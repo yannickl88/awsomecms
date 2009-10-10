@@ -1,0 +1,1 @@
+ALTER TABLE `images` ADD `image_tag` VARCHAR( 200 ) NOT NULL ;

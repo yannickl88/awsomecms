@@ -1,0 +1,141 @@
+/* ADMIN CSS FILE */
+/* NAVIGATION */
+#mainHeader{
+    background: url(/img/admin_menu-bg.png) no-repeat left bottom;
+}
+#adminNavWrapper{
+    margin-left: 30px;
+}
+#adminNavWrapper ul {
+    margin: 0;
+    padding: 0;
+}
+#adminNavWrapper li {
+    display: inline;
+    float: left;
+}
+#adminNavWrapper a {
+    display: block;
+    margin: 181px 5px 2px 5px;
+    
+    color: #fff;
+    font-family: Arial, Helvetica;
+    font-size: 12px;
+    font-weight: bold;
+}
+
+/* ADMIN TREE */
+#sidebarCenter #sidebarAdminContent{
+    margin: 10px 10px 85px 10px;
+}
+#treeWrapper {
+    margin-top: 150px;
+    margin-left: 20px;
+}
+#treeHeader {
+    background: url(/img/tree_header-bg.png) no-repeat;
+    height: 4px;
+}
+#treeCenter {
+    background: url(/img/tree_center-bg.png) repeat-y;
+    padding-left: 9px;
+}
+#treeFooter {
+    background: url(/img/tree_footer-bg.png) no-repeat left bottom;
+    height: 4px;
+}
+#treeCenter .tree {
+    width: 230px;
+}
+.treeNode {
+    padding-left: 10px;
+}
+.treeNode img {
+    border: 0;
+}
+.treeNode a {
+    padding-left: 20px;
+    text-decoration: none;
+}
+.treeNode a.folder {
+    height: 16px;
+    display: block;
+    float: left;
+    background-image: url(/img/icons/selection.png);
+    background-repeat: no-repeat;
+}
+.focus {
+    background-position: left -32px;
+}
+.open {
+    background-position: left -48px;
+}
+.open.focus {
+    background-position: left -16px;
+}
+.hidden {
+    display: none;
+}
+.hideIcons .deleteIcon,
+.hideIcons .viewIcon {
+    display: none;
+}
+.deleteIcon, .viewIcon {
+    float: right;
+    display: block;
+    height: 16px;
+    width: 16px;
+    
+    padding: 0 !important;
+}
+.deleteIcon {
+    background-image: url(/img/icons/page_delete.png);
+}
+.viewIcon {
+    background-image: url(/img/icons/page_view.png);
+}
+
+/* ADMIN FORMS */
+.admin_form_label {
+    float: left;
+    width: 120px;
+}
+.admin_form_field {
+    margin-left: 120px;
+}
+.admin_form_field input[type="text"],
+.admin_form_field input[type="password"],
+.admin_form_field textarea {
+    width: 300px;
+}
+.admin_form_row.admin_form_submit
+{
+    text-align: center;
+    margin-top: 10px;
+}
+.admin_form_row.form_error
+{
+    background: #ffe6e6;
+    color: #632525;
+}
+.smallfield {
+    width: 75px !important;
+}
+.tinyfield {
+    width: 25px !important;
+}
+.admin_table {
+    width: 100%;
+    border-collapse: collapse;
+    text-align: center;
+}
+.admin_table th {
+    background: #d8ebfd;
+    height: 20px;
+}
+.admin_table tr.highlighted {
+    background: #f1f8ff;
+}
+.admin_table .admin_table_actions {
+    width: 50px;
+}

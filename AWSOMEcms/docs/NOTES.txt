@@ -1,0 +1,77 @@
+COMPONENTS
+ - Comments
+ - Contact
+ - Core
+ - Gallery
+ - News
+ - Page
+ - Twitter
+ - Users
+ - Slideshow
+
+Required components:
+ - Core
+ - Pages
+
+Requested components:
+ - Forum
+ - User profiles
+ 
+Dependancies:
+ - News => Users
+
+TODO:
+ * Refactor some old code with newer code, so backwards copatibily can be removed.
+ * Comments components need to interface with users module if installed. If users installed then need to the name/email field
+ * Installer needs to delete components when that option is checked
+ * Installed need to keep track of the installed components and insert the corresponding admin pages depending on those
+ * Installer needs to be updated with new changes made in v0.3.8
+    - admin pages is seperate file
+    - admin user + rights
+    - request field at installment (needs to be retrived from ini file)
+ * Make a dynamic menu for the admin section
+ 
+CHANGE LOG:
+27-09-2009 (v0.3.8)
+ * Added License and Copyright files, removed some old file headers
+ * Moved some sql query to admin files for easy initialisation admin pages per module
+20-09-2009 (v0.3.8)
+ * Added Wysiwyg when editing or adding a page content
+ * Restructered the way the request and components are handeled whyle keeping backwards compatibility (TODO: refactor old code)
+ * Added feature to have authoriszation for requests methods or not.
+ * Added support for page templates, which is a wrapper around the $content in the layout.
+13-09-2009 (v0.3.7)
+ * Added validation for image dimentions when uploading a thumb in the gallery component
+ * Added role based authentication basis for the user module
+ * Restructed the framework a bit
+12-09-2009 (v0.3.7)
+ * Added request-method based authorization for each component that is called by the proxy.
+ * Fixed the installer, now also copies the install files.
+15-7-2009 (v0.3.6)
+ * Fixed some issues with the portfolio component
+10-5-2009 (v0.3.5)
+ * Installer now gives an detailed error message on fail
+ * Re-implemented the multi query function with PDO
+ * Installer now copies the install files from each component into the root dir
+9-5-2009 (v0.3.4)
+ * Twitter components now stores the data in session, this way there isn't a call made every page
+7-5-2009 (v0.3.4)
+ * Install now also handels the database createion and settings
+ * created deploy script for easy creation of version packages
+ * SQL::query is done with PDO now
+ * Renamed MySQL class to SQL in preperation to PDO implementation
+6-5-2009 (v0.3.3)
+ * Added comments component, these will be hooked to the URL or with a param given in the tag
+5-5-2009 (v0.3.2)
+ * Made install page, this will be a fallback for when the framework doesn't find any components
+ * Implmented the multi query using mysqli
+4-5-2009 (v0.3.1)
+ * Added gallery tags
+ * Made preperations for install script to help speed up deployment
+    - Added db folder to all components with sql for installation
+    - Added patch script for gallery to update from v0.3 to v0.3.1
+    - Made an exception and handeling of it when the framework detects that there are no components installed
+    - Added install.php
+ * Added rules to the .htaccess to prevent browsing of core directories
+19-4-2009 (v0.3)
+ * Added validation to all current components, contact forms and the login form

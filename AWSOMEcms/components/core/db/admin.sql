@@ -1,0 +1,1 @@
+INSERT INTO `pages` (`page_name`, `page_location`, `page_template`, `page_timestamp`) VALUES('index', '/admin/', 'Welcome to the admin section', '2009-09-12 00:31:07');
