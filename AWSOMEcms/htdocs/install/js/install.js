@@ -328,7 +328,7 @@ function action_step5()
         admin_needslogin:   $('#setting_needslogin').attr('checked'),
         admin_location:     $('#setting_adminlocation').val(),
         admin_login:        $('#setting_adminlogin').val(),
-        admin_default:      $('#setting_needslogin').attr('checked'),
+        admin_default:      $('#setting_default').attr('checked'),
         dbhost:             $('#setting_dbhost').val(),
         dbdatabase:         $('#setting_dbdatabase').val(),
         dbusername:         $('#setting_dbuser').val(),

@@ -5,4 +5,4 @@ CREATE TABLE IF NOT EXISTS `pages` (
   `page_template` text NOT NULL,
   `page_timestamp` datetime NOT NULL,
   PRIMARY KEY  (`page_id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=37 ;
+) ENGINE=MyISAM  DEFAULT CHARSET=latin1 ;

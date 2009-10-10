@@ -409,13 +409,19 @@ class SQLRecord
     
     private $index = 0;
     
-    public function __construct($record)
+    public function __construct($record = null)
     {
         $this->records = array();
-        $this->records = $record->fetchAll(PDO::FETCH_OBJ);
-        $this->record = $this->records[0];
-        $this->count = $record->rowCount();
-        $this->insertID = SQL::getInstance()->getPDOInstance()->lastInsertId();
+        $this->record = null;
+        $this->count = 0;
+        
+        if($record != null)
+        {
+            $this->records = $record->fetchAll(PDO::FETCH_OBJ);
+            $this->record = $this->records[0];
+            $this->count = $record->rowCount();
+            $this->insertID = SQL::getInstance()->getPDOInstance()->lastInsertId();
+        }
     }
     
     public function getRows()
@@ -505,14 +511,28 @@ class SQL
     
     public function query($query)
     {
-        $this->query = $query;
+        if(!empty($query))
+        {
+            $this->query = $query;
+            
+            $result = $this->PDOconnection->prepare($query);
+            
+            if(!$result->execute())
+            {
+                $error = $result->errorInfo();
+                Debugger::getInstance()->log("SQL ERROR: '{$query}' {$error}");
+                $this->triggerSQLError("{$error[1]} - {$error[2]}");
+            }
+            $result = new SQLRecord($result);
+        }
+        else
+        {
+            $result = new SQLRecord(null);
+        }
         
-        $result = $this->PDOconnection->prepare($query);
-        $result->execute();
-
-        $record = new SQLRecord($result);
+        Debugger::getInstance()->log("Query: '{$query}' [{$result->count()} rows returned]");
         
-        return $record;
+        return $result;
     }
     
     public function multi_query($queries)

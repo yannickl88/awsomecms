@@ -24,14 +24,15 @@ TODO:
  * Refactor some old code with newer code, so backwards copatibily can be removed.
  * Comments components need to interface with users module if installed. If users installed then need to the name/email field
  * Installer needs to delete components when that option is checked
- * Installed need to keep track of the installed components and insert the corresponding admin pages depending on those
- * Installer needs to be updated with new changes made in v0.3.8
-    - admin pages is seperate file
-    - admin user + rights
-    - request field at installment (needs to be retrived from ini file)
  * Make a dynamic menu for the admin section
  
 CHANGE LOG:
+10-10-2009 (v0.3.8)
+ * Added very simple debug logger so developers know what is going on.
+ * Updates installer with following features:
+    - admin pages is seperate file
+    - admin user + rights
+    - request field at installment (needs to be retrived from ini file)
 27-09-2009 (v0.3.8)
  * Added License and Copyright files, removed some old file headers
  * Moved some sql query to admin files for easy initialisation admin pages per module

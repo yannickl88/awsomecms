@@ -102,7 +102,7 @@ function rcopy($source, $dest)
 
         foreach($content as $file)
         {
-            if($file != '.' && $file != '..')
+            if($file != '.' && $file != '..' && $file != '.svn')
             {
                 rcopy($source.'/'.$file, $dest.'/'.$file);
             }
@@ -147,6 +147,26 @@ function installDB()
         return array(false, "could not connect to DB");
     }
 }
+function getHighestPatchLevel($installDir)
+{
+    $files = scandir($installDir);
+    $patchlevel = 0;
+    
+    foreach($files as $file)
+    {
+        $matches = array();
+        
+        if(preg_match('/^patch-([0-9]+)\.sql$/', $file, $matches) == 1)
+        {
+            if($patchlevel < (int) $matches[1])
+            {
+                $patchlevel = (int) $matches[1];
+            }
+        }
+    }
+    
+    return $patchlevel;
+}
 function installComponents()
 {
     global $websiteroot;
@@ -177,30 +197,58 @@ function installComponents()
                 }
             }
             
+            //insert component into the database
+            $info = parse_ini_file($dir.'/info.ini', true);
+            $requests = '';
+            if($info['requests'])
+            {
+                $requests = implode(';', $info['requests']);
+            }
+            $patchlevel = getHighestPatchLevel($dir.'/db');
+            
+            $dir = addslashes($dir);
+            
+            $db->query(
+                "INSERT INTO 
+                    `components` 
+                (
+                    `component_name`, 
+                    `component_requests`, 
+                    `component_path`, 
+                    `component_auth`,
+                    `component_patchlevel`
+                )
+                VALUES
+                (
+                    '{$component}',
+                    '{$requests}',
+                    '{$dir}',
+                    15,
+                    {$patchlevel}
+                );"
+            );
+        }
+        catch(Exception $e)
+        {
+            return array(false, $e->getMessage());
+        }
+    }
+    
+    // second run so we can install the default content
+    foreach($_POST['components'] as $component)
+    {
+        try
+        {
+            $dir = realpath($websiteroot.'/../components/'.$component);
+            
             //copy the install files
             if(file_exists($dir.'/install'))
             {
                 rcopy($dir.'/install', $websiteroot);
             }
             
-            //insert component into the database
-            $dir = addslashes($dir);
-            
-            $db->query("INSERT INTO `components` (`component_name`, `component_path`) VALUES('{$component}', '{$dir}');");
-        }
-        catch(Exception $e)
-        {
-            return false;
-        }
-        
-    }
-    
-    if($_POST['admin_default'] === 'true')
-    {
-        //run default sql
-        $file = $websiteroot.'/../components/core/db/default.sql';
-        try
-        {
+            //run default sql
+            $file = $dir.'/db/default.sql';
             if(file_exists($file) && is_readable($file))
             {
             
@@ -210,13 +258,29 @@ function installComponents()
                     $db->multi_query($sql);
                 }
             }
+            
+            if($_POST['admin_default'] === 'true')
+            {
+                //run admin sql
+                $file = $dir.'/db/admin.sql';
+                if(file_exists($file) && is_readable($file))
+                {
+                
+                    $sql = file_get_contents($file);
+                    if($sql != '')
+                    {
+                        $db->multi_query($sql);
+                    }
+                }
+            }
         }
         catch(Exception $e)
         {
-            return false;
+            return array(false, $e->getMessage());
         }
     }
-    return true;
+    
+    return array(true);
 }
 
 function saveConfig()
@@ -291,9 +355,11 @@ if(!empty($_REQUEST['action']))
                 
                 if($check2[0])
                 {
-                    if(!($check3 = installComponents()))
+                    $check3 = installComponents();
+                    
+                    if(!$check3[0])
                     {
-                        $error = "could not install componentes";
+                        $error = "could not install componentes, '" . $check3[1] . "'";
                     }
                 }
                 else
@@ -306,7 +372,7 @@ if(!empty($_REQUEST['action']))
                 $error = "Could not save the config file";
             }
             
-            $data = array("result" => ($check1 && $check2 && $check3), "error" => $error );
+            $data = array("result" => ($check1 && $check2[0] && $check3[0]), "error" => $error );
             break;
     }
     echo json_encode($data);
@@ -328,12 +394,12 @@ $componentsDirs = scandir($websiteroot.'/../components/');
 
 foreach($componentsDirs as $component)
 {
-    if($component != '.' && $component != '..' && is_dir($websiteroot.'/../components/'.$component))
+    if($component != '.' && $component != '..' && '.svn' && is_dir($websiteroot.'/../components/'.$component))
     {
-        $components[$component] = array("name" => ucfirst($component));
-        
         if(file_exists($websiteroot.'/../components/'.$component.'/info.ini'))
         {
+            $components[$component] = array("name" => ucfirst($component));
+            
             $inidata = parse_ini_file($websiteroot.'/../components/'.$component.'/info.ini', true);
             
             if($inidata['dependson'])

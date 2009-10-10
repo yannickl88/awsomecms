@@ -1,9 +1,9 @@
 <?php
 session_start();
 
-$start = microtime(true);
+global $websiteroot, $start;
 
-global $websiteroot;
+$start = microtime(true);
 $websiteroot = dirname(__FILE__);
 
 try
