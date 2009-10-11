@@ -1,5 +1,5 @@
 <?php
-include_once Config::get('websiteroot', '.').'/../core/shared/class.RequestComponent.inc';
+import('/core/shared/class.RequestComponent.inc');
 
 class PageRequest extends RequestComponent
 {

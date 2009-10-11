@@ -1,5 +1,5 @@
 <?php
-include_once Config::get('websiteroot', '.').'/../core/shared/class.Component.inc';
+import('/core/shared/class.Component.inc');
 
 class CommentsComponent extends Component
 {
