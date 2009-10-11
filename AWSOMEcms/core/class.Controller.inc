@@ -1,5 +1,5 @@
 <?php
-require_once Config::get('websiteroot', '.').'/../core/shared/class.Component.inc';
+import('/core/shared/class.Component.inc');
 
 /** @desc Exception thrown if the given component is not installed or found */ 
 class ComponentNotFoundException extends Exception {}
@@ -87,7 +87,7 @@ class Controller
         
         if(isset($_SESSION['FORMERROR']))
         {
-            include_once Config::get('websiteroot', '.').'/../core/shared/class.InvalidFormException.inc';
+            import('/core/shared/class.InvalidFormException.inc');
             
             $e = unserialize($_SESSION['FORMERROR']);
             $data = array("record" => $e->getRecord(), "fields" => $e->getInvalidFields());

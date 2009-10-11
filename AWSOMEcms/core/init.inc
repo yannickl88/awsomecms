@@ -1,7 +1,9 @@
 <?php
-include_once $websiteroot.'/../libs/Smarty.class.php';
-include_once $websiteroot.'/../core/shared/class.Config.inc';
-include_once $websiteroot.'/../core/class.Debugger.inc';
-include_once $websiteroot.'/../core/class.SmartyPageLoader.inc';
-include_once $websiteroot.'/../core/class.Controller.inc';
+require_once realpath(dirname(__FILE__).'/functions.util.inc');
+
+import('/libs/Smarty.class.php');
+import('/core/shared/class.Config.inc');
+import('/core/class.Debugger.inc');
+import('/core/class.SmartyPageLoader.inc');
+import('/core/class.Controller.inc');
 

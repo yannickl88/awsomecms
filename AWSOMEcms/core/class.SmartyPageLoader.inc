@@ -1,5 +1,5 @@
 <?php
-include_once $websiteroot.'/../core/shared/class.SQL.inc';
+import('/core/shared/class.SQL.inc');
 
 /** @desc Exception thrown when a page could not be found */ 
 class PageNotFoundExeption extends Exception {}

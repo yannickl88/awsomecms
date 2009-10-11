@@ -1,5 +1,5 @@
 <?php
-include_once Config::get('websiteroot', '.').'/../core/shared/class.InvalidFormException.inc';
+import('/core/shared/class.InvalidFormException.inc');
 
 /**
 * @desc superclass for all the components
