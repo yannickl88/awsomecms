@@ -1,7 +1,7 @@
 <?php
   function smarty_function_twitter($params, &$smarty)
   {
-      include_once Config::get('websiteroot', '.').'/components/twitter/util/class.Twitter.inc';
+      include_once Config::get('websiteroot', '.').'/../components/twitter/util/class.Twitter.inc';
       
       $twitter = new Twitter(Config::get("username", "", "twitter"), Config::get("password", "", "twitter"));
       
@@ -25,7 +25,7 @@
       $text = $statuses[0]['text'];
       
       //parse for the extra stuff
-      $text = preg_replace('/(http:\/\/)?(www\.)?[a-zA-Z-\.]*\.[a-z\.]{2,5}(\/[.\S]*)?/m', '<a href="$0" rel="external">$0</a>', $text); //link
+      $text = preg_replace('/http:\/\/(www\.)?[a-zA-Z-\.]*\.[a-z\.]{2,5}(\/[.\S]*)?/m', '<a href="$0" rel="external">$0</a>', $text); //link
       $text = preg_replace('/@([.\S]*)/', '<a href="http://twitter.com/$1" rel="external">$0</a>', $text); //user
       
       $smarty->assign("message", $text);

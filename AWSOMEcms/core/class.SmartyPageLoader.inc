@@ -124,7 +124,7 @@ class SmartyPageLoader
             
             $smarty_obj->assign('PAGE', $result->record);
             
-            $tpl_source = nl2br($result->record->page_template);
+            $tpl_source = $result->record->page_template;
             return true;
         } 
         else 

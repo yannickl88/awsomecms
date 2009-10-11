@@ -40,6 +40,4 @@
     <input type="hidden" name="url" value="{$URL}" />
     <input type="hidden" name="action" value="send" />
     <input type="hidden" name="component" value="contact" />
-    <br />
-    Fields marked as <span class="required">*</span> are required. 
 </form>

@@ -127,11 +127,11 @@ class Debugger
         $html .= "Site was rendered in {$timestamp}sec </div>";
         if(isset($_COOKIE['debugHide']))
         {
-            $html .= "<div class='debugBody' style='font-size: 12px; padding-left: 10px; display: none;'>";
+            $html .= "<div class='debugBody' style='font-size: 0.9em; padding-left: 10px; display: none;'>";
         }
         else
         {
-            $html .= "<div class='debugBody' style='font-size: 12px; padding-left: 10px;'>";
+            $html .= "<div class='debugBody' style='font-size: 0.9em; padding-left: 10px;'>";
         }
         $html .= $debug;
         $html .= "</div></div>";
