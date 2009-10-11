@@ -46,17 +46,17 @@ class Config
     */
     private function fillData()
     {
-        global $websiteroot;
+        global $websiteroot, $frameworkroot;
         
         $this->data = array();
         
-        if(file_exists($websiteroot.'/../config.ini'))
+        if(file_exists($websiteroot.'/config.ini'))
         {
-            $this->data = parse_ini_file($websiteroot.'/../config.ini', true);
+            $this->data = parse_ini_file($websiteroot.'/config.ini', true);
         }
-        if(file_exists($websiteroot.'/../core/core.ini'))
+        if(file_exists($frameworkroot.'/core/core.ini'))
         {
-            $this->data = array_merge_recursive($this->data, parse_ini_file($websiteroot.'/../core/core.ini', true));
+            $this->data = array_merge_recursive($this->data, parse_ini_file($frameworkroot.'/core/core.ini', true));
         }
         
         //parse extra ini's
