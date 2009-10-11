@@ -24,9 +24,13 @@ TODO:
  * Refactor some old code with newer code, so backwards copatibily can be removed.
  * Comments components need to interface with users module if installed. If users installed then need to the name/email field
  * Installer needs to delete components when that option is checked
+ * Fix configs at the installer, they moved
  * Make a dynamic menu for the admin section
  
 CHANGE LOG:
+11-10-2009 (v0.3.8)
+ * Some minor bugfixes
+ * Addes support for the main framework stuff to be else where located
 10-10-2009 (v0.3.8)
  * Added very simple debug logger so developers know what is going on.
  * Updates installer with following features:

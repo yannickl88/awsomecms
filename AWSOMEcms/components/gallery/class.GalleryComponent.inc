@@ -277,30 +277,33 @@ class GalleryComponent extends Component
         $index = -1;
         $exception = new InvalidFormException($data, $redirectOnFailure, "The form was not valid");
         
-        //check the tumb dimentions if set
-        $maxDimentions = explode('x', Config::get('tumbsize', "100x50", 'gallery'));
-        $tempInfo = getimagesize($_FILES['image_thumb']['tmp_name']);
-        
-        if($tempInfo[0] > $maxDimentions[0] || $tempInfo[1] > $maxDimentions[1])
+        if($data['image_tumb_generate'] == 'on')
         {
-            $exception->addInvalidField('image_thumb', "Tumb image was to large");
+            //check the tumb dimentions if set
+            $maxDimentions = explode('x', Config::get('tumbsize', "100x50", 'gallery'));
+            $tempInfo = getimagesize($_FILES['image_thumb']['tmp_name']);
             
-            if($mode == "edit")
+            if($tempInfo[0] > $maxDimentions[0] || $tempInfo[1] > $maxDimentions[1])
             {
-                foreach($this->fields as $field => $type)
+                $exception->addInvalidField('image_thumb', "Tumb image was to large");
+                
+                if($mode == "edit")
                 {
-                    //check for index
-                    if($index == -1 && $type == 'index')
+                    foreach($this->fields as $field => $type)
                     {
-                        $index = $field;
-                        break;
+                        //check for index
+                        if($index == -1 && $type == 'index')
+                        {
+                            $index = $field;
+                            break;
+                        }
                     }
+                    
+                    $exception->setRedirectData(array($index => $data[$index]));
                 }
                 
-                $exception->setRedirectData(array($index => $data[$index]));
+                throw $exception;
             }
-            
-            throw $exception;
         }
         
         return parent::validate($data, $redirectOnFailure, $mode);

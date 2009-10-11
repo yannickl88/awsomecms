@@ -51,7 +51,7 @@ function rcopy($source, $dest)
         
         foreach($files as $file)
         {
-            if($file != '.' && $file != '..')
+            if($file != '.' && $file != '..' && $file != '.svn')
             {
                 rcopy($source.DIRECTORY_SEPARATOR.$file, $dest.DIRECTORY_SEPARATOR.$file);
             }
@@ -75,7 +75,7 @@ function raddFileToZip($source, $dest, $zip)
         {
             foreach($files as $file)
             {
-                if($file != '.' && $file != '..')
+                if($file != '.' && $file != '..' && $file != '.svn')
                 {
                     raddFileToZip($source.DIRECTORY_SEPARATOR.$file, $dest.DIRECTORY_SEPARATOR.$file, $zip);
                 }
