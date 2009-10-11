@@ -8,14 +8,14 @@ $websiteroot = dirname(__FILE__);
 
 try
 {
-    include_once '../core/init.inc';
+    require_once '../framework/core/init.inc';
 
     $config = Config::getInstance();
 
     //check if incomming request if directed at the proxy
     if($config->get("enabled", false, 'proxy') == "1" && 'http://' . $_SERVER['SERVER_NAME'] == $config->get("proxy", 'www.google.com', 'proxy'))
     {
-        include_once $websiteroot.'/../core/shared/class.RequestComponent.inc';
+        import('/core/shared/class.RequestComponent.inc');
         
         RequestComponent::handelRequest();
     }
