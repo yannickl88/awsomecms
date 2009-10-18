@@ -8,7 +8,7 @@ $websiteroot = dirname(__FILE__);
 
 try
 {
-    require_once '../framework/core/init.inc';
+    require_once '../core/init.inc';
 
     $config = Config::getInstance();
 

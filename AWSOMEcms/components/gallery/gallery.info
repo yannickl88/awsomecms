@@ -1,0 +1,9 @@
+GALLERY:
+A simple component to manage and show a series of images on a page.
+
+TAGS:
+gallery
+    'max' Maximum number of images to show
+        Int, optional
+    'tag' Tag of the images to show
+        String, optional

@@ -287,9 +287,9 @@ function saveConfig()
 {
     global $websiteroot;
     
-    copy($websiteroot.'/../config-default.ini', $websiteroot.'/../config.ini');
+    copy($websiteroot.'/config-default.ini', $websiteroot.'/config.ini');
     
-    $ini = parse_ini_file($websiteroot.'/../config.ini', true);
+    $ini = parse_ini_file($websiteroot.'/config.ini', true);
     
     //update the data
     $ini['db']['dbhost'] = $_POST['dbhost'];
@@ -306,7 +306,7 @@ function saveConfig()
     $ini['admin']['login'] = $_POST['admin_login'];
     $ini['debug']['debug'] = $_POST['debug'];
     
-    $result = (file_put_contents($websiteroot.'/../config.ini', arrayToIni($ini)) !== false);
+    $result = (file_put_contents($websiteroot.'/config.ini', arrayToIni($ini)) !== false);
     
     if($result)
     {

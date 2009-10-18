@@ -8,6 +8,10 @@ function smarty_function_news($params, &$smarty)
     {
         $template = $params['template'];
     }
+    if(isset($params['tag']))
+    {
+        $params['news_tag'] = $params['tag'];
+    }
 
     $smarty->assign("news", $newsComponent->select($params));
 

@@ -6,16 +6,11 @@ class CommentsRequest extends RequestComponent
     protected function do_SELECT($data = array())
     {
         //select
-        $query = SQLQuery::doSelect()
+        $result = SQLQuery::doSelect()
             ->orderby("comment_time", 'DESC')
-            ->table('comments');
-        
-        if(isset($data['hook']))
-        {
-            $query->where('comment_hook', $data['hook']);
-        }
-        
-        $result = $query->exec();
+            ->table('comments')
+            ->whereWhenSet('comment_hook', $data['hook'])
+            ->exec();
         
         return $result->getRows();
     }
@@ -39,9 +34,8 @@ class CommentsRequest extends RequestComponent
             ->updateWhenSet('comment_time', $data['comment_time'])
             ->updateWhenSet('comment_userid', $data['comment_userid'])
             ->where('comment_id', $data['comment_id'])
-            ->table('comments');
-        
-        $query->exec();
+            ->table('comments')
+            ->exec();
         
         return true;
     }

@@ -41,6 +41,14 @@
     </div>
     <div class="admin_form_row">
         <div class="admin_form_label">
+            <label for="news_tag">Tag:</label>
+        </div>
+        <div class="admin_form_field">
+            <input type="text" name="news_tag" id="news_tag" value="{$FORMERROR.record.news_tag}"/>
+        </div>
+    </div>
+    <div class="admin_form_row">
+        <div class="admin_form_label">
             <label for="news_text">Content:</label>
         </div>
         <div class="admin_form_field">

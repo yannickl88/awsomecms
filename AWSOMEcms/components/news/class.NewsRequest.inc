@@ -22,6 +22,11 @@ class NewsRequest extends RequestComponent
             $query->where('news_user', $data['news_user']);
         }
         
+        if(isset($data['news_tag']))
+        {
+            $query->where('news_tag', $data['news_tag']);
+        }
+        
         if(isset($data['max']))
         {
             $query->limit($data['max']);
@@ -51,6 +56,7 @@ class NewsRequest extends RequestComponent
             ->updateWhenSet('news_user', $data['news_user'])
             ->updateWhenSet('news_text', $data['news_text'])
             ->updateWhenSet('news_date', $data['news_date'])
+            ->updateWhenSet('news_tag', $data['news_tag'])
             ->exec();
         
         return true;
@@ -62,6 +68,7 @@ class NewsRequest extends RequestComponent
             ->insert('news_user', $data['news_user'])
             ->insert('news_text', $data['news_text'])
             ->insert('news_date', $data['news_date'])
+            ->insert('news_tag', $data['news_tag'])
             ->table('news')
             ->exec();
         
