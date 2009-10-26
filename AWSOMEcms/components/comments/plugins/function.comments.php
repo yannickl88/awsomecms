@@ -7,6 +7,10 @@
       {
           $hook = $params['hook'];
       }
+      if(isset($params['redirect']))
+      {
+          $smarty->assign("comment_redirect", $params['redirect']);
+      }
       
       include_once Config::get('websiteroot', '.').'/../components/comments/class.CommentsComponent.inc';
       $commentsComponent = new CommentsComponent();

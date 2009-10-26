@@ -31,6 +31,9 @@
         <input type="submit" value="Send" id="contact_submit" class="form_submit">
     </div>
     <input type="hidden" name="comment_hook" value="{$comment_hook}" />
+    {if $comment_redirect}
+    <input type="hidden" name="comment_redirect" value="{$comment_redirect}" />
+    {/if}
     <input type="hidden" name="action" value="reply" />
     <input type="hidden" name="component" value="comments" />
     <br />

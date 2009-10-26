@@ -1,8 +1,13 @@
 <?php
-import('/core/shared/class.RequestComponent.inc');
+import('/core/shared/class.Component.inc');
 
-class CoreComponent extends RequestComponent
+class CoreComponent extends Component
 {
+    public function __construct()
+    {
+        parent::__construct('core');
+    }
+    
     public function action_index($smarty, $smartyLoader, $request)
     {
         $smarty->register_resource("scf", array(

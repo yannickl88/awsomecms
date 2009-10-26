@@ -8,10 +8,9 @@
         <meta name="keywords" content="web, design, website, uk, cheap, professional, effective" />
         <meta name="country" content="United Kingdom" />
         <meta name="geo.country" content="GB" />
-        <link type="text/css" rel="stylesheet" href="/css/css.css" media="screen" />
         <link type="text/css" rel="stylesheet" href="/css/admin.css" media="screen" />
         <link type="text/css" rel="stylesheet" href="/css/lightbox.css" media="screen" />
-        <link type="text/css" rel="stylesheet" href="/css/wysiwyg.css" media="screen" />
+        <link type="text/css" rel="stylesheet" href="/css/jHtmlArea.css" media="screen" />
         <script type="text/javascript" src="http://www.google.com/jsapi"></script>
         <script type="text/javascript">
             {literal}
@@ -26,7 +25,8 @@
         <script type="text/javascript" src="/js/tree.js"></script>
         <script type="text/javascript" src="/js/jquery.lightbox.js"></script>
         <script type="text/javascript" src="/js/ajaxupload.3.5.js"></script>
-        <script type="text/javascript" src="/js/jquery.wysiwyg.js"></script>
+        <script type="text/javascript" src="/js/jHtmlArea-0.6.0.min.js"></script>
+        <script type="text/javascript" src="/js/adminmenu.js"></script>
         <script type="text/javascript">
             {literal}
             $(document).ready(function(){
@@ -36,30 +36,46 @@
                     imageClickClose: false,
                     disableNavbarLinks: true
                 });
-                $(".htmleditor").wysiwyg({
-                    
+                
+                //load the editor
+                $("form .htmleditor").htmlarea({
+                    css: "/css/jHtmlArea.Editor.css"
+                });
+                $("form").submit(function(e) {
+                    $(this).find(".htmleditor").each(function(key, value){
+                        var name = $(value).attr('name');
+                        var content = $(value).htmlarea('toHtmlString');
+                        
+                        $(value).replaceWith("<textarea style='display: none;' name='" + name + "'>" + content + "</textarea>");
+                    });
                 });
             });
             {/literal}
         </script>
     </head>
     <body>
-        <ul>
-            <li><a href="/admin/page/add">Add Page</a></li>
-            <li><a href="/admin/users/admin">Users</a></li>
-            <li><a href="/admin/news/admin">News</a></li>
-            <li><a href="/admin/gallery/admin">Gallery</a></li>
-            <li><a href="/admin/contact/admin">Contact</a></li>
-            <li><a href="/admin/skimfo/admin">Skimfo</a></li>
-            <li>Slideshow</li>
-            <ul>
-                <li><a href="/admin/slideshow/group/admin">Groups</a></li>
-                <li><a href="/admin/slideshow/image/admin">Images</a></li>
-            </ul>
-            <li><a href="/">Back to Site</a></li>
-        </ul>
-        {admintree}
-        {$content}<br />
-        Rendered in {rendertime start=$SCRIPT_START} sec
+        <div id="siteWrapper">
+            <div id="headerWrapper">
+                <img src="/img/admin/header-right.png" style="float: right;"/>
+                <a href="/" style="float: right;" class="backtosite"><img src="/img/admin/backtosite.png"/> Back to site</a>
+                <a href="/admin/"><img src="/img/admin/header-left.png" /></a>
+            </div>
+            <div id="sideWrapper">
+                <div id="menuWrapper">
+                    {adminmenu}
+                </div>
+                <div id="treeWrapper">
+                    {admintree}
+                </div>
+                <img src="/img/admin/tree-bottom.png" />
+                <div id="copyWrapper">
+                    <a href="http://yannickl88.nl/cms/" target="_blank">A.W.S.O.M.E. cms</a> &copy; 2009
+                </div>
+            </div>
+            <div id="contentWrapper">
+                {$content}
+            </div>
+        </div>
+        {renderdebug}
     </body>
 </html>

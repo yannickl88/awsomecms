@@ -106,4 +106,9 @@ class NewsComponent extends Component
         $smarty->assign("actionurl_edit", Config::get('newsedit', 'newsedit', 'admin'));
         $smarty->assign("actionurl_delete", Config::get('newsdelete', 'newsdelete', 'admin'));
     }
+    
+    public function registerMenuItems($menu)
+    {
+        $menu->addChild(new MenuItem("news", "", Config::get('newsadmin', 'newsadmin', 'admin')));
+    }
 }

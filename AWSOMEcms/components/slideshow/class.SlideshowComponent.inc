@@ -321,4 +321,10 @@ class SlideshowComponent extends Component
             return false;
         }
     }
+    public function registerMenuItems($menu)
+    {
+        $menu->addChild(new MenuItem("slideshow", "", ""));
+        $menu->addChild(new MenuItem("slideshowimg", "Images", Config::get('slideshow_imageadmin', 'slideshow_imageadmin', 'admin'), "slideshow"));
+        $menu->addChild(new MenuItem("slideshowgrp", "Groups", Config::get('slideshow_groupadmin', 'slideshow_groupadmin', 'admin'), "slideshow"));
+    }
 }

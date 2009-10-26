@@ -254,4 +254,9 @@ class Component
     {
         $this->currentTable = $table;
     }
+    
+    public function registerMenuItems($menu)
+    {
+        
+    }
 }

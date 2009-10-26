@@ -148,4 +148,11 @@ class ContactComponent extends Component
             $this->redirect($form->form_thanks);
         }
     }
+    
+    public function registerMenuItems($menu)
+    {
+        $menu->addChild(new MenuItem("contact", "", ""));
+        $menu->addChild(new MenuItem("forms", "", Config::get('contactadmin', 'contactadmin', 'admin'), "contact"));
+        $menu->addChild(new MenuItem("formsadd", "Add", Config::get('contactadd', 'contactadd', 'admin'), "contact"));
+    }
 }

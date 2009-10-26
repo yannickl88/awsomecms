@@ -308,4 +308,11 @@ class GalleryComponent extends Component
         
         return parent::validate($data, $redirectOnFailure, $mode);
     }
+    
+    public function registerMenuItems($menu)
+    {
+        $menu->addChild(new MenuItem("gallery", "", ""));
+        $menu->addChild(new MenuItem("galleryadmin", "Images", Config::get('galleryadmin', 'galleryadmin', 'admin'), "gallery"));
+        $menu->addChild(new MenuItem("galleryadd", "Upload", Config::get('galleryadd', 'galleryadd', 'admin'), "gallery"));
+    }
 }

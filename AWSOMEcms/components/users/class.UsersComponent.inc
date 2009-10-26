@@ -178,4 +178,10 @@ class UsersComponent extends Component
         
         return (count($record) > 0);
     }
+    
+    public function registerMenuItems($menu)
+    {
+        $menu->addChild(new MenuItem("users", "", Config::get('usersadmin', 'usersadmin', 'admin')));
+        $menu->addChild(new MenuItem("usersadmin", "Users", Config::get('usersadmin', 'usersadmin', 'admin'), "users"));
+    }
 }

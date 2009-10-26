@@ -1,5 +1,6 @@
 <?php
 import('/core/shared/class.Component.inc');
+import('/core/shared/class.RequestComponent.inc');
 
 /** @desc Exception thrown if the given component is not installed or found */ 
 class ComponentNotFoundException extends Exception {}

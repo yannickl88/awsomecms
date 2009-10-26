@@ -517,9 +517,9 @@ class SQL
             
             $result = $this->PDOconnection->query($query);
             
-            if($result->errorCode() != '00000')
+            if($this->PDOconnection->errorCode() != '00000')
             {
-                $error = $result->errorInfo();
+                $error = $this->PDOconnection->errorInfo();
                 Debugger::getInstance()->log("SQL ERROR: '{$query}' {$error}");
                 $this->triggerSQLError("{$error[1]} - {$error[2]}");
             }
