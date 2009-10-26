@@ -1,0 +1,30 @@
+html,
+body {
+    font-family: Verdana;
+    font-size: 11px;
+}
+a {
+    text-decoration: none;
+    color: #f17480;
+}
+a:hover {
+    text-decoration: underline;
+    color: #d75a66;
+}
+h1 {
+    margin: 0;
+    padding: 0 0 2px 0;
+    color: #d32232;
+    font-family: Arial, sans-serif;
+    font-size: 24px;
+    font-weight: normal;
+}
+p {
+    margin: 0;
+    padding: 5px 0 10px 0;
+}
+hr {
+    border-style: dashed;
+    border-color: #000000;
+    border-width: 1px 0 0 0;
+}
