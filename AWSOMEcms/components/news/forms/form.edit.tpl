@@ -52,7 +52,7 @@
             <label for="news_text">Content:</label>
         </div>
         <div class="admin_form_field">
-            <textarea name="news_text" id="news_text" rows="5" cols="20">{$record->news_text}</textarea>
+            <textarea name="news_text" id="news_text" rows="5" cols="20" class="htmleditor">{$record->news_text}</textarea>
         </div>
     </div>
     <div class="admin_form_row admin_form_submit">
