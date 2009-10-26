@@ -26,6 +26,7 @@ class MenuItem
         if($this->name == $child->parent)
         {
             $this->children[$child->name] = $child;
+            usort($this->children, array($this, 'sort'));
             return true;
         }
         else
@@ -40,6 +41,11 @@ class MenuItem
         }
         
         return false;
+    }
+    
+    private function sort($child1, $child2)
+    {
+        return strcasecmp($child1->text, $child2->text);
     }
     
     public function toHTML()
@@ -104,6 +110,7 @@ class Menu
         if($child->parent == "")
         {
             $this->children[$child->name] = $child;
+            usort($this->children, array($this, 'sort'));
             return true;
         }
         else
@@ -166,5 +173,10 @@ class Menu
         $html .= "</ul>";
         
         return $html;
+    }
+    
+    private function sort($child1, $child2)
+    {
+        return strcasecmp($child1->text, $child2->text);
     }
 }

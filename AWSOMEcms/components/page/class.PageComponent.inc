@@ -81,4 +81,9 @@ class PageComponent extends Component
             }
         }
     }
+    public function registerMenuItems($menu)
+    {
+        $menu->addChild(new MenuItem("page", "Pages", ""));
+        $menu->addChild(new MenuItem("addpage", "Add Page", Config::get('pageadd', 'pageadd', 'admin'), "page"));
+    }
 }
