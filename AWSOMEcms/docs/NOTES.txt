@@ -24,9 +24,12 @@ TODO:
  * Refactor some old code with newer code, so backwards copatibily can be removed.
  * Comments components need to interface with users module if installed. If users installed then need to the name/email field
  * Installer needs to delete components when that option is checked
- * Make a dynamic menu for the admin section
  
 CHANGE LOG:
+26-10-2009 (v0.3.8)
+ * Made a dynamic menu for the admin section
+ * Made a default layout for the admin section
+ * Made some small fixes to most of the components
 18-10-2009 (v0.3.8)
  * Started with adding info files for general documentation for each component
  * News module supports tags now for each news item
