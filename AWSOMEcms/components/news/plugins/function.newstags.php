@@ -2,7 +2,7 @@
 function smarty_function_newstags($params, &$smarty)
 {
     $newsComponent = Request::init('news');
-    $template = "news/newstags.tpl";
+    $template = "news/news_tags.tpl";
     
     //select
     $tags = SQLQuery::doSelect()
