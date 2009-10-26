@@ -47,12 +47,18 @@ class MenuItem
         $html = "<li onmouseover=\"adminmenu_openMenu(this);\" onmouseout=\"adminmenu_closeMenu(this);\">";
         if(empty($this->page))
         {
-            $html .= "<a>{$this->text}</a>";
+            $html .= "<a>{$this->text}";
         }
         else
         {
-            $html .= "<a href=\"/{$this->page}\">{$this->text}</a>";
+            $html .= "<a href=\"/{$this->page}\">{$this->text}";
         }
+        
+        if(count($this->children) > 0)
+        {
+            $html .= "<span style='float: right'>&#187;</span>";
+        }
+        $html .= "</a>";
         
         if(count($this->children) > 0)
         {
