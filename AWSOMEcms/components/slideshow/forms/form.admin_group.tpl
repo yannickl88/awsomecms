@@ -22,14 +22,14 @@
         </td>
     </tr>
     {foreachelse}
-    <tr class="admin_table_row" colspan="3">
+    <tr class="admin_table_row" colspan="2">
         <td class="admin_table_cell">
             No Records
         </td>
     </tr>
     {/foreach}
     <tr class="admin_table_row">
-        <td class="admin_table_cell admin_table_actions" colspan="3">
+        <td class="admin_table_cell admin_table_actions" colspan="2">
             <a href="/{$actionurl_add}">Add</a>
         </td>
         <td class="admin_table_cell">
