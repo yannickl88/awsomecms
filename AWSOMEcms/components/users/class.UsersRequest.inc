@@ -57,6 +57,7 @@ class UsersRequest extends RequestComponent
         //insert
         $result = SQLQuery::doInsert('user_name', $data['user_name'])
             ->insert('user_pass', md5($data['user_pass']))
+            ->insert('user_privileges ', 1)
             ->table('users')
             ->exec();
         
