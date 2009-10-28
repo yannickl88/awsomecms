@@ -42,15 +42,9 @@ class SmartyPageLoader
         {
             if(Config::get('needslogin', false, 'admin') && $smarty_obj->get_template_vars('isADMIN') === true && !($_SESSION['usr']['auth']['admin'] === true))
             {
-                $login = '/'.Config::get('login', '', 'admin');
-                $forceDefaultLayout = true;
-                
-                $page = $smarty_obj->fetch("scf:{$login}");
+                $url = '/'.Config::get('login', '', 'admin');
             }
-            else
-            {
-                $page = $smarty_obj->fetch("scf:{$url}");
-            }
+            $page = $smarty_obj->fetch("scf:{$url}");
         }
         catch(PageNotFoundExeption $e)
         {
@@ -77,14 +71,18 @@ class SmartyPageLoader
                 $smarty_obj->assign('content', $smarty_obj->fetch("{$url}.tpl"));
             }
             
-            if(!$forceDefaultLayout && $smarty_obj->get_template_vars('isADMIN') === true && file_exists("{$smarty_obj->template_dir}/admin_layout.tpl"))
+            $layoutmap = Config::get('layoutmap', array());
+            
+            foreach($layoutmap as $map)
             {
-                return $smarty_obj->fetch("admin_layout.tpl");
+                if(preg_match("/^".$map[0]."$/", "/".$url) > 0)
+                {
+                    return $smarty_obj->fetch($map[1]);
+                }
             }
-            else
-            {
-                return $smarty_obj->fetch("layout.tpl");
-            }
+            
+            //no layout fond so we fallback to the default
+            return $smarty_obj->fetch("layout.tpl");
         }
         else
         {

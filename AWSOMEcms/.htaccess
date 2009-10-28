@@ -4,6 +4,7 @@ RewriteEngine On
 # disable viewing of ini files
 RewriteRule \.(ini)$ - [F]
 RewriteRule \.(info)$ - [F]
+RewriteRule \.(conf)$ - [F]
 
 # disable viewing of core directories
 RewriteCond %{REQUEST_URI} ^/cache/.*$ [OR]

@@ -46,7 +46,8 @@ class Config
     */
     private function fillData()
     {
-        global $websiteroot, $frameworkroot;
+        global $websiteroot;
+        $frameworkroot = getFrameworkRoot();
         
         $this->data = array();
         
@@ -67,6 +68,18 @@ class Config
             if($file != '.' && $file != ".." && substr($file, strrpos($file, '.')+1) == 'ini')
             {
                 $this->data = array_merge_recursive($this->data, parse_ini_file($websiteroot.'/configs/'.$file, true));
+            }
+        }
+        
+        //parse the layout map
+        if(file_exists($frameworkroot.'/core/layoutmap.conf'))
+        {
+            $data = file($frameworkroot.'/core/layoutmap.conf');
+            $this->data['layoutmap'] = array();
+            
+            foreach($data as $line)
+            {
+                $this->data['layoutmap'][] = explode(" ", trim($line));
             }
         }
         

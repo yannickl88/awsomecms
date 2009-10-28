@@ -5,3 +5,8 @@ function import($file)
     
     require_once realpath($frameworkRoot.'/'.$file);
 }
+
+function getFrameworkRoot()
+{
+    return dirname(dirname(__FILE__));
+}
