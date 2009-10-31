@@ -311,7 +311,7 @@ class GalleryComponent extends Component
     
     public function registerMenuItems($menu)
     {
-        $menu->addChild(new MenuItem("gallery", "", ""));
+        $menu->addChild(new MenuItem("gallery", "", Config::get('galleryadmin', 'galleryadmin', 'admin')));
         $menu->addChild(new MenuItem("galleryadmin", "Images", Config::get('galleryadmin', 'galleryadmin', 'admin'), "gallery"));
         $menu->addChild(new MenuItem("galleryadd", "Upload", Config::get('galleryadd', 'galleryadd', 'admin'), "gallery"));
     }

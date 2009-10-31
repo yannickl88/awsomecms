@@ -197,8 +197,6 @@ if($env != 'update')
 
     if($env != 'release' && $env != 'stable')
     {
-        rcopy($location.'config.ini', $location."RELEASES{$ds}tmp{$ds}config.ini");
-        output(".", true);
         rcopy($location.'deploy.php', $location."RELEASES{$ds}tmp{$ds}deploy.php");
         output(".", true);
     }
@@ -218,6 +216,10 @@ if($env != 'update')
     output(".", true);
     clearDir($location."RELEASES{$ds}tmp{$ds}htdocs{$ds}install{$ds}templates_c");
     output(".", true);
+    if($env == 'release' || $env == 'stable')
+    {
+        unlink($location."RELEASES{$ds}tmp{$ds}htdocs{$ds}config.ini");
+    }
 }
 else
 {
