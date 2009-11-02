@@ -33,6 +33,7 @@ class PrivilegesRequest extends RequestComponent
         }
         else
         {
+            $query->orderBy('privilege_name');
             return $query->exec()->getRows();
         }
     }

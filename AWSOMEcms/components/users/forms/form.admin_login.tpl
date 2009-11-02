@@ -30,6 +30,6 @@
     <div class="admin_form_row admin_form_submit">
         <input type="submit" value="Login" id="user_submit" class="admin_form_submit">
     </div>
-    <input type="hidden" name="action" value="login" />
+    <input type="hidden" name="action" value="admin_login" />
     <input type="hidden" name="component" value="users" />
 </form>

@@ -111,48 +111,79 @@ class UsersComponent extends Component
         $smarty->assign("actionurl_delete", Config::get('usersdelete', 'usersdelete', 'admin'));
     }
     
-    public function action_login($smarty, $smartyLoader, $request)
+    public function action_json($smarty, $smartyLoader, $request)
     {
-        if($request['methode'] == 'post')
+        return json_encode(array("hey" => "hoi"));
+    }
+    
+    private function login($request, $redirect)
+    {
+        //extra custom validation
+        $valid = true;
+        $e = new InvalidFormException($request, $redirect);
+        
+        if(empty($request['user_name']))
         {
-            //extra custom validation
-            $valid = true;
-            $e = new InvalidFormException($request, "/".Config::get('location', 'location', 'admin'));
-            
-            if(empty($request['user_name']))
+            $valid = false;
+            $e->addInvalidField('user_name', "Field was not filled in");
+        }
+        if(empty($request['user_pass']))
+        {
+            $valid = false;
+            $e->addInvalidField('user_pass', "Field was not filled in");
+        }
+        
+        if($valid)
+        {
+            if(Controller::getInstance()->auth_login($request['user_name'], $request['user_pass']))
             {
-                $valid = false;
-                $e->addInvalidField('user_name', "Field was not filled in");
-            }
-            if(empty($request['user_pass']))
-            {
-                $valid = false;
-                $e->addInvalidField('user_pass', "Field was not filled in");
-            }
-            
-            if($valid)
-            {
-                if(Controller::getInstance()->auth_login($request['user_name'], $request['user_pass']))
-                {
-                    $_SESSION['usr'] = array();
-                    $_SESSION['usr']['user_name'] = $request['user_name'];
-                    $_SESSION['usr']['user_pass'] = $request['user_pass'];
-                    $_SESSION['usr']['auth'] = Controller::getInstance()->auth($record['user_id']);
-                }
-                else
-                {
-                    $e->addInvalidField('user_name', "Username and Password do not match");
-                    $e->addInvalidField('user_pass', "");
-                    
-                    throw $e;
-                }
+                $_SESSION['usr'] = array();
+                $_SESSION['usr']['user_name'] = $request['user_name'];
+                $_SESSION['usr']['user_pass'] = $request['user_pass'];
+                $_SESSION['usr']['auth'] = Controller::getInstance()->auth($record['user_id']);
             }
             else
             {
+                $e->addInvalidField('user_name', "Username and Password do not match");
+                $e->addInvalidField('user_pass', "");
+                
                 throw $e;
             }
+        }
+        else
+        {
+            throw $e;
+        }
+        
+        $this->redirect($redirect);
+    }
+    
+    public function action_user_login($smarty, $smartyLoader, $request)
+    {
+        if($request['methode'] == 'post')
+        {
+            $this->login($request, "/");
+        }
+    }
+    
+    public function action_admin_login($smarty, $smartyLoader, $request)
+    {
+        if($request['methode'] == 'post')
+        {
+            $this->login($request, "/".Config::get('location', 'location', 'admin'));
+        }
+    }
+    
+    public function action_privadmin($smarty, $smartyLoader, $request)
+    {
+        if($request['methode'] == 'post')
+        {
             
-            $this->redirect("/".Config::get('location', 'location', 'admin'));
+        }
+        else
+        {
+            $requestObj = Request::init('privileges');
+            $smarty->assign("records", $requestObj->doSelect());
         }
     }
     
@@ -183,5 +214,6 @@ class UsersComponent extends Component
     {
         $menu->addChild(new MenuItem("users", "", Config::get('usersadmin', 'usersadmin', 'admin')));
         $menu->addChild(new MenuItem("usersadmin", "Users", Config::get('usersadmin', 'usersadmin', 'admin'), "users"));
+        $menu->addChild(new MenuItem("privadmin", "Privileges", Config::get('privadmin', 'privadmin', 'admin'), "users"));
     }
 }

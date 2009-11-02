@@ -61,8 +61,21 @@ class SmartyPageLoader
             }
         }
         
-        //check for layout file
-        if(file_exists("{$smarty_obj->template_dir}/layout.tpl"))
+        if($smarty_obj->get_template_vars('LAYOUT')) //check if layout was set from withing a page
+        {
+            $template = $smarty_obj->get_template_vars('LAYOUT');
+            
+            if($template == "json")
+            {
+                header('Content-type: application/json');
+                return $page;
+            }
+            else
+            {
+                return $smarty_obj->fetch("{$template}.tpl");
+            }
+        }
+        elseif(file_exists("{$smarty_obj->template_dir}/layout.tpl")) //check for layout file
         {
             $smarty_obj->assign('content', $page);
             
