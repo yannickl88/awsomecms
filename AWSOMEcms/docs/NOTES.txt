@@ -26,6 +26,9 @@ TODO:
  * Installer needs to delete components when that option is checked
  
 CHANGE LOG:
+8-11-2009 (v0.3.8)
+ * Added user privilages to the user component.
+ * Added additional debugger info.
 26-10-2009 (v0.3.8)
  * Made a dynamic menu for the admin section
  * Made a default layout for the admin section
