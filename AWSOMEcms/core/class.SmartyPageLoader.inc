@@ -262,7 +262,7 @@ class SmartyPageLoader
                     else if(preg_match('/^modifier\.(.*)\.php$/', $plugin, $matches))
                     {
                         require_once $pluginDir.'/'.$plugin;
-                        $smarty_obj->register_function($matches[1], "smarty_modifier_".$matches[1]);
+                        $smarty_obj->register_modifier($matches[1], "smarty_modifier_".$matches[1]);
                     }
                     else if(preg_match('/^block\.(.*)\.php$/', $plugin, $matches))
                     {

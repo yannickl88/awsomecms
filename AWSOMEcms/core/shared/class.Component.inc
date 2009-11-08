@@ -199,7 +199,7 @@ class Component
         foreach($this->getFields() as $field => $type)
         {
             //check for index
-            if($index == -1 && $type == 'index')
+            if($index == -1 && ($type == 'index' || $type == 'str_index'))
             {
                 $index = $field;
                 

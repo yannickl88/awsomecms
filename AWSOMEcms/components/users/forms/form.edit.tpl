@@ -41,7 +41,7 @@
         </div>
         <div class="admin_form_field">
             {foreach from=$privileges item=priv}
-                <input type="checkbox" name="privileges[]" value="{$priv->privilege_int}"/>{$priv->privilege_name}<br />
+                <input type="checkbox" name="privileges[]" value="{$priv->privilege_int}" {if $record->user_privileges|hasflag:$priv->privilege_int} checked="checked"{/if}/>{$priv->privilege_name}<br />
             {/foreach}
         </div>
     </div>

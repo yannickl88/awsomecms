@@ -41,6 +41,7 @@ class UsersRequest extends RequestComponent
         //update
         $query = SQLQuery::doUpdate()
             ->updateWhenSet('user_name', $data['user_name'])
+            ->updateWhenSet('user_privileges', $data['user_privileges'])
             ->where('user_id', $data['user_id'])
             ->table('users');
         if($data['user_pass'])
@@ -57,7 +58,7 @@ class UsersRequest extends RequestComponent
         //insert
         $result = SQLQuery::doInsert('user_name', $data['user_name'])
             ->insert('user_pass', md5($data['user_pass']))
-            ->insert('user_privileges ', 1)
+            ->insert('user_privileges ', $data['user_privileges'])
             ->table('users')
             ->exec();
         

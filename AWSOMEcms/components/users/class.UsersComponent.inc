@@ -7,14 +7,15 @@ class UsersComponent extends Component
     {
         parent::__construct('users');
         
+        $this->multiTable = true;
         $this->fields = array(
             "users" => array(
                 "user_id" => "index",
                 "user_name" => "text",
                 "user_pass" => "text",
             ),
-            "privlages" => array(
-                "privilege_name" => "text"
+            "privileges" => array(
+                "privilege_name" => "str_index",
             )
         );
     }
@@ -41,6 +42,9 @@ class UsersComponent extends Component
                 }
                 else
                 {
+                    //sum the privlilages
+                    $request['user_privileges'] = array_sum($request['privileges']);
+                    
                     $id = $this->insert($request);
                 }
             }
@@ -53,7 +57,7 @@ class UsersComponent extends Component
     {
         if($request['methode'] == 'post')
         {
-            unset($this->fields['user_pass']);
+            unset($this->fields['users']['user_pass']);
             
             if($request['user_pass'] == '' || $request['user_pass'] != $request['user_pass2'])
             {
@@ -63,6 +67,9 @@ class UsersComponent extends Component
             
             if($this->validate($request, "/".Config::get('usersedit', 'usersedit', 'admin'), "edit"))
             {
+                //sum the privlilages
+                $request['user_privileges'] = array_sum($request['privileges']);
+                
                 $this->update($request);
             }
             
@@ -193,6 +200,26 @@ class UsersComponent extends Component
     {
         if($request['methode'] == 'post')
         {
+            $this->setCurrentTable('privileges');
+            
+            //select the privlilages
+            if($this->validate($request, "/".Config::get('privadd', 'privadd', 'admin'), "add"))
+            {
+                $requestObj = Request::init('privileges');
+                
+                //check if name is not yet chosen, we do not wat duplicates
+                if(!$requestObj->doSelect($request))
+                {
+                    $requestObj->doInsert($request);
+                }
+                else
+                {
+                    $e = new InvalidFormException($request, "/".Config::get('privadd', 'privadd', 'admin'), "Privilage already exists");
+                    $e->addInvalidField('privilege_name', "Please select another name");
+                    
+                    throw $e;
+                }
+            }
             
             $this->redirect("/".Config::get('privadmin', 'privadmin', 'admin'));
         }
@@ -200,15 +227,61 @@ class UsersComponent extends Component
     
     public function action_privedit($smarty, $smartyLoader, $request)
     {
+        $requestObj = Request::init('privileges');
+        
         if($request['methode'] == 'post')
         {
+            $this->setCurrentTable('privileges');
+            
+            //select the privlilages
+            if($this->validate($request, "/".Config::get('privedit', 'privedit', 'admin'), "edit"))
+            {
+                //check if name is not yet chosen, we do not wat duplicates
+                if(!$requestObj->doSelect($request))
+                {
+                    $requestObj->doUpdate($request);
+                }
+                else
+                {
+                    $e = new InvalidFormException($request, "/".Config::get('privedit', 'privedit', 'admin'), "Privilage already exists");
+                    $e->addInvalidField('privilege_name', "Please select another name");
+                    
+                    throw $e;
+                }
+            }
             
             $this->redirect("/".Config::get('privadmin', 'privadmin', 'admin'));
         }
         else
         {
-            $requestObj = Request::init('privileges');
-            $smarty->assign("record", $requestObj->doSelect($request));
+            $records = $requestObj->doSelect($request);
+            
+            $smarty->assign("record", $records[0]);
+        }
+    }
+    
+    public function action_privdelete($smarty, $smartyLoader, $request)
+    {
+        $requestObj = Request::init('privileges');
+        
+        if($request['methode'] == 'post')
+        {
+            $requestObj->doDelete($request);
+            
+            $this->redirect("/".Config::get('privadmin', 'privadmin', 'admin'));
+        }
+        else
+        {
+            if($request['privilege_name'])
+            {
+                $record = $requestObj->doSelect($request);
+                
+                $smarty->assign("record", $record);
+            }
+            else
+            {
+                $this->redirect("/".Config::get('privadmin', 'privadmin', 'admin'));
+            }
         }
     }
     

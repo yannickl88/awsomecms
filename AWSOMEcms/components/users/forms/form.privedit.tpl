@@ -10,45 +10,19 @@
         {/foreach}
     </script>
 {/if}
-<form method="post" action="/" class="admin_form admin_users_edit">
+<form method="post" action="/admin/users/privedit" class="admin_form admin_priv_edit">
     <div class="admin_form_row">
         <div class="admin_form_label">
-            <label for="user_name">Name:</label>
+            <label for="privilege_name">Name:</label>
         </div>
         <div class="admin_form_field">
-            <input type="text" name="user_name" id="user_name" value="{$record->user_name}"/>
-        </div>
-    </div>
-    <div class="admin_form_row">
-        <div class="admin_form_label">
-            <label for="user_pass">Password:</label>
-        </div>
-        <div class="admin_form_field">
-            <input type="password" name="user_pass" id="user_pass"/>
-        </div>
-    </div>
-    <div class="admin_form_row">
-        <div class="admin_form_label">
-            <label for="user_pass2">Again:</label>
-        </div>
-        <div class="admin_form_field">
-            <input type="password" name="user_pass2" id="user_pass2"/>
-        </div>
-    </div>
-    <div class="admin_form_row">
-        <div class="admin_form_label">
-            <label>Privileges:</label>
-        </div>
-        <div class="admin_form_field">
-            {foreach from=$privileges item=priv}
-                <input type="checkbox" name="privileges[]" value="{$priv->privilege_int}"/>{$priv->privilege_name}<br />
-            {/foreach}
+            <input type="text" name="privilege_name" id="privilege_name" value="{$record->privilege_name}"/>
         </div>
     </div>
     <div class="admin_form_row admin_form_submit">
-        <input type="submit" value="Save" id="user_submit" class="admin_form_submit">
+        <input type="submit" value="Save" id="priv_submit" class="admin_form_submit">
     </div>
-    <input type="hidden" name="user_id" value="{$record->user_id}" />
-    <input type="hidden" name="action" value="edit" />
+    <input type="hidden" name="privilege_name_old" value="{$record->privilege_name}" />
+    <input type="hidden" name="action" value="privedit" />
     <input type="hidden" name="component" value="users" />
 </form>

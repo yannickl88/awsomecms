@@ -13,7 +13,7 @@ try
     $config = Config::getInstance();
 
     //check if incomming request if directed at the proxy
-    if($config->get("enabled", false, 'proxy') == "1" && 'http://' . $_SERVER['SERVER_NAME'] == $config->get("proxy", 'www.google.com', 'proxy'))
+    if($config->get("enabled", false, 'proxy') == "1" && strpos('http://' . $_SERVER['SERVER_NAME'] . $_SERVER['REQUEST_URI'], $config->get("proxy", 'www.google.com', 'proxy')) === 0)
     {
         import('/core/shared/class.RequestComponent.inc');
         

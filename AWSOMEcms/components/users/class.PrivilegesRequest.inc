@@ -19,23 +19,48 @@ class PrivilegesRequest extends RequestComponent
             $query->where('privilege_int', $data['privilege_int']);
         }
         
-        if(isset($data['privilege_name']))
-        {
-            $rows = $query->exec();
-            $total = 0;
-            
-            while($row = $rows->getRow())
-            {
-                $total += $row->privilege_int;
-            }
-            
-            return $total;
-        }
-        else
-        {
-            $query->orderBy('privilege_name');
-            return $query->exec()->getRows();
-        }
+        $query->where('privilege_name', '*deleted*', "!=");
+        $query->orderBy('privilege_name');
+        
+        return $query->exec()->getRows();
+    }
+    protected function do_DELETE($data = array())
+    {
+        //delete
+        $query = SQLQuery::doUpdate()
+            ->update('privilege_name', '*deleted*')
+            ->where('privilege_name', $data['privilege_name'])
+            ->table('privileges')
+            ->exec();
+        
+        return true;
+    }
+    protected function do_UPDATE($data = array())
+    {
+        //update
+        $query = SQLQuery::doUpdate()
+            ->updateWhenSet('privilege_name', $data['privilege_name'])
+            ->where('privilege_name', $data['privilege_name_old'])
+            ->table('privileges')
+            ->exec();
+        
+        return true;
+    }
+    protected function do_INSERT($data = array())
+    {
+        //first let us request all the records
+        $rows = SQLQuery::doSelect()
+            ->table('privileges')
+            ->exec()
+            ->getRows();
+        
+        //insert
+        $result = SQLQuery::doInsert('privilege_name', $data['privilege_name'])
+            ->insert('privilege_int', pow(2, count($rows)))
+            ->table('privileges')
+            ->exec();
+        
+        return $result->insertID();
     }
 }
 ?>

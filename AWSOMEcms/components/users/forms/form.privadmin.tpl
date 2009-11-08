@@ -12,12 +12,14 @@
             {$row->privilege_name}
         </td>
         <td class="admin_table_cell admin_table_actions">
-            <a href="/{$actionurl_edit}&user_id={$row->privilege_name}"><img src="/img/icons/user_edit.png" alt="edit"></a>
-            <a href="/{$actionurl_delete}&user_id={$row->privilege_name}"><img src="/img/icons/user_delete.png" alt="delete"></a>
+            {if $row->privilege_locked != 1}
+                <a href="/{$actionurl_edit}?privilege_name={$row->privilege_name}"><img src="/img/icons/user_edit.png" alt="edit"></a>
+                <a href="/{$actionurl_delete}?privilege_name={$row->privilege_name}"><img src="/img/icons/user_delete.png" alt="delete"></a>
+            {/if}
         </td>
     </tr>
     {foreachelse}
-    <tr class="admin_table_row" colspan="3">
+    <tr class="admin_table_row" colspan="2">
         <td class="admin_table_cell">
             No Records
         </td>

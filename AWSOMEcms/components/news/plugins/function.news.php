@@ -1,7 +1,7 @@
 <?php
 function smarty_function_news($params, &$smarty)
 {
-    $newsComponent = Component::init('news');
+    $newsComponent = Request::init('news');
     $template = "news/news.tpl";
     
     if(isset($params['template']))
@@ -13,7 +13,7 @@ function smarty_function_news($params, &$smarty)
         $params['news_tag'] = $params['tag'];
     }
 
-    $smarty->assign("news", $newsComponent->select($params));
+    $smarty->assign("news", $newsComponent->doSelect($params));
 
     return $smarty->fetch($template);
 }

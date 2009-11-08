@@ -10,34 +10,18 @@
         {/foreach}
     </script>
 {/if}
-<form method="post" action="/admin/users/add" class="admin_form admin_page_add">
+<form method="post" action="/admin/users/privadd" class="admin_form admin_priv_add">
     <div class="admin_form_row">
         <div class="admin_form_label">
-            <label for="user_name">Name:</label>
+            <label for="privilege_name">Name:</label>
         </div>
         <div class="admin_form_field">
-            <input type="text" name="user_name" id="user_name" value="{$FORMERROR.record.user_name}"/>
-        </div>
-    </div>
-    <div class="admin_form_row">
-        <div class="admin_form_label">
-            <label for="user_pass">Password:</label>
-        </div>
-        <div class="admin_form_field">
-            <input type="password" name="user_pass" id="user_pass"/>
-        </div>
-    </div>
-    <div class="admin_form_row">
-        <div class="admin_form_label">
-            <label for="user_pass2">Again:</label>
-        </div>
-        <div class="admin_form_field">
-            <input type="password" name="user_pass2" id="user_pass2"/>
+            <input type="text" name="privilege_name" id="privilege_name" value="{$FORMERROR.record.privilege_name}"/>
         </div>
     </div>
     <div class="admin_form_row admin_form_submit">
-        <input type="submit" value="Save" id="user_submit" class="admin_form_submit">
+        <input type="submit" value="Save" id="priv_submit" class="admin_form_submit">
     </div>
-    <input type="hidden" name="action" value="add" />
+    <input type="hidden" name="action" value="privadd" />
     <input type="hidden" name="component" value="users" />
 </form>
