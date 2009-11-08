@@ -40,7 +40,7 @@ class Debugger
         
         $timestamp = round(microtime(true) - $start, 2);
         
-        $this->logs[] = array(Debugger::NOTICE, "[{$timestamp}sec] - {$message}");
+        $this->logs[] = array($level, "[{$timestamp}sec] - {$message}");
     }
     
     public function warning($message)

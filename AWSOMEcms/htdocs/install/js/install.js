@@ -212,7 +212,7 @@ function action_step2()
             $('#check1').attr('src', '/install/img/fail-icon.png');
         }
         
-        if(valid == 4)
+        if(valid == 3)
         {
             $('#next').removeAttr("disabled");
         }
@@ -232,27 +232,7 @@ function action_step2()
             $('#check2').attr('src', '/install/img/fail-icon.png');
         }
         
-        if(valid == 4)
-        {
-            $('#next').removeAttr("disabled");
-        }
-        else
-        {
-            $('#next').attr("disabled", "disabled");
-        }
-    });
-    jQuery.getJSON('/install.php', {action: 'checkcurl'}, function(data) {
-        if(data)
-        {
-            $('#check3').attr('src', '/install/img/ok-icon.png');
-            valid++;
-        }
-        else
-        {
-            $('#check3').attr('src', '/install/img/fail-icon.png');
-        }
-        
-        if(valid == 4)
+        if(valid == 3)
         {
             $('#next').removeAttr("disabled");
         }
@@ -264,15 +244,15 @@ function action_step2()
     jQuery.getJSON('/install.php', {action: 'checkgdmod'}, function(data) {
         if(data)
         {
-            $('#check4').attr('src', '/install/img/ok-icon.png');
+            $('#check3').attr('src', '/install/img/ok-icon.png');
             valid++;
         }
         else
         {
-            $('#check4').attr('src', '/install/img/fail-icon.png');
+            $('#check3').attr('src', '/install/img/fail-icon.png');
         }
         
-        if(valid == 4)
+        if(valid == 3)
         {
             $('#next').removeAttr("disabled");
         }

@@ -10,13 +10,13 @@
         {/foreach}
     </script>
 {/if}
-<form method="post" action="/" class="admin_form admin_users_edit">
+<form method="post" action="/admin/users/add" class="admin_form admin_page_add">
     <div class="admin_form_row">
         <div class="admin_form_label">
             <label for="user_name">Name:</label>
         </div>
         <div class="admin_form_field">
-            <input type="text" name="user_name" id="user_name" value="{$record->user_name}"/>
+            <input type="text" name="user_name" id="user_name" value="{$FORMERROR.record.user_name}"/>
         </div>
     </div>
     <div class="admin_form_row">
@@ -35,20 +35,9 @@
             <input type="password" name="user_pass2" id="user_pass2"/>
         </div>
     </div>
-    <div class="admin_form_row">
-        <div class="admin_form_label">
-            <label>Privileges:</label>
-        </div>
-        <div class="admin_form_field">
-            {foreach from=$privileges item=priv}
-                <input type="checkbox" name="privileges[]" value="{$priv->privilege_int}"/>{$priv->privilege_name}<br />
-            {/foreach}
-        </div>
-    </div>
     <div class="admin_form_row admin_form_submit">
         <input type="submit" value="Save" id="user_submit" class="admin_form_submit">
     </div>
-    <input type="hidden" name="user_id" value="{$record->user_id}" />
-    <input type="hidden" name="action" value="edit" />
+    <input type="hidden" name="action" value="add" />
     <input type="hidden" name="component" value="users" />
 </form>

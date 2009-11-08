@@ -8,9 +8,14 @@ class UsersComponent extends Component
         parent::__construct('users');
         
         $this->fields = array(
-            "user_id" => "index",
-            "user_name" => "text",
-            "user_pass" => "text",
+            "users" => array(
+                "user_id" => "index",
+                "user_name" => "text",
+                "user_pass" => "text",
+            ),
+            "privlages" => array(
+                "privilege_name" => "text"
+            )
         );
     }
     
@@ -67,9 +72,13 @@ class UsersComponent extends Component
         {
             if($request['user_id'])
             {
-                $record = $this->select($request);
+                $userRequest = Request::init('users');
+                $privRequest = Request::init('privileges');
+                
+                $record = $userRequest->doSelect($request);
                 
                 $smarty->assign("record", $record[0]);
+                $smarty->assign("privileges", $privRequest->doSelect());
             }
             else
             {
@@ -109,11 +118,6 @@ class UsersComponent extends Component
         $smarty->assign("actionurl_add", Config::get('usersadd', 'usersadd', 'admin'));
         $smarty->assign("actionurl_edit", Config::get('usersedit', 'usersedit', 'admin'));
         $smarty->assign("actionurl_delete", Config::get('usersdelete', 'usersdelete', 'admin'));
-    }
-    
-    public function action_json($smarty, $smartyLoader, $request)
-    {
-        return json_encode(array("hey" => "hoi"));
     }
     
     private function login($request, $redirect)
@@ -176,14 +180,35 @@ class UsersComponent extends Component
     
     public function action_privadmin($smarty, $smartyLoader, $request)
     {
+        $requestObj = Request::init('privileges');
+        $smarty->assign("records", $requestObj->doSelect());
+        
+        //urls
+        $smarty->assign("actionurl_add", Config::get('privadd', 'privadd', 'admin'));
+        $smarty->assign("actionurl_edit", Config::get('privedit', 'privedit', 'admin'));
+        $smarty->assign("actionurl_delete", Config::get('privdelete', 'privdelete', 'admin'));
+    }
+    
+    public function action_privadd($smarty, $smartyLoader, $request)
+    {
         if($request['methode'] == 'post')
         {
             
+            $this->redirect("/".Config::get('privadmin', 'privadmin', 'admin'));
+        }
+    }
+    
+    public function action_privedit($smarty, $smartyLoader, $request)
+    {
+        if($request['methode'] == 'post')
+        {
+            
+            $this->redirect("/".Config::get('privadmin', 'privadmin', 'admin'));
         }
         else
         {
             $requestObj = Request::init('privileges');
-            $smarty->assign("records", $requestObj->doSelect());
+            $smarty->assign("record", $requestObj->doSelect($request));
         }
     }
     

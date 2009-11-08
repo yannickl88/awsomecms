@@ -34,8 +34,7 @@
                     <br />
                     <img src='/install/img/loader.gif' id="check1"/> PHP 5 or higher <br />
                     <img src='/install/img/loader.gif' id="check2"/> MySQL 5.0 or higher <br />
-                    <img src='/install/img/loader.gif' id="check3"/> CURL extention <br />
-                    <img src='/install/img/loader.gif' id="check4"/> GDMod <br />
+                    <img src='/install/img/loader.gif' id="check3"/> GDMod <br />
                     <br />
                     <a href="javascript: void(0)" onclick="action_step2();">Re-check</a>
                 </div>

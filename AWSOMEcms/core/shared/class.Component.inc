@@ -6,6 +6,8 @@ import('/core/shared/class.InvalidFormException.inc');
 */
 class Component
 {
+    private static $components;
+    
     protected $component;
     protected $request;
     protected $fields;
@@ -37,20 +39,39 @@ class Component
     */
     public static function init($component)
     {
-        $components = Config::getInstance()->getComponenets();
-        
-        $className = ucfirst($component)."Component";
-        $loc = $components[$component]->component_path.'/class.'.$className.'.inc';
-        
-        if(file_exists($loc) && array_key_exists($component, $components))
+        if(isset(Component::$components[$component]))
         {
-            include_once $loc;
-            
-            return new $className();
+            return Component::$components[$component];
         }
         else
         {
-            return false;
+            if(!isset(Component::$components))
+            {
+                Component::$components = array();
+            }
+            
+            $components = Config::getInstance()->getComponenets();
+            
+            $className = ucfirst($component)."Component";
+            $loc = $components[$component]->component_path.'/class.'.$className.'.inc';
+            
+            Debugger::getInstance()->log("Creating Component '{$className}'");
+            
+            if(file_exists($loc) && array_key_exists($component, $components))
+            {
+                include_once $loc;
+                
+                $obj = new $className();
+                Component::$components[$component] = $obj;
+                
+                return $obj;
+            }
+            else
+            {
+                Debugger::getInstance()->log("Cannot find Component '{$className}'");
+                Component::$components[$component] = false;
+                return false;
+            }
         }
     }
     
@@ -72,6 +93,7 @@ class Component
     */
     public function select($data = array())
     {
+        Debugger::getInstance()->warning('Depricated ::select(), use the request object');
         return Request::init($this->request)->doSelect($data);
     }
     
@@ -83,7 +105,8 @@ class Component
     */
     public function delete($data = array())
     {
-       return Request::init($this->request)->doDelete($data);
+        Debugger::getInstance()->warning('Depricated ::delete(), use the request object');
+        return Request::init($this->request)->doDelete($data);
     }
     
     /**
@@ -94,6 +117,7 @@ class Component
     */
     public function update($data = array())
     {
+        Debugger::getInstance()->warning('Depricated ::update(), use the request object');
         return Request::init($this->request)->doUpdate($data);
     }
     
@@ -105,6 +129,7 @@ class Component
     */
     public function insert($data = array())
     {
+        Debugger::getInstance()->warning('Depricated ::insert(), use the request object');
         return Request::init($this->request)->doInsert($data);
     }
     
@@ -255,8 +280,5 @@ class Component
         $this->currentTable = $table;
     }
     
-    public function registerMenuItems($menu)
-    {
-        
-    }
+    public function registerMenuItems($menu) { }
 }

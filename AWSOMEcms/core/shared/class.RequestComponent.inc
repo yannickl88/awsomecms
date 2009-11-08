@@ -7,6 +7,8 @@ class ForbiddenException extends Exception {}
 */
 class Request
 {
+    private static $requests;
+    
     public $component;
     public $methode;
     public $action;
@@ -35,22 +37,39 @@ class Request
     
     public static function init($component)
     {
-        $components = Config::getInstance()->getRequests();
-        
-        $className = ucfirst($component)."Request";
-        $loc = $components[$component]->component_path.'/class.'.$className.'.inc';
-        
-        if(file_exists($loc) && array_key_exists($component, $components))
+        if(isset(Request::$requests[$component]))
         {
-            include_once $loc;
-            
-            return new $className();
+            return Request::$requests[$component];
         }
         else
         {
-            trigger_error("Cannot find request '{$component}'", E_USER_ERROR);
+            if(!isset(Request::$requests))
+            {
+                Request::$requests = array();
+            }
             
-            return false;
+            $components = Config::getInstance()->getRequests();
+            
+            $className = ucfirst($component)."Request";
+            $loc = $components[$component]->component_path.'/class.'.$className.'.inc';
+            
+            Debugger::getInstance()->log("Creating Request '{$className}'");
+            
+            if(file_exists($loc) && array_key_exists($component, $components))
+            {
+                include_once $loc;
+                
+                $obj = new $className();
+                Request::$requests[$component] = $obj;
+                
+                return $obj;
+            }
+            else
+            {
+                Debugger::getInstance()->error("Cannot find Request '{$className}'");
+                Request::$requests[$component] = false;
+                return false;
+            }
         }
     }
 }
@@ -73,6 +92,7 @@ class RequestComponent
         //create the request
         $request = new Request();
         $request->methode = $_SERVER['REQUEST_METHOD'];
+        
         $request->component = $_GET['url'];
         $request->action = $request->translateAction();
         
