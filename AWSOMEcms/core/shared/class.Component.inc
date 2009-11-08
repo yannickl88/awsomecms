@@ -162,6 +162,7 @@ class Component
         if(Config::get('debug', 0, 'debug') > 1)
         {
             echo "Non debug would have redirected to \" <a href='{$url}'>{$url}</a> \"";
+            echo Debugger::getInstance();
         }
         else
         {

@@ -54,7 +54,7 @@ class Debugger
     }
     
     public function __toString() {
-        if(Config::get('debug', 0, 'debug') == 1)
+        if(Config::get('debug', 0, 'debug') > 0)
         {
             return $this->renderDebug();
         }

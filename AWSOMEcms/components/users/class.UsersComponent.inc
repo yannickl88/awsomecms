@@ -164,14 +164,7 @@ class UsersComponent extends Component
         
         if($valid)
         {
-            if(Controller::getInstance()->auth_login($request['user_name'], $request['user_pass']))
-            {
-                $_SESSION['usr'] = array();
-                $_SESSION['usr']['user_name'] = $request['user_name'];
-                $_SESSION['usr']['user_pass'] = $request['user_pass'];
-                $_SESSION['usr']['auth'] = Controller::getInstance()->auth($record['user_id']);
-            }
-            else
+            if(!Controller::getInstance()->auth_login($request['user_name'], $request['user_pass']))
             {
                 $e->addInvalidField('user_name', "Username and Password do not match");
                 $e->addInvalidField('user_pass', "");
@@ -321,9 +314,23 @@ class UsersComponent extends Component
     {
         $user_pass = md5($user_pass);
         
-        $record = $this->select(array("user_name" => $user_name, "user_pass" => $user_pass));
+        $record = Request::init('users.users')->doSelect(array("user_name" => $user_name, "user_pass" => $user_pass));
+        $privilages = $this->auth($record[0]->user_id);
         
-        return (count($record) > 0);
+        if(count($record) == 1 && $privilages['admin'] === true)
+        {
+            //set the session
+            $_SESSION['usr'] = array();
+            $_SESSION['usr']['user_name'] = $user_name;
+            $_SESSION['usr']['user_pass'] = $user_pass;
+            $_SESSION['usr']['auth'] = $privilages;
+            
+            return true;
+        }
+        else
+        {
+            return false;
+        }
     }
     
     public function registerMenuItems($menu)
