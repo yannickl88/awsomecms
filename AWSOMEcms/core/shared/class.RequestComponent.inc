@@ -50,7 +50,16 @@ class Request
             
             $components = Config::getInstance()->getRequests();
             
-            $className = ucfirst($component)."Request";
+            if(strpos($component, '.') > 0)
+            {
+                $request = substr($component, strpos($component, '.') + 1);
+            }
+            else
+            {
+                $request = $component;
+            }
+            
+            $className = ucfirst($request)."Request";
             $loc = $components[$component]->component_path.'/class.'.$className.'.inc';
             
             Debugger::getInstance()->log("Creating Request '{$className}'");

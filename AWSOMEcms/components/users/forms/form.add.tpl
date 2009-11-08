@@ -35,6 +35,16 @@
             <input type="password" name="user_pass2" id="user_pass2"/>
         </div>
     </div>
+    <div class="admin_form_row">
+        <div class="admin_form_label">
+            <label>Privileges:</label>
+        </div>
+        <div class="admin_form_field">
+            {foreach from=$privileges item=priv}
+                <input type="checkbox" name="privileges[]" value="{$priv->privilege_int}" {if $record->user_privileges|hasflag:$priv->privilege_int} checked="checked"{/if}/>{$priv->privilege_name}<br />
+            {/foreach}
+        </div>
+    </div>
     <div class="admin_form_row admin_form_submit">
         <input type="submit" value="Save" id="user_submit" class="admin_form_submit">
     </div>

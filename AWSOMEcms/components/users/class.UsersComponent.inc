@@ -43,13 +43,23 @@ class UsersComponent extends Component
                 else
                 {
                     //sum the privlilages
+                    if(!isset($request['privileges']))
+                    {
+                        $request['privileges'] = array();
+                    }
                     $request['user_privileges'] = array_sum($request['privileges']);
                     
-                    $id = $this->insert($request);
+                    $userRequest = Request::init('users.users');
+                    $id = $userRequest->doInsert($request);
                 }
             }
             
             $this->redirect("/".Config::get('usersadmin', 'usersadmin', 'admin'));
+        }
+        else
+        {
+            $privRequest = Request::init('users.privileges');
+            $smarty->assign("privileges", $privRequest->doSelect());
         }
     }
     
@@ -68,9 +78,14 @@ class UsersComponent extends Component
             if($this->validate($request, "/".Config::get('usersedit', 'usersedit', 'admin'), "edit"))
             {
                 //sum the privlilages
+                if(!isset($request['privileges']))
+                {
+                    $request['privileges'] = array();
+                }
                 $request['user_privileges'] = array_sum($request['privileges']);
                 
-                $this->update($request);
+                $userRequest = Request::init('users.users');
+                $userRequest->doUpdate($request);
             }
             
             $this->redirect("/".Config::get('usersadmin', 'usersadmin', 'admin'));
@@ -79,8 +94,8 @@ class UsersComponent extends Component
         {
             if($request['user_id'])
             {
-                $userRequest = Request::init('users');
-                $privRequest = Request::init('privileges');
+                $userRequest = Request::init('users.users');
+                $privRequest = Request::init('users.privileges');
                 
                 $record = $userRequest->doSelect($request);
                 
@@ -96,9 +111,11 @@ class UsersComponent extends Component
     
     public function action_delete($smarty, $smartyLoader, $request)
     {
+        $userRequest = Request::init('users.users');
+        
         if($request['methode'] == 'post')
         {
-            $this->delete($request);
+            $userRequest->doDelete($request);
             
             $this->redirect("/".Config::get('usersadmin', 'usersadmin', 'admin'));
         }
@@ -106,7 +123,7 @@ class UsersComponent extends Component
         {
             if($request['user_id'])
             {
-                $record = $this->select($request);
+                $record = $userRequest->doSelect($request);
                 
                 $smarty->assign("record", $record);
             }
@@ -119,7 +136,8 @@ class UsersComponent extends Component
     
     public function action_admin($smarty, $smartyLoader, $request)
     {
-        $smarty->assign("records", $this->select());
+        $userRequest = Request::init('users.users');
+        $smarty->assign("records", $userRequest->doSelect());
         
         //urls
         $smarty->assign("actionurl_add", Config::get('usersadd', 'usersadd', 'admin'));
@@ -187,7 +205,7 @@ class UsersComponent extends Component
     
     public function action_privadmin($smarty, $smartyLoader, $request)
     {
-        $requestObj = Request::init('privileges');
+        $requestObj = Request::init('users.privileges');
         $smarty->assign("records", $requestObj->doSelect());
         
         //urls
@@ -205,7 +223,7 @@ class UsersComponent extends Component
             //select the privlilages
             if($this->validate($request, "/".Config::get('privadd', 'privadd', 'admin'), "add"))
             {
-                $requestObj = Request::init('privileges');
+                $requestObj = Request::init('users.privileges');
                 
                 //check if name is not yet chosen, we do not wat duplicates
                 if(!$requestObj->doSelect($request))
@@ -227,7 +245,7 @@ class UsersComponent extends Component
     
     public function action_privedit($smarty, $smartyLoader, $request)
     {
-        $requestObj = Request::init('privileges');
+        $requestObj = Request::init('users.privileges');
         
         if($request['methode'] == 'post')
         {
@@ -262,7 +280,7 @@ class UsersComponent extends Component
     
     public function action_privdelete($smarty, $smartyLoader, $request)
     {
-        $requestObj = Request::init('privileges');
+        $requestObj = Request::init('users.privileges');
         
         if($request['methode'] == 'post')
         {
@@ -287,8 +305,8 @@ class UsersComponent extends Component
     
     public function auth($user_id)
     {
-        $privilages = Request::init('privileges')->doSelect();
-        $user = Request::init('users')->doSelect(array('user_id' => $user_id));
+        $privilages = Request::init('users.privileges')->doSelect();
+        $user = Request::init('users.users')->doSelect(array('user_id' => $user_id));
         $rights = array();
         
         foreach($privilages as $privilage)

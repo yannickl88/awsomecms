@@ -173,7 +173,14 @@ class Config
                 {
                     if($request != '')
                     {
-                        $this->requests[$request] = $row;
+                        if($row->component_name != $request || count($requests) > 1)
+                        {
+                            $this->requests[$row->component_name.".".$request] = $row;
+                        }
+                        else
+                        {
+                            $this->requests[$request] = $row;
+                        }
                     }
                 }
             }
@@ -191,26 +198,7 @@ class Config
     {
         if(!$this->componenets)
         {
-            $this->componenets = array();
-            $this->requests = array();
-            
-            $result = SQLQuery::doSelect()
-                ->table('components')
-                ->exec();
-            
-            while($row = $result->getRow())
-            {
-                $this->componenets[$row->component_name] = $row;
-                $requests = explode(';', $row->component_requests);
-                
-                foreach($requests as $request)
-                {
-                    if($request != '')
-                    {
-                        $this->requests[$request] = $row;
-                    }
-                }
-            }
+            $this->getComponenets();
         }
         
         return $this->requests;

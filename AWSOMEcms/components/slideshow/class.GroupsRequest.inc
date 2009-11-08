@@ -27,7 +27,7 @@ class GroupsRequest extends RequestComponent
         
         foreach($rows as &$row)
         {
-            $row->images = Request::init('groupsimages')->doSelect(array("group_id" => $row->group_id));
+            $row->images = Request::init('slideshow.groupsimages')->doSelect(array("group_id" => $row->group_id));
         }
         
         return $rows;

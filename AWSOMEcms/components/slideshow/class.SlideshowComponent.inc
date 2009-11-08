@@ -28,7 +28,7 @@ class SlideshowComponent extends Component
         //we have special actions here, mostly because this is used as answer for post, ajax and internal use
         if($request['methode'] == 'post')
         {
-            $requestObj = Request::init('images');
+            $requestObj = Request::init('slideshow.images');
             $this->setCurrentTable('s_images');
             
             if($request['ajax'] == 'true' || $request['internal'] == 'true' || $this->validate($request, "/".Config::get('slideshow_imageadd', 'slideshow_imageadd', 'admin'), "add"))
@@ -65,7 +65,7 @@ class SlideshowComponent extends Component
     {
         if($request['methode'] == 'post')
         {
-            $requestObj = Request::init('images');
+            $requestObj = Request::init('slideshow.images');
             
             if(!empty($_FILES['image_image']['name']))
             {
@@ -99,7 +99,7 @@ class SlideshowComponent extends Component
         {
             if($request['image_id'])
             {
-                $record = Request::init('images')->doSelect($request);
+                $record = Request::init('slideshow.images')->doSelect($request);
                 
                 $smarty->assign("record", $record[0]);
             }
@@ -112,7 +112,7 @@ class SlideshowComponent extends Component
     
     public function action_delete_image($smarty, $smartyLoader, $request)
     {
-        $requestObj = Request::init('images');
+        $requestObj = Request::init('slideshow.images');
         
         if($request['methode'] == 'post')
         {
@@ -145,7 +145,7 @@ class SlideshowComponent extends Component
     
     public function action_admin_image($smarty, $smartyLoader, $request)
     {
-        $smarty->assign("records", Request::init('images')->doSelect());
+        $smarty->assign("records", Request::init('slideshow.images')->doSelect());
         
         //urls
         $smarty->assign("actionurl_add", Config::get('slideshow_imageadd', 'slideshow_imageadd', 'admin'));
@@ -157,7 +157,7 @@ class SlideshowComponent extends Component
     {
         if($request['methode'] == 'post')
         {
-            $requestObj = Request::init('groups');
+            $requestObj = Request::init('slideshow.groups');
             $this->setCurrentTable('s_groups');
             
             if($this->validate($request, "/".Config::get('slideshow_groupadd', 'slideshow_groupadd', 'admin'), "add"))
@@ -173,7 +173,7 @@ class SlideshowComponent extends Component
                 //now the images
                 foreach($request['images'] as $image)
                 {
-                    Request::init('groupsimages')->doInsert(array('group_id' => $id, 'image_id' => $image));
+                    Request::init('slideshow.groupsimages')->doInsert(array('group_id' => $id, 'image_id' => $image));
                 }
             }
             
@@ -181,7 +181,7 @@ class SlideshowComponent extends Component
         }
         else
         {
-            $smarty->assign("images", Request::init('images')->doSelect());
+            $smarty->assign("images", Request::init('slideshow.images')->doSelect());
         }
     }
     
@@ -189,7 +189,7 @@ class SlideshowComponent extends Component
     {
         if($request['methode'] == 'post')
         {
-            $requestObj = Request::init('groups');
+            $requestObj = Request::init('slideshow.groups');
             $this->setCurrentTable('s_groups');
             
             if($this->validate($request, "/".Config::get('slideshow_groupadd', 'slideshow_groupadd', 'admin'), "add"))
@@ -211,11 +211,11 @@ class SlideshowComponent extends Component
                 $requestObj->doUpdate($request);
                 
                 //now the images
-                Request::init('groupsimages')->doDelete(array('group_id' => $id));
+                Request::init('slideshow.groupsimages')->doDelete(array('group_id' => $id));
                 
                 foreach($request['images'] as $image)
                 {
-                    Request::init('groupsimages')->doInsert(array('group_id' => $id, 'image_id' => $image));
+                    Request::init('slideshow.groupsimages')->doInsert(array('group_id' => $id, 'image_id' => $image));
                 }
             }
             
@@ -225,9 +225,9 @@ class SlideshowComponent extends Component
         {
             if($request['group_id'])
             {
-                $record = Request::init('groups')->doSelect($request);
-                $images = Request::init('images')->doSelect();
-                $groupimages = Request::init('groupsimages')->doSelect($request);
+                $record = Request::init('slideshow.groups')->doSelect($request);
+                $images = Request::init('slideshow.images')->doSelect();
+                $groupimages = Request::init('slideshow.groupsimages')->doSelect($request);
                 
                 $images_ids = array();
                 
@@ -257,7 +257,7 @@ class SlideshowComponent extends Component
     
     public function action_delete_group($smarty, $smartyLoader, $request)
     {
-        $requestObj = Request::init('groups');
+        $requestObj = Request::init('slideshow.groups');
         
         if($request['methode'] == 'post')
         {
@@ -266,7 +266,7 @@ class SlideshowComponent extends Component
             $id = $request['group_id'];
             
             //remove images linked to this group
-            Request::init('groupsimages')->doDelete(array("group_id" => $id));
+            Request::init('slideshow.groupsimages')->doDelete(array("group_id" => $id));
             
             $requestObj->doDelete(array("group_id" => $id));
             
@@ -287,7 +287,7 @@ class SlideshowComponent extends Component
     
     public function action_admin_group($smarty, $smartyLoader, $request)
     {
-        $smarty->assign("records", Request::init('groups')->doSelect());
+        $smarty->assign("records", Request::init('slideshow.groups')->doSelect());
         
         //urls
         $smarty->assign("actionurl_add", Config::get('slideshow_groupadd', 'slideshow_groupadd', 'admin'));
