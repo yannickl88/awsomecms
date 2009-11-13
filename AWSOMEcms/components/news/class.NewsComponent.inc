@@ -29,16 +29,15 @@ class NewsComponent extends Component
             
             if($this->validate($request, "/".Config::get('newsadd', 'newsadd', 'admin'), "add"))
             {
-                $id = $this->insert($request);
+                $requestObj = Request::init("news");
+                $id = $requestObj->doInsert($request);
             }
             
             $this->redirect("/".Config::get('newsadmin', 'newsadmin', 'admin'));
         }
         else
         {
-            $usersComponent = Component::init('users');
-            
-            $smarty->assign("users", $usersComponent->select());
+            $smarty->assign("users", Request::init('users.users')->doSelect());
         }
     }
     
@@ -50,7 +49,8 @@ class NewsComponent extends Component
             
             if($this->validate($request, "/".Config::get('newsedit', 'newsedit', 'admin'), "edit"))
             {
-                $this->update($request);
+                $requestObj = Request::init("news");
+                $requestObj->doUpdate($request);
             }
             
             $this->redirect("/".Config::get('newsadmin', 'newsadmin', 'admin'));
@@ -59,11 +59,10 @@ class NewsComponent extends Component
         {
             if($request['news_id'])
             {
-                $usersComponent = Component::init('users');
+                $smarty->assign("users", Request::init('users.users')->doSelect());
                 
-                $smarty->assign("users", $usersComponent->select());
-                
-                $record = $this->select($request);
+                $requestObj = Request::init("news");
+                $record = $requestObj->doSelect($request);
                 
                 $smarty->assign("record", (object) array_merge((array) $record[0], Controller::getInstance()->lastRecord));
             }
@@ -78,7 +77,8 @@ class NewsComponent extends Component
     {
         if($request['methode'] == 'post')
         {
-            $this->delete($request);
+            $requestObj = Request::init("news");
+            $requestObj->doDelete($request);
             
             $this->redirect("/".Config::get('newsadmin', 'newsadmin', 'admin'));
         }
@@ -86,7 +86,8 @@ class NewsComponent extends Component
         {
             if($request['news_id'])
             {
-                $record = $this->select($request);
+                $requestObj = Request::init("news");
+                $record = $requestObj->doSelect($request);
                 
                 $smarty->assign("record", $record);
             }
@@ -99,7 +100,7 @@ class NewsComponent extends Component
     
     public function action_admin($smarty, $smartyLoader, $request)
     {
-        $smarty->assign("records", $this->select());
+        $smarty->assign("records", Request::init("news")->doSelect());
         
         //urls
         $smarty->assign("actionurl_add", Config::get('newsadd', 'newsadd', 'admin'));
