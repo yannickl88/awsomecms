@@ -26,7 +26,8 @@ class PageComponent extends Component
         {
             if($this->validate($request, "/".Config::get('pageadd', 'pageadd', 'admin'), "add"))
             {
-                $id = $this->insert($request);
+                $requestObj = Request::init('page');
+                $id = $requestObj->doInsert($request);
             }
             
             $this->redirect("/".Config::get('pageedit', 'pageedit', 'admin'), array("page_id" => $id));
@@ -39,7 +40,8 @@ class PageComponent extends Component
         {
             if($this->validate($request, "/".Config::get('pageedit', 'pageedit', 'admin'), "edit"))
             {
-                $this->update($request);
+                $requestObj = Request::init('page');
+                $requestObj->doUpdate($request);
             }
             
             $this->redirect("/".Config::get('pageedit', 'pageedit', 'admin'), array("page_id" => $request['page_id']));
@@ -48,7 +50,8 @@ class PageComponent extends Component
         {
             if($request['page_id'])
             {
-                $record = $this->select($request);
+                $requestObj = Request::init('page');
+                $record = $requestObj->doSelect($request);
                 
                 $smarty->assign("record", $record[0]);
             }
@@ -63,7 +66,8 @@ class PageComponent extends Component
     {
         if($request['methode'] == 'post')
         {
-            $this->delete($request);
+            $requestObj = Request::init('page');
+            $requestObj->doDelete($request);
             
             $this->redirect("/".Config::get('pageadd', 'pageadd', 'admin'));
         }
@@ -71,7 +75,8 @@ class PageComponent extends Component
         {
             if($request['page_id'])
             {
-                $record = $this->select($request);
+                $requestObj = Request::init('page');
+                $record = $requestObj->doSelect($request);
                 
                 $smarty->assign("record", $record[0]);
             }

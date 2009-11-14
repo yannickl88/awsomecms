@@ -9,7 +9,8 @@ class GroupsRequest extends RequestComponent
         $query = SQLQuery::doSelect()
             ->table('groups')
             ->whereWhenSet('group_id', $data['group_id'])
-            ->whereWhenSet('group_name', htmlentities($data['group_name']));
+            ->whereWhenSet('group_name', htmlentities($data['group_name']))
+            ->orderBy("group_name");
         
         if(isset($data['user_id']) || isset($data['user_name']) || isset($data['user_pass']))
         {
@@ -26,15 +27,35 @@ class GroupsRequest extends RequestComponent
     }
     protected function do_DELETE($data = array())
     {
+        //delete
+        $result = SQLQuery::doDelete()
+            ->where('group_id', $data['group_id'])
+            ->table('groups')
+            ->exec();
+        
         return true;
     }
     protected function do_UPDATE($data = array())
     {
+        //update
+        $query = SQLQuery::doUpdate()
+            ->updateWhenSet('group_name', $data['group_name'])
+            ->updateWhenSet('group_privileges', $data['group_privileges'])
+            ->where('group_id', $data['group_id'])
+            ->table('groups')
+            ->exec();
+        
         return true;
     }
     protected function do_INSERT($data = array())
     {
-        return 0;
+        //insert
+        $result = SQLQuery::doInsert('group_name', $data['group_name'])
+            ->insert('group_privileges ', $data['group_privileges'])
+            ->table('groups')
+            ->exec();
+        
+        return $result->insertID();
     }
 }
 ?>

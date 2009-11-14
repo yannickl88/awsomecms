@@ -19,6 +19,7 @@ class Controller
     private $smarty;
     private $smartyLoader;
     private $instanciated = false;
+    private $redirect = false;
     
     private $components;
     
@@ -124,7 +125,48 @@ class Controller
             }
         }
         
-        $this->handleRequest($action, $component, $request);
+        $prehook = Config::getInstance()->getHook($component, $action, "pre");
+        $posthook = Config::getInstance()->getHook($component, $action, "post");
+        
+        //pre action
+        if($prehook)
+        {
+            try
+            {
+                Debugger::getInstance()->log("Calling PRE hook {$prehook[1]} on {$prehook[0]}");
+                
+                $prehookComponent = Component::init($prehook[0]);
+                $prehookAction = "hook_".$prehook[1];
+                
+                if(method_exists($prehookComponent, $prehookAction))
+                {
+                    $request = call_user_func(array($prehookComponent, $prehookAction), $smarty, $request);
+                }
+            }
+            catch(Exception $e) { }
+        }
+        $request = $this->handleRequest($action, $component, $request);
+        
+        //post action
+        if($posthook)
+        {
+            try
+            {
+                Debugger::getInstance()->log("Calling POST hook {$posthook[1]} on {$posthook[0]}");
+                
+                $posthookComponent = Component::init($posthook[0]);
+                $posthookAction = "hook_".$posthook[1];
+                
+                if(method_exists($posthookComponent, $posthookAction))
+                {
+                    $request = call_user_func(array($posthookComponent, $posthookAction), $smarty, $request);
+                }
+            }
+            catch(Exception $e) { }
+        }
+        
+        //redirect if set
+        $this->redirect();
     }
     
     /**
@@ -133,11 +175,12 @@ class Controller
     * @param $action        Action
     * @param $component     Component name
     * @param $request       Array of parameters
+    * @param $functionPrefix String of the prefix for the function to be called
     * @return               HTML
     */
-    private function handleRequest($action, $component, $request)
+    private function handleRequest($action, $component, &$request, $functionPrefix = "action")
     {
-        $actionHandler = "action_".$action;
+        $actionHandler = $functionPrefix."_".$action;
         
         try
         {
@@ -285,20 +328,12 @@ class Controller
     * @param $parameters    Array with parameters
     * @return               Mixed
     */
-    private function callComponentAction($component, $action, $parameters)
+    private function callComponentAction($component, $actionHandler, $parameters)
     {
-        if($this->components[$component])
-        {
-            $componentObject = $this->components[$component];
-            
-            return call_user_func_array(array($componentObject, $action), $parameters);
-        }
-        
         $config = Config::getInstance();
         
         $components = $config->getComponenets();
         
-        $actionHandler = $action;
         $componentObject = Component::init($component);
         
         if($componentObject)
@@ -316,5 +351,33 @@ class Controller
         {
             throw new ComponentNotFoundException();
         }
+    }
+    
+    /**
+    * @desc Do an redirect, based on what is set.
+    * 
+    * @param $url           Url to redirect to
+    * @param $data          Array with data to be send
+    */
+    public function redirect()
+    {
+        if($this->redirect)
+        {
+            if(Config::get('debug', 0, 'debug') > 1)
+            {
+                echo "Non debug would have redirected to \" <a href='{$this->redirect}'>{$this->redirect}</a> \"";
+                echo Debugger::getInstance();
+            }
+            else
+            {
+                header("Location: {$this->redirect}");
+            }
+            exit;
+        }
+    }
+    
+    public function setRedirect($url)
+    {
+        $this->redirect = $url;
     }
 }

@@ -35,6 +35,7 @@
             <input type="password" name="user_pass2" id="user_pass2"/>
         </div>
     </div>
+    {if $privileges}
     <div class="admin_form_row">
         <div class="admin_form_label">
             <label>Privileges:</label>
@@ -45,6 +46,7 @@
             {/foreach}
         </div>
     </div>
+    {/if}
     <div class="admin_form_row admin_form_submit">
         <input type="submit" value="Save" id="user_submit" class="admin_form_submit">
     </div>

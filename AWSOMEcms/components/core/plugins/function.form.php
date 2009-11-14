@@ -12,6 +12,8 @@ function smarty_function_form($params, &$smarty)
     //call the action for the form
     $actionHandler = "action_".$params['form'];
     $componentObject = Component::init($params['component']);
+    $prehook = Config::getInstance()->getHook($params['component'], $params['form'], "pre");
+    $posthook = Config::getInstance()->getHook($params['component'], $params['form'], "post");
     
     if($componentObject)
     {
@@ -38,11 +40,47 @@ function smarty_function_form($params, &$smarty)
         
         if(method_exists($componentObject, $actionHandler))
         {
+            //pre action
+            if($prehook)
+            {
+                try
+                {
+                    Debugger::getInstance()->log("Calling PRE hook {$prehook[1]} on {$prehook[0]}");
+                    
+                    $prehookComponent = Component::init($prehook[0]);
+                    $prehookAction = "hook_".$prehook[1];
+                    
+                    if(method_exists($prehookComponent, $prehookAction))
+                    {
+                        $request = call_user_func(array($prehookComponent, $prehookAction), $smarty, $request);
+                    }
+                }
+                catch(Exception $e) { }
+            }
+            
             try
             {
                 call_user_func(array($componentObject, $actionHandler), $smarty, null, $request);
             }
             catch(Exception $e) { }
+            
+            //post action
+            if($posthook)
+            {
+                try
+                {
+                    Debugger::getInstance()->log("Calling POST hook {$posthook[1]} on {$posthook[0]}");
+                    
+                    $posthookComponent = Component::init($posthook[0]);
+                    $posthookAction = "hook_".$posthook[1];
+                    
+                    if(method_exists($posthookComponent, $posthookAction))
+                    {
+                        $request = call_user_func(array($posthookComponent, $posthookAction), $smarty, $request);
+                    }
+                }
+                catch(Exception $e) { }
+            }
         }
     }
     

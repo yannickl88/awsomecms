@@ -24,6 +24,7 @@ TODO:
  * Refactor some old code with newer code, so backwards copatibily can be removed.
  * Comments components need to interface with users module if installed. If users installed then need to the name/email field
  * Installer needs to delete components when that option is checked
+ * Comments component should get tag to show reactions
  
 CHANGE LOG:
 8-11-2009 (v0.3.8)

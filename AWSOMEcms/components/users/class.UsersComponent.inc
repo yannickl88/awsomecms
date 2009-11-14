@@ -50,7 +50,7 @@ class UsersComponent extends Component
                     $request['user_privileges'] = array_sum($request['privileges']);
                     
                     $userRequest = Request::init('users.users');
-                    $id = $userRequest->doInsert($request);
+                    $request["user_id"] = $userRequest->doInsert($request);
                 }
             }
             
@@ -58,9 +58,14 @@ class UsersComponent extends Component
         }
         else
         {
-            $privRequest = Request::init('users.privileges');
-            $smarty->assign("privileges", $privRequest->doSelect());
+            if(!Config::getInstance()->isComponentInstalled("groups"))
+            {
+                $privRequest = Request::init('users.privileges');
+                $smarty->assign("privileges", $privRequest->doSelect());
+            }
         }
+        
+        return $request;
     }
     
     public function action_edit($smarty, $smartyLoader, $request)
@@ -100,13 +105,19 @@ class UsersComponent extends Component
                 $record = $userRequest->doSelect($request);
                 
                 $smarty->assign("record", $record[0]);
-                $smarty->assign("privileges", $privRequest->doSelect());
+                
+                if(!Config::getInstance()->isComponentInstalled("groups"))
+                {
+                    $smarty->assign("privileges", $privRequest->doSelect());
+                }
             }
             else
             {
                 $this->redirect("/".Config::get('usersadmin', 'usersadmin', 'admin'));
             }
         }
+        
+        return $request;
     }
     
     public function action_delete($smarty, $smartyLoader, $request)
@@ -132,6 +143,8 @@ class UsersComponent extends Component
                 $this->redirect("/".Config::get('usersadmin', 'usersadmin', 'admin'));
             }
         }
+        
+        return $request;
     }
     
     public function action_admin($smarty, $smartyLoader, $request)
@@ -143,9 +156,11 @@ class UsersComponent extends Component
         $smarty->assign("actionurl_add", Config::get('usersadd', 'usersadd', 'admin'));
         $smarty->assign("actionurl_edit", Config::get('usersedit', 'usersedit', 'admin'));
         $smarty->assign("actionurl_delete", Config::get('usersdelete', 'usersdelete', 'admin'));
+        
+        return $request;
     }
     
-    private function login($request, $redirect)
+    private function login($request, &$redirect)
     {
         //extra custom validation
         $valid = true;
@@ -180,7 +195,7 @@ class UsersComponent extends Component
         $this->redirect($redirect);
     }
     
-    public function action_user_login($smarty, $smartyLoader, $request)
+    public function action_user_login($smarty, $smartyLoader, &$request)
     {
         if($request['methode'] == 'post')
         {
@@ -188,7 +203,7 @@ class UsersComponent extends Component
         }
     }
     
-    public function action_admin_login($smarty, $smartyLoader, $request)
+    public function action_admin_login($smarty, $smartyLoader, &$request)
     {
         if($request['methode'] == 'post')
         {
@@ -196,7 +211,7 @@ class UsersComponent extends Component
         }
     }
     
-    public function action_privadmin($smarty, $smartyLoader, $request)
+    public function action_privadmin($smarty, $smartyLoader, &$request)
     {
         $requestObj = Request::init('users.privileges');
         $smarty->assign("records", $requestObj->doSelect());
@@ -207,7 +222,7 @@ class UsersComponent extends Component
         $smarty->assign("actionurl_delete", Config::get('privdelete', 'privdelete', 'admin'));
     }
     
-    public function action_privadd($smarty, $smartyLoader, $request)
+    public function action_privadd($smarty, $smartyLoader, &$request)
     {
         if($request['methode'] == 'post')
         {
@@ -236,7 +251,7 @@ class UsersComponent extends Component
         }
     }
     
-    public function action_privedit($smarty, $smartyLoader, $request)
+    public function action_privedit($smarty, $smartyLoader, &$request)
     {
         $requestObj = Request::init('users.privileges');
         
@@ -271,7 +286,7 @@ class UsersComponent extends Component
         }
     }
     
-    public function action_privdelete($smarty, $smartyLoader, $request)
+    public function action_privdelete($smarty, $smartyLoader, &$request)
     {
         $requestObj = Request::init('users.privileges');
         

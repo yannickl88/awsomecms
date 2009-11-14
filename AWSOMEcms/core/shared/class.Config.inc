@@ -8,6 +8,7 @@ class Config
     
     private $data;
     private $componenets;
+    private $hooks;
     private $requests;
     
     /**
@@ -187,6 +188,68 @@ class Config
         }
         
         return $this->componenets;
+    }
+    
+    /**
+    * Check whenever a component is installed
+    * 
+    * @param $component     String with the component name
+    * @return               Boolean
+    */
+    public function isComponentInstalled($component)
+    {
+        $components = $this->getComponenets();
+        
+        return isset($component[$component]);
+    }
+    
+    /**
+    * @desc get the hook for the action, if there is one
+    * 
+    * @param $component     String with the component name
+    * @param $action        String with the action (without prefix)
+    * @param $prepost       String with type pre|post
+    * @return               callback to the function or False when there is none
+    */
+    public function getHook($component, $action, $prepost)
+    {
+        if(!$this->hooks)
+        {
+            $this->hooks = array();
+            
+            $result = SQLQuery::doSelect()
+                ->table('hooks')
+                ->exec();
+            
+            while($row = $result->getRow())
+            {
+                if(!isset($this->hooks[$row->component_target]))
+                {
+                    $this->hooks[$row->component_target] = array(
+                        "pre" => array(),
+                        "post" => array()
+                    );
+                }
+                
+                if($row->hook_prepost == "pre")
+                {
+                    $this->hooks[$row->hook_target]['pre'][$row->hook_action] = array($row->hook_component, $row->hook_function);
+                }
+                elseif($row->hook_prepost == "post")
+                {
+                    $this->hooks[$row->hook_target]['post'][$row->hook_action] = array($row->hook_component, $row->hook_function);
+                }
+            }
+        }
+        
+        if(isset($this->hooks[$component][$prepost][$action]))
+        {
+            return $this->hooks[$component][$prepost][$action];
+        }
+        else
+        {
+            return false;
+        }
     }
     /**
     * @desc get an list of all installed requests
