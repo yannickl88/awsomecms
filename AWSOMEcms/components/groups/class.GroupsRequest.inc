@@ -67,7 +67,7 @@ class GroupsRequest extends RequestComponent
         //update
         $query = SQLQuery::doUpdate()
             ->updateWhenSet('group_name', $data['group_name'])
-            ->updateWhenSet('group_privileges', $data['group_privileges'])
+            ->update('group_privileges', $data['group_privileges'])
             ->where('group_id', $data['group_id'])
             ->table('groups')
             ->exec();

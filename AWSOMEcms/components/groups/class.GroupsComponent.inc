@@ -137,15 +137,14 @@ class GroupsComponent extends Component
         $smarty->assign("actionurl_delete", Config::get('groupsdelete', 'groupsdelete', 'admin'));
     }
     
-    public function auth($user_id)
+    public function auth($groupRecord)
     {
         $privilages = Request::init('users.privileges')->doSelect();
-        $user = Request::init('groups.groups')->doSelect(array('user_id' => $user_id));
         $rights = array();
         
         foreach($privilages as $privilage)
         {
-            $rights[$privilage->privilege_name] = Config::hasFlag((int) $user[0]->group_privileges, $privilage->privilege_int);
+            $rights[$privilage->privilege_name] = Config::hasFlag((int) $groupRecord->group_privileges, $privilage->privilege_int);
         }
         
         return $rights;
@@ -155,23 +154,25 @@ class GroupsComponent extends Component
     {
         $user_pass = md5($user_pass);
         
-        $record = Request::init('groups.groups')->doSelect(array("user_name" => $user_name, "user_pass" => $user_pass));
-        $privilages = $this->auth($record[0]->user_id);
+        $records = Request::init('groups.groups')->doSelect(array("user_name" => $user_name, "user_pass" => $user_pass));
         
-        if(count($record) == 1 && $privilages['admin'] === true)
+        foreach($records as $record)
         {
-            //set the session
-            $_SESSION['usr'] = array();
-            $_SESSION['usr']['user_name'] = $user_name;
-            $_SESSION['usr']['user_pass'] = $user_pass;
-            $_SESSION['usr']['auth'] = $privilages;
+            $privilages = $this->auth($record);
             
-            return true;
+            if(count($record) == 1 && $privilages['admin'] === true)
+            {
+                //set the session
+                $_SESSION['usr'] = array();
+                $_SESSION['usr']['user_name'] = $user_name;
+                $_SESSION['usr']['user_pass'] = $user_pass;
+                $_SESSION['usr']['auth'] = $privilages;
+                
+                return true;
+            }
         }
-        else
-        {
-            return false;
-        }
+        
+        return false;
     }
     
     public function hook_useradd($smarty, $request)

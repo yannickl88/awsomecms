@@ -10,7 +10,7 @@
         {/foreach}
     </script>
 {/if}
-<form method="post" action="/" class="admin_form admin_groups_edit">
+<form method="post" action="/" class="admin_form admin_groups_edit" onsubmit="updateUsersField();">
     <div class="admin_form_row">
         <div class="admin_form_label">
             <label for="group_name">Name:</label>
@@ -92,6 +92,8 @@
         $("#activeusers option").each(function(key, value) {
             $('.admin_groups_edit').append("<input type='hidden' name='users[]' value='"+$(value).val()+"' />");
         });
+        
+        return true;
     }
 {/literal}
 </script>

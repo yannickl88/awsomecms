@@ -89,6 +89,6 @@ class CoreComponent extends Component
     {
         $menu->addChild(new MenuItem("system", "", ""));
         $menu->addChild(new MenuItem("layoutmaps", "Layout Mapping", Config::get('corelayout', 'corelayout', 'admin'), "system"));
-        $menu->addChild(new MenuItem("components", "Component Settings", Config::get('corecomponents', 'corecomponents', 'admin'), "system"));
+        $menu->addChild(new MenuItem("components", "Components", Config::get('corecomponents', 'corecomponents', 'admin'), "system"));
     }
 }

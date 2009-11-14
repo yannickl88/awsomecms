@@ -311,15 +311,14 @@ class UsersComponent extends Component
         }
     }
     
-    public function auth($user_id)
+    public function auth($userRow)
     {
         $privilages = Request::init('users.privileges')->doSelect();
-        $user = Request::init('users.users')->doSelect(array('user_id' => $user_id));
         $rights = array();
         
         foreach($privilages as $privilage)
         {
-            $rights[$privilage->privilege_name] = Config::hasFlag($user[0]->user_privileges, $privilage->privilege_int);
+            $rights[$privilage->privilege_name] = Config::hasFlag($userRow->user_privileges, $privilage->privilege_int);
         }
         
         return $rights;
@@ -330,7 +329,7 @@ class UsersComponent extends Component
         $user_pass = md5($user_pass);
         
         $record = Request::init('users.users')->doSelect(array("user_name" => $user_name, "user_pass" => $user_pass));
-        $privilages = $this->auth($record[0]->user_id);
+        $privilages = $this->auth($record);
         
         if(count($record) == 1 && $privilages['admin'] === true)
         {
