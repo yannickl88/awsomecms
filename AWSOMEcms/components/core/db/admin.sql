@@ -1,2 +1,2 @@
 INSERT INTO `pages` (`page_name`, `page_location`, `page_template`, `page_timestamp`) VALUES('index', '/admin/', 'Welcome to the admin section', '2009-09-12 00:31:07');
-INSERT INTO `pages` (`page_id`, `page_name`, `page_location`, `page_template`, `page_timestamp`) VALUES(36, 'layout', '/admin/core/', '{form component=''core'' form=''layout''}', '2009-10-28 10:15:51');
+INSERT INTO `pages` (`page_name`, `page_location`, `page_template`, `page_timestamp`) VALUES('layout', '/admin/core/', '{form component=''core'' form=''layout''}', '2009-10-28 10:15:51');

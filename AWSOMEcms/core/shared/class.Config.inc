@@ -62,13 +62,16 @@ class Config
         }
         
         //parse extra ini's
-        $files = scandir($websiteroot.'/configs/');
-        
-        foreach($files as $file)
+        if(file_exists($websiteroot.'/configs/'))
         {
-            if($file != '.' && $file != ".." && substr($file, strrpos($file, '.')+1) == 'ini')
+            $files = scandir($websiteroot.'/configs/');
+            
+            foreach($files as $file)
             {
-                $this->data = array_merge_recursive($this->data, parse_ini_file($websiteroot.'/configs/'.$file, true));
+                if($file != '.' && $file != ".." && substr($file, strrpos($file, '.')+1) == 'ini')
+                {
+                    $this->data = array_merge_recursive($this->data, parse_ini_file($websiteroot.'/configs/'.$file, true));
+                }
             }
         }
         
