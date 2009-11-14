@@ -11,7 +11,7 @@ try
     require_once '../core/init.inc';
 
     $config = Config::getInstance();
-
+    
     //check if incomming request if directed at the proxy
     if($config->get("enabled", false, 'proxy') == "1" && strpos('http://' . $_SERVER['SERVER_NAME'] . $_SERVER['REQUEST_URI'], $config->get("proxy", 'www.google.com', 'proxy')) === 0)
     {
