@@ -2,6 +2,7 @@ COMPONENTS
  - Comments
  - Contact
  - Core
+ - Groups
  - Gallery
  - News
  - Page
@@ -27,6 +28,11 @@ TODO:
  * Comments component should get tag to show reactions
  
 CHANGE LOG:
+14-11-2009 (v0.3.9)
+ * Finsihed groups component, which now give the ability to use group based authentication
+ * Added hooks so pre and post functions in different components can be called
+ * Updated installer to include hooks from the info files
+ * Fixed various bugs
 8-11-2009 (v0.3.8)
  * Added user privilages to the user component.
  * Added additional debugger info.
