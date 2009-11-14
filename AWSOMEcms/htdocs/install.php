@@ -227,6 +227,37 @@ function installComponents()
                     {$patchlevel}
                 );"
             );
+            
+            //install the hooks
+            if($info['hooks'])
+            {
+                foreach($info['hooks'] as $hook)
+                {
+                    $hook_function = explode("->", $hook);
+                    $hook_target = explode(":", $hook_function[0]);
+                    
+                    //insert
+                    $db->query(
+                        "INSERT INTO 
+                            `hooks` 
+                        (
+                            `hook_component`, 
+                            `hook_target`, 
+                            `hook_prepost`, 
+                            `hook_action`,
+                            `hook_function`
+                        )
+                        VALUES
+                        (
+                            '{$component}',
+                            '{$hook_target[0]}',
+                            '{$hook_target[1]}',
+                            '{$hook_target[2]}',
+                            '{$hook_function[1]}'
+                        );"
+                    );
+                }
+            }
         }
         catch(Exception $e)
         {
