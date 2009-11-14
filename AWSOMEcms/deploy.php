@@ -190,8 +190,6 @@ if($env != 'update')
     output(".", true);
     rcopy($location.'.htaccess', $location."RELEASES{$ds}tmp{$ds}.htaccess");
     output(".", true);
-    rcopy($location.'config-default.ini', $location."RELEASES{$ds}tmp{$ds}config-default.ini");
-    output(".", true);
     rcopy($location.'index.php', $location."RELEASES{$ds}tmp{$ds}index.php");
     output(".", true);
 
