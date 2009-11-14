@@ -53,9 +53,42 @@ class CoreComponent extends Component
         }
     }
     
+    public function action_components($smarty, $smartyLoader, $request)
+    {
+        if($request['methode'] == 'post')
+        {
+            $components = Config::getComponenets();
+            
+            foreach($components as $component)
+            {
+                $key = "auth_".$component->component_name;
+                
+                if(isset($request[$key]) || (!isset($request[$key]) && $component->component_auth < 15))
+                {
+                    $total = 15 - array_sum($request[$key]);
+                    Request::init('core')->doUpdate(array("component_auth" => $total, "component_name" => $component->component_name));
+                }
+            }
+            
+            Config::getInstance()->reloadComponenets();
+            $this->redirect("/".Config::get('corecomponents', 'corecomponents', 'admin'));
+        }
+        else
+        {
+            $smarty->assign("components", Config::getComponenets());
+            $smarty->assign("auth", array(
+                "auth_select" => Config::get("auth_select", 1, "core"),
+                "auth_delete" => Config::get("auth_delete", 2, "core"),
+                "auth_insert" => Config::get("auth_insert", 4, "core"),
+                "auth_update" => Config::get("auth_update", 8, "core"),
+            ));
+        }
+    }
+    
     public function registerMenuItems($menu)
     {
         $menu->addChild(new MenuItem("system", "", ""));
         $menu->addChild(new MenuItem("layoutmaps", "Layout Mapping", Config::get('corelayout', 'corelayout', 'admin'), "system"));
+        $menu->addChild(new MenuItem("components", "Component Settings", Config::get('corecomponents', 'corecomponents', 'admin'), "system"));
     }
 }

@@ -18,4 +18,14 @@ class CoreRequest extends RequestComponent
             return Config::getInstance()->get($data['key'], '', $data['section']);
         }
     }
+    
+    protected function do_UPDATE($data = array())
+    {
+        //update
+        $query = SQLQuery::doUpdate()
+            ->update('component_auth', $data['component_auth'])
+            ->where('component_name', $data['component_name'])
+            ->table('components')
+            ->exec();
+    }
 }

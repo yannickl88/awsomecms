@@ -151,6 +151,10 @@ class Config
         }
     }
     
+    public function reloadComponenets()
+    {
+        $this->componenets = false;
+    }
     /**
     * @desc get an list of all installed components
     * 

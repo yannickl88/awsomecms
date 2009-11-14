@@ -61,8 +61,21 @@ class SmartyPageLoader
             }
         }
         
-        //check for layout file
-        if(file_exists("{$smarty_obj->template_dir}/layout.tpl"))
+        if($smarty_obj->get_template_vars('LAYOUT')) //check if layout was set from withing a page
+        {
+            $template = $smarty_obj->get_template_vars('LAYOUT');
+            
+            if($template == "json")
+            {
+                header('Content-type: application/json');
+                return $page;
+            }
+            else
+            {
+                return $smarty_obj->fetch("{$template}.tpl");
+            }
+        }
+        elseif(file_exists("{$smarty_obj->template_dir}/layout.tpl")) //check for layout file
         {
             $smarty_obj->assign('content', $page);
             
@@ -249,7 +262,7 @@ class SmartyPageLoader
                     else if(preg_match('/^modifier\.(.*)\.php$/', $plugin, $matches))
                     {
                         require_once $pluginDir.'/'.$plugin;
-                        $smarty_obj->register_function($matches[1], "smarty_modifier_".$matches[1]);
+                        $smarty_obj->register_modifier($matches[1], "smarty_modifier_".$matches[1]);
                     }
                     else if(preg_match('/^block\.(.*)\.php$/', $plugin, $matches))
                     {
