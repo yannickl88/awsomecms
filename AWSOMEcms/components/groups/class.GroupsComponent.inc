@@ -35,15 +35,22 @@ class GroupsComponent extends Component
                 $request['group_privileges'] = array_sum($request['privileges']);
                 
                 $userRequest = Request::init('groups.groups');
+                $usersgroupsRequest = Request::init('groups.usersgroups');
                 $id = $userRequest->doInsert($request);
+                
+                //now add the links between users
+                foreach($request['users'] as $user)
+                {
+                    $usersgroupsRequest->doInsert(array("group_id" => $id, "user_id" => $user));
+                }
             }
             
             $this->redirect("/".Config::get('groupsadmin', 'groupsadmin', 'admin'));
         }
         else
         {
-            $privRequest = Request::init('users.privileges');
-            $smarty->assign("privileges", $privRequest->doSelect());
+            $smarty->assign("privileges", Request::init('users.privileges')->doSelect());
+            $smarty->assign("users", Request::init('users.users')->doSelect());
         }
     }
     
@@ -62,7 +69,16 @@ class GroupsComponent extends Component
                 $request['group_privileges'] = array_sum($request['privileges']);
                 
                 $userRequest = Request::init('groups.groups');
+                $usersgroupsRequest = Request::init('groups.usersgroups');
                 $id = $userRequest->doUpdate($request);
+                
+                //now add the links between users
+                $usersgroupsRequest->doDelete(array("group_id" => $id));
+                
+                foreach($request['users'] as $user)
+                {
+                    $usersgroupsRequest->doInsert(array("group_id" => $id, "user_id" => $user));
+                }
             }
             
             $this->redirect("/".Config::get('groupsadmin', 'groupsadmin', 'admin'));
@@ -71,13 +87,12 @@ class GroupsComponent extends Component
         {
             if($request['group_id'])
             {
-                $groupRequest = Request::init('groups.groups');
-                $privRequest = Request::init('users.privileges');
+                $request['showusers'] = true;
+                $record = Request::init('groups.groups')->doSelect($request);
                 
-                $record = $groupRequest->doSelect($request);
-                
-                $smarty->assign("record", $record[0]);
-                $smarty->assign("privileges", $privRequest->doSelect());
+                $smarty->assign("record", array_shift($record));
+                $smarty->assign("privileges", Request::init('users.privileges')->doSelect());
+                $smarty->assign("users", Request::init('users.users')->doSelect());
             }
             else
             {
