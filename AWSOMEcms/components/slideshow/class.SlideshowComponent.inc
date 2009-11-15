@@ -43,6 +43,7 @@ class SlideshowComponent extends Component
                 
                 list($request["image_url"], $request["image_width"], $request["image_height"]) = $this->handleFileUpload($id, 'image_image');
                 
+                
                 $requestObj->doUpdate($request);
             }
             
@@ -165,7 +166,15 @@ class SlideshowComponent extends Component
                 //upload the image
                 $request['internal'] = 'true';
                 $request['image_title'] = $request['group_title']." Header";
-                $request['group_header'] = $this->action_add_image($smarty, $smartyLoader, $request);
+                //is there an upload?
+                if(!empty($_FILES['image_image']['temp_name']))
+                {
+                    $request['group_header'] = $this->action_add_image($smarty, $smartyLoader, $request);
+                }
+                else //check dropdown
+                {
+                    $request['group_header'] = $request['image_image_select'];
+                }
                 
                 //add the group
                 $id = $requestObj->doInsert($request);
@@ -203,8 +212,11 @@ class SlideshowComponent extends Component
                     //upload the image
                     $request['internal'] = 'true';
                     $request['image_title'] = $request['group_title']." Header";
-                    $request['image_id'] = $group[0]->group_header;
-                    $request['group_header'] = $this->action_edit_image($smarty, $smartyLoader, $request);
+                    $request['group_header'] = $this->action_add_image($smarty, $smartyLoader, $request);
+                }
+                else //check dropdown
+                {
+                    $request['group_header'] = $request['image_image_select'];
                 }
                 
                 //update the group
@@ -236,16 +248,9 @@ class SlideshowComponent extends Component
                     $images_ids[] = $image->image_id;
                 }
                 
-                foreach($images as $key => $image)
-                {
-                    if(in_array($image->image_id, $images_ids))
-                    {
-                        unset($images[$key]);
-                    }
-                }
-                
                 $smarty->assign("record", $record[0]);
                 $smarty->assign("images", $images);
+                $smarty->assign("images_ids", $images_ids);
                 $smarty->assign("groupimages", $groupimages);
             }
             else
@@ -308,6 +313,11 @@ class SlideshowComponent extends Component
         
         if(($maxSize == -1 || $fileSize <= $maxSize) && in_array($fileExtention, $allowedExtentions))
         {
+            if(!file_exists(realpath(Config::get('websiteroot', '.').'/'.Config::get('uploaddir', 'img/slideshow/', 'slideshow'))))
+            {
+                mkdir(realpath(Config::get('websiteroot', '.').'/'.Config::get('uploaddir', 'img/slideshow/', 'slideshow')), 777, true);
+            }
+            
             move_uploaded_file($_FILES[$name]['tmp_name'], $destFile);
             
             $info = getimagesize($destFile);

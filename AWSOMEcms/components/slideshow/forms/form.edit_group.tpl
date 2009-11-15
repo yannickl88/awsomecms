@@ -24,7 +24,12 @@
             <label for="group_header">Header:</label>
         </div>
         <div class="admin_form_field">
-            <input type="file" name="image_image" id="group_header" />
+            <select id="image_image_select" name="image_image_select" style="width: 125px;">
+                {foreach from=$images item=image}
+                <option value="{$image->image_id}"{if $image->image_id == $record->group_header} selected="selected"{/if}>{$image->image_title}</option>
+                {/foreach}
+            </select>
+            or <input type="file" name="image_image" id="group_header" />
         </div>
     </div>
     <div class="admin_form_row">
@@ -46,7 +51,9 @@
             <div>
                 <select id="image_groups" style="width: 325px;">
                     {foreach from=$images item=image}
+                    {if $image->image_id|notin:$images_ids}
                     <option value="{$image->image_id}">{$image->image_title}</option>
+                    {/if}
                     {/foreach}
                 </select><br/>
                 <button id="add_image" type="button" style="width: 70px;" onclick="addImage();">Add</button><br />
