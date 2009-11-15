@@ -1,4 +1,10 @@
 <?php
+/**
+* Form tag, this is used to add a form from a component to a page. This will call the action and hooks related to the action of the form
+* 
+* @param array $params
+* @param Smarty $smarty
+*/
 function smarty_function_form($params, &$smarty)
 {
     $html = '';

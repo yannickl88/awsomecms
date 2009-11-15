@@ -1,4 +1,12 @@
 <?php
+/**
+* Contact for tag, this addes a form to a page
+* 
+* params: form
+* 
+* @param array $params
+* @param Smarty $smarty
+*/
 function smarty_function_contactform($params, &$smarty)
 {
     $html = '';

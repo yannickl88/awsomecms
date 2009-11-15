@@ -1,8 +1,14 @@
 <?php
 import('/core/shared/class.Component.inc');
 
+/**
+* Contact component class, this holds all the logic for the contact component
+*/
 class ContactComponent extends Component
 {
+    /**
+    * Constructor class for the contact component
+    */
     public function __construct()
     {
         parent::__construct('contact');
@@ -16,11 +22,13 @@ class ContactComponent extends Component
         );
     }
     
-    public function action_index($smarty, $smartyLoader, $request)
-    {
-        
-    }
-
+    /**
+    * Add action, this is called when a contact form is added
+    * 
+    * @param Smarty $smarty
+    * @param SmartyPageLoader $smartyLoader
+    * @param array $request
+    */
     public function action_add($smarty, $smartyLoader, $request)
     {
         if($request['methode'] == 'post')
@@ -34,6 +42,13 @@ class ContactComponent extends Component
         }
     }
     
+    /**
+    * Edit action, this is called when a contact form is edited
+    * 
+    * @param Smarty $smarty
+    * @param SmartyPageLoader $smartyLoader
+    * @param array $request
+    */
     public function action_edit($smarty, $smartyLoader, $request)
     {
         if($request['methode'] == 'post')
@@ -60,6 +75,13 @@ class ContactComponent extends Component
         }
     }
     
+    /**
+    * Delete action, this is called when a form is deleted
+    * 
+    * @param Smarty $smarty
+    * @param SmartyPageLoader $smartyLoader
+    * @param array $request
+    */
     public function action_delete($smarty, $smartyLoader, $request)
     {
         if($request['methode'] == 'post')
@@ -83,6 +105,13 @@ class ContactComponent extends Component
         }
     }
     
+    /**
+    * Admin action, this is called when a showing the admin overview of the forms
+    * 
+    * @param Smarty $smarty
+    * @param SmartyPageLoader $smartyLoader
+    * @param array $request
+    */
     public function action_admin($smarty, $smartyLoader, $request)
     {
         $smarty->assign("records", $this->select());
@@ -93,6 +122,13 @@ class ContactComponent extends Component
         $smarty->assign("actionurl_delete", Config::get('contactdelete', 'contactdelete', 'admin'));
     }
     
+    /**
+    * Send action, this is called when a form is submitted
+    * 
+    * @param Smarty $smarty
+    * @param SmartyPageLoader $smartyLoader
+    * @param array $request
+    */
     public function action_send($smarty, $smartyLoader, $request)
     {
         if($request['methode'] == 'post' && isset($request['form_id']) && is_numeric($request['form_id']))
@@ -149,6 +185,11 @@ class ContactComponent extends Component
         }
     }
     
+    /**
+    * Function for registering menu items to the admin menu
+    * 
+    * @param Menu $menu
+    */
     public function registerMenuItems($menu)
     {
         $menu->addChild(new MenuItem("contact", "", Config::get('contactadmin', 'contactadmin', 'admin')));

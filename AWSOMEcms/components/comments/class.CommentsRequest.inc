@@ -1,6 +1,9 @@
 <?php
 import('/core/shared/class.RequestComponent.inc');
 
+/**
+* Request class for the comments component
+*/
 class CommentsRequest extends RequestComponent
 {
     protected function do_SELECT($data = array())

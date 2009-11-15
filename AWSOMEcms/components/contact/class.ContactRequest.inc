@@ -1,6 +1,9 @@
 <?php
 import('/core/shared/class.RequestComponent.inc');
 
+/**
+* Request for the contact component
+*/
 class ContactRequest extends RequestComponent
 {
     //CORE ACTIONS

@@ -1,0 +1,16 @@
+CORE:
+All core functionality is included in here, this, together with the page component, is the heart of the cms
+
+TAGS:
+form
+    'form'
+        String
+    'component'
+        String
+MODIFIERS:
+hasflag
+    'flag'
+        Int
+notin
+    'array'
+        Array

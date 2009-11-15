@@ -1,8 +1,14 @@
 <?php
 import('/core/shared/class.Component.inc');
 
+/**
+* Comments compontent class, this includes all logic for an component
+*/
 class CommentsComponent extends Component
 {
+    /**
+    * Constructor for the comments component
+    */
     public function __construct()
     {
         parent::__construct('comments');
@@ -16,6 +22,13 @@ class CommentsComponent extends Component
         );
     }
     
+    /**
+    * Admin action, this is called when the admin page is shown
+    * 
+    * @param Smarty $smarty
+    * @param SmartyPageLoader $smartyLoader
+    * @param array $request
+    */
     public function action_admin($smarty, $smartyLoader, $request)
     {
         $requestObj = Request::init('comments');
@@ -28,6 +41,13 @@ class CommentsComponent extends Component
         $smarty->assign("actionurl_delete", Config::get('gallerydelete', 'gallerydelete', 'admin'));
     }
     
+    /**
+    * Repley action, this is called when a reply is posted
+    * 
+    * @param Smarty $smarty
+    * @param SmartyPageLoader $smartyLoader
+    * @param array $request
+    */
     public function action_reply($smarty, $smartyLoader, $request)
     {
         if($request['methode'] == 'post' && isset($request['comment_hook']))

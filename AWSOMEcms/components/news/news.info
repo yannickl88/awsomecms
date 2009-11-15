@@ -1,0 +1,14 @@
+NEWS:
+A simple new system that allows for new messages. News items can be grouped using a tag if needed.
+TAGS:
+news
+    'template' template to be used for showing the news, default is 'news.tpl'
+        String, optional
+    'tag'
+        String, optional
+    'max' maximum amount of news post to be displayed
+        Int, optional
+    'news_user' all posts showing the user with the given user id 
+        Int, optional
+newsitem, show the news item, the ID must be passed through the GET variable
+newstags, show all tags used and the last post of it

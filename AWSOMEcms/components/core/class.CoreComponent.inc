@@ -1,13 +1,26 @@
 <?php
 import('/core/shared/class.Component.inc');
 
+/**
+* Core component class, this includes all the logic for the core actions
+*/
 class CoreComponent extends Component
 {
+    /**
+    * Constructor
+    */
     public function __construct()
     {
         parent::__construct('core');
     }
     
+    /**
+    * Index action, this is used when a page is shown by the cms
+    * 
+    * @param Smarty $smarty
+    * @param SmartyPageLoader $smartyLoader
+    * @param array $request
+    */
     public function action_index($smarty, $smartyLoader, $request)
     {
         $smarty->register_resource("scf", array(
@@ -21,6 +34,13 @@ class CoreComponent extends Component
         echo $smartyLoader->getPage($_GET['url'], $smarty);
     }
     
+    /**
+    * Session action, this is used to set some data for the templates, like if a user is logged in or if the page is part of the admin section.
+    * 
+    * @param Smarty $smarty
+    * @param SmartyPageLoader $smartyLoader
+    * @param array $request
+    */
     public function action_session($smarty, $smartyLoader, $request)
     {
         $smarty->assign("URL", $_GET['url']);
@@ -28,6 +48,13 @@ class CoreComponent extends Component
         $smarty->assign("USR", $_SESSION['usr']);
     }
     
+    /**
+    * Layout action, this is used for the layout mapping page.
+    * 
+    * @param Smarty $smarty
+    * @param SmartyPageLoader $smartyLoader
+    * @param array $request
+    */
     public function action_layout($smarty, $smartyLoader, $request)
     {
         if($request['methode'] == 'post')
@@ -53,6 +80,13 @@ class CoreComponent extends Component
         }
     }
     
+    /**
+    * Components action, this is used for the compontent settings page
+    * 
+    * @param Smarty $smarty
+    * @param SmartyPageLoader $smartyLoader
+    * @param array $request
+    */
     public function action_components($smarty, $smartyLoader, $request)
     {
         if($request['methode'] == 'post')
@@ -85,6 +119,11 @@ class CoreComponent extends Component
         }
     }
     
+    /**
+    * registering the core menu items
+    * 
+    * @param Menu $menu
+    */
     public function registerMenuItems($menu)
     {
         $menu->addChild(new MenuItem("system", "", ""));
