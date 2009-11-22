@@ -277,7 +277,55 @@ class GalleryComponent extends Component
         $index = -1;
         $exception = new InvalidFormException($data, $redirectOnFailure, "The form was not valid");
         
-        if($data['image_tumb_generate'] == 'on')
+        //check if the file did actully upload
+        if($_FILES['image_image']['error'] > 0) //uh-oh error
+        {
+            $error = "";
+            
+            switch($_FILES['image_image']['error'])
+            {
+                case 1:
+                case 2:
+                case 3:
+                    $error = "Filesize is to large";
+                    break;
+                case 4:
+                    $error = "No file selected";
+                    break;
+                case 5:
+                    $error = "Cannot write file to disk";
+                    break;
+            }
+            
+            $exception->addInvalidField('image_image', $error);
+            throw $exception;
+        }
+        
+        //check if the file did actully upload
+        if($data['image_tumb_generate'] != 'on' && $_FILES['image_thumb']['error'] > 0) //uh-oh error
+        {
+            $error = "";
+            
+            switch($_FILES['image_thumb']['error'])
+            {
+                case 1:
+                case 2:
+                case 3:
+                    $error = "Filesize is to large";
+                    break;
+                case 4:
+                    $error = "No file selected";
+                    break;
+                case 5:
+                    $error = "Cannot write file to disk";
+                    break;
+            }
+            
+            $exception->addInvalidField('image_thumb', $error);
+            throw $exception;
+        }
+        
+        if($data['image_tumb_generate'] != 'on')
         {
             //check the tumb dimentions if set
             $maxDimentions = explode('x', Config::get('tumbsize', "100x50", 'gallery'));

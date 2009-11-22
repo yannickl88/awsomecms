@@ -103,6 +103,12 @@
         },
         onComplete: function(file, response) {
             //console.log(file, response);
+            if(response.error)
+            {
+                alert("There was an error when uploading the file: '"+response.error+"'.");
+                return false;
+            }
+            
             var html = "";
             
             html += "<li id='image" + response[0].image_id + "'>";

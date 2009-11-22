@@ -33,6 +33,42 @@ class SlideshowComponent extends Component
             
             if($request['ajax'] == 'true' || $request['internal'] == 'true' || $this->validate($request, "/".Config::get('slideshow_imageadd', 'slideshow_imageadd', 'admin'), "add"))
             {
+                //check if the file did actully upload
+                if($_FILES['image_image']['error'] > 0) //uh-oh error
+                {
+                    $error = "";
+                    
+                    switch($_FILES['image_image']['error'])
+                    {
+                        case 1:
+                        case 2:
+                        case 3:
+                            $error = "Filesize is to large";
+                            break;
+                        case 4:
+                            $error = "No file selected";
+                            break;
+                        case 5:
+                            $error = "Cannot write file to disk";
+                            break;
+                    }
+                    
+                    if($request['ajax'] == 'true')
+                    {
+                        $this->ajax(array("error" => $error));
+                    }
+                    else if($request['internal'] == 'true')
+                    {
+                        return false;
+                    }
+                    else
+                    {
+                        $e = new InvalidFormException($request, "/".Config::get('slideshow_imageadd', 'slideshow_imageadd', 'admin'));
+                        $e->addInvalidField('image_image', $error);
+                        throw $e;
+                    }
+                }
+                
                 $request["image_url"] = "";
                 $request["image_width"] = 0;
                 $request["image_height"] = 0;
@@ -70,6 +106,42 @@ class SlideshowComponent extends Component
             
             if(!empty($_FILES['image_image']['name']))
             {
+                //check if the file did actully upload
+                if($_FILES['image_image']['error'] > 0) //uh-oh error
+                {
+                    $error = "";
+                    
+                    switch($_FILES['image_image']['error'])
+                    {
+                        case 1:
+                        case 2:
+                        case 3:
+                            $error = "Filesize is to large";
+                            break;
+                        case 4:
+                            $error = "No file selected";
+                            break;
+                        case 5:
+                            $error = "Cannot write file to disk";
+                            break;
+                    }
+                    
+                    if($request['ajax'] == 'true')
+                    {
+                        $this->ajax(array("error" => $error));
+                    }
+                    else if($request['internal'] == 'true')
+                    {
+                        return false;
+                    }
+                    else
+                    {
+                        $e = new InvalidFormException($request, "/".Config::get('slideshow_imageadd', 'slideshow_imageadd', 'admin'));
+                        $e->addInvalidField('image_image', $error);
+                        throw $e;
+                    }
+                }
+                
                 $image = $requestObj->doSelect($request);
                 
                 if(file_exists(Config::get('websiteroot', '.').$image[0]->image_url))
@@ -311,7 +383,7 @@ class SlideshowComponent extends Component
         $destName = $id.'-'.$fileName.'.'.$fileExtention;
         $destFile = realpath(Config::get('websiteroot', '.').'/'.Config::get('uploaddir', 'img/slideshow/', 'slideshow')).'/'.$destName;
         
-        if(($maxSize == -1 || $fileSize <= $maxSize) && in_array($fileExtention, $allowedExtentions))
+        if(($maxSize == -1 || $fileSize <= $maxSize) && in_array($fileExtention, $allowedExtentions) && $_FILES[$name]['error'] == 0)
         {
             if(!file_exists(realpath(Config::get('websiteroot', '.').'/'.Config::get('uploaddir', 'img/slideshow/', 'slideshow'))))
             {
@@ -326,7 +398,7 @@ class SlideshowComponent extends Component
         }
         else
         {
-            echo "Could not upload file";
+            //echo "Could not upload file";
             
             return false;
         }
