@@ -117,6 +117,36 @@ function clearDir($source, $unless = array())
         }
     }
 }
+function dir2zip($source, $dest)
+{
+    $ds = DIRECTORY_SEPARATOR;
+    $zip = new ZipArchive();
+    
+    if(file_exists($dest))
+    {
+        unlink($dest);
+    }
+
+    if($zip->open($dest, ZIPARCHIVE::CREATE))
+    {
+        $files = scandir($source);
+        
+        foreach($files as $file)
+        {
+            if($file != '.' && $file != '..')
+            {
+                raddFileToZip($source.$ds.$file, $file, $zip);
+            }
+        }
+        
+        return true;
+    }
+    else
+    {
+        return false;
+    }
+    $zip->close();
+}
 
 output("==============================");
 output("A.W.S.O.M.E. cms deploy script");
@@ -130,7 +160,6 @@ if(!class_exists('ZipArchive'))
     die();
 }
 
-$version = prompt("Version:", '/^[0-9]+(\.[0-9]+)*$/');
 $ds = DIRECTORY_SEPARATOR;
 
 switch($argv[1])
@@ -159,22 +188,19 @@ if(!confirm("Is this location correct?"))
 {
     $location = prompt("Path to framework root:");
 }
-output("Creating archive", true);
-//check for releases dir
-if(!file_exists($location."RELEASES"))
-{
-    mkdir($location."RELEASES");
-}
+
 //check for tmp dir
 if(!file_exists($location."RELEASES{$ds}tmp"))
 {
-    mkdir($location."RELEASES{$ds}tmp");
+    mkdir($location."RELEASES{$ds}tmp", 0777, true);
 }
-
-output(".", true);
 
 if($env != 'update')
 {
+    $version = prompt("Version:", '/^[0-9]+(\.[0-9]+)*$/');
+    
+    output("Creating archive");
+    
     //copy all the required stuff
     mkdir($location."RELEASES{$ds}tmp{$ds}cache", 0777, true);
     mkdir($location."RELEASES{$ds}tmp{$ds}htdocs{$ds}install", 0777, true);
@@ -200,60 +226,71 @@ if($env != 'update')
         rcopy($location.'deploy.php', $location."RELEASES{$ds}tmp{$ds}deploy.php");
         output(".", true);
     }
+    
+    //archive
+    if($env != 'release')
+    {
+        $suffix = '-'.$env;
+    }
+
+    dir2zip($location."RELEASES{$ds}tmp", $location."RELEASES{$ds}AWSOMEcms_v{$version}{$suffix}.zip");
+
+    output(".");
+    //done
+    output("Archive '".$location."RELEASES{$ds}AWSOMEcms_v{$version}{$suffix}.zip' created");
 }
 else
 {
-    rcopy($location."components", $location."RELEASES{$ds}tmp{$ds}components");
-    output(".", true);
+    $versions = array();
+    output("Creating core archive");
+    
+    //copy the core files
     rcopy($location."core", $location."RELEASES{$ds}tmp{$ds}core");
     output(".", true);
     rcopy($location.'docs', $location."RELEASES{$ds}tmp{$ds}docs");
     output(".", true);
     rcopy($location."libs", $location."RELEASES{$ds}tmp{$ds}libs");
     output(".", true);
-}
-
-//archive
-$zip = new ZipArchive();
-
-if($env != 'release')
-{
-    $suffix = '-'.$env;
-}
-
-$zipfile = $location."RELEASES{$ds}AWSOMEcms_v{$version}{$suffix}.zip";
-
-if(file_exists($zipfile))
-{
-    unlink($zipfile);
-}
-
-if($zip->open($zipfile, ZIPARCHIVE::CREATE))
-{
-    $files = scandir($location."RELEASES{$ds}tmp{$ds}");
     
-    foreach($files as $file)
+    dir2zip($location."RELEASES{$ds}tmp", $location."RELEASES{$ds}framework.zip");
+    $versions["framework"] = md5_file($location."RELEASES{$ds}framework.zip");
+    $versions["components"] = array();
+    
+    //cleanup
+    clearDir($location."RELEASES{$ds}tmp");
+    
+    //create zips for all components
+    $components = scandir($location."components");
+    
+    foreach($components as $component)
     {
-        if($file != '.' && $file != '..')
+        if($component != '.' && $component != '..' && $component != '.svn')
         {
-            raddFileToZip($location."RELEASES{$ds}tmp{$ds}{$file}", $file, $zip);
+            if(!file_exists($location."RELEASES{$ds}components"))
+            {
+                mkdir($location."RELEASES{$ds}components", 0777, true);
+            }
+            rcopy($location."components{$ds}{$component}", $location."RELEASES{$ds}tmp{$ds}{$component}");
+            dir2zip($location."RELEASES{$ds}tmp{$ds}{$component}", $location."RELEASES{$ds}components{$ds}{$component}.zip");
+            output(".", true);
+            
+            $versions["components"][$component] = md5_file($location."RELEASES{$ds}components{$ds}{$component}.zip");
+            
+            //cleanup
+            clearDir($location."RELEASES{$ds}tmp{$ds}{$component}");
+            rmdir($location."RELEASES{$ds}tmp{$ds}{$component}");
             output(".", true);
         }
     }
+    
+    //create version file
+    file_put_contents($location."RELEASES{$ds}version.json", json_encode($versions));
+    
+    output(".");
+    //done
+    output("Archives created");
 }
-else
-{
-    output("Could not create archive");
-    die();
-}
-$zip->close();
-
-output(".", true);
 
 //cleanup
 clearDir($location."RELEASES{$ds}tmp");
 rmdir($location."RELEASES{$ds}tmp");
-output(".");
-
-//done
-output("Archive '{$zipfile}' created");

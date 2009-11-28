@@ -329,7 +329,7 @@ class UsersComponent extends Component
         $user_pass = md5($user_pass);
         
         $record = Request::init('users.users')->doSelect(array("user_name" => $user_name, "user_pass" => $user_pass));
-        $privilages = $this->auth($record);
+        $privilages = $this->auth($record[0]);
         
         if(count($record) == 1 && $privilages['admin'] === true)
         {

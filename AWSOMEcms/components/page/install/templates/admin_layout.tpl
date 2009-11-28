@@ -49,6 +49,10 @@
                         $(value).replaceWith("<textarea style='display: none;' name='" + name + "'>" + content + "</textarea>");
                     });
                 });
+                $('#doc').click(function(e) {
+                    window.open("/doc.php", "_blank", "width=500,height=600");
+                    return false;
+                });
             });
             {/literal}
         </script>
@@ -58,6 +62,7 @@
             <div id="headerWrapper">
                 <img src="/img/admin/header-right.png" style="float: right;"/>
                 <a href="/" style="float: right;" class="backtosite"><img src="/img/admin/backtosite.png"/> Back to site</a>
+                <a href="/doc.php" style="float: right;" class="backtosite" id="doc"><img src="/img/admin/help.png"/></a>
                 <a href="/admin/"><img src="/img/admin/header-left.png" /></a>
             </div>
             <div id="sideWrapper">
@@ -69,7 +74,7 @@
                 </div>
                 <img src="/img/admin/tree-bottom.png" />
                 <div id="copyWrapper">
-                    <a href="http://yannickl88.nl/cms/" target="_blank">A.W.S.O.M.E. cms</a> &copy; 2009
+                    <a href="http://yannickl88.nl/cms" target="_blank">A.W.S.O.M.E. cms</a> &copy; 2009
                 </div>
             </div>
             <div id="contentWrapper">

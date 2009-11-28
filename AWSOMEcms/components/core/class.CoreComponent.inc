@@ -52,8 +52,7 @@ class CoreComponent extends Component
     * Layout action, this is used for the layout mapping page.
     * 
     * @param Smarty $smarty
-    * @param SmartyPageLoader $smartyLoader
-    * @param array $request
+    * @param SmartyPageLoader $smartyLoader    * @param array $request
     */
     public function action_layout($smarty, $smartyLoader, $request)
     {
@@ -77,6 +76,39 @@ class CoreComponent extends Component
         else
         {
             $smarty->assign("maping", Config::get("layoutmap", array()));
+        }
+    }
+    
+    /**
+    * Update action, this is used for the update manager.
+    * 
+    * @param Smarty $smarty
+    * @param SmartyPageLoader $smartyLoader
+    * @param array $request
+    */
+    public function action_update($smarty, $smartyLoader, $request)
+    {
+        if($request['methode'] == 'post')
+        {
+            
+        }
+        else
+        {
+            //fetch the current version info
+            $versions = json_decode(file_get_contents("http://update.yannickl88.nl/version.json"));
+            
+            //check if the framework is up to date
+            $smarty->assign("frameworkU2D", (file_exists(Config::get("websiteroot")."/version.info") && trim(file_get_contents(Config::get("websiteroot")."/version.info")) == trim($versions['framework'])));
+            
+            $components = Config::getInstance()->getComponenets();
+            
+            foreach($components as $component)
+            {
+                $component_name = $component->component_name;
+                $components[$component->component_name]->U2D = (trim($versions->components->$component_name) == $component->component_version);
+            }
+            
+            $smarty->assign("components", $components);
         }
     }
     
@@ -129,5 +161,6 @@ class CoreComponent extends Component
         $menu->addChild(new MenuItem("system", "", ""));
         $menu->addChild(new MenuItem("layoutmaps", "Layout Mapping", Config::get('corelayout', 'corelayout', 'admin'), "system"));
         $menu->addChild(new MenuItem("components", "Components", Config::get('corecomponents', 'corecomponents', 'admin'), "system"));
+        $menu->addChild(new MenuItem("update", "Update", Config::get('coreupdate', 'coreupdate', 'admin'), "system"));
     }
 }
