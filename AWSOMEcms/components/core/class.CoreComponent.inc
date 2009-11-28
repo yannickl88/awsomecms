@@ -89,25 +89,31 @@ class CoreComponent extends Component
     */
     public function action_update($smarty, $smartyLoader, $request)
     {
-        $updateURL = "http://update.yannickl88.nl";
-        
         if($request['methode'] == 'post')
         {
             $versions = json_decode(file_get_contents("http://update.yannickl88.nl/version.json"));
             $installer = new InstallHelper();
             
-            //framework?
-            if(!(file_exists(getFrameworkRoot()."/version.info") && trim(file_get_contents(Config::get("websiteroot")."/version.info")) == trim($versions->framework)))
+            if($request['framework'] == 1)
             {
-                $installer->downloadAndInstall("{$updateURL}/framework.zip");
-                file_put_contents(getFrameworkRoot()."/version.info", trim($versions->framework));
+                //framework?
+                if(!(file_exists(getFrameworkRoot()."/version.info") && trim(file_get_contents(Config::get("websiteroot")."/version.info")) == trim($versions->framework)))
+                {
+                    $installer->downloadAndInstall("{$updateURL}/framework.zip");
+                    file_put_contents(getFrameworkRoot()."/version.info", trim($versions->framework));
+                }
+                
+                echo "true";
+                return;
             }
             
-            //components
-            $components = Config::getInstance()->getComponenets();
-            
-            foreach($components as $component)
+            if(isset($request['updateComponent']))
             {
+                //components
+                $components = Config::getInstance()->getComponenets();
+                
+                $component = $components[$request['updateComponent']];
+                
                 $component_name = $component->component_name;
                 
                 if(trim($versions->components->$component_name) > $component->component_version)
@@ -126,27 +132,12 @@ class CoreComponent extends Component
                 
                 //copy any new stuff from the install folder
                 $installer->rcopy($component->component_path."/install", Config::get('websiteroot'), false);
+                
+                echo "true";
+                return;
             }
             
-            $this->redirect("/".Config::get('coreupdate', 'coreupdate', 'admin'));
-        }
-        else
-        {
-            //fetch the current version info
-            $versions = json_decode(file_get_contents("{$updateURL}/version.json"));
-            
-            //check if the framework is up to date
-            $smarty->assign("frameworkU2D", (file_exists(getFrameworkRoot()."/version.info") && trim(file_get_contents(getFrameworkRoot()."/version.info")) == trim($versions->framework)));
-            
-            $components = Config::getInstance()->getComponenets();
-            
-            foreach($components as $component)
-            {
-                $component_name = $component->component_name;
-                $components[$component->component_name]->U2D = (trim($versions->components->$component_name) == $component->component_version);
-            }
-            
-            $smarty->assign("components", $components);
+            echo "false";
         }
     }
     
@@ -179,7 +170,26 @@ class CoreComponent extends Component
         }
         else
         {
-            $smarty->assign("components", Config::getComponenets());
+            $updateURL = "http://update.yannickl88.nl";
+            
+            //fetch the current version info
+            $versions = json_decode(file_get_contents("{$updateURL}/version.json"));
+            
+            //check if the framework is up to date
+            $smarty->assign("frameworkU2D", (file_exists(getFrameworkRoot()."/version.info") && trim(file_get_contents(getFrameworkRoot()."/version.info")) == trim($versions->framework)));
+            
+            $components = Config::getInstance()->getComponenets();
+            
+            foreach($components as $component)
+            {
+                $component_name = $component->component_name;
+                
+                $components[$component->component_name]->U2D = (trim($versions->components->$component_name) == $component->component_version);
+                $components[$component->component_name]->info = parseInfoFile($component->component_path."/{$component_name}.info", $component_name);
+            }
+            
+            $smarty->assign("components", $components);
+            
             $smarty->assign("auth", array(
                 "auth_select" => Config::get("auth_select", 1, "core"),
                 "auth_delete" => Config::get("auth_delete", 2, "core"),
@@ -199,6 +209,5 @@ class CoreComponent extends Component
         $menu->addChild(new MenuItem("system", "", ""));
         $menu->addChild(new MenuItem("layoutmaps", "Layout Mapping", Config::get('corelayout', 'corelayout', 'admin'), "system"));
         $menu->addChild(new MenuItem("components", "Components", Config::get('corecomponents', 'corecomponents', 'admin'), "system"));
-        $menu->addChild(new MenuItem("update", "Update", Config::get('coreupdate', 'coreupdate', 'admin'), "system"));
     }
 }
