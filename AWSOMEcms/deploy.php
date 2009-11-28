@@ -147,6 +147,36 @@ function dir2zip($source, $dest)
     }
     $zip->close();
 }
+function getHightestRevNumber($source)
+{
+    if(is_array($source))
+    {
+        $hightest = -1;
+        
+        foreach($source as $file)
+        {
+            $rev = getHightestRevNumber($file);
+            
+            if($rev > $hightest)
+            {
+                $hightest = $rev;
+            }
+        }
+        
+        return $hightest;
+    }
+    else
+    {
+        $source = realpath($source);
+        $result = array();
+        
+        exec("svn info -r HEAD {$source}", $result);
+        $matches = array();
+        preg_match('/Last Changed Rev: ([0-9]*)/m', implode("\n", $result), $matches);
+        
+        return (int) trim($matches[1]);
+    }
+}
 
 output("==============================");
 output("A.W.S.O.M.E. cms deploy script");
@@ -244,6 +274,8 @@ else
     $versions = array();
     output("Creating core archive");
     
+    $versions["framework"] = getHightestRevNumber(array($location."core", $location."docs", $location."libs"));
+    
     //copy the core files
     rcopy($location."core", $location."RELEASES{$ds}tmp{$ds}core");
     output(".", true);
@@ -253,7 +285,6 @@ else
     output(".", true);
     
     dir2zip($location."RELEASES{$ds}tmp", $location."RELEASES{$ds}framework.zip");
-    $versions["framework"] = md5_file($location."RELEASES{$ds}framework.zip");
     $versions["components"] = array();
     
     //cleanup
@@ -270,11 +301,12 @@ else
             {
                 mkdir($location."RELEASES{$ds}components", 0777, true);
             }
+            
+            $versions["components"][$component] = getHightestRevNumber($location."components{$ds}{$component}");
+            
             rcopy($location."components{$ds}{$component}", $location."RELEASES{$ds}tmp{$ds}{$component}");
             dir2zip($location."RELEASES{$ds}tmp{$ds}{$component}", $location."RELEASES{$ds}components{$ds}{$component}.zip");
             output(".", true);
-            
-            $versions["components"][$component] = md5_file($location."RELEASES{$ds}components{$ds}{$component}.zip");
             
             //cleanup
             clearDir($location."RELEASES{$ds}tmp{$ds}{$component}");

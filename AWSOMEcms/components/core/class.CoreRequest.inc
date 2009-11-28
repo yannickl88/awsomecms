@@ -23,7 +23,9 @@ class CoreRequest extends RequestComponent
     {
         //update
         $query = SQLQuery::doUpdate()
-            ->update('component_auth', $data['component_auth'])
+            ->updateWhenSet('component_auth', $data['component_auth'])
+            ->updateWhenSet('component_version', $data['component_version'])
+            ->updateWhenSet('component_patchlevel', $data['component_patchlevel'])
             ->where('component_name', $data['component_name'])
             ->table('components')
             ->exec();

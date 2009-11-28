@@ -1,5 +1,6 @@
 <?php
 import('/core/shared/class.Component.inc');
+import('/components/core/util/class.InstallHelper.inc');
 
 /**
 * Core component class, this includes all the logic for the core actions
@@ -88,17 +89,57 @@ class CoreComponent extends Component
     */
     public function action_update($smarty, $smartyLoader, $request)
     {
+        $updateURL = "http://update.yannickl88.nl";
+        
         if($request['methode'] == 'post')
         {
+            $versions = json_decode(file_get_contents("http://update.yannickl88.nl/version.json"));
+            $installer = new InstallHelper();
             
+            //framework?
+            if(!(file_exists(getFrameworkRoot()."/version.info") && trim(file_get_contents(Config::get("websiteroot")."/version.info")) == trim($versions->framework)))
+            {
+                $installer->downloadAndInstall("{$updateURL}/framework.zip");
+                file_put_contents(getFrameworkRoot()."/version.info", trim($versions->framework));
+            }
+            
+            //components
+            $components = Config::getInstance()->getComponenets();
+            
+            foreach($components as $component)
+            {
+                $component_name = $component->component_name;
+                
+                if(trim($versions->components->$component_name) > $component->component_version)
+                {
+                    if($component->component_name == "core")
+                    {
+                        continue;
+                    }
+                    
+                    $installer->downloadAndInstall("{$updateURL}/components/{$component_name}.zip", $component->component_path);
+                    
+                    Request::init('core')->doUpdate(array(
+                        'component_version'=> trim($versions->components->$component_name),
+                        'component_name' => $component->component_name
+                    ));
+                }
+                
+                //we want to run this no matter what, this will allow us to manually update the files and run this anyways
+                //now to run the patches
+                $installer->runPatches($component_name);
+                
+                //copy any new stuff from the install folder
+                $installer->rcopy($component->component_path."/install", Config::get('websiteroot'), false);
+            }
         }
         else
         {
             //fetch the current version info
-            $versions = json_decode(file_get_contents("http://update.yannickl88.nl/version.json"));
+            $versions = json_decode(file_get_contents("{$updateURL}/version.json"));
             
             //check if the framework is up to date
-            $smarty->assign("frameworkU2D", (file_exists(Config::get("websiteroot")."/version.info") && trim(file_get_contents(Config::get("websiteroot")."/version.info")) == trim($versions['framework'])));
+            $smarty->assign("frameworkU2D", (file_exists(getFrameworkRoot()."/version.info") && trim(file_get_contents(getFrameworkRoot()."/version.info")) == trim($versions->framework)));
             
             $components = Config::getInstance()->getComponenets();
             
