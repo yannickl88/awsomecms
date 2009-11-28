@@ -7,10 +7,7 @@ RewriteRule \.(info)$ - [F]
 RewriteRule \.(conf)$ - [F]
 
 # disable viewing of core directories
-RewriteCond %{REQUEST_URI} ^/cache/.*$ [OR]
-RewriteCond %{REQUEST_URI} ^/components/.*$ [OR]
 RewriteCond %{REQUEST_URI} ^/configs/.*$ [OR]
-RewriteCond %{REQUEST_URI} ^/core/.*$ [OR]
 RewriteCond %{REQUEST_URI} ^/templates/.*$ [OR]
 RewriteCond %{REQUEST_URI} ^/templates_c/.*$
 RewriteRule ^.*$ - [F]
