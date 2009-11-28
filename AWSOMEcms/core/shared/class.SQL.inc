@@ -484,7 +484,7 @@ class SQL
     
     private function __construct()
     {
-        $this->host     = Config::get('host',     'localhost', 'db');
+        $this->host     = Config::get('dbhost',   'localhost', 'db');
         $this->database = Config::get('database', 'site',      'db');
         $this->username = Config::get('username', 'root',      'db');
         $this->password = Config::get('password', '',          'db');

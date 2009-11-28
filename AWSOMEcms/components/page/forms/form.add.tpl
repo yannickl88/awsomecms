@@ -33,7 +33,7 @@
             <label for="page_template">Content:</label>
         </div>
         <div class="admin_form_field">
-            <textarea name="page_template" id="page_template" rows="5" cols="20" class="htmleditor">{$FORMERROR.record.page_template}</textarea>
+            <textarea name="page_template" id="page_template" rows="20" cols="20" class="htmleditor">{$FORMERROR.record.page_template}</textarea>
         </div>
     </div>
     <div class="admin_form_row admin_form_submit">

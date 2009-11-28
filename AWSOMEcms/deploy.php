@@ -177,6 +177,7 @@ if($env != 'update')
 {
     //copy all the required stuff
     mkdir($location."RELEASES{$ds}tmp{$ds}cache", 0777, true);
+    mkdir($location."RELEASES{$ds}tmp{$ds}htdocs{$ds}install", 0777, true);
     output(".", true);
     rcopy($location.'components', $location."RELEASES{$ds}tmp{$ds}components");
     output(".", true);
@@ -184,7 +185,8 @@ if($env != 'update')
     output(".", true);
     rcopy($location.'docs', $location."RELEASES{$ds}tmp{$ds}docs");
     output(".", true);
-    rcopy($location.'htdocs', $location."RELEASES{$ds}tmp{$ds}htdocs");
+    rcopy($location."htdocs{$ds}install", $location."RELEASES{$ds}tmp{$ds}htdocs{$ds}install");
+    rcopy($location."htdocs{$ds}install.php", $location."RELEASES{$ds}tmp{$ds}htdocs{$ds}install.php");
     output(".", true);
     rcopy($location.'libs', $location."RELEASES{$ds}tmp{$ds}libs");
     output(".", true);
@@ -197,26 +199,6 @@ if($env != 'update')
     {
         rcopy($location.'deploy.php', $location."RELEASES{$ds}tmp{$ds}deploy.php");
         output(".", true);
-    }
-
-    output(".", true);
-
-    //clear directories
-    clearDir($location."RELEASES{$ds}tmp{$ds}htdocs{$ds}configs");
-    output(".", true);
-    clearDir($location."RELEASES{$ds}tmp{$ds}htdocs{$ds}img");
-    output(".", true);
-    clearDir($location."RELEASES{$ds}tmp{$ds}htdocs{$ds}js");
-    output(".", true);
-    clearDir($location."RELEASES{$ds}tmp{$ds}htdocs{$ds}css");
-    output(".", true);
-    clearDir($location."RELEASES{$ds}tmp{$ds}htdocs{$ds}templates_c");
-    output(".", true);
-    clearDir($location."RELEASES{$ds}tmp{$ds}htdocs{$ds}install{$ds}templates_c");
-    output(".", true);
-    if($env == 'release' || $env == 'stable')
-    {
-        unlink($location."RELEASES{$ds}tmp{$ds}htdocs{$ds}config.ini");
     }
 }
 else

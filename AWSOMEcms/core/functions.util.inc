@@ -63,7 +63,7 @@ function parseInfoFile($file, $component)
             $line = $data[$currentLine];
             $currentLine++;
             
-            if(trim($line) == strtoupper($component->component_name.":"))
+            if(trim($line) == strtoupper($component.":"))
             {
                 $currentTextType = 1;
                 continue;

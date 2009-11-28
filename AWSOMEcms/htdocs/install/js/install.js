@@ -3,6 +3,7 @@ var dependancies = {};
 var dependanciesChecked = new Array();
 var disabled = false;
 var stepsexec = new Array();
+var valid = 0;
 
 //final data
 var finalData = {
@@ -190,29 +191,23 @@ function action_step1()
 {
     
 }
-function action_step2()
+function checkItem(id, check, total)
 {
-    var valid = 0;
-    $('#next').attr("disabled", "disabled");
-    
-    $('#check1').attr('src', '/install/img/loader.gif');
-    $('#check2').attr('src', '/install/img/loader.gif');
-    $('#check3').attr('src', '/install/img/loader.gif');
-    $('#check4').attr('src', '/install/img/loader.gif');
+    $(id).attr('src', '/install/img/loader.gif');
     
     //check requirements
-    jQuery.getJSON('/install.php', {action: 'checkphp'}, function(data) {
+    jQuery.getJSON('/install.php', {action: check}, function(data) {
         if(data)
         {
-            $('#check1').attr('src', '/install/img/ok-icon.png');
+            $(id).attr('src', '/install/img/ok-icon.png');
             valid++;
         }
         else
         {
-            $('#check1').attr('src', '/install/img/fail-icon.png');
+            $(id).attr('src', '/install/img/fail-icon.png');
         }
         
-        if(valid == 3)
+        if(valid == total)
         {
             $('#next').removeAttr("disabled");
         }
@@ -221,46 +216,18 @@ function action_step2()
             $('#next').attr("disabled", "disabled");
         }
     });
-    jQuery.getJSON('/install.php', {action: 'checkmysql'}, function(data) {
-        if(data)
-        {
-            $('#check2').attr('src', '/install/img/ok-icon.png');
-            valid++;
-        }
-        else
-        {
-            $('#check2').attr('src', '/install/img/fail-icon.png');
-        }
-        
-        if(valid == 3)
-        {
-            $('#next').removeAttr("disabled");
-        }
-        else
-        {
-            $('#next').attr("disabled", "disabled");
-        }
-    });
-    jQuery.getJSON('/install.php', {action: 'checkgdmod'}, function(data) {
-        if(data)
-        {
-            $('#check3').attr('src', '/install/img/ok-icon.png');
-            valid++;
-        }
-        else
-        {
-            $('#check3').attr('src', '/install/img/fail-icon.png');
-        }
-        
-        if(valid == 3)
-        {
-            $('#next').removeAttr("disabled");
-        }
-        else
-        {
-            $('#next').attr("disabled", "disabled");
-        }
-    });
+}
+
+function action_step2()
+{
+    valid = 0;
+    $('#next').attr("disabled", "disabled");
+    
+    checkItem('#check1', 'checkphp', 5);
+    checkItem('#check2', 'checkmysql', 5);
+    checkItem('#check3', 'checkgdmod', 5);
+    checkItem('#check4', 'checkrewrite', 5);
+    checkItem('#check5', 'checkapache', 5);
 }
 function action_step3()
 {

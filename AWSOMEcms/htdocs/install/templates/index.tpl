@@ -32,6 +32,8 @@
                 <div id="step2" style="display: none;">
                     In order to use the SlyFox Component Framework you system needs to support to following items:<br />
                     <br />
+                    <img src='/install/img/loader.gif' id="check5"/> Apache 2.0 <br />
+                    <img src='/install/img/loader.gif' id="check4"/> mod_rewrite <br />
                     <img src='/install/img/loader.gif' id="check1"/> PHP 5 or higher <br />
                     <img src='/install/img/loader.gif' id="check2"/> MySQL 5.0 or higher <br />
                     <img src='/install/img/loader.gif' id="check3"/> GDMod <br />
@@ -43,16 +45,23 @@
                     <br />
                     <div id="componentsWrapper">
                         {foreach from=$components item=component key=key}
-                            <input type="checkbox" id="component_{$key}" onclick="checkDependecies('{$key}');" class="input_components" value="{$key}" {if $component.required}checked="checked" disabled="disabled"{/if} /> <span id="label_{$key}">{$component.name}</span>
-                            {if $component.hasdependencies}
-                                <span class="dependson">(Depends on: {$component.dependson_string|capitalize:true})</span>
-                                <script type="text/javascript">
-                                    {foreach from=$component.dependson item=dependson}
-                                        markDependecies('{$key}', '{$dependson}')
-                                    {/foreach}
-                                </script>
-                            {/if}
-                            <br />
+                            <div class="componentSelectWrapper">
+                                <div class="checkboxWrapper">
+                                    <input type="checkbox" id="component_{$key}" onclick="checkDependecies('{$key}');" class="input_components" value="{$key}" {if $component.required}checked="checked" disabled="disabled"{/if} />
+                                </div>
+                                <div class="descWrapper">
+                                    <label id="label_{$key}" for="component_{$key}">{$component.name}</label>
+                                    {if $component.hasdependencies}
+                                        <span class="dependson">(Depends on: {$component.dependson_string|capitalize:true})</span>
+                                        <script type="text/javascript">
+                                            {foreach from=$component.dependson item=dependson}
+                                                markDependecies('{$key}', '{$dependson}')
+                                            {/foreach}
+                                        </script>
+                                    {/if}
+                                    <div class="desc">{$component.info.desc|nl2br}</div>
+                                </div>
+                            </div>
                         {/foreach}
                     </div>
                 </div>
@@ -110,7 +119,7 @@
                 </div>
             </div>
             <div id="buttonWrapper">
-                <span id="copyright">&copy; 2009 <a href="http://www.slyfoxdesign.co.uk/" target="_blank">SlyFox Design</a></span>
+                <span id="copyright">&copy; 2009 - 2010 <a href="http://www.yannickl88.nl/cms" target="_blank">A.W.S.O.M.E. cms</a></span>
                 <button type="button" id="prev" disabled="disabled" onclick="prevStep();">Back</button>
                 <button type="button" id="next" onclick="nextStep();">Next</button>
             </div>

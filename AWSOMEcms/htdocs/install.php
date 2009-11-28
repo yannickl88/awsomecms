@@ -368,11 +368,21 @@ if(!empty($_REQUEST['action']))
             $version = preg_replace('/[a-zA-Z]/', '', SQL_get_client_info());
             $data = (floatval($version) >= 5);
             break;
-        case 'checkcurl' :
-            $data = function_exists('curl_version');
+        case 'checkrewrite' :
+             if(!function_exists('apache_get_modules'))
+             {
+                 $data = false;
+             }
+             else
+             {
+                $data = in_array('mod_rewrite', apache_get_modules());
+             }
             break;
         case 'checkgdmod' :
             $data = function_exists('gd_info');
+            break;
+        case 'checkapache' :
+            $data = (strpos($_SERVER['SERVER_SOFTWARE'], 'Apache/2.0') === 0);
             break;
         case 'save' :
             $check1 = false;
@@ -429,9 +439,10 @@ foreach($componentsDirs as $component)
     {
         if(file_exists($websiteroot.'/../components/'.$component.'/info.ini'))
         {
-            $components[$component] = array("name" => ucfirst($component));
-            
+            $infodata = parseInfoFile($websiteroot.'/../components/'.$component.'/'.$component.'.info', $component);
             $inidata = parse_ini_file($websiteroot.'/../components/'.$component.'/info.ini', true);
+            
+            $components[$component] = array("name" => ucfirst($component), "info" => $infodata);
             
             if($inidata['dependson'])
             {
