@@ -112,11 +112,6 @@ class CoreComponent extends Component
                 
                 if(trim($versions->components->$component_name) > $component->component_version)
                 {
-                    if($component->component_name == "core")
-                    {
-                        continue;
-                    }
-                    
                     $installer->downloadAndInstall("{$updateURL}/components/{$component_name}.zip", $component->component_path);
                     
                     Request::init('core')->doUpdate(array(
@@ -132,6 +127,8 @@ class CoreComponent extends Component
                 //copy any new stuff from the install folder
                 $installer->rcopy($component->component_path."/install", Config::get('websiteroot'), false);
             }
+            
+            $this->redirect("/".Config::get('coreupdate', 'coreupdate', 'admin'));
         }
         else
         {

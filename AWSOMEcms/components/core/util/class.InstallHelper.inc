@@ -42,7 +42,7 @@ class InstallHelper
         $component = $components[$component];
         
         $current = $component->component_patchlevel;
-        $highest = getHighestPatchLevel($component->component_path."/db");
+        $highest = $this->getHighestPatchLevel($component->component_path."/db");
         
         while($current < $highest)
         {
@@ -176,7 +176,7 @@ class InstallHelper
             {
                 if($file != '.' && $file != '..' && $file != '.svn')
                 {
-                    rcopy($source.'/'.$file, $dest.'/'.$file);
+                    $this->rcopy($source.'/'.$file, $dest.'/'.$file, $override);
                 }
             }
         }
