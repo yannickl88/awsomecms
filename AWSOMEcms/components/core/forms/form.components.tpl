@@ -36,12 +36,12 @@
                 </td>
                 <td>
                     <div style="float: left;">
-                        <input name="auth_{$component->component_name}[]" value="{$auth.auth_select}" type="checkbox"{if !$component->component_auth|hasflag:$auth.auth_select} checked="checked"{/if} /> Select<br />
-                        <input name="auth_{$component->component_name}[]" value="{$auth.auth_insert}" type="checkbox"{if !$component->component_auth|hasflag:$auth.auth_insert} checked="checked"{/if} /> Insert
+                        <input name="auth_{$component->component_name}[]" id="auth_{$component->component_name}s" value="{$auth.auth_select}" type="checkbox"{if !$component->component_auth|hasflag:$auth.auth_select} checked="checked"{/if} /> <label for="auth_{$component->component_name}s">Select</label><br />
+                        <input name="auth_{$component->component_name}[]" id="auth_{$component->component_name}i" value="{$auth.auth_insert}" type="checkbox"{if !$component->component_auth|hasflag:$auth.auth_insert} checked="checked"{/if} /> <label for="auth_{$component->component_name}i">Insert</label>
                     </div>
                     <div style="margin-left: 75px;">
-                        <input name="auth_{$component->component_name}[]" value="{$auth.auth_update}" type="checkbox"{if !$component->component_auth|hasflag:$auth.auth_update} checked="checked"{/if} /> Update<br />
-                        <input name="auth_{$component->component_name}[]" value="{$auth.auth_delete}" type="checkbox"{if !$component->component_auth|hasflag:$auth.auth_delete} checked="checked"{/if} /> Delete
+                        <input name="auth_{$component->component_name}[]" id="auth_{$component->component_name}u" value="{$auth.auth_update}" type="checkbox"{if !$component->component_auth|hasflag:$auth.auth_update} checked="checked"{/if} /> <label for="auth_{$component->component_name}u">Update</label><br />
+                        <input name="auth_{$component->component_name}[]" id="auth_{$component->component_name}d" value="{$auth.auth_delete}" type="checkbox"{if !$component->component_auth|hasflag:$auth.auth_delete} checked="checked"{/if} /> <label for="auth_{$component->component_name}d">Delete</label>
                     </div>
                 </td>
                 <td style="vertical-align: top;">
