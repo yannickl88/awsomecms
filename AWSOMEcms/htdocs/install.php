@@ -183,6 +183,8 @@ function installComponents()
     //fetch version number
     $versions = json_decode(file_get_contents($websiteroot."/install/version.json"));
     
+    file_put_contents(getFrameworkRoot()."/version.info", $versions->framework);
+    
     foreach($_POST['components'] as $component)
     {
         try
