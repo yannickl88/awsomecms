@@ -32,8 +32,7 @@
                 <div id="step2" style="display: none;">
                     In order to use the SlyFox Component Framework you system needs to support to following items:<br />
                     <br />
-                    <img src='/install/img/loader.gif' id="check5"/> Apache 2.0 <br />
-                    <img src='/install/img/loader.gif' id="check4"/> mod_rewrite <br />
+                    <img src='/install/img/loader.gif' id="check4"/> Apache 2.0 <br />
                     <img src='/install/img/loader.gif' id="check1"/> PHP 5 or higher <br />
                     <img src='/install/img/loader.gif' id="check2"/> MySQL 5.0 or higher <br />
                     <img src='/install/img/loader.gif' id="check3"/> GDMod <br />
@@ -55,13 +54,18 @@
                                         <span class="dependson">(Depends on: {$component.dependson_string|capitalize:true})</span>
                                         <script type="text/javascript">
                                             {foreach from=$component.dependson item=dependson}
-                                                markDependecies('{$key}', '{$dependson}')
+                                                markDependecies('{$key}', '{$dependson}');
                                             {/foreach}
                                         </script>
                                     {/if}
                                     <div class="desc">{$component.info.desc|nl2br}</div>
                                 </div>
                             </div>
+                            {if $component.canauth}
+                                <script type="text/javascript">
+                                    addAuthComponent('{$key}');
+                                </script>
+                            {/if}
                         {/foreach}
                     </div>
                 </div>

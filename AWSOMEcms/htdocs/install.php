@@ -180,6 +180,9 @@ function installComponents()
     
     array_unshift($_POST['components'], 'core');
     
+    //fetch version number
+    $versions = json_decode(file_get_contents($websiteroot."/install/version.json"));
+    
     foreach($_POST['components'] as $component)
     {
         try
@@ -208,6 +211,8 @@ function installComponents()
             
             $dir = addslashes($dir);
             
+            $version = $versions->components->$component;
+            
             $db->query(
                 "INSERT INTO 
                     `components` 
@@ -216,7 +221,8 @@ function installComponents()
                     `component_requests`, 
                     `component_path`, 
                     `component_auth`,
-                    `component_patchlevel`
+                    `component_patchlevel`,
+                    `component_version`
                 )
                 VALUES
                 (
@@ -224,7 +230,8 @@ function installComponents()
                     '{$requests}',
                     '{$dir}',
                     15,
-                    {$patchlevel}
+                    {$patchlevel},
+                    {$version}
                 );"
             );
             
@@ -368,16 +375,6 @@ if(!empty($_REQUEST['action']))
             $version = preg_replace('/[a-zA-Z]/', '', SQL_get_client_info());
             $data = (floatval($version) >= 5);
             break;
-        case 'checkrewrite' :
-             if(!function_exists('apache_get_modules'))
-             {
-                 $data = false;
-             }
-             else
-             {
-                $data = in_array('mod_rewrite', apache_get_modules());
-             }
-            break;
         case 'checkgdmod' :
             $data = function_exists('gd_info');
             break;
@@ -455,6 +452,8 @@ foreach($componentsDirs as $component)
                 $components[$component]['dependson'] = array();
                 $components[$component]['hasdependencies'] = false;
             }
+            
+            $components[$component]['canauth'] = $inidata['canauth'];
             
             if($inidata['required'])
             {

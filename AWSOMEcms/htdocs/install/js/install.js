@@ -4,6 +4,7 @@ var dependanciesChecked = new Array();
 var disabled = false;
 var stepsexec = new Array();
 var valid = 0;
+var authComponents = new Array();
 
 //final data
 var finalData = {
@@ -223,11 +224,10 @@ function action_step2()
     valid = 0;
     $('#next').attr("disabled", "disabled");
     
-    checkItem('#check1', 'checkphp', 5);
-    checkItem('#check2', 'checkmysql', 5);
-    checkItem('#check3', 'checkgdmod', 5);
-    checkItem('#check4', 'checkrewrite', 5);
-    checkItem('#check5', 'checkapache', 5);
+    checkItem('#check1', 'checkphp', 4);
+    checkItem('#check2', 'checkmysql', 4);
+    checkItem('#check3', 'checkgdmod', 4);
+    checkItem('#check4', 'checkapache', 4);
 }
 function action_step3()
 {
@@ -238,7 +238,7 @@ function action_step4()
     $('#setting_auth').empty();
     
     $('.input_components').each(function(key, value) {
-        if($(value).attr('checked'))
+        if($(value).attr('checked') && in_array($(value).val(), authComponents))
         {
             $('#setting_auth').append("<option value='"+$(value).val()+"'>"+$('#label_'+$(value).val()).text()+"</option>")
         }
@@ -326,4 +326,24 @@ function confirmDeletion(checkbox)
     {
         $(checkbox).removeAttr('checked');
     }
+}
+
+function addAuthComponent(componentName)
+{
+    authComponents.push(componentName);
+}
+
+function in_array(needel, array)
+{
+    var inArray = false;
+    
+    $(array).each(function(key, value) {
+        if(needel == value)
+        {
+            inArray = true
+            return;
+        }
+    });
+    
+    return inArray;
 }
