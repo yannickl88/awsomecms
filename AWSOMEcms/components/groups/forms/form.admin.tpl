@@ -14,11 +14,15 @@
             {$row->group_name}
         </td>
         <td class="admin_table_cell admin_table_actions">
+            {if $row->group_locked eq 0}
             <a href="/{$actionurl_edit}&group_id={$row->group_id}"><img src="/img/icons/group_edit.png" alt="edit"></a>
             <a href="/{$actionurl_delete}&group_id={$row->group_id}"><img src="/img/icons/group_delete.png" alt="delete"></a>
+            {/if}
         </td>
         <td class="admin_table_cell admin_table_actions">
+            {if $row->group_locked eq 0}
             <input type="checkbox" value="{$row->group_id}" name="action[]" class="actioncheckbox">
+            {/if}
         </td>
     </tr>
     {foreachelse}
@@ -33,7 +37,7 @@
             <a href="/{$actionurl_add}">Add</a>
         </td>
         <td class="admin_table_cell">
-            <a href="javascript: void(0);" onclick="deleteMultiple('/{$actionurl_delete}', 'user_id', $('.actioncheckbox'));"><img src="/img/icons/group_delete.png" alt="deleteselected"></a>
+            <a href="javascript: void(0);" onclick="deleteMultiple('/{$actionurl_delete}', 'group_id', $('.actioncheckbox'));"><img src="/img/icons/group_delete.png" alt="deleteselected"></a>
         </td>
     </tr>
 </table>

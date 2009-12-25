@@ -28,6 +28,13 @@ TODO:
  * Comments component should get tag to show reactions
  
 CHANGE LOG:
+25-12-2009 (v0.3.10)
+ * Added support for an external url to update a component from
+ * Fixed some bugs
+ * Gallery now auto fills the name when it's not set when selecting a file
+ * Updated Twitter Component with a newer version of the library class
+ * Starting to add support for a normal user login
+ * Added caching for components info, this is stored in a file now in the cache dir
 28-11-2009 (v0.3.9)
  * Added support for an update service, this will allow for easy updating of the cms.
  * Fixed verious bugs

@@ -33,7 +33,7 @@
             <a href="/{$actionurl_add}">Add</a>
         </td>
         <td class="admin_table_cell">
-            <a href="javascript: void(0);" onclick="deleteMultiple('/{$actionurl_delete}', 'image_id', $('.actioncheckbox'));"><img src="/img/icons/page_white_delete.png" alt="deleteselected"></a>
+            <a href="javascript: void(0);" onclick="deleteMultiple('/{$actionurl_delete}', 'group_id', $('.actioncheckbox'));"><img src="/img/icons/page_white_delete.png" alt="deleteselected"></a>
         </td>
     </tr>
 </table>

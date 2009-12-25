@@ -91,7 +91,8 @@ class CoreComponent extends Component
     {
         if($request['methode'] == 'post')
         {
-            $versions = json_decode(file_get_contents("http://update.yannickl88.nl/version.json"));
+            $updateURL = Config::get("updateurl", "", "update");
+            $versions = json_decode(file_get_contents("{$updateURL}/version.json"));
             $installer = new InstallHelper();
             
             if($request['framework'] == 1)
@@ -111,17 +112,34 @@ class CoreComponent extends Component
             {
                 //components
                 $components = Config::getInstance()->getComponenets();
-                
                 $component = $components[$request['updateComponent']];
-                
                 $component_name = $component->component_name;
                 
-                if(trim($versions->components->$component_name) > $component->component_version)
+                if(!empty($component->component_updateurl))
                 {
-                    $installer->downloadAndInstall("{$updateURL}/components/{$component_name}.zip", $component->component_path);
+                    $extVersions = json_decode(file_get_contents("{$component->component_updateurl}/version.json"));
+                    
+                    $version = trim($extVersions->$component_name);
+                }
+                else
+                {
+                    $version = trim($versions->components->$component_name);
+                }
+                
+                if($version > $component->component_version)
+                {
+                    //is there an update URL set?
+                    if(!empty($component->component_updateurl))
+                    {
+                        $installer->downloadAndInstall("{$component->component_updateurl}/{$component_name}.zip", $component->component_path);
+                    }
+                    else
+                    {
+                        $installer->downloadAndInstall("{$updateURL}/{$component_name}.zip", $component->component_path);
+                    }
                     
                     Request::init('core')->doUpdate(array(
-                        'component_version'=> trim($versions->components->$component_name),
+                        'component_version'=> trim($version),
                         'component_name' => $component->component_name
                     ));
                 }
@@ -134,6 +152,9 @@ class CoreComponent extends Component
                 $installer->rcopy($component->component_path."/install", Config::get('websiteroot'), false);
                 
                 echo "true";
+                
+                Config::getInstance()->reloadComponenets();
+                
                 return;
             }
             
@@ -170,7 +191,7 @@ class CoreComponent extends Component
         }
         else
         {
-            $updateURL = "http://update.yannickl88.nl";
+            $updateURL = Config::get("updateurl", "", "update");
             
             //fetch the current version info
             $versions = json_decode(file_get_contents("{$updateURL}/version.json"));
@@ -184,7 +205,25 @@ class CoreComponent extends Component
             {
                 $component_name = $component->component_name;
                 
-                $components[$component->component_name]->U2D = (trim($versions->components->$component_name) == $component->component_version);
+                //is there an update URL set?
+                if(!empty($component->component_updateurl))
+                {
+                    $extVersions = json_decode(file_get_contents("{$component->component_updateurl}/version.json"));
+                    
+                    if($extVersions === false || $extVersions === null)
+                    {
+                        $components[$component->component_name]->U2D = "???";
+                    }
+                    else
+                    {
+                        $components[$component->component_name]->U2D = (trim($extVersions->$component_name) == $component->component_version);
+                    }
+                }
+                else
+                {
+                    $components[$component->component_name]->U2D = (trim($versions->components->$component_name) == $component->component_version);
+                }
+                
                 $components[$component->component_name]->info = parseInfoFile($component->component_path."/{$component_name}.info", $component_name);
             }
             

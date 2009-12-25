@@ -15,7 +15,7 @@ class GroupsRequest extends RequestComponent
         if(isset($data['user_id']) || isset($data['user_name']) || isset($data['user_pass']) || isset($data['showusers']))
         {
             $query->join('usersgroups', 'groups.group_id', 'usersgroups.group_id', 'left')
-                ->join('users', 'users.user_id', 'usersgroups.user_id')
+                ->join('users', 'users.user_id', 'usersgroups.user_id', 'left')
                 ->select("users.user_id")
                 ->select("users.user_name")
                 ->whereWhenSet('users.user_id', $data['user_id'])

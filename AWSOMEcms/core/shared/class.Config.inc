@@ -153,6 +153,19 @@ class Config
     
     public function reloadComponenets()
     {
+        //clear the cache, seeing as we changed the components
+        $cachefile = getFrameworkRoot()."/cache/components.cache";
+        if(file_exists($cachefile))
+        {
+            unlink($cachefile);
+        }
+        
+        $cachefile = getFrameworkRoot()."/cache/hooks.cache";
+        if(file_exists($cachefile))
+        {
+            unlink($cachefile);
+        }
+        
         $this->componenets = false;
     }
     /**
@@ -165,32 +178,46 @@ class Config
     {
         if(!$this->componenets)
         {
-            $this->componenets = array();
-            $this->requests = array();
-            
-            $result = SQLQuery::doSelect()
-                ->table('components')
-                ->exec();
-            
-            while($row = $result->getRow())
+            //check if there is cache file.
+            $cachefile = getFrameworkRoot()."/cache/components.cache";
+            if(file_exists($cachefile))
             {
-                $this->componenets[$row->component_name] = $row;
-                $requests = explode(';', $row->component_requests);
+                $cache = unserialize(file_get_contents($cachefile));
                 
-                foreach($requests as $request)
+                $this->componenets = $cache[0];
+                $this->requests = $cache[1];
+            }
+            else
+            {
+                $this->componenets = array();
+                $this->requests = array();
+                
+                $result = SQLQuery::doSelect()
+                    ->table('components')
+                    ->exec();
+                
+                while($row = $result->getRow())
                 {
-                    if($request != '')
+                    $this->componenets[$row->component_name] = $row;
+                    $requests = explode(';', $row->component_requests);
+                    
+                    foreach($requests as $request)
                     {
-                        if($row->component_name != $request || count($requests) > 1)
+                        if($request != '')
                         {
-                            $this->requests[$row->component_name.".".$request] = $row;
-                        }
-                        else
-                        {
-                            $this->requests[$request] = $row;
+                            if($row->component_name != $request || count($requests) > 1)
+                            {
+                                $this->requests[$row->component_name.".".$request] = $row;
+                            }
+                            else
+                            {
+                                $this->requests[$request] = $row;
+                            }
                         }
                     }
                 }
+                
+                file_put_contents($cachefile, serialize(array($this->componenets, $this->requests)));
             }
         }
         
@@ -222,30 +249,40 @@ class Config
     {
         if(!$this->hooks)
         {
-            $this->hooks = array();
-            
-            $result = SQLQuery::doSelect()
-                ->table('hooks')
-                ->exec();
-            
-            while($row = $result->getRow())
+            //check if there is cache file.
+            $cachefile = getFrameworkRoot()."/cache/hooks.cache";
+            if(file_exists($cachefile))
             {
-                if(!isset($this->hooks[$row->component_target]))
-                {
-                    $this->hooks[$row->component_target] = array(
-                        "pre" => array(),
-                        "post" => array()
-                    );
-                }
+                $this->hooks = unserialize(file_get_contents($cachefile));
+            }
+            else
+            {
+                $this->hooks = array();
                 
-                if($row->hook_prepost == "pre")
+                $result = SQLQuery::doSelect()
+                    ->table('hooks')
+                    ->exec();
+                
+                while($row = $result->getRow())
                 {
-                    $this->hooks[$row->hook_target]['pre'][$row->hook_action] = array($row->hook_component, $row->hook_function);
+                    if(!isset($this->hooks[$row->component_target]))
+                    {
+                        $this->hooks[$row->component_target] = array(
+                            "pre" => array(),
+                            "post" => array()
+                        );
+                    }
+                    
+                    if($row->hook_prepost == "pre")
+                    {
+                        $this->hooks[$row->hook_target]['pre'][$row->hook_action] = array($row->hook_component, $row->hook_function);
+                    }
+                    elseif($row->hook_prepost == "post")
+                    {
+                        $this->hooks[$row->hook_target]['post'][$row->hook_action] = array($row->hook_component, $row->hook_function);
+                    }
                 }
-                elseif($row->hook_prepost == "post")
-                {
-                    $this->hooks[$row->hook_target]['post'][$row->hook_action] = array($row->hook_component, $row->hook_function);
-                }
+                file_put_contents($cachefile, serialize($this->hooks));
             }
         }
         

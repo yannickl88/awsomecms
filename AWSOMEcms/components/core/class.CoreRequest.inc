@@ -26,6 +26,7 @@ class CoreRequest extends RequestComponent
             ->updateWhenSet('component_auth', $data['component_auth'])
             ->updateWhenSet('component_version', $data['component_version'])
             ->updateWhenSet('component_patchlevel', $data['component_patchlevel'])
+            ->updateWhenSet('component_updateurl', $data['component_updateurl'])
             ->where('component_name', $data['component_name'])
             ->table('components')
             ->exec();

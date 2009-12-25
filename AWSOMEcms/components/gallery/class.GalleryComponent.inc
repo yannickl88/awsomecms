@@ -24,12 +24,14 @@ class GalleryComponent extends Component
         {
             if($this->validate($request, "/".Config::get('galleryadd', 'galleryadd', 'admin'), "add"))
             {
+                $requestObj = Request::init("gallery");
+                
                 $request["image_url"] = "";
                 $request["image_urlthumb"] = "";
                 $request["image_width"] = 0;
                 $request["image_height"] = 0;
                 
-                $id = $this->insert($request);
+                $id = $requestObj->doInsert($request);
                 
                 $request["image_id"] = $id;
                 list($request["image_url"], $request["image_width"], $request["image_height"]) = $this->handleFileUpload($id, 'image_image');
@@ -49,20 +51,29 @@ class GalleryComponent extends Component
                     die("ERROR");
                 }
                 
-                $id = $this->update($request);
+                $id = $requestObj->doUpdate($request);
             }
             
-            $this->redirect("/".Config::get('galleryadmin', 'galleryadmin', 'admin'));
+            if($request['uploadMore'] == 1)
+            {
+                $this->redirect("/".Config::get('galleryadd', 'galleryadd', 'admin'));
+            }
+            else
+            {
+                $this->redirect("/".Config::get('galleryadmin', 'galleryadmin', 'admin'));
+            }
         }
     }
     
     public function action_edit($smarty, $smartyLoader, $request)
     {
+        $requestObj = Request::init("gallery");
+        
         if($request['methode'] == 'post')
         {
             if($this->validate($request, "/".Config::get('galleryedit', 'galleryedit', 'admin'), "edit"))
             {
-                $record = $this->select($request);
+                $record = $requestObj->doSelect($request);
                 
                 $id = $request['image_id'];
                 
@@ -99,7 +110,7 @@ class GalleryComponent extends Component
                     list($request["image_urlthumb"], $request["image_thumbwidth"], $request["image_thumbheight"]) = $this->handleThumbUpload($id, 'image_thumb');
                 }
                 
-                $this->update($request);
+                $requestObj->doUpdate($request);
             }
             
             $this->redirect("/".Config::get('galleryadmin', 'galleryadmin', 'admin'));
@@ -108,7 +119,7 @@ class GalleryComponent extends Component
         {
             if($request['image_id'])
             {
-                $record = $this->select($request);
+                $record = $requestObj->doSelect($request);
                 
                 $smarty->assign("record", $record[0]);
             }
@@ -121,9 +132,11 @@ class GalleryComponent extends Component
     
     public function action_delete($smarty, $smartyLoader, $request)
     {
+        $requestObj = Request::init("gallery");
+        
         if($request['methode'] == 'post')
         {
-            $record = $this->select($request);
+            $record = $requestObj->doSelect($request);
             
             $id = $request['image_id'];
             
@@ -136,7 +149,7 @@ class GalleryComponent extends Component
             {
                 @unlink(Config::get('websiteroot', '.').$record[0]->image_urlthumb);
             }
-            $this->delete($request);
+            $requestObj->doDelete($request);
             
             $this->redirect("/".Config::get('galleryadmin', 'galleryadmin', 'admin'));
         }
@@ -144,7 +157,7 @@ class GalleryComponent extends Component
         {
             if($request['image_id'])
             {
-                $record = $this->select($request);
+                $record = $requestObj->doSelect($request);
                 
                 $smarty->assign("record", $record);
             }
@@ -157,7 +170,7 @@ class GalleryComponent extends Component
     
     public function action_admin($smarty, $smartyLoader, $request)
     {
-        $smarty->assign("records", $this->select());
+        $smarty->assign("records", Request::init("gallery")->doSelect());
         
         //urls
         $smarty->assign("actionurl_add", Config::get('galleryadd', 'galleryadd', 'admin'));

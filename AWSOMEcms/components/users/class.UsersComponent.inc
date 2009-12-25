@@ -179,7 +179,9 @@ class UsersComponent extends Component
         
         if($valid)
         {
-            if(!Controller::getInstance()->auth_login($request['user_name'], $request['user_pass']))
+            $loggedin = Controller::getInstance()->auth_login($request['user_name'], $request['user_pass']);
+            
+            if(!$loggedin || ($loggedin && $_SESSION['usr']['auth']['admin'] !== true))
             {
                 $e->addInvalidField('user_name', "Username and Password do not match");
                 $e->addInvalidField('user_pass', "");
@@ -195,11 +197,11 @@ class UsersComponent extends Component
         $this->redirect($redirect);
     }
     
-    public function action_user_login($smarty, $smartyLoader, $request)
+    public function action_login($smarty, $smartyLoader, $request)
     {
         if($request['methode'] == 'post')
         {
-            $this->login($request, "/");
+            $this->login($request, "/".$_GET['url']);
         }
     }
     
@@ -331,7 +333,7 @@ class UsersComponent extends Component
         $record = Request::init('users.users')->doSelect(array("user_name" => $user_name, "user_pass" => $user_pass));
         $privilages = $this->auth($record[0]);
         
-        if(count($record) == 1 && $privilages['admin'] === true)
+        if(count($record) == 1)
         {
             //set the session
             $_SESSION['usr'] = array();

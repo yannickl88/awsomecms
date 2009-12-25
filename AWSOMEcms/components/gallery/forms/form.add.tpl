@@ -33,7 +33,7 @@
         </div>
         <div class="admin_form_field">
             <input type="file" name="image_thumb" id="image_thumb" {if $FORMERROR.record.image_tumb_generate}disabled="disabled"{/if}/>
-            <input type="checkbox" name="image_tumb_generate" id="image_tumb_generate" {if $FORMERROR.record.image_tumb_generate}checked="checked"{/if} onchange="toggleDisabled(this, 'image_thumb');"/> Generate
+            <input type="checkbox" name="image_tumb_generate" id="image_tumb_generate" {if $FORMERROR.record.image_tumb_generate}checked="checked"{/if}/> Generate
         </div>
     </div>
     <div class="admin_form_row">
@@ -46,6 +46,7 @@
     </div>
     <div class="admin_form_row admin_form_submit">
         <input type="submit" value="Save" id="user_submit" class="admin_form_submit">
+        <input type="checkbox" value="1" name="uploadMore"> Upload More
     </div>
     <input type="hidden" name="action" value="add" />
     <input type="hidden" name="component" value="gallery" />
@@ -68,5 +69,17 @@
             }
         }
     }
+    $().ready(function(e) {
+        $("#image_image").change(function(e) {
+            if($("#image_title").val() == "")
+            {
+                var title = $("#image_image").val();
+                $("#image_title").val(title.substr(0, title.lastIndexOf(".")));
+            }
+        });
+        $("#image_tumb_generate").change(function(e) {
+            toggleDisabled(this, 'image_thumb');
+        });
+    });
     {/literal}
 </script>

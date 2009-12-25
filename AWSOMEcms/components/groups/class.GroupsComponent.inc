@@ -160,7 +160,7 @@ class GroupsComponent extends Component
         {
             $privilages = $this->auth($record);
             
-            if(count($record) == 1 && $privilages['admin'] === true)
+            if(count($record) == 1)
             {
                 //set the session
                 $_SESSION['usr'] = array();
@@ -180,7 +180,7 @@ class GroupsComponent extends Component
         if($request['methode'] == 'post')
         {
             $requestObj = Request::init('groups.usersgroups');
-            $requestObj->doInsert(array("group_id" => Config::get('defaultgroup', 1, 'groups'), "user_id" => $request['user_id']));
+            $requestObj->doInsert(array("group_id" => Config::get('defaultgroup', 2, 'groups'), "user_id" => $request['user_id']));
         }
         return true;
     }

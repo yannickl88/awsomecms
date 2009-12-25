@@ -31,8 +31,8 @@
                     <i>{$component->component_name|capitalize}</i>
                 </td>
                 <td style="vertical-align: top;" class="updateCell">
-                    <img src="/img/admin/{if $component->U2D}ok{else}fail{/if}-icon.png" /> 
-                    {if $component->U2D}Up-to-date{else}<button type="button" onclick="updateComponent('{$component->component_name}');">Update</button>{/if}
+                    <img src="/img/admin/{if $component->U2D === "???"}unknown{elseif $component->U2D}ok{else}fail{/if}-icon.png" /> 
+                    {if $component->U2D === "???"}Unknown{elseif $component->U2D}Up-to-date{else}<button type="button" onclick="updateComponent('{$component->component_name}');">Update</button>{/if}
                 </td>
                 <td>
                     <div style="float: left;">
