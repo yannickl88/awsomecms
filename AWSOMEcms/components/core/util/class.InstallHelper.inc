@@ -25,7 +25,7 @@ class InstallHelper
             $zip->extractTo($root);
             $zip->close();
             
-            unlink($sourceFile);
+            //unlink($sourceFile);
             return true;
         }
         else

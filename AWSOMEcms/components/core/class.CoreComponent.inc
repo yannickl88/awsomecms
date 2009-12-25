@@ -131,11 +131,17 @@ class CoreComponent extends Component
                     //is there an update URL set?
                     if(!empty($component->component_updateurl))
                     {
-                        $installer->downloadAndInstall("{$component->component_updateurl}/{$component_name}.zip", $component->component_path);
+                        if(!$installer->downloadAndInstall("{$component->component_updateurl}/{$component_name}.zip", $component->component_path))
+                        {
+                            die("false");
+                        }
                     }
                     else
                     {
-                        $installer->downloadAndInstall("{$updateURL}/{$component_name}.zip", $component->component_path);
+                        if(!$installer->downloadAndInstall("{$updateURL}/components/{$component_name}.zip", $component->component_path))
+                        {
+                            die("false");
+                        }
                     }
                     
                     Request::init('core')->doUpdate(array(
