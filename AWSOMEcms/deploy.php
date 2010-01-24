@@ -88,7 +88,7 @@ function raddFileToZip($source, $dest, $zip)
     }
     else
     {
-        $zip->addFile($source, $dest);
+        $zip->addFile($source, str_replace(DIRECTORY_SEPARATOR, "/", $dest));
     }
 }
 function clearDir($source, $unless = array())

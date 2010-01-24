@@ -102,7 +102,9 @@ class RequestComponent
         $request = new Request();
         $request->methode = $_SERVER['REQUEST_METHOD'];
         
-        $request->component = substr('http://' . $_SERVER['SERVER_NAME'] . $_SERVER['REQUEST_URI'], strlen($config->get("proxy", 'www.google.com', 'proxy'))+1);
+        $url = 'http://' . $_SERVER['SERVER_NAME'] . $_SERVER['REQUEST_URI'];
+        $request->component = substr($url, strlen($config->get("proxy", 'www.google.com', 'proxy'))+1);
+        $request->component = substr($request->component, 0, strrpos($request->component, "?"));
         $request->action = $request->translateAction();
         
         switch($request->methode)

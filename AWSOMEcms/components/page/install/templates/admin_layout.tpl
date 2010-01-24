@@ -25,7 +25,7 @@
         <script type="text/javascript" src="/js/tree.js"></script>
         <script type="text/javascript" src="/js/jquery.lightbox.js"></script>
         <script type="text/javascript" src="/js/ajaxupload.3.5.js"></script>
-        <script type="text/javascript" src="/js/jHtmlArea-0.6.0.min.js"></script>
+        <script type="text/javascript" src="http://js.nicedit.com/nicEdit-latest.js"></script>
         <script type="text/javascript" src="/js/adminmenu.js"></script>
         <script type="text/javascript">
             {literal}
@@ -38,16 +38,31 @@
                 });
                 
                 //load the editor
-                $("form .htmleditor").htmlarea({
-                    css: "/css/jHtmlArea.Editor.css"
-                });
-                $("form").submit(function(e) {
-                    $(this).find(".htmleditor").each(function(key, value){
-                        var name = $(value).attr('name');
-                        var content = $(value).htmlarea('toHtmlString');
-                        
-                        $(value).replaceWith("<textarea style='display: none;' name='" + name + "'>" + content + "</textarea>");
-                    });
+                $("form .htmleditor").each(function(key, value) {
+                    var data = {
+                        buttonList: [
+                            'bold',
+                            'italic',
+                            'underline',
+                            'left',
+                            'center',
+                            'right',
+                            'justify',
+                            'ol',
+                            'ul',
+                            'subscript',
+                            'superscript',
+                            'strikethrough',
+                            'removeformat',
+                            'hr',
+                            'image',
+                            'fontFormat',
+                            'xhtml'
+                        ],
+                        xhtml: true
+                    };
+                    
+                    new nicEditor(data).panelInstance(value);
                 });
                 $('#doc').click(function(e) {
                     window.open("/doc.php", "_blank", "width=500,height=600");
@@ -74,7 +89,7 @@
                 </div>
                 <img src="/img/admin/tree-bottom.png" />
                 <div id="copyWrapper">
-                    <a href="http://yannickl88.nl/cms" target="_blank">A.W.S.O.M.E. cms</a> &copy; 2009
+                    <a href="http://yannickl88.nl/cms" target="_blank">A.W.S.O.M.E. cms</a> &copy; 2009 - 2010
                 </div>
             </div>
             <div id="contentWrapper">

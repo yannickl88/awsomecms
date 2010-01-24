@@ -101,7 +101,7 @@ class SQLQuery
     
     public function insertWhenSet($field, $value)
     {
-        if(isset($value) && !empty($value))
+        if((isset($value) && is_numeric($value)) || (isset($value) && !is_numeric($value) && !empty($value)))
         {
             $this->insert($field, $value);
         }
@@ -122,7 +122,7 @@ class SQLQuery
     
     public function updateWhenSet($field, $value)
     {
-        if(isset($value) && !empty($value))
+        if((isset($value) && is_numeric($value)) || (isset($value) && !is_numeric($value) && !empty($value)))
         {
             $this->update($field, $value);
         }
@@ -139,7 +139,7 @@ class SQLQuery
     
     public function whereWhenSet($field, $value, $comparison = "=", $orAnd = 'AND')
     {
-        if(isset($value) && !empty($value))
+        if((isset($value) && is_numeric($value)) || (isset($value) && !is_numeric($value) && !empty($value)))
         {
             $this->where($field, $value, $comparison, $orAnd);
         }
@@ -160,7 +160,7 @@ class SQLQuery
             {
                 if(!is_numeric($value))
                 {
-                    $value[$key] = "'{$value2}'";
+                    $value[$key] = "'" . addslashes($value2) . "'";
                 }
             }
             
@@ -181,7 +181,7 @@ class SQLQuery
         {
             if(!is_numeric($value))
             {
-                $value = "'{$value}'";
+                $value = "'" . addslashes($value) . "'";
             }
             
             $this->where[] = array("({$field} {$comparison} {$value})", $orAnd);
@@ -311,11 +311,11 @@ class SQLQuery
             
             if(is_numeric($this->values[$field]))
             {
-                $totalValues .= $this->values[$field];
+                $totalValues .= addslashes($this->values[$field]);
             }
             else
             {
-                $totalValues .= "'".$this->values[$field]."'";
+                $totalValues .= "'".addslashes($this->values[$field])."'";
             }
         }
         
@@ -343,11 +343,11 @@ class SQLQuery
             
             if(is_numeric($this->values[$field]))
             {
-                $totalValues .= $this->values[$field];
+                $totalValues .= addslashes($this->values[$field]);
             }
             else
             {
-                $totalValues .= "'".$this->values[$field]."'";
+                $totalValues .= "'".addslashes($this->values[$field])."'";
             }
         }
         
@@ -578,10 +578,10 @@ class SQL
         switch($type)
         {
             case 1 :
-                throw new SQLExeption($error."\n QUERY: '{$this->query}'");
+                throw new SQLExeption($error."\n QUERY: '" . $this->query . "'");
                 break;
             case 2 :
-                throw new SQLConnenectionExeption($error."\n QUERY: '{$this->query}'");
+                throw new SQLConnenectionExeption($error."\n QUERY: '" . $this->query . "'");
                 break;
         }
     }

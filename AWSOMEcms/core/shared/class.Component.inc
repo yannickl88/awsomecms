@@ -273,4 +273,5 @@ class Component
     }
     
     public function registerMenuItems($menu) { }
+    public function execCron() { }
 }

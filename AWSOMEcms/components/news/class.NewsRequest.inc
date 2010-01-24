@@ -57,6 +57,8 @@ class NewsRequest extends RequestComponent
             ->updateWhenSet('news_text', $data['news_text'])
             ->updateWhenSet('news_date', $data['news_date'])
             ->updateWhenSet('news_tag', $data['news_tag'])
+            ->updateWhenSet('news_external', $data['news_external'])
+            ->updateWhenSet('news_extlink', $data['news_extlink'])
             ->exec();
         
         return true;
@@ -69,6 +71,8 @@ class NewsRequest extends RequestComponent
             ->insert('news_text', $data['news_text'])
             ->insert('news_date', $data['news_date'])
             ->insert('news_tag', $data['news_tag'])
+            ->insertWhenSet('news_external', $data['news_external'])
+            ->insertWhenSet('news_extlink', $data['news_extlink'])
             ->table('news')
             ->exec();
         

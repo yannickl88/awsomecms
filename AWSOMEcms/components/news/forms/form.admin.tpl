@@ -26,7 +26,9 @@
             {$row->news_date}
         </td>
         <td class="admin_table_cell admin_table_actions">
-            <a href="/{$actionurl_edit}&news_id={$row->news_id}"><img src="/img/icons/page_white_edit.png" alt="edit"></a>
+            {if $row->news_external == 0}
+                <a href="/{$actionurl_edit}&news_id={$row->news_id}"><img src="/img/icons/page_white_edit.png" alt="edit"></a>
+            {/if}
             <a href="/{$actionurl_delete}&news_id={$row->news_id}"><img src="/img/icons/page_white_delete.png" alt="delete"></a>
         </td>
         <td class="admin_table_cell admin_table_actions">
