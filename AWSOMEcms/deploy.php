@@ -178,6 +178,98 @@ function getHightestRevNumber($source)
     }
 }
 
+//FTP functions
+class FTP
+{
+    private static $instance;
+    
+    private $connection = null;
+    private $ftphost = "ftp.yannickl88.nl";
+    private $username = "yannic";
+    private $password = "bUzysymY";
+    
+    private $dirsChecked;
+    
+    public static function getInstance()
+    {
+        if (!self::$instance instanceof self) {
+            self::$instance = new self();
+        }
+        
+        return self::$instance;
+    }
+    
+    private function __construct()
+    {
+        $this->dirsChecked = array();
+        $this->openConnection();
+    }
+    
+    private function openConnection()
+    {
+        $this->connection = ftp_connect($this->ftphost); 
+        $login_result = ftp_login($this->connection, $this->username, $this->password); 
+
+        // check connection
+        if ((!$this->connection) || (!$login_result))
+        { 
+            output("FTP connection has failed!");
+            output("Attempted to connect to {$ftp_server} for user {$ftp_user_name}");
+        }
+    }
+    
+    public function __destruct()
+    {
+        ftp_close($this->connection);
+        $this->connection = null;
+    }
+    
+    public function upload($source, $dest)
+    {
+        $this->makeDir(dirname($dest));
+        
+        if($this->connection == null)
+        {
+            $this->openConnection();
+        }
+        
+        $upload = @ftp_put($this->connection, $dest, $source, FTP_BINARY); 
+        
+        if (!$upload)
+        { 
+            output("FTP upload has failed! {$source} -> {$dest}");
+        }
+        else
+        {
+            output("Uploaded {$source} -> {$dest}");
+        }
+    }
+    
+    private function makeDir($dest)
+    {
+        if(in_array($dest, $this->dirsChecked))
+        {
+            return;
+        }
+        $dir = dirname($dest);
+        $me = substr($dest, strlen($dir) + 1);
+        
+        if($dir != "\\")
+        {
+            $parentFiles = $this->makeDir($dir);
+            
+            if(!in_array($me, $parentFiles))
+            {
+                ftp_mkdir($this->connection, $dest);
+            }
+            
+            $this->dirsChecked[] = $dest;
+        }
+        
+        return ftp_nlist($this->connection, $dest);
+    }
+}
+
 output("==============================");
 output("A.W.S.O.M.E. cms deploy script");
 output("© 2009 yannickl88.nl");
@@ -210,6 +302,8 @@ switch($argv[1])
         $env = 'alpha';
         break;
 }
+
+$upload = in_array("u", $argv);
 
 $location = dirname(__FILE__).$ds;
 
@@ -283,6 +377,10 @@ else
     output(".", true);
     rcopy($location."libs", $location."RELEASES{$ds}tmp{$ds}libs");
     output(".", true);
+    rcopy($location."index.php", $location."RELEASES{$ds}tmp{$ds}index.php");
+    output(".", true);
+    rcopy($location."cron.php", $location."RELEASES{$ds}tmp{$ds}cron.php");
+    output(".", true);
     
     dir2zip($location."RELEASES{$ds}tmp", $location."RELEASES{$ds}framework.zip");
     $versions["components"] = array();
@@ -292,6 +390,7 @@ else
     
     //create zips for all components
     $components = scandir($location."components");
+    $componentsList = array();
     
     foreach($components as $component)
     {
@@ -312,11 +411,28 @@ else
             clearDir($location."RELEASES{$ds}tmp{$ds}{$component}");
             rmdir($location."RELEASES{$ds}tmp{$ds}{$component}");
             output(".", true);
+            
+            $componentsList[$component] = array("name" => $component, "version" => $versions["components"][$component]);
+            
+            if($upload)
+            {
+                $ftp = FTP::getInstance();
+                $ftp->upload($location."RELEASES{$ds}components{$ds}{$component}.zip", "/public_html_update/components/{$component}.zip");
+            }
         }
     }
     
     //create version file
     file_put_contents($location."RELEASES{$ds}version.json", json_encode($versions));
+    file_put_contents($location."RELEASES{$ds}components{$ds}components.json", json_encode($componentsList));
+    
+    if($upload)
+    {
+        $ftp = FTP::getInstance();
+        $ftp->upload($location."RELEASES{$ds}framework.zip", "/public_html_update/framework.zip");
+        $ftp->upload($location."RELEASES{$ds}version.json", "/public_html_update/version.json");
+        $ftp->upload($location."RELEASES{$ds}components{$ds}components.json", "/public_html_update/components/components.json");
+    }
     
     output(".");
     //done

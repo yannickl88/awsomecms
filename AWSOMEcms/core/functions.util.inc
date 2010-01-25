@@ -168,3 +168,13 @@ function parseInfoFile($file, $component)
         return array();
     }
 }
+
+function addSlashesConfig($string)
+{
+    if(get_magic_quotes_gpc() === 0)
+    {
+        $string = addslashes($string);
+    }
+    
+    return $string;
+}

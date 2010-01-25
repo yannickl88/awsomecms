@@ -160,7 +160,7 @@ class SQLQuery
             {
                 if(!is_numeric($value))
                 {
-                    $value[$key] = "'" . addslashes($value2) . "'";
+                    $value[$key] = "'" . addSlashesConfig($value2) . "'";
                 }
             }
             
@@ -181,7 +181,7 @@ class SQLQuery
         {
             if(!is_numeric($value))
             {
-                $value = "'" . addslashes($value) . "'";
+                $value = "'" . addSlashesConfig($value) . "'";
             }
             
             $this->where[] = array("({$field} {$comparison} {$value})", $orAnd);
@@ -311,11 +311,11 @@ class SQLQuery
             
             if(is_numeric($this->values[$field]))
             {
-                $totalValues .= addslashes($this->values[$field]);
+                $totalValues .= addSlashesConfig($this->values[$field]);
             }
             else
             {
-                $totalValues .= "'".addslashes($this->values[$field])."'";
+                $totalValues .= "'".addSlashesConfig($this->values[$field])."'";
             }
         }
         
@@ -343,11 +343,11 @@ class SQLQuery
             
             if(is_numeric($this->values[$field]))
             {
-                $totalValues .= addslashes($this->values[$field]);
+                $totalValues .= addSlashesConfig($this->values[$field]);
             }
             else
             {
-                $totalValues .= "'".addslashes($this->values[$field])."'";
+                $totalValues .= "'".addSlashesConfig($this->values[$field])."'";
             }
         }
         
