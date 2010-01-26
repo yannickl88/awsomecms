@@ -1,0 +1,22 @@
+@author: Yannick de Lange <yannick.l.88@gmail.com>
+@package: AWSOMEcms
+@copyright: (c)2009-2010 AWSOMEcms
+@licence: GNU General Public License
+@website: http://yannickl88.nl/cms
+
+CORE:
+All core functionality is included in here, this, together with the page component, is the heart of the cms
+
+TAGS:
+form
+    'form'
+        String
+    'component'
+        String
+MODIFIERS:
+hasflag
+    'flag'
+        Int
+notin
+    'array'
+        Array

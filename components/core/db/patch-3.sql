@@ -1,0 +1,1 @@
+ALTER TABLE `components` ADD `component_version` VARCHAR( 50 ) NOT NULL ;

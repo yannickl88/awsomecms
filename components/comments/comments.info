@@ -1,0 +1,9 @@
+COMMENTS:
+A way to add comments to a section or a page. Comments work by hooks; this hook is a way to link the comments with a certain topic, section or page. By default each comment is hooked on a page.
+
+TAGS:
+comments
+    'hook' This will be the grouping parameter which comments will be linked. Default is the page location
+        String, optional
+    'redirect' Location that will be redirected to when a comment is posted, default is the hook
+        String, optional

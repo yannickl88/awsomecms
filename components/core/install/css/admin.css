@@ -1,0 +1,208 @@
+/* ADMIN CSS FILE */
+
+body {
+    margin: 10px;
+    font-family: Verdana;
+    font-size: 11px;
+}
+img {
+    border: 0;
+}
+/* ADMIN LAYOUT */
+#sideWrapper {
+    width: 200px;
+    float: left;
+}
+#contentWrapper {
+    margin-left: 200px;
+    background-image: url(/img/admin/main-bg.png);
+    background-position: top right;
+    background-repeat: no-repeat;
+    min-height: 480px;
+    padding: 10px;
+}
+#treeWrapper {
+    height: 350px;
+    overflow: auto;
+}
+#headerWrapper {
+    height: 50px;
+    background-image: url(/img/admin/header-bg.png);
+}
+#copyWrapper {
+    color: #c0c0c0;
+    font-size: 10px;
+    text-align: center;
+}
+#copyWrapper a{
+    color: #c0c0c0;
+}
+#copyWrapper a:hover{
+    color: #333333;
+}
+.debug {
+    clear: both;
+    color: #52687a;
+}
+.backtosite {
+    padding-top: 10px;
+    color: #ffffff;
+    text-decoration: none;
+    font-size: 12px;
+    font-weight: bold;
+}
+.backtosite img {
+    vertical-align: -10px;
+}
+
+/* ADMIN MENU */
+#menuWrapper ul {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    width: 200px;
+    border-bottom: 1px solid #D8EBFD;
+}
+#menuWrapper ul li {
+    position: relative;
+    background-color: #c0c0c0;
+}
+#menuWrapper ul li ul {
+    position: absolute;
+    width: 120px;
+    display: none;
+}
+#menuWrapper ul li ul li {
+    position: relative;
+    top: 2px;
+    left: 2px;
+}
+#menuWrapper ul li ul li a {
+    position: relative;
+    bottom: 2px;
+    right: 2px;
+}
+#menuWrapper ul li a {
+    display: block;
+    text-decoration: none;
+    color: #000000;
+    background-color: #ffffff;
+    padding: 3px 5px 3px 5px;
+    border: 1px solid #D8EBFD;
+    border-bottom: 0;
+    cursor: pointer;
+}
+#menuWrapper ul li a:hover, #menuWrapper ul li a.open {
+    background-color: #F1F8FF;
+}
+
+/* ADMIN TREE */
+#treeWrapper {
+    border: 1px solid;
+    border-color: transparent #D8EBFD transparent #D8EBFD;
+}
+.treeNode {
+    padding-left: 10px;
+}
+.treeNode img {
+    border: 0;
+}
+.treeNode a {
+    padding-left: 20px;
+    text-decoration: none;
+}
+.treeNode a.folder {
+    height: 16px;
+    display: block;
+    float: left;
+    background-image: url(/img/icons/selection.png);
+    background-repeat: no-repeat;
+}
+.focus {
+    background-position: left -32px;
+}
+.open {
+    background-position: left -48px;
+}
+.open.focus {
+    background-position: left -16px;
+}
+.hidden {
+    display: none;
+}
+.hideIcons .deleteIcon,
+.hideIcons .viewIcon {
+    display: none;
+}
+.deleteIcon, .viewIcon {
+    float: right;
+    display: block;
+    height: 16px;
+    width: 16px;
+    
+    padding: 0 !important;
+}
+.deleteIcon {
+    background-image: url(/img/icons/page_delete.png);
+}
+.viewIcon {
+    background-image: url(/img/icons/page_view.png);
+}
+
+/* ADMIN FORMS */
+.admin_form_label {
+    float: left;
+    width: 120px;
+}
+.admin_form_field {
+    margin-left: 120px;
+}
+.admin_form_field input[type="text"],
+.admin_form_field input[type="password"] {
+    width: 300px;
+}
+.admin_form_field textarea {
+    width: 500px;
+}
+.admin_form_row.admin_form_submit
+{
+    text-align: center;
+    margin-top: 10px;
+}
+.admin_form_row.form_error
+{
+    background: #ffe6e6;
+    color: #632525;
+}
+.smallfield {
+    width: 75px !important;
+}
+.tinyfield {
+    width: 25px !important;
+}
+.admin_table {
+    width: 100%;
+    border-collapse: collapse;
+    text-align: center;
+}
+.admin_table th {
+    background: #d8ebfd;
+    height: 20px;
+}
+.admin_table tr.highlighted {
+    background: #f1f8ff;
+}
+.admin_table .admin_table_actions {
+    width: 50px;
+}
+.admin_component_access {
+    display: block; 
+    float: left; 
+    width: 16px; 
+    height: 16px; 
+    background-image: url(/img/admin/access.png);
+}
+.admin_component_access.s { background-position: 0 -16px; } .admin_component_access.s.selected { background-position: 0 0; } .admin_component_access.s:hover { background-position: 0 -32px; }
+.admin_component_access.i { background-position: -16px -16px; } .admin_component_access.i.selected { background-position: -16px 0; } .admin_component_access.i:hover { background-position: -16px -32px; }
+.admin_component_access.u { background-position: -32px -16px; } .admin_component_access.u.selected { background-position: -32px 0; } .admin_component_access.u:hover { background-position: -32px -32px; }
+.admin_component_access.d { background-position: -48px -16px; } .admin_component_access.d.selected { background-position: -48px 0; } .admin_component_access.d:hover { background-position: -48px -32px; }

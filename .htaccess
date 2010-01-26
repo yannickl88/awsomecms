@@ -1,0 +1,21 @@
+AddType application/x-httpd-php .inc
+
+RewriteEngine On
+# disable viewing of ini files
+RewriteRule \.(ini)$ - [F]
+RewriteRule \.(info)$ - [F]
+RewriteRule \.(conf)$ - [F]
+
+# disable viewing of core directories
+RewriteCond %{REQUEST_URI} ^/configs/.*$ [OR]
+RewriteCond %{REQUEST_URI} ^/templates/.*$ [OR]
+RewriteCond %{REQUEST_URI} ^/templates_c/.*$
+RewriteRule ^.*$ - [F]
+
+#framework rules
+RewriteCond %{REQUEST_FILENAME} -s [OR]
+RewriteCond %{REQUEST_FILENAME} -l [OR]
+RewriteCond %{REQUEST_FILENAME} -d 
+RewriteRule ^.*$ - [NC,L]
+RewriteRule ^.*?/(.*)?(.*?)$ /index.php?url=$1&%{QUERY_STRING} [NC,L]
+RewriteRule ^.*?/(.*)$ /index.php?url=$1 [NC,L]
