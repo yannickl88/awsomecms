@@ -22,8 +22,8 @@
         <tr class="header">
             <th style="width: 100px;">Component</th>
             <th style="width: 100px;">Status</th>
-            <th style="width: 150px;">Public JSON Access</th>
             <th>Description</th>
+            <th style="width: 100px;">Public Access</th>
         </tr>
         {foreach from=$components item=component name=components}
             <tr class="row" {if $smarty.foreach.components.index % 2 == 0}style="background-color: #F1F8FF;"{/if} id="row_{$component->component_name}">
@@ -34,18 +34,22 @@
                     <img src="/img/admin/{if $component->U2D === "???"}unknown{elseif $component->U2D}ok{else}fail{/if}-icon.png" /> 
                     {if $component->U2D === "???"}Unknown{elseif $component->U2D}Up-to-date{else}<button type="button" onclick="updateComponent('{$component->component_name}');">Update</button>{/if}
                 </td>
-                <td>
-                    <div style="float: left;">
-                        <input name="auth_{$component->component_name}[]" id="auth_{$component->component_name}s" value="{$auth.auth_select}" type="checkbox"{if !$component->component_auth|hasflag:$auth.auth_select} checked="checked"{/if} /> <label for="auth_{$component->component_name}s">Select</label><br />
-                        <input name="auth_{$component->component_name}[]" id="auth_{$component->component_name}i" value="{$auth.auth_insert}" type="checkbox"{if !$component->component_auth|hasflag:$auth.auth_insert} checked="checked"{/if} /> <label for="auth_{$component->component_name}i">Insert</label>
-                    </div>
-                    <div style="margin-left: 75px;">
-                        <input name="auth_{$component->component_name}[]" id="auth_{$component->component_name}u" value="{$auth.auth_update}" type="checkbox"{if !$component->component_auth|hasflag:$auth.auth_update} checked="checked"{/if} /> <label for="auth_{$component->component_name}u">Update</label><br />
-                        <input name="auth_{$component->component_name}[]" id="auth_{$component->component_name}d" value="{$auth.auth_delete}" type="checkbox"{if !$component->component_auth|hasflag:$auth.auth_delete} checked="checked"{/if} /> <label for="auth_{$component->component_name}d">Delete</label>
-                    </div>
-                </td>
                 <td style="vertical-align: top;">
                     {$component->info.desc}
+                </td>
+                <td style="vertical-align: top;">
+                    <div style="padding-left: 18px;">
+                        <a href="javascript: void(0);" class="s admin_component_access{if !$component->component_auth|hasflag:$auth.auth_select} selected{/if}" onclick="toggleAccess('auth_{$component->component_name}s', this);" title="Select"></a>
+                        <a href="javascript: void(0);" class="i admin_component_access{if !$component->component_auth|hasflag:$auth.auth_insert} selected{/if}" onclick="toggleAccess('auth_{$component->component_name}i', this);" title="Insert"></a>
+                        <a href="javascript: void(0);" class="u admin_component_access{if !$component->component_auth|hasflag:$auth.auth_update} selected{/if}" onclick="toggleAccess('auth_{$component->component_name}u', this);" title="Update"></a>
+                        <a href="javascript: void(0);" class="d admin_component_access{if !$component->component_auth|hasflag:$auth.auth_delete} selected{/if}" onclick="toggleAccess('auth_{$component->component_name}d', this);" title="Delete"></a>
+                        <span style="display: none;">
+                        <input name="auth_{$component->component_name}[]" id="auth_{$component->component_name}s" value="{$auth.auth_select}" type="checkbox"{if !$component->component_auth|hasflag:$auth.auth_select} checked="checked"{/if} />
+                        <input name="auth_{$component->component_name}[]" id="auth_{$component->component_name}i" value="{$auth.auth_insert}" type="checkbox"{if !$component->component_auth|hasflag:$auth.auth_insert} checked="checked"{/if} /> 
+                        <input name="auth_{$component->component_name}[]" id="auth_{$component->component_name}u" value="{$auth.auth_update}" type="checkbox"{if !$component->component_auth|hasflag:$auth.auth_update} checked="checked"{/if} /> 
+                        <input name="auth_{$component->component_name}[]" id="auth_{$component->component_name}d" value="{$auth.auth_delete}" type="checkbox"{if !$component->component_auth|hasflag:$auth.auth_delete} checked="checked"{/if} />
+                        </span>
+                    </div>
                 </td>
             </tr>
         {/foreach}
@@ -58,6 +62,21 @@
 </form>
 <script>
     {literal}
+    function toggleAccess(id, link)
+    {
+        console.log($("#"+id).attr("checked"));
+        
+        if($("#"+id).attr("checked"))
+        {
+            $(link).removeClass("selected");
+            $("#"+id).removeAttr("checked");
+        }
+        else
+        {
+            $(link).addClass("selected");
+            $("#"+id).attr("checked", true);
+        }
+    }
     function updateComponent(name)
     {
         //update the cell so it show loading

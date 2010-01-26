@@ -349,6 +349,12 @@ class UsersComponent extends Component
         }
     }
     
+    public function auth_logout()
+    {
+        $_SESSION['usr'] = null;
+        session_destroy();
+    }
+    
     public function registerMenuItems($menu)
     {
         $menu->addChild(new MenuItem("users", "", Config::get('usersadmin', 'usersadmin', 'admin')));

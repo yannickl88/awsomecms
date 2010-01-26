@@ -28,6 +28,16 @@ TODO:
  * Comments component should get tag to show reactions
  
 CHANGE LOG:
+25-01-2010 (v0.3.10)
+ * Started with support to uninstall a component
+ * Made the Core components page more compact to use toggable icons for the Access items.
+ * Added ability to add more meta data to the info files. currently supported @ tags are:
+    - @author       Name, and email. Use "Name <email>" format for mailto link
+    - @package      Package where this belongs to
+    - @copyright    Copyright
+    - @licence      License, usally GNU
+    - @website      Author and/or component website
+    - @images       Image for the component
 24-01-2010 (v0.3.10)
  * Added support for cron jobs for each component to do a task
  * Added to the news component support for external news items, these cannot be editted; only deleted

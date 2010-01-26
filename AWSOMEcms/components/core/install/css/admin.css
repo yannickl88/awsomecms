@@ -195,3 +195,14 @@ img {
 .admin_table .admin_table_actions {
     width: 50px;
 }
+.admin_component_access {
+    display: block; 
+    float: left; 
+    width: 16px; 
+    height: 16px; 
+    background-image: url(/img/admin/access.png);
+}
+.admin_component_access.s { background-position: 0 -16px; } .admin_component_access.s.selected { background-position: 0 0; } .admin_component_access.s:hover { background-position: 0 -32px; }
+.admin_component_access.i { background-position: -16px -16px; } .admin_component_access.i.selected { background-position: -16px 0; } .admin_component_access.i:hover { background-position: -16px -32px; }
+.admin_component_access.u { background-position: -32px -16px; } .admin_component_access.u.selected { background-position: -32px 0; } .admin_component_access.u:hover { background-position: -32px -32px; }
+.admin_component_access.d { background-position: -48px -16px; } .admin_component_access.d.selected { background-position: -48px 0; } .admin_component_access.d:hover { background-position: -48px -32px; }

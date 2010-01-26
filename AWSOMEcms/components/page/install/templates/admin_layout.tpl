@@ -56,6 +56,9 @@
                             'removeformat',
                             'hr',
                             'image',
+                            'link',
+                            'unlink',
+                            'upload',
                             'fontFormat',
                             'xhtml'
                         ],

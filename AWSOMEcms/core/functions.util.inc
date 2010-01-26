@@ -51,6 +51,14 @@ function parseInfoFile($file, $component)
         $data = file($file);
         $result = array(
             "desc" => "",
+            "atlines" => array(
+                "author" => "",
+                "package" => "",
+                "copyright" => "",
+                "licence" => "",
+                "website" => "",
+                "image" => ""
+            ),
             "tags" => array(),
             "modifiers" => array(),
         );
@@ -63,6 +71,24 @@ function parseInfoFile($file, $component)
             $line = $data[$currentLine];
             $currentLine++;
             
+            if(substr(trim($line), 0, 1) == "@")
+            {
+                $atLine = explode(":", substr(trim($line), 1));
+                $key = array_shift($atLine);
+                $value = trim(implode(":", $atLine));
+                
+                if($key == "author")
+                {
+                    $matches = array();
+                    if(preg_match('/(.*)<(.*)>/', $value, $matches) > 0)
+                    {
+                        $value = "<a href='mailto:{$matches[2]}'>".trim($matches[1])."</a>";
+                    }
+                }
+                
+                $result["atlines"][$key] = $value;
+                continue;
+            }
             if(trim($line) == strtoupper($component.":"))
             {
                 $currentTextType = 1;
@@ -71,7 +97,6 @@ function parseInfoFile($file, $component)
             if(trim($line) == strtoupper("TAGS:"))
             {
                 $currentTextType = 2;
-                
                 continue;
             }
             if(trim($line) == strtoupper("MODIFIERS:"))

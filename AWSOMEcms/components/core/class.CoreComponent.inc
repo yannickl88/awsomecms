@@ -24,6 +24,15 @@ class CoreComponent extends Component
     */
     public function action_index($smarty, $smartyLoader, $request)
     {
+        //check for logout
+        if($_GET['logout'] === 'true')
+        {
+            $authComponent = Component::init(Config::get("component", "core", "auth"));
+            $authComponent->auth_logout();
+            $this->redirect("/");
+            Controller::getInstance()->redirect();
+        }
+        
         $smarty->register_resource("scf", array(
             array($smartyLoader, "getTemplate"),
             array($smartyLoader, "getTimestamp"),

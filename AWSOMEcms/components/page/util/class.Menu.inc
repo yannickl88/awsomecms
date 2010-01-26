@@ -170,6 +170,7 @@ class Menu
         {
             $html .= $childNode->toHTML();
         }
+        $html .= "<li onmouseout=\"adminmenu_closeMenu(this);\" onmouseover=\"adminmenu_openMenu(this);\"><a href=\"/?logout=true\" class=\"\">Logout</a></li>";
         $html .= "</ul>";
         
         return $html;

@@ -15,6 +15,5 @@ function smarty_function_adminmenu($params, &$smarty)
             $component->registerMenuItems($menu);
         }
     }
-
     return $menu->toHTML();
 }

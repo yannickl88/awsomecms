@@ -181,4 +181,9 @@ class InstallHelper
             }
         }
     }
+    
+    public function uninstall($component)
+    {
+        
+    }
 }

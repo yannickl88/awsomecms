@@ -175,6 +175,12 @@ class GroupsComponent extends Component
         return false;
     }
     
+    public function auth_logout()
+    {
+        $_SESSION['usr'] = null;
+        session_destroy();
+    }
+    
     public function hook_useradd($smarty, $request)
     {
         if($request['methode'] == 'post')
