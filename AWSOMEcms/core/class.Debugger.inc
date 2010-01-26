@@ -138,7 +138,7 @@ class Debugger
         
         //JAVASCRIPT
         $html .= <<<STR
-<script>
+<script type="text/javascript">
     function debug_hadCookie() {
         var nameEQ = "debugHide=";
         var ca = document.cookie.split(';');
