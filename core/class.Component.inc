@@ -1,5 +1,5 @@
 <?php
-import('/core/shared/class.InvalidFormException.inc');
+import('/core/class.InvalidFormException.inc');
 
 /**
 * @desc superclass for all the components

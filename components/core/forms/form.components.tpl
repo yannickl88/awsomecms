@@ -64,8 +64,6 @@
     {literal}
     function toggleAccess(id, link)
     {
-        console.log($("#"+id).attr("checked"));
-        
         if($("#"+id).attr("checked"))
         {
             $(link).removeClass("selected");

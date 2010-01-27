@@ -6,7 +6,7 @@ import('/core/class.Debugger.inc');
 set_error_handler("handleError");
 
 import('/libs/Smarty.class.php');
-import('/core/shared/class.Config.inc');
+import('/core/class.Config.inc');
 import('/core/class.SmartyPageLoader.inc');
 import('/core/class.Controller.inc');
 

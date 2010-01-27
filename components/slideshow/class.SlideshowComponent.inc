@@ -1,5 +1,5 @@
 <?php
-import('/core/shared/class.Component.inc');
+import('/core/class.Component.inc');
 
 class SlideshowComponent extends Component
 {
@@ -390,7 +390,10 @@ class SlideshowComponent extends Component
                 mkdir(realpath(Config::get('websiteroot', '.').'/'.Config::get('uploaddir', 'img/slideshow/', 'slideshow')), 777, true);
             }
             
-            move_uploaded_file($_FILES[$name]['tmp_name'], $destFile);
+            if(!move_uploaded_file($_FILES[$name]['tmp_name'], $destFile))
+            {
+                return false;
+            }
             
             $info = getimagesize($destFile);
             
