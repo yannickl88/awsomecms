@@ -1,5 +1,5 @@
 <?php
-import('/core/shared/class.Component.inc');
+import('/core/class.Component.inc');
 
 class PageComponent extends Component
 {

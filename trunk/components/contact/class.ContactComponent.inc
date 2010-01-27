@@ -1,5 +1,5 @@
 <?php
-import('/core/shared/class.Component.inc');
+import('/core/class.Component.inc');
 
 /**
 * Contact component class, this holds all the logic for the contact component

@@ -1,5 +1,5 @@
 <?php
-import('/core/shared/class.Component.inc');
+import('/core/class.Component.inc');
 import('/components/core/util/class.InstallHelper.inc');
 
 /**

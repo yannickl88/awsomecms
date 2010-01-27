@@ -1,5 +1,5 @@
 <?php
-import('/core/shared/class.RequestComponent.inc');
+import('/core/class.RequestComponent.inc');
 
 class GroupsimagesRequest extends RequestComponent
 {
