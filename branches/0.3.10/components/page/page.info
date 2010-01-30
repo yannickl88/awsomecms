@@ -1,0 +1,8 @@
+PAGE:
+Together with the core module is this used to show pages and manage them
+TAGS:
+adminmenu, used for displaying the admin menu
+admintree, used for displaying the admin page tree
+layout, this can be used in order to change the layout of a page
+renderdebug, show the debug, only when debug is set higher then 0
+rendertime, show the time it took the cms to display the page

@@ -1,0 +1,8 @@
+INSERT INTO `pages` (`page_name`, `page_location`, `page_template`, `page_timestamp`) VALUES('add', '/admin/users/', '{form component=''users'' form=''add''}', '2009-09-12 00:31:07');
+INSERT INTO `pages` (`page_name`, `page_location`, `page_template`, `page_timestamp`) VALUES('edit', '/admin/users/', '{form component=''users'' form=''edit''}', '2009-09-12 00:31:07');
+INSERT INTO `pages` (`page_name`, `page_location`, `page_template`, `page_timestamp`) VALUES('delete', '/admin/users/', '{form component=''users'' form=''delete''}', '2009-09-12 00:31:07');
+INSERT INTO `pages` (`page_name`, `page_location`, `page_template`, `page_timestamp`) VALUES('admin', '/admin/users/', '{form component=''users'' form=''admin''}', '2009-09-12 00:31:07');
+INSERT INTO `pages` (`page_name`, `page_location`, `page_template`, `page_timestamp`) VALUES('privadmin', '/admin/users/', '{form component=''users'' form=''privadmin''}<br>', '2009-10-31 14:08:54');
+INSERT INTO `pages` (`page_name`, `page_location`, `page_template`, `page_timestamp`) VALUES('privadd', '/admin/users/', '{form component=''users'' form=''privadd''}<br>', '2009-11-08 13:26:10');
+INSERT INTO `pages` (`page_name`, `page_location`, `page_template`, `page_timestamp`) VALUES('privedit', '/admin/users/', '{form component=''users'' form=''privedit''}<br>', '2009-11-08 13:26:30');
+INSERT INTO `pages` (`page_name`, `page_location`, `page_template`, `page_timestamp`) VALUES('privdelete', '/admin/users/', '{form component=''users'' form=''privdelete''}<br>', '2009-11-08 13:26:22');

@@ -1,0 +1,2 @@
+USERS:
+A way to create different users inside a system, these users can be assigned a name and password and privilages. If the group component is installed, privilages will be delegated there

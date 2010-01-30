@@ -1,0 +1,1 @@
+ALTER TABLE `news` ADD `news_tag` VARCHAR( 50 ) NOT NULL AFTER `news_text` ;
