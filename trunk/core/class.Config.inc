@@ -13,6 +13,7 @@ class Config
     
     /**
     * @desc singelton
+    * @return Config
     */
     public static function getInstance()
     {

@@ -34,53 +34,6 @@ class Request
             break;
         }
     }
-    
-    public static function init($component)
-    {
-        if(isset(Request::$requests[$component]))
-        {
-            return Request::$requests[$component];
-        }
-        else
-        {
-            if(!isset(Request::$requests))
-            {
-                Request::$requests = array();
-            }
-            
-            $components = Config::getInstance()->getRequests();
-            
-            if(strpos($component, '.') > 0)
-            {
-                $request = substr($component, strpos($component, '.') + 1);
-            }
-            else
-            {
-                $request = $component;
-            }
-            
-            $className = ucfirst($request)."Request";
-            $loc = $components[$component]->component_path.'/class.'.$className.'.inc';
-            
-            Debugger::getInstance()->log("Creating Request '{$className}'");
-            
-            if(file_exists($loc) && array_key_exists($component, $components))
-            {
-                include_once $loc;
-                
-                $obj = new $className();
-                Request::$requests[$component] = $obj;
-                
-                return $obj;
-            }
-            else
-            {
-                Debugger::getInstance()->error("Cannot find Request '{$className}'");
-                Request::$requests[$component] = false;
-                return false;
-            }
-        }
-    }
 }
 
 /**

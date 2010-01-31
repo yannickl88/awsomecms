@@ -15,15 +15,14 @@
       $tree = array();
       
       $currentFolder = '/';
+      $table = Table::init("page.pages");
       
       if($hideAdmin)
       {
-          $result = Controller::makeRequest('page', "GET", array("where" => array('page_location', "/admin/%", "NOT LIKE")));
+          $table->setRecord((object) array("where" => array('page_location', "/admin/%", "NOT LIKE")));
       }
-      else
-      {
-          $result = Controller::makeRequest('page');
-      }
+      
+      $result = $table->doSelect()->getRows();
       
       foreach($result as $row)
       {

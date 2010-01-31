@@ -38,11 +38,9 @@ class PageComponent extends Component
     {
         if($request['methode'] == 'post')
         {
-            if($this->validate($request, "/".Config::get('pageedit', 'pageedit', 'admin'), "edit"))
-            {
-                $requestObj = Request::init('page');
-                $requestObj->doUpdate($request);
-            }
+            Table::init('page.pages')
+                ->setRecord($request)
+                ->doUpdate();
             
             $this->redirect("/".Config::get('pageedit', 'pageedit', 'admin'), array("page_id" => $request['page_id']));
         }
@@ -50,10 +48,8 @@ class PageComponent extends Component
         {
             if($request['page_id'])
             {
-                $requestObj = Request::init('page');
-                $record = $requestObj->doSelect($request);
-                
-                $smarty->assign("record", $record[0]);
+                $table = Table::init('page.pages');
+                $smarty->assign("record", $table->doSelect($request)->getRow());
             }
             else
             {
