@@ -1,6 +1,4 @@
 <?php
-import('/core/class.SQL.inc');
-
 /** @desc Exception thrown when a page could not be found */ 
 class PageNotFoundExeption extends Exception {}
 class NotInstalledException extends Exception {}

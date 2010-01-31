@@ -28,7 +28,7 @@ class Controller
     /**
     * @desc singelton
     * 
-    * @return               Instance of Controller
+    * @return Controller
     */
     public static function getInstance()
     {
@@ -92,12 +92,13 @@ class Controller
             import('/core/class.InvalidFormException.inc');
             
             $e = unserialize($_SESSION['FORMERROR']);
-            $data = array("record" => $e->getRecord(), "fields" => $e->getInvalidFields());
             
             if("/".$_GET['url'] == $e->getRedirect())
             {
-                $this->lastRecord = $e->getRecord();
-                $this->smarty->assign("FORMERROR", $data);
+                $this->smarty->assign("FORMERROR", array("record" => $e->getRecord(), "fields" => $e->getInvalidFields()));
+                
+                Table::init($e->getTable())
+                    ->setErrorRecord($e->getRecord(), $e->getInvalidFields());
             }
             else
             {
@@ -379,5 +380,10 @@ class Controller
     public function setRedirect($url)
     {
         $this->redirect = $url;
+    }
+    
+    public function getSmarty()
+    {
+        return $this->smarty;
     }
 }

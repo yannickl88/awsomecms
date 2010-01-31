@@ -6,18 +6,6 @@ class UsersComponent extends Component
     public function __construct()
     {
         parent::__construct('users');
-        
-        $this->multiTable = true;
-        $this->fields = array(
-            "users" => array(
-                "user_id" => "index",
-                "user_name" => "text",
-                "user_pass" => "text",
-            ),
-            "privileges" => array(
-                "privilege_name" => "str_index",
-            )
-        );
     }
     
     public function action_index($smarty, $smartyLoader, $request)
@@ -29,29 +17,26 @@ class UsersComponent extends Component
     {
         if($request['methode'] == 'post')
         {
-            if($this->validate($request, "/".Config::get('usersadd', 'usersadd', 'admin'), "add"))
+            //extra custom validation
+            if($request['user_pass'] != $request['user_pass2'])
             {
-                //extra custom validation
-                if($request['user_pass'] != $request['user_pass2'])
+                $e = new InvalidFormException($request, "/".Config::get('usersadd', 'usersadd', 'admin'), "Password do not match");
+                $e->addInvalidField('user_pass', "Passwords do not match");
+                $e->addInvalidField('user_pass2', "");
+                
+                throw $e;
+            }
+            else
+            {
+                //sum the privlilages
+                if(!isset($request['privileges']))
                 {
-                    $e = new InvalidFormException($request, "/".Config::get('usersadd', 'usersadd', 'admin'), "Password do not match");
-                    $e->addInvalidField('user_pass', "Passwords do not match");
-                    $e->addInvalidField('user_pass2', "");
-                    
-                    throw $e;
+                    $request['privileges'] = array();
                 }
-                else
-                {
-                    //sum the privlilages
-                    if(!isset($request['privileges']))
-                    {
-                        $request['privileges'] = array();
-                    }
-                    $request['user_privileges'] = array_sum($request['privileges']);
-                    
-                    $userRequest = Request::init('users.users');
-                    $request["user_id"] = $userRequest->doInsert($request);
-                }
+                $request['user_privileges'] = array_sum($request['privileges']);
+                
+                $userRequest = Request::init('users.users');
+                $request["user_id"] = $userRequest->doInsert($request);
             }
             
             $this->redirect("/".Config::get('usersadmin', 'usersadmin', 'admin'));
@@ -99,17 +84,7 @@ class UsersComponent extends Component
         {
             if($request['user_id'])
             {
-                $userRequest = Request::init('users.users');
-                $privRequest = Request::init('users.privileges');
-                
-                $record = $userRequest->doSelect($request);
-                
-                $smarty->assign("record", $record[0]);
-                
-                if(!Config::getInstance()->isComponentInstalled("groups"))
-                {
-                    $smarty->assign("privileges", $privRequest->doSelect());
-                }
+                Table::init('users.users');
             }
             else
             {
@@ -149,22 +124,15 @@ class UsersComponent extends Component
     
     public function action_admin($smarty, $smartyLoader, $request)
     {
-        $userRequest = Request::init('users.users');
-        $smarty->assign("records", $userRequest->doSelect());
-        
-        //urls
-        $smarty->assign("actionurl_add", Config::get('usersadd', 'usersadd', 'admin'));
-        $smarty->assign("actionurl_edit", Config::get('usersedit', 'usersedit', 'admin'));
-        $smarty->assign("actionurl_delete", Config::get('usersdelete', 'usersdelete', 'admin'));
-        
-        return $request;
+        $userRequest = Table::init('users.users');
+        $userRequest->setRecord($userRequest->doSelect()->getRows());
     }
     
     private function login($request, $redirect)
     {
         //extra custom validation
         $valid = true;
-        $e = new InvalidFormException($request, $redirect);
+        $e = new InvalidFormException($request, $redirect, "users.users");
         
         if(empty($request['user_name']))
         {
@@ -315,7 +283,7 @@ class UsersComponent extends Component
     
     public function auth($userRow)
     {
-        $privilages = Request::init('users.privileges')->doSelect();
+        $privilages = Table::init('users.privileges')->doSelect();
         $rights = array();
         
         foreach($privilages as $privilage)
@@ -330,8 +298,10 @@ class UsersComponent extends Component
     {
         $user_pass = md5($user_pass);
         
-        $record = Request::init('users.users')->doSelect(array("user_name" => $user_name, "user_pass" => $user_pass));
-        $privilages = $this->auth($record[0]);
+        $record = Table::init('users.users')
+            ->doSelect(array("user_name" => $user_name, "user_pass" => $user_pass))
+            ->getRow();
+        $privilages = $this->auth($record);
         
         if(count($record) == 1)
         {

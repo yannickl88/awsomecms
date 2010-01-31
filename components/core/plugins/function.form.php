@@ -1,4 +1,6 @@
 <?php
+import("/core/class.Table.inc");
+
 /**
 * Form tag, this is used to add a form from a component to a page. This will call the action and hooks related to the action of the form
 * 
@@ -11,15 +13,25 @@ function smarty_function_form($params, &$smarty)
 
     $config = Config::getInstance();
     $components = $config->getComponenets();
-
-    $componentLoc = $components[$params['component']]->component_path;
-    $formLoc = $componentLoc.'/forms/form.'.$params['form'].'.tpl';
-
+    $component;
+    $table;
+    
+    if(isset($params['component']))
+    {
+        $component = $params['component'];
+    }
+    else
+    {
+        $tableID = explode(".", $params['table']);
+        $component = $tableID[0];
+        $table = $tableID[1];
+    }
+    
     //call the action for the form
     $actionHandler = "action_".$params['form'];
-    $componentObject = Component::init($params['component']);
-    $prehook = Config::getInstance()->getHook($params['component'], $params['form'], "pre");
-    $posthook = Config::getInstance()->getHook($params['component'], $params['form'], "post");
+    $componentObject = Component::init($component);
+    $prehook = Config::getInstance()->getHook($tableID[0], $params['form'], "pre");
+    $posthook = Config::getInstance()->getHook($tableID[0], $params['form'], "post");
     
     if($componentObject)
     {
@@ -90,10 +102,38 @@ function smarty_function_form($params, &$smarty)
         }
     }
     
-    if(file_exists($formLoc))
+    $render = $params['form'];
+    
+    if(isset($params['component']))
     {
-        $html = $smarty->fetch("file:".$formLoc);
+        $loc = $components[$component]->component_path."/forms/form.".$render.".tpl";
+        return $smarty->fetch("file:".$loc);
     }
-
-    return $html;
+    else
+    {
+        $tableObject = Table::init($params['table']);
+        
+        if(isset($params['render']))
+        {
+            $render = $params['render'];
+        }
+        
+        switch(strtolower($render))
+        {
+            case "add":
+                return $tableObject->toHTML(Field::ADD);
+                break;
+            case "edit":
+                $tableObject->setRecord($smarty->get_template_vars("record"));
+                return $tableObject->toHTML(Field::EDIT);
+                break;
+            case "delete":
+                return $tableObject->toHTML(Field::DELETE);
+                break;
+            case "view":
+            default:
+                return $tableObject->toHTML(Field::VIEW);
+                break;
+        }
+    }
 }
