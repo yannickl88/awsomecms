@@ -204,7 +204,7 @@ abstract class Table
         {
             if(!is_array($data))
             {
-                $this->record = array((object) $data);
+                $this->record = array($data);
             }
             else
             {
@@ -562,6 +562,8 @@ abstract class Table
                 $html .= "        addFieldError('{$field}', '{$error}');\n";
             }
             $html .= "</script>\n";
+            
+            return $html;
         }
     }
     protected function getAssignment($mode = null)
