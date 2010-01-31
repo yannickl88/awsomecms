@@ -27,7 +27,7 @@ JS;
     {
         parent::validate($mode);
         
-        if(($mode == Field::ADD || $mode == Field::EDIT) && !is_numeric($this->getValue()))
+        if(($mode == Field::ADD || $mode == Field::EDIT) && (!is_numeric($this->getValue()) && (!$this->isIndex() && $mode == Field::EDIT)))
         {
             throw new FormException($this, "Field was not a number");
         }

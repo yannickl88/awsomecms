@@ -24,11 +24,9 @@ class PageComponent extends Component
     {
         if($request['methode'] == 'post')
         {
-            if($this->validate($request, "/".Config::get('pageadd', 'pageadd', 'admin'), "add"))
-            {
-                $requestObj = Request::init('page');
-                $id = $requestObj->doInsert($request);
-            }
+            $id = Table::init('page.pages')
+                ->setRecord((object) $request)
+                ->doInsert();
             
             $this->redirect("/".Config::get('pageedit', 'pageedit', 'admin'), array("page_id" => $id));
         }
@@ -39,7 +37,7 @@ class PageComponent extends Component
         if($request['methode'] == 'post')
         {
             Table::init('page.pages')
-                ->setRecord($request)
+                ->setRecord((object) $request)
                 ->doUpdate();
             
             $this->redirect("/".Config::get('pageedit', 'pageedit', 'admin'), array("page_id" => $request['page_id']));

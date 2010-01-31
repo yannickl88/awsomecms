@@ -92,7 +92,7 @@ class SQLQuery
     {
         if($field != '')
         {
-            $this->insert[] = $field;
+            $this->insert[$field] = $field;
             $this->values[$field] = $value;
         }
         
@@ -113,7 +113,7 @@ class SQLQuery
     {
         if($field != '')
         {
-            $this->update[] = $field;
+            $this->update[$field] = $field;
             $this->values[$field] = $value;
         }
         
