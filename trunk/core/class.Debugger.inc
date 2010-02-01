@@ -11,11 +11,12 @@ class Debugger
     private static $instance;
     
     private $logs;
+    private $currentRobot;
     
     /**
     * @desc singelton
     * 
-    * @return               Instance of Debugger
+    * @return Debugger      Instance of Debugger
     */
     public static function getInstance()
     {
@@ -30,8 +31,14 @@ class Debugger
     */
     private function __construct()
     {
+        $this->currentRobot = null;
         $this->logs = array();
         $this->log("Debugger initialized");
+    }
+    
+    public function setRobot($robot)
+    {
+        $this->currentRobot = stripslashes($robot);
     }
     
     public function log($message, $level = Debugger::NOTICE)
@@ -124,7 +131,12 @@ class Debugger
                 $html .= "<div style='display: block; cursor: pointer;' onclick='debug_toggleDebug();'>";
                 break;
         }
-        $html .= "Site was rendered in {$timestamp}sec </div>";
+        $html .= "Site was rendered in {$timestamp}sec";
+        if($this->currentRobot != null)
+        {
+            $html .= " [seen by '{$this->currentRobot}' robot]";
+        }
+        $html .= "</div>";
         if(isset($_COOKIE['debugHide']))
         {
             $html .= "<div class='debugBody' style='font-size: 0.9em; padding-left: 10px; display: none;'>";

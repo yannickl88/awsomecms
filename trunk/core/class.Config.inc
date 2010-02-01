@@ -87,6 +87,17 @@ class Config
                 $this->data['layoutmap'][] = explode(" ", trim($line));
             }
         }
+        //parse the layout map
+        if(file_exists($frameworkroot.'/core/robots.conf'))
+        {
+            $data = file($frameworkroot.'/core/robots.conf');
+            $this->data['robots'] = array();
+            
+            foreach($data as $line)
+            {
+                $this->data['robots'][] = preg_quote(trim($line), "/");
+            }
+        }
         
         $this->data['websiteroot'] = $websiteroot;
     }

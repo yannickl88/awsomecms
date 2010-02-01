@@ -88,6 +88,7 @@ class Component
     /**
     * @desc Do an select for the component
     * 
+    * @deprecated           Please use the requests
     * @param $data          Array with data to be send
     * @return               Mixed
     */
@@ -100,6 +101,7 @@ class Component
     /**
     * @desc Do an delete for the component
     * 
+    * @deprecated           Please use the requests
     * @param $data          Array with data to be send
     * @return               Mixed
     */
@@ -112,6 +114,7 @@ class Component
     /**
     * @desc Do an update for the component
     * 
+    * @deprecated           Please use the requests
     * @param $data          Array with data to be send
     * @return               Mixed
     */
@@ -124,6 +127,7 @@ class Component
     /**
     * @desc Do an insert for the component
     * 
+    * @deprecated           Please use the requests
     * @param $data          Array with data to be send
     * @return               Mixed
     */
