@@ -82,6 +82,17 @@ class SmartyPageLoader
                 $smarty_obj->assign('content', $smarty_obj->fetch("{$url}.tpl"));
             }
             
+            $robotmap = Config::get('robots', array());
+            
+            foreach($robotmap as $map)
+            {
+                if(preg_match("/".$map."/i", $_SERVER['HTTP_USER_AGENT']) > 0)
+                {
+                    Debugger::getInstance()->setRobot($map);
+                    return $smarty_obj->fetch("robot_layout.tpl");
+                }
+            }
+
             $layoutmap = Config::get('layoutmap', array());
             
             foreach($layoutmap as $map)

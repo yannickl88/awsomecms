@@ -43,6 +43,23 @@ class SQLQuery
         $this->action = $action;
     }
     
+    /**
+    * return the action for this query
+    * 
+    * @return string    select, update, insert or delete
+    */
+    public function getAction()
+    {
+        return $this->action;
+    }
+    
+    /**
+    * Create a select query object
+    * 
+    * @param string $field
+    * @param string $distrinct
+    * @return SQLQuery
+    */
     public static function doSelect($field = '', $distrinct = false)
     {
         $query = new SQLQuery('select');
@@ -51,6 +68,13 @@ class SQLQuery
         return $query;
     }
     
+    /**
+    * Create a insert query object
+    * 
+    * @param string $field
+    * @param string $value
+    * @return SQLQuery
+    */
     public static function doInsert($field = '', $value = '')
     {
         $query = new SQLQuery('insert');
@@ -59,6 +83,13 @@ class SQLQuery
         return $query;
     }
     
+    /**
+    * Create a update query object
+    * 
+    * @param string $field
+    * @param string $value
+    * @return SQLQuery
+    */
     public static function doUpdate($field = '', $value = '')
     {
         $query = new SQLQuery('update');
@@ -67,12 +98,24 @@ class SQLQuery
         return $query;
     }
     
+    /**
+    * Create a delete query object
+    * 
+    * @return SQLQuery
+    */
     public static function doDelete()
     {
         $query = new SQLQuery('delete');
         return $query;
     }
     
+    /**
+    * add select statement
+    * 
+    * @param string $field
+    * @param boolean $distrinct
+    * @return SQLQuery
+    */
     public function select($field, $distrinct = false)
     {
         if($field != '')
@@ -88,6 +131,13 @@ class SQLQuery
         return $this;
     }
     
+    /**
+    * add insert statement
+    * 
+    * @param string $field
+    * @param mixed $value
+    * @return SQLQuery
+    */
     public function insert($field, $value)
     {
         if($field != '')
@@ -99,9 +149,16 @@ class SQLQuery
         return $this;
     }
     
+    /**
+    * add insert statement, only when the value is set
+    * 
+    * @param string $field
+    * @param mixed $value
+    * @return SQLQuery
+    */
     public function insertWhenSet($field, $value)
     {
-        if((isset($value) && is_numeric($value)) || (isset($value) && !is_numeric($value) && !empty($value)))
+        if(!$this->isEmpty($value))
         {
             $this->insert($field, $value);
         }
@@ -109,6 +166,13 @@ class SQLQuery
         return $this;
     }
     
+    /**
+    * add update statement
+    * 
+    * @param string $field
+    * @param mixed $value
+    * @return SQLQuery
+    */
     public function update($field, $value)
     {
         if($field != '')
@@ -120,9 +184,16 @@ class SQLQuery
         return $this;
     }
     
+    /**
+    * add update statement, only when the value is set
+    * 
+    * @param string $field
+    * @param mixed $value
+    * @return SQLQuery
+    */
     public function updateWhenSet($field, $value)
     {
-        if((isset($value) && is_numeric($value)) || (isset($value) && !is_numeric($value) && !empty($value)))
+        if(!$this->isEmpty($value))
         {
             $this->update($field, $value);
         }
@@ -130,6 +201,12 @@ class SQLQuery
         return $this;
     }
     
+    /**
+    * add tabel
+    * 
+    * @param string $table
+    * @return SQLQuery
+    */
     public function table($table)
     {
         $this->table[] = $table;
@@ -137,18 +214,22 @@ class SQLQuery
         return $this;
     }
     
-    public function whereWhenSet($field, $value, $comparison = "=", $orAnd = 'AND')
-    {
-        if((isset($value) && is_numeric($value)) || (isset($value) && !is_numeric($value) && !empty($value)))
-        {
-            $this->where($field, $value, $comparison, $orAnd);
-        }
-        
-        return $this;
-    }
-    
+    /**
+    * add where statement
+    * 
+    * @param string $field
+    * @param mixed $value
+    * @param string $comparison
+    * @param string $orAnd  AND or OR
+    * @return SQLQuery
+    */
     public function where($field, $value, $comparison = "=", $orAnd = 'AND')
     {
+        if($this->isEmpty($value))
+        {
+            throw new SQLExeption("Cannot compare '{$field}' with empty value");
+        }
+        
         if($orAnd != 'AND')
         {
             $orAnd = "OR";
@@ -190,6 +271,31 @@ class SQLQuery
         return $this;
     }
     
+    /**
+    * add where statement, only when the value is set
+    * 
+    * @param string $field
+    * @param mixed $value
+    * @param string $comparison
+    * @param string $orAnd  AND or OR
+    * @return SQLQuery
+    */
+    public function whereWhenSet($field, $value, $comparison = "=", $orAnd = 'AND')
+    {
+        if(!$this->isEmpty($value))
+        {
+            $this->where($field, $value, $comparison, $orAnd);
+        }
+        
+        return $this;
+    }
+    
+    /**
+    * add group statement
+    * 
+    * @param string $field
+    * @return SQLQuery
+    */
     public function groupBy($field)
     {
         $this->group[] = $field;
@@ -197,6 +303,13 @@ class SQLQuery
         return $this;
     }
     
+    /**
+    * add order statement
+    * 
+    * @param string $field
+    * @param string $sort   ASc or DESC
+    * @return SQLQuery
+    */
     public function orderBy($field, $sort = "ASC")
     {
         if($sort != 'ASC')
@@ -209,6 +322,13 @@ class SQLQuery
         return $this;
     }
     
+    /**
+    * add limit statement
+    * 
+    * @param int $amount
+    * @param in $start
+    * @return SQLQuery
+    */
     public function limit($amount, $start = 0)
     {
         $this->limit = "LIMIT {$start}, {$amount}";
@@ -216,6 +336,15 @@ class SQLQuery
         return $this;
     }
     
+    /**
+    * add join statement
+    * 
+    * @param string $table
+    * @param string $local
+    * @param string $forign
+    * @param string $type   left, right or inner
+    * @return SQLQuery
+    */
     public function join($table, $local, $forign, $type = 'left')
     {
         $this->join[] = strtoupper($type)." JOIN {$table} ON {$local} = {$forign}";
@@ -223,6 +352,37 @@ class SQLQuery
         return $this;
     }
     
+    private function isEmpty($value)
+    {
+        //((isset($value) && is_numeric($value)) || (isset($value) && !is_numeric($value) && !empty($value)))
+        if(isset($value))
+        {
+            if($value == "")
+            {
+                return true;
+            }
+            else if(is_numeric($value))
+            {
+                return false;
+            }
+            else if(is_array($value))
+            {
+                return (count($value) == 0);
+            }
+            else
+            {
+                return empty($value);
+            }
+        }
+        
+        return true;
+    }
+    
+    /**
+    * execute the statement
+    * 
+    * @return SQLRecord
+    */
     public function exec()
     {
         switch($this->action)
@@ -242,6 +402,11 @@ class SQLQuery
         }
     }
     
+    /**
+    * execute the statement as an select
+    * 
+    * @return SQLRecord
+    */
     private function execSelect()
     {
         $query = '';
@@ -293,6 +458,11 @@ class SQLQuery
         return SQL::getInstance()->query($query);
     }
     
+    /**
+    * execute the statement as an insert
+    * 
+    * @return SQLRecord
+    */
     private function execInsert()
     {
         $query = '';
@@ -324,6 +494,11 @@ class SQLQuery
         return SQL::getInstance()->query($query);
     }
     
+    /**
+    * execute the statment as an update
+    * 
+    * @return SQLRecord
+    */
     private function execUpdate()
     {
         $query = '';
@@ -373,6 +548,11 @@ class SQLQuery
         return SQL::getInstance()->query($query);
     }
     
+    /**
+    * execute statment as an Delete
+    * 
+    * @return SQLRecord
+    */
     private function execDelete()
     {
         $query = '';
