@@ -1,4 +1,7 @@
 <?php
+importField("Field");
+importField("IntField");
+
 class PrivilegesTable extends Table
 {
     public function __construct()
@@ -6,20 +9,32 @@ class PrivilegesTable extends Table
         parent::__construct("privileges");
         $this->assign("users");
         
-        $this->addField(new Field("privilege_name", "", Field::STR_INDEX|Field::FORCEUPDATE));
-        $this->addField(new IntField("privilege_int", "", Field::HIDE));
+        $this->addField(new IntField("privilege_id", "", Field::INDEX|Field::AUTOKEY));
+        $this->addField(new Field("privilege_name", "Name", Field::FORCEUPDATE));
+        $this->addField(new IntField("privilege_int", "", Field::HIDE|Field::OPTIONAL));
         $this->addField(new IntField("privilege_locked", "", Field::HIDE|Field::OPTIONAL));
+        $this->setTitle("[privilege_name]");
+        
+        $this->setURLs(
+            Config::get('privadmin', 'privadmin', 'admin'),
+            Config::get('privadd', 'privadd', 'admin'),
+            Config::get('privedit', 'privedit', 'admin'),
+            Config::get('privdelete', 'privdelete', 'admin')
+        );
     }
     
-    protected function select($query, $data = array())
+    protected function select($query, $data = null)
     {
         $query->orderby('privilege_name');
         
         $query->where('privilege_name', '*deleted*', "!=");
-        $query->whereWhenSet('privilege_name', $data['privilege_name']);
-        $query->whereWhenSet('privilege_int', $data['privilege_int']);
+        if($data)
+        {
+            $query->whereWhenSet('privilege_name', $data->privilege_name);
+            $query->whereWhenSet('privilege_int', $data->privilege_int);
+        }
     }
-    protected function insert($query, $data = array())
+    protected function insert($query, $data = null)
     {
         $rows = SQLQuery::doSelect()
             ->table('privileges')
@@ -28,10 +43,29 @@ class PrivilegesTable extends Table
         
         $query->insert('privilege_int', pow(2, count($rows)));
     }
-    protected function update($query, $data = array())
-    {
-        $query->where('privilege_name', $data['privilege_name_old']);
-    }
     
-    protected function delete($query, $data = array()) {}
+    protected function update($query, $data = null) {}
+    protected function delete($query, $data = null) {}
+    
+    public function getAction($mode)
+    {
+        if(!is_numeric($mode))
+        {
+            $mode = $this->string2action($mode);
+        }
+        
+        switch($mode)
+        {
+            case Field::EDIT:
+                return "privedit";
+                break;
+            case Field::DELETE:
+                return "privdelete";
+                break;
+            case Field::ADD:
+            default:
+                return "privadd";
+                break;
+        }
+    }
 }

@@ -164,6 +164,7 @@ class Component
         $url .= $query;
         
         Controller::getInstance()->setRedirect($url);
+        Controller::getInstance()->redirect();
     }
     
     /**

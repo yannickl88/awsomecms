@@ -6,48 +6,36 @@ class PageComponent extends Component
     public function __construct()
     {
         parent::__construct('page');
-        
-        $this->fields = array(
-            "page_id" => "index",
-            "page_name" => "text",
-            "page_location" => "text",
-            "page_template" => "text"
-        );
     }
-    
-    public function action_index($smarty, $smartyLoader, $request)
-    {
-        
-    }
-    
+
     public function action_add($smarty, $smartyLoader, $request)
     {
-        if($request['methode'] == 'post')
+        if($request['method'] == 'post')
         {
             $id = Table::init('page.pages')
                 ->setRecord((object) $request)
                 ->doInsert();
-            
+
             $this->redirect("/".Config::get('pageedit', 'pageedit', 'admin'), array("page_id" => $id));
         }
     }
-    
+
     public function action_edit($smarty, $smartyLoader, $request)
     {
-        if($request['methode'] == 'post')
+        if($request['method'] == 'post')
         {
             Table::init('page.pages')
                 ->setRecord((object) $request)
                 ->doUpdate();
-            
+
             $this->redirect("/".Config::get('pageedit', 'pageedit', 'admin'), array("page_id" => $request['page_id']));
         }
         else
         {
             if($request['page_id'])
             {
-                $table = Table::init('page.pages');
-                $smarty->assign("record", $table->doSelect($request)->getRow());
+                Table::init('page.pages')
+                    ->setRecord((object) $request);
             }
             else
             {
@@ -55,24 +43,23 @@ class PageComponent extends Component
             }
         }
     }
-    
+
     public function action_delete($smarty, $smartyLoader, $request)
     {
-        if($request['methode'] == 'post')
+        if($request['method'] == 'post')
         {
-            $requestObj = Request::init('page');
-            $requestObj->doDelete($request);
-            
-            $this->redirect("/".Config::get('pageadd', 'pageadd', 'admin'));
+            Table::init('page.pages')
+                ->setRecord((object) $request)
+                ->doDelete();
+
+            $this->redirect("/admin/");
         }
         else
         {
             if($request['page_id'])
             {
-                $requestObj = Request::init('page');
-                $record = $requestObj->doSelect($request);
-                
-                $smarty->assign("record", $record[0]);
+                $table = Table::init('page.pages')
+                    ->setRecord((object) $request);
             }
             else
             {

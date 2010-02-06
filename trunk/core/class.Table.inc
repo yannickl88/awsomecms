@@ -14,6 +14,7 @@ abstract class Table
     protected $record;
     protected $errorRecord;
     protected $errorFields;
+    protected $title;
     
     protected $component;
     protected $action;
@@ -29,11 +30,11 @@ abstract class Table
     * @param string $table      <component>.<tabel>
     * @return Table
     */
-    public static function init($table)
+    public static function init($table, $ID = "")
     {
-        if(isset(self::$tables[$table]))
+        if(isset(self::$tables[$ID.$table]))
         {
-            return self::$tables[$table];
+            return self::$tables[$ID.$table];
         }
         else
         {
@@ -49,7 +50,7 @@ abstract class Table
             $className = ucfirst($tableID[1])."Table";
             $loc = $components[$tableID[0]]->component_path.'/class.'.$className.'.inc';
             
-            Debugger::getInstance()->log("Creating Table '{$className}'");
+            Debugger::getInstance()->log("Creating Table '{$className}' {$ID}");
             
             if(file_exists($loc) && array_key_exists($tableID[0], $components))
             {
@@ -57,14 +58,14 @@ abstract class Table
                 
                 $obj = new $className();
                 $obj->ID = $table;
-                self::$tables[$table] = $obj;
+                self::$tables[$ID.$table] = $obj;
                 
                 return $obj;
             }
             else
             {
                 Debugger::getInstance()->error("Cannot find Table '{$className}'");
-                self::$tables[$table] = false;
+                self::$tables[$ID.$table] = false;
                 return false;
             }
         }
@@ -193,6 +194,29 @@ abstract class Table
     }
     
     /**
+     * Get the title of this tabel record. This is a pre-parsed string with the values from the record
+     * 
+     * @return String
+     */
+    public function getTitle()
+    {
+        return $this->title;
+    }
+    
+    /**
+     * Set the title of this tabel record. This is a string with the field names between [ and ]
+     * 
+     * @param $titleString String
+     * @return Table
+     */
+    public function setTitle($titleString)
+    {
+        $this->title = $titleString;
+        
+        return $this;
+    }
+    
+    /**
     * Set the current record of the table
     * 
     * @param array $data
@@ -200,7 +224,7 @@ abstract class Table
     */
     public function setRecord($data)
     {
-        if(!isset($this->errorRecord))
+        if(!isset($this->errorRecord) && !empty($data))
         {
             if(!is_array($data))
             {
@@ -326,12 +350,16 @@ abstract class Table
     }
     protected function toHTML_edit()
     {
+        $data = $this->doSelect($this->record[0])->getRow();
+        
         $html_post = "";
         $html = $this->getErrors();
         $html .= "<form method=\"post\" action=\"/\" class=\"admin_form admin_edit\">\n";
         
-        foreach($this->fields as $field)
+        foreach($this->fields as $field) //@var $field Field
         {
+            $field->setData($data);
+            
             if($field->visible(Field::EDIT))
             {
                 $html .= "<div class=\"admin_form_row\">\n";
@@ -356,7 +384,7 @@ abstract class Table
     }
     protected function toHTML_view()
     {
-        $data = $this->record;
+        $data = $this->doSelect($this->record[0])->getRows();
         
         $html = "<table class=\"admin_table\">\n";
         $html .= "    <tr class=\"admin_table_row\">\n";
@@ -367,7 +395,8 @@ abstract class Table
                 $html .= "        <th class=\"admin_table_header\">".$field->getDisplayName()."</th>\n";
             }
         }
-        $html .= "        <th colspan=\"2\">\n        </th>\n";
+        $html .= "        <th class=\"admin_table_header admin_table_actions\">\n        </th>\n";
+        $html .= "        <th class=\"admin_table_header admin_table_actions\">\n        </th>\n";
         $html .= "    </tr>\n";
         
         $count = 0;
@@ -381,11 +410,13 @@ abstract class Table
             }
             
             $html .= "    <tr class=\"{$class}\">\n";
+            $cols = 0;
             foreach($this->fields as $field)
             {
                 if($field->visible(Field::VIEW))
                 {
                     $html .= "        <td class=\"admin_table_cell\">".$field->getValue($row)."</td>\n";
+                    $cols++;
                 }
             }
             
@@ -412,18 +443,33 @@ abstract class Table
             $html .= "            <a href='/{$this->deleteURL}{$queryString}'><img src=\"/img/icons/delete.png\" alt=\"delete\"</a>\n";
             $html .= "        </td>\n";
             $html .= "        <td class=\"admin_table_cell admin_table_actions\">\n";
-            $html .= "            <input type=\"checkbox\" value=\"".$this->keys[0]->getName()."\" name=\"action[]\" class=\"actioncheckbox\">\n";
+            $html .= "            <input type=\"checkbox\" value=\"".$this->keys[0]->getValue($row)."\" name=\"action[]\" class=\"actioncheckbox\">\n";
             $html .= "        </td>\n";
             
             $html .= "    </tr>\n";
             $count++;
         }
+        if($count == 0) //add empty row
+        {
+            foreach($this->fields as $field)
+            {
+                if($field->visible(Field::VIEW))
+                {
+                    $cols++;
+                }
+            }
+            
+            $colspan = $cols + 2;
+            $html .= "        <td class=\"admin_table_cell\" colspan=\"{$colspan}\">No Records</td>\n";
+        }
+        
+        $colspan = $cols + 1;
         $html .= "    <tr class=\"admin_table_row\">\n";
-        $html .= "        <td class=\"admin_table_cell admin_table_actions\" colspan=\"2\">\n";
+        $html .= "        <td class=\"admin_table_cell admin_table_actions\" colspan=\"{$colspan}\">\n";
         $html .= "            <img src=\"/img/icons/add.png\" alt=\"add\"> <a href=\"/{$this->addURL}\">Add</a>\n";
         $html .= "        </td>\n";
         $html .= "        <td class=\"admin_table_cell\">\n";
-        $html .= "            <a href=\"javascript: void(0);\" onclick=\"deleteMultiple('/{$this->deleteURL}', 'user_id', $('.actioncheckbox'));\"><img src=\"/img/icons/delete.png\" alt=\"delete selected\"></a>\n";
+        $html .= "            <a href=\"javascript: void(0);\" onclick=\"deleteMultiple('/{$this->deleteURL}', '{$this->keys[0]->getName()}', $('.actioncheckbox'));\"><img src=\"/img/icons/delete.png\" alt=\"delete selected\"></a>\n";
         $html .= "        </td>\n";
         $html .= "    </tr>\n";
         $html .= "</table>\n";
@@ -433,8 +479,66 @@ abstract class Table
     }
     protected function toHTML_delete()
     {
-        return "asdf";
+        $data = $this->doSelect($this->record[0])->getRows();
+        
+        $html = "";
+        $post_html = "";
+        $html .= "<form method=\"post\" action=\"/\" class=\"admin_form admin_delete\">\n";
+        $html .= "    <div class=\"admin_form_row\">\n";
+        $html .= "        <div class=\"admin_form_text\">\n";
+        $html .= "            Are you sure you want to delete this item? <br />\n";
+        $html .= "            <ul>\n";
+        
+        foreach($data as $row)
+        {
+            $title = "";
+            
+            if(true)
+            {
+                $title = $this->parseTitle($this->title, $row);
+            }
+            else
+            {
+                $title = $this->keys[0]->getName();
+                if(!empty($title))
+                {
+                    $title = $row->$title;
+                }
+            }
+            $html .= "                <li><img src=\"/img/icons/page.png\" alt=\"\">{$title}</li>\n";
+            
+            foreach($this->keys as $field)
+            {
+                $post_html .= "    <input type=\"hidden\" name=\"{$field->getName()}[]\" value=\"{$field->getValue($row)}\" />\n";
+            }
+        }
+        
+        $html .= "            </ul>\n";
+        $html .= "        </div>\n";
+        $html .= "    </div>\n";
+        $html .= "    <div class=\"admin_form_row admin_form_submit\">\n";
+        $html .= "        <input type=\"submit\" value=\"Delete\" id=\"page_submit\" class=\"admin_form_submit\">\n";
+        $html .= "    </div>\n";
+        $html .= $post_html;
+        $html .= $this->getAssignment(Field::DELETE);
+        $html .= "</form>\n";
+        
+        return $html;
     }
+    
+    protected function parseTitle($title, $data)
+    {
+        $matches = array();
+        $titleArray = preg_match_all('/\[(.*?)\]/', $title, $matches);
+        
+        foreach($matches[1] as $match)
+        {
+            $title = str_replace("[{$match}]", $this->getField($match)->getValue($data), $title);
+        }
+        
+        return $title;
+    }
+
     
     /**
     * Preform a select on the table
@@ -450,7 +554,7 @@ abstract class Table
         
         foreach($this->fields as $field)
         {
-            $field->select($query);
+            $field->select($query, $data);
         }
         
         $return = $this->select($query, $data);
@@ -566,6 +670,12 @@ abstract class Table
             return $html;
         }
     }
+    /**
+     * Assignment field which containt the componentn and action values
+     * 
+     * @param int $mode
+     * @return String       HTML with the hidden input fields
+     */
     protected function getAssignment($mode = null)
     {
         $html = "";
@@ -577,22 +687,64 @@ abstract class Table
         {
             $html .= "<input type='hidden' name='action' value='{$this->action}'/>\n";
         }
-        elseif($mode == Field::ADD)
+        elseif($mode == Field::ADD || $mode == Field::DELETE || $mode == Field::EDIT)
         {
-            $html .= "<input type='hidden' name='action' value='add'/>\n";
-        }
-        elseif($mode == Field::EDIT)
-        {
-            $html .= "<input type='hidden' name='action' value='edit'/>\n";
+            $html .= "<input type='hidden' name='action' value='{$this->getAction($mode)}'/>\n";
         }
         
         return $html;
     }
     
-    abstract protected function select($query);
-    abstract protected function insert($query);
-    abstract protected function update($query);
-    abstract protected function delete($query);
+    /**
+     * Mapping of the action to the actuly hidden field content.
+     * When in need of custom mapping, like if you have two tables for one component, override this method
+     * 
+     * @param int $mode
+     * @return String       edit, delete, add
+     */
+    public function getAction($mode)
+    {
+        if(!is_numeric($mode))
+        {
+            $mode = $this->string2action($mode);
+        }
+        
+        switch($mode)
+        {
+            case Field::EDIT:
+                return "edit";
+                break;
+            case Field::DELETE:
+                return "delete";
+                break;
+            case Field::ADD:
+            default:
+                return "add";
+                break;
+        }
+    }
+    
+    protected function string2action($string)
+    {
+        switch($string)
+        {
+            case 'edit':
+                return Field::EDIT;
+                break;
+            case 'delete':
+                return Field::DELETE;
+                break;
+            case 'add':
+            default:
+                return Field::ADD;
+                break;
+        }
+    }
+    
+    abstract protected function select($query, $data = null);
+    abstract protected function insert($query, $data = null);
+    abstract protected function update($query, $data = null);
+    abstract protected function delete($query, $data = null);
     
     public function validate($mode = Field::ADD)
     {
@@ -617,7 +769,8 @@ abstract class Table
         
         $valid = true;
         $index = -1;
-        $exception = new InvalidFormException($this->record, $redirect, $this->ID, "The form was not valid");
+        
+        $exception = new InvalidFormException($this->record, "/".$redirect, $this->ID, "The form was not valid");
         
         foreach($this->fields as $field)
         {
@@ -628,6 +781,7 @@ abstract class Table
             catch(FormException $e)
             {
                 $valid = false;
+                Debugger::getInstance()->log("Validation ERROR {$e->getField()->getName()} '{$e->getMessage()}'");
                 $exception->addInvalidField($e->getField()->getName(), $e->getMessage());
             }
         }
@@ -645,6 +799,8 @@ abstract class Table
                 
                 $exception->setRedirectData($data);
             }
+            
+            Debugger::getInstance()->log("Record did not validate, redirecting back");
             
             throw $exception;
         }

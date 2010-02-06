@@ -14,6 +14,6 @@ class PasswordField extends Field
     }
     protected function toHTML_edit()
     {
-        return "<input type='password' name='{$this->getName()}' id='{$this->getName()}' value='{$this->getValue()}'/>";
+        return "<input type='password' name='{$this->getName()}' id='{$this->getName()}' value='{$this->getDefaultValue()}'/>";
     }
 }

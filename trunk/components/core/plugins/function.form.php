@@ -28,8 +28,17 @@ function smarty_function_form($params, &$smarty)
     }
     
     //call the action for the form
-    $actionHandler = "action_".$params['form'];
+    $tableObject = Table::init($params['table']);
     $componentObject = Component::init($component);
+    
+    $action = $params['action'];
+    
+    if(empty($params['component']))
+    {
+        $action = $tableObject->getAction($params['form']);
+    }
+    
+    $actionHandler = "action_".$action;
     $prehook = Config::getInstance()->getHook($tableID[0], $params['form'], "pre");
     $posthook = Config::getInstance()->getHook($tableID[0], $params['form'], "post");
     
@@ -111,7 +120,10 @@ function smarty_function_form($params, &$smarty)
     }
     else
     {
-        $tableObject = Table::init($params['table']);
+        if(!$tableObject)
+        {
+            return "Could not find the Table '{$params['table']}'";
+        }
         
         if(isset($params['render']))
         {
