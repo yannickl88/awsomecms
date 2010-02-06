@@ -158,7 +158,7 @@ class SQLQuery
     */
     public function insertWhenSet($field, $value)
     {
-        if(!$this->isEmpty($value))
+        if(!self::isEmpty($value))
         {
             $this->insert($field, $value);
         }
@@ -193,7 +193,7 @@ class SQLQuery
     */
     public function updateWhenSet($field, $value)
     {
-        if(!$this->isEmpty($value))
+        if(!self::isEmpty($value))
         {
             $this->update($field, $value);
         }
@@ -225,7 +225,7 @@ class SQLQuery
     */
     public function where($field, $value, $comparison = "=", $orAnd = 'AND')
     {
-        if($this->isEmpty($value))
+        if(self::isEmpty($value))
         {
             throw new SQLExeption("Cannot compare '{$field}' with empty value");
         }
@@ -282,7 +282,7 @@ class SQLQuery
     */
     public function whereWhenSet($field, $value, $comparison = "=", $orAnd = 'AND')
     {
-        if(!$this->isEmpty($value))
+        if(!self::isEmpty($value))
         {
             $this->where($field, $value, $comparison, $orAnd);
         }
@@ -352,7 +352,7 @@ class SQLQuery
         return $this;
     }
     
-    private function isEmpty($value)
+    public static function isEmpty($value)
     {
         //((isset($value) && is_numeric($value)) || (isset($value) && !is_numeric($value) && !empty($value)))
         if(isset($value))

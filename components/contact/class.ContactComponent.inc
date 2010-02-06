@@ -174,7 +174,6 @@ class ContactComponent extends Component
                 $headers .= "Bcc: {$bcc}\r\n";
 
                 @mail($to, $subject, $body, $headers);
-                die(var_dump($body));
             }
             else
             {

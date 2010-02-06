@@ -16,11 +16,13 @@ class Field
     const NO_INDEX      = 0; //not really needed but usefull
     const INDEX         = 8;
     const STR_INDEX     = 16;
-    const OPTIONAL      = 32;
-    const NOTNULL       = 64;
-    const AUTOKEY       = 128; //auto_increment is turned on at the database
-    const FORCEUPDATE   = 256;
-    const DUMMY         = 512; //does not get's added to the selection list
+    const OPTIONAL_ADD  = 32;
+    const OPTIONAL_EDIT = 64;
+    const OPTIONAL      = 96; //OPTIONAL_ADD|OPTIONAL_EDIT
+    const NOTNULL       = 128;
+    const AUTOKEY       = 256; //auto_increment is turned on at the database
+    const FORCEUPDATE   = 512;
+    const DUMMY         = 1024; //does not get's added to the selection list
     
     protected $type;
     protected $name;
@@ -51,12 +53,12 @@ class Field
         $this->displayName = ucfirst($displayName);
         $this->value = "";
         
-        $this->required = !$this->hasFlag(Field::OPTIONAL);
         $this->defaultValue = false;
         $this->null = !$this->hasFlag(Field::NOTNULL);
         if($this->hasFlag(Field::INDEX))
         {
             $this->index = Field::INDEX;
+            $this->style = $this->style|Field::HIDE;
         }
         elseif($this->hasFlag(Field::STR_INDEX))
         {
@@ -67,10 +69,6 @@ class Field
             $this->index = Field::NO_INDEX;
         }
         
-        if($this->isIndex())
-        {
-            $this->style = $this->style|Field::HIDE;
-        }
         $this->maxSize = -1;
         
         $this->type = "text";
@@ -118,8 +116,7 @@ class Field
     public function setData($record)
     {
         $name = $this->getName();
-        $this->value = $record->$name;
-        return $this;
+        return $this->setValue($record->$name);
     }
     
     /**
@@ -137,13 +134,43 @@ class Field
         }
         else
         {
-            return $this->value;
+            $value = $this->value;
+            
+            if(SQLQuery::isEmpty($value))
+            {
+                $value = $this->getDefaultValue();
+            }
+            
+            return $value;
         }
     }
     
-    public function isRequired()
+    public function hasValue($data = null)
     {
-        return $this->required;
+        if(!empty($data))
+        {
+            return true;
+        }
+        else
+        {
+            return !SQLQuery::isEmpty($this->value);
+        }
+    }
+    
+    public function isRequired($mode)
+    {
+        if($mode == Field::ADD && $this->hasFlag(Field::OPTIONAL_ADD))
+        {
+            return false;
+        }
+        elseif($mode == Field::EDIT && $this->hasFlag(Field::OPTIONAL_EDIT))
+        {
+            return false;
+        }
+        else
+        {
+            return true;
+        }
     }
     
     /**
@@ -283,7 +310,7 @@ class Field
                 return $this->toHTML_add();
                 break;
             case Field::EDIT:
-                if($this->isIndex())
+                if($this->isIndex() && !$this->hasFlag(Field::FORCEUPDATE))
                 {
                     return $this->toHTML_edit_hidden();
                 }
@@ -307,7 +334,14 @@ class Field
     
     protected function toHTML_add()
     {
-        return "<input type='text' name='{$this->getName()}' id='{$this->getName()}' value='{$this->getDefaultValue()}'/>";
+        $value = $this->getDefaultValue();
+        
+        if($this->hasValue())
+        {
+            $value = $this->getValue();
+        }
+        
+        return "<input type='text' name='{$this->getName()}' id='{$this->getName()}' value='{$value}'/>";
     }
     protected function toHTML_edit()
     {
@@ -326,27 +360,36 @@ class Field
         return "";
     }
     
+    /**
+     * @param $query SQLquery
+     * @param $data
+     */
     public function select($query, $data = array())
     {
         if($this->hasFlag(Field::DUMMY))
         {
             return;
         }
+        
+        if($this->isIndex())
+        {
+            $query->whereWhenSet($this->getName(), $this->value2db($this->getValue($data)));
+        }
         $query->select($this->getName());
     }
     public function insert($query, $data = array())
     {
-        if($this->hasFlag(Field::DUMMY))
+        if($this->hasFlag(Field::DUMMY) || $this->hasFlag(Field::AUTOKEY))
         {
             return;
         }
-        if($this->isRequired() || $this->hasFlag(Field::FORCEUPDATE))
+        if($this->isRequired(Field::ADD) || $this->hasFlag(Field::FORCEUPDATE))
         {
-            $query->insert($this->getName(), $this->getValue($data));
+            $query->insert($this->getName(), $this->value2db($this->getValue()));
         }
         else
         {
-            $query->insertWhenSet($this->getName(), $this->getValue($data));
+            $query->insertWhenSet($this->getName(), $this->value2db($this->getValue($data)));
         }
     }
     public function update($query, $data = array())
@@ -355,31 +398,32 @@ class Field
         {
             return;
         }
+        
         if(!$this->isIndex())
         {
-            if($this->isRequired() || $this->hasFlag(Field::FORCEUPDATE))
+            if($this->isRequired(Field::EDIT) || $this->hasFlag(Field::FORCEUPDATE))
             {
-                $query->update($this->getName(), $this->getValue($data));
+                $query->update($this->getName(), $this->value2db($this->getValue($data)));
             }
             else
             {
-                $query->updateWhenSet($this->getName(), $this->getValue($data));
+                $query->updateWhenSet($this->getName(), $this->value2db($this->getValue($data)));
             }
         }
         else
         {
             if($this->hasFlag(Field::FORCEUPDATE))
             {
-                $query->update($this->getName(), $this->getValue($data));
+                $query->update($this->getName(), $this->value2db($this->getValue($data)));
             }
             
-            if($this->isRequired())
+            if($this->isRequired(Field::EDIT))
             {
-                $query->where($this->getName(), $this->getValue($data));
+                $query->where($this->getName(), $this->value2db($this->getValue($data)));
             }
             else
             {
-                $query->whereWhenSet($this->getName(), $this->getValue($data));
+                $query->whereWhenSet($this->getName(), $this->value2db($this->getValue($data)));
             }
         }
     }
@@ -392,13 +436,13 @@ class Field
         
         if($this->isIndex())
         {
-            if($this->isRequired())
+            if($this->isRequired(Field::DELETE))
             {
-                $query->where($this->getName(), $this->getValue($data));
+                $query->where($this->getName(), $this->value2db($this->getValue($data)));
             }
             else
             {
-                $query->whereWhenSet($this->getName(), $this->getValue($data));
+                $query->whereWhenSet($this->getName(), $this->value2db($this->getValue($data)));
             }
         }
     }
@@ -408,12 +452,22 @@ class Field
         $value = $this->getValue();
         
         if(($mode == Field::ADD || $mode == Field::EDIT) &&
-            $this->isRequired() && 
+            $this->isRequired($mode) && 
             empty($value) && 
             ($this->hasFlag(Field::AUTOKEY) == false && $mode != Field::EDIT)
         )
         {
-            //throw new FormException($this, "Field was not filled in");
+            throw new FormException($this, "Field was not filled in");
         }
+    }
+    /**
+     * Convert the value of the param to that what the DB expects
+     * 
+     * @param $value String
+     * @return String
+     */
+    public function value2db($value)
+    {
+        return $value;
     }
 }

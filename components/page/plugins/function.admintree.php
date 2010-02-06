@@ -15,7 +15,7 @@
       $tree = array();
       
       $currentFolder = '/';
-      $table = Table::init("page.pages");
+      $table = Table::init("page.pages", "admintree");
       
       if($hideAdmin)
       {

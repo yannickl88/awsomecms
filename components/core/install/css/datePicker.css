@@ -1,0 +1,54 @@
+.ui-datepicker
+{
+    background-color: #ffffff;
+    border: 1px solid #D8EBFD;
+}
+.ui-datepicker-calendar
+{
+    width: 304px;
+    border-collapse: collapse;
+}
+.ui-datepicker-week-end
+{
+    background-color: #F1F8FF;
+}
+.ui-datepicker-title
+{
+	height: 20px;
+	background-color: #D8EBFD;
+}
+.ui-datepicker-current-day
+{
+	font-weight: bold;
+    background-color: #D8EBFD;
+}
+.ui-datepicker-prev,
+.ui-datepicker-next
+{
+	cursor: pointer;
+}
+.ui-datepicker-today
+{
+	font-weight: bold;
+}
+.ui-datepicker-calendar a
+{
+    display: block;
+    text-align: center;
+}
+.ui-datepicker-prev
+{
+    float: left;
+}
+.ui-datepicker-next
+{
+    float: right;
+}
+.ui-datepicker-title
+{
+    text-align: center;
+}
+.ui-helper-hidden-accessible 
+{
+    display: none;
+}

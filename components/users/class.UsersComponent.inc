@@ -8,126 +8,6 @@ class UsersComponent extends Component
         parent::__construct('users');
     }
     
-    public function action_index($smarty, $smartyLoader, $request)
-    {
-        
-    }
-    
-    public function action_add($smarty, $smartyLoader, $request)
-    {
-        if($request['methode'] == 'post')
-        {
-            //extra custom validation
-            if($request['user_pass'] != $request['user_pass2'])
-            {
-                $e = new InvalidFormException($request, "/".Config::get('usersadd', 'usersadd', 'admin'), "Password do not match");
-                $e->addInvalidField('user_pass', "Passwords do not match");
-                $e->addInvalidField('user_pass2', "");
-                
-                throw $e;
-            }
-            else
-            {
-                //sum the privlilages
-                if(!isset($request['privileges']))
-                {
-                    $request['privileges'] = array();
-                }
-                $request['user_privileges'] = array_sum($request['privileges']);
-                
-                $userRequest = Request::init('users.users');
-                $request["user_id"] = $userRequest->doInsert($request);
-            }
-            
-            $this->redirect("/".Config::get('usersadmin', 'usersadmin', 'admin'));
-        }
-        else
-        {
-            if(!Config::getInstance()->isComponentInstalled("groups"))
-            {
-                $privRequest = Request::init('users.privileges');
-                $smarty->assign("privileges", $privRequest->doSelect());
-            }
-        }
-        
-        return $request;
-    }
-    
-    public function action_edit($smarty, $smartyLoader, $request)
-    {
-        if($request['methode'] == 'post')
-        {
-            unset($this->fields['users']['user_pass']);
-            
-            if($request['user_pass'] == '' || $request['user_pass'] != $request['user_pass2'])
-            {
-                unset($request['user_pass']);
-                unset($request['user_pass2']);
-            }
-            
-            if($this->validate($request, "/".Config::get('usersedit', 'usersedit', 'admin'), "edit"))
-            {
-                //sum the privlilages
-                if(!isset($request['privileges']))
-                {
-                    $request['privileges'] = array();
-                }
-                $request['user_privileges'] = array_sum($request['privileges']);
-                
-                $userRequest = Request::init('users.users');
-                $userRequest->doUpdate($request);
-            }
-            
-            $this->redirect("/".Config::get('usersadmin', 'usersadmin', 'admin'));
-        }
-        else
-        {
-            if($request['user_id'])
-            {
-                Table::init('users.users');
-            }
-            else
-            {
-                $this->redirect("/".Config::get('usersadmin', 'usersadmin', 'admin'));
-            }
-        }
-        
-        return $request;
-    }
-    
-    public function action_delete($smarty, $smartyLoader, $request)
-    {
-        $userRequest = Request::init('users.users');
-        
-        if($request['methode'] == 'post')
-        {
-            $userRequest->doDelete($request);
-            
-            $this->redirect("/".Config::get('usersadmin', 'usersadmin', 'admin'));
-        }
-        else
-        {
-            if($request['user_id'])
-            {
-                $record = $userRequest->doSelect($request);
-                
-                $smarty->assign("record", $record);
-            }
-            else
-            {
-                $this->redirect("/".Config::get('usersadmin', 'usersadmin', 'admin'));
-            }
-        }
-        
-        return $request;
-    }
-    
-    public function action_admin($smarty, $smartyLoader, $request)
-    {
-        $userRequest = Table::init('users.users');
-        $userRequest->setRecord($userRequest->doSelect()->getRows());
-    }
-    
     private function login($request, $redirect)
     {
         //extra custom validation
@@ -167,7 +47,7 @@ class UsersComponent extends Component
     
     public function action_login($smarty, $smartyLoader, $request)
     {
-        if($request['methode'] == 'post')
+        if($request['method'] == 'post')
         {
             $this->login($request, "/".$_GET['url']);
         }
@@ -175,46 +55,129 @@ class UsersComponent extends Component
     
     public function action_admin_login($smarty, $smartyLoader, $request)
     {
-        if($request['methode'] == 'post')
+        if($request['method'] == 'post')
         {
             $this->login($request, "/".Config::get('location', 'location', 'admin'));
         }
     }
     
-    public function action_privadmin($smarty, $smartyLoader, $request)
+    public function action_add($smarty, $smartyLoader, $request)
     {
-        $requestObj = Request::init('users.privileges');
-        $smarty->assign("records", $requestObj->doSelect());
+        if($request['method'] == 'post')
+        {
+            //extra custom validation
+            if($request['user_pass'] != $request['user_pass2'])
+            {
+                $e = new InvalidFormException(array((object) $request), "/".Config::get('usersadd', 'usersadd', 'admin'), "users.users", "Password do not match");
+                
+                $e->addInvalidField('user_pass', "Passwords do not match");
+                $e->addInvalidField('user_pass2', "");
+                
+                throw $e;
+            }
+            else
+            {
+                Table::init('users.users')
+                    ->setRecord((object) $request)
+                    ->doInsert();
+            }
+            
+            $this->redirect("/".Config::get('usersadmin', 'usersadmin', 'admin'));
+        }
+        else
+        {
+            if(!Config::getInstance()->isComponentInstalled("groups"))
+            {
+                $privRequest = Request::init('users.privileges');
+                $smarty->assign("privileges", $privRequest->doSelect());
+            }
+        }
         
-        //urls
-        $smarty->assign("actionurl_add", Config::get('privadd', 'privadd', 'admin'));
-        $smarty->assign("actionurl_edit", Config::get('privedit', 'privedit', 'admin'));
-        $smarty->assign("actionurl_delete", Config::get('privdelete', 'privdelete', 'admin'));
+        return $request;
+    }
+    
+    public function action_edit($smarty, $smartyLoader, $request)
+    {
+        if($request['method'] == 'post')
+        {
+            //extra custom validation
+            if(!empty($request['user_pass']) && $request['user_pass'] != $request['user_pass2'])
+            {
+                $e = new InvalidFormException(array((object) $request), "/".Config::get('usersedit', 'usersedit', 'admin'), "users.users", "Password do not match");
+                
+                $e->setRedirectData(array("user_id" => $request["user_id"]));
+                $e->addInvalidField('user_pass', "Passwords do not match");
+                $e->addInvalidField('user_pass2', "");
+                
+                throw $e;
+            }
+            else
+            {
+                Table::init('users.users')
+                    ->setRecord((object) $request)
+                    ->doUpdate();
+                
+                $this->redirect("/".Config::get('usersadmin', 'usersadmin', 'admin'));
+            }
+        }
+        else
+        {
+            if($request['user_id'])
+            {
+                Table::init('users.users')
+                    ->setRecord((object) $request);
+            }
+            else
+            {
+                $this->redirect("/".Config::get('usersadmin', 'usersadmin', 'admin'));
+            }
+        }
+        
+        return $request;
+    }
+    
+    public function action_delete($smarty, $smartyLoader, $request)
+    {
+        if($request['method'] == 'post')
+        {
+            Table::init('users.users')
+                ->setRecord((object) $request)
+                ->doDelete();
+            
+            $this->redirect("/".Config::get('usersadmin', 'usersadmin', 'admin'));
+        }
+        else
+        {
+            if($request['user_id'])
+            {
+                Table::init('users.users')
+                    ->setRecord((object) $request);
+            }
+            else
+            {
+                $this->redirect("/".Config::get('usersadmin', 'usersadmin', 'admin'));
+            }
+        }
     }
     
     public function action_privadd($smarty, $smartyLoader, $request)
     {
-        if($request['methode'] == 'post')
+        if($request['method'] == 'post')
         {
-            $this->setCurrentTable('privileges');
+            $table = Table::init('users.privileges')
+                ->setRecord((object) $request);
             
-            //select the privlilages
-            if($this->validate($request, "/".Config::get('privadd', 'privadd', 'admin'), "add"))
+            //check if name is not yet chosen, we do not wat duplicates
+            if($table->doSelect((object) $request)->count() == 0)
             {
-                $requestObj = Request::init('users.privileges');
+                $table->doInsert();
+            }
+            else
+            {
+                $e = new InvalidFormException($request, "/".Config::get('privadd', 'privadd', 'admin'), "users.privileges", "Privilage already exists");
+                $e->addInvalidField('privilege_name', "Please select another name");
                 
-                //check if name is not yet chosen, we do not wat duplicates
-                if(!$requestObj->doSelect($request))
-                {
-                    $requestObj->doInsert($request);
-                }
-                else
-                {
-                    $e = new InvalidFormException($request, "/".Config::get('privadd', 'privadd', 'admin'), "Privilage already exists");
-                    $e->addInvalidField('privilege_name', "Please select another name");
-                    
-                    throw $e;
-                }
+                throw $e;
             }
             
             $this->redirect("/".Config::get('privadmin', 'privadmin', 'admin'));
@@ -223,36 +186,14 @@ class UsersComponent extends Component
     
     public function action_privedit($smarty, $smartyLoader, $request)
     {
-        $requestObj = Request::init('users.privileges');
-        
-        if($request['methode'] == 'post')
+        $table = Table::init('users.privileges')
+            ->setRecord((object) $request);
+         
+        if($request['method'] == 'post')
         {
-            $this->setCurrentTable('privileges');
-            
-            //select the privlilages
-            if($this->validate($request, "/".Config::get('privedit', 'privedit', 'admin'), "edit"))
-            {
-                //check if name is not yet chosen, we do not wat duplicates
-                if(!$requestObj->doSelect($request))
-                {
-                    $requestObj->doUpdate($request);
-                }
-                else
-                {
-                    $e = new InvalidFormException($request, "/".Config::get('privedit', 'privedit', 'admin'), "Privilage already exists");
-                    $e->addInvalidField('privilege_name', "Please select another name");
-                    
-                    throw $e;
-                }
-            }
+            $table->doUpdate();
             
             $this->redirect("/".Config::get('privadmin', 'privadmin', 'admin'));
-        }
-        else
-        {
-            $records = $requestObj->doSelect($request);
-            
-            $smarty->assign("record", $records[0]);
         }
     }
     
@@ -260,7 +201,7 @@ class UsersComponent extends Component
     {
         $requestObj = Request::init('users.privileges');
         
-        if($request['methode'] == 'post')
+        if($request['method'] == 'post')
         {
             $requestObj->doDelete($request);
             

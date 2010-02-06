@@ -79,11 +79,11 @@ class Controller
         {
             case 'POST' :
                 $request = $_POST;
-                $request['methode'] = 'post';
+                $request['method'] = 'post';
                 break;
             default :
                 $request = $_GET;
-                $request['methode'] = 'get';
+                $request['method'] = 'get';
                 break;
         }
         
@@ -95,10 +95,12 @@ class Controller
             
             if("/".$_GET['url'] == $e->getRedirect())
             {
-                $this->smarty->assign("FORMERROR", array("record" => $e->getRecord(), "fields" => $e->getInvalidFields()));
+                $record = $e->getRecord();
+                
+                $this->smarty->assign("FORMERROR", array("record" => $record[0], "fields" => $e->getInvalidFields()));
                 
                 Table::init($e->getTable())
-                    ->setErrorRecord($e->getRecord(), $e->getInvalidFields());
+                    ->setErrorRecord($record[0], $e->getInvalidFields());
             }
             else
             {
@@ -146,6 +148,7 @@ class Controller
             }
             catch(Exception $e) { }
         }
+        
         $request = $this->handleRequest($action, $component, $request);
         
         //post action

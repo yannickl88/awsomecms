@@ -6,52 +6,27 @@ class NewsComponent extends Component
     public function __construct()
     {
         parent::__construct('news');
-        
-        $this->fields = array(
-            "news_id" => "index",
-            "news_title" => "text",
-            "news_user" => "int",
-            "news_text" => "text",
-            "news_date" => "date"
-        );
-    }
-    
-    public function action_index($smarty, $smartyLoader, $request)
-    {
-        
     }
     
     public function action_add($smarty, $smartyLoader, $request)
     {
-        if($request['methode'] == 'post')
+        if($request['method'] == 'post')
         {
-            $request['news_date'] = $request['news_date_Year']."-".$request['news_date_Month']."-".$request['news_date_Day'];
-            
-            if($this->validate($request, "/".Config::get('newsadd', 'newsadd', 'admin'), "add"))
-            {
-                $requestObj = Request::init("news");
-                $id = $requestObj->doInsert($request);
-            }
+            Table::init("news.news")
+                ->setRecord((object) $request)
+                ->doInsert();
             
             $this->redirect("/".Config::get('newsadmin', 'newsadmin', 'admin'));
-        }
-        else
-        {
-            $smarty->assign("users", Request::init('users.users')->doSelect());
         }
     }
     
     public function action_edit($smarty, $smartyLoader, $request)
     {
-        if($request['methode'] == 'post')
+        if($request['method'] == 'post')
         {
-            $request['news_date'] = $request['news_date_Year']."-".$request['news_date_Month']."-".$request['news_date_Day'];
-            
-            if($this->validate($request, "/".Config::get('newsedit', 'newsedit', 'admin'), "edit"))
-            {
-                $requestObj = Request::init("news");
-                $requestObj->doUpdate($request);
-            }
+            Table::init("news.news")
+                ->setRecord((object) $request)
+                ->doUpdate();
             
             $this->redirect("/".Config::get('newsadmin', 'newsadmin', 'admin'));
         }
@@ -59,12 +34,8 @@ class NewsComponent extends Component
         {
             if($request['news_id'])
             {
-                $smarty->assign("users", Request::init('users.users')->doSelect());
-                
-                $requestObj = Request::init("news");
-                $record = $requestObj->doSelect($request);
-                
-                $smarty->assign("record", (object) array_merge((array) $record[0], Controller::getInstance()->lastRecord));
+                Table::init('news.news')
+                    ->setRecord((object) $request);
             }
             else
             {
@@ -75,10 +46,11 @@ class NewsComponent extends Component
     
     public function action_delete($smarty, $smartyLoader, $request)
     {
-        if($request['methode'] == 'post')
+        if($request['method'] == 'post')
         {
-            $requestObj = Request::init("news");
-            $requestObj->doDelete($request);
+            Table::init("news.news")
+                ->setRecord((object) $request)
+                ->doDelete();
             
             $this->redirect("/".Config::get('newsadmin', 'newsadmin', 'admin'));
         }
@@ -86,26 +58,14 @@ class NewsComponent extends Component
         {
             if($request['news_id'])
             {
-                $requestObj = Request::init("news");
-                $record = $requestObj->doSelect($request);
-                
-                $smarty->assign("record", $record);
+                Table::init('news.news')
+                    ->setRecord((object) $request);
             }
             else
             {
                 $this->redirect("/".Config::get('newsadd', 'newsadd', 'admin'));
             }
         }
-    }
-    
-    public function action_admin($smarty, $smartyLoader, $request)
-    {
-        $smarty->assign("records", Request::init("news")->doSelect());
-        
-        //urls
-        $smarty->assign("actionurl_add", Config::get('newsadd', 'newsadd', 'admin'));
-        $smarty->assign("actionurl_edit", Config::get('newsedit', 'newsedit', 'admin'));
-        $smarty->assign("actionurl_delete", Config::get('newsdelete', 'newsdelete', 'admin'));
     }
     
     public function registerMenuItems($menu)
