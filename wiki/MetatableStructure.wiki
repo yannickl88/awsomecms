@@ -61,4 +61,4 @@ Table::init("news.news")
     ->setRecord((object) $request)
     ->doInsert();
 }}}
-It is recommended to use the static `Table::init()` rather then creating the table with `new`. This is because `init()` will store the table and this retain it's record data.
+It is recommended to use the static `Table::init()` rather then creating the table with `new`. This is because `init()` will store the table and retains it's record data.
