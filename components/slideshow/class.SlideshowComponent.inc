@@ -26,7 +26,7 @@ class SlideshowComponent extends Component
     public function action_add_image($smarty, $smartyLoader, $request)
     {
         //we have special actions here, mostly because this is used as answer for post, ajax and internal use
-        if($request['methode'] == 'post')
+        if($request['method'] == 'post')
         {
             $requestObj = Request::init('slideshow.images');
             $this->setCurrentTable('s_images');
@@ -100,7 +100,7 @@ class SlideshowComponent extends Component
     
     public function action_edit_image($smarty, $smartyLoader, $request)
     {
-        if($request['methode'] == 'post')
+        if($request['method'] == 'post')
         {
             $requestObj = Request::init('slideshow.images');
             
@@ -187,7 +187,7 @@ class SlideshowComponent extends Component
     {
         $requestObj = Request::init('slideshow.images');
         
-        if($request['methode'] == 'post')
+        if($request['method'] == 'post')
         {
             $images = $requestObj->doSelect($request);
             
@@ -228,7 +228,7 @@ class SlideshowComponent extends Component
     
     public function action_add_group($smarty, $smartyLoader, $request)
     {
-        if($request['methode'] == 'post')
+        if($request['method'] == 'post')
         {
             $requestObj = Request::init('slideshow.groups');
             $this->setCurrentTable('s_groups');
@@ -268,7 +268,7 @@ class SlideshowComponent extends Component
     
     public function action_edit_group($smarty, $smartyLoader, $request)
     {
-        if($request['methode'] == 'post')
+        if($request['method'] == 'post')
         {
             $requestObj = Request::init('slideshow.groups');
             $this->setCurrentTable('s_groups');
@@ -336,7 +336,7 @@ class SlideshowComponent extends Component
     {
         $requestObj = Request::init('slideshow.groups');
         
-        if($request['methode'] == 'post')
+        if($request['method'] == 'post')
         {
             $record = $requestObj->doSelect($request);
             

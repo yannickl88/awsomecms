@@ -66,7 +66,7 @@ class CoreComponent extends Component
     */
     public function action_layout($smarty, $smartyLoader, $request)
     {
-        if($request['methode'] == 'post')
+        if($request['method'] == 'post')
         {
             $data = "";
             
@@ -98,7 +98,7 @@ class CoreComponent extends Component
     */
     public function action_update($smarty, $smartyLoader, $request)
     {
-        if($request['methode'] == 'post')
+        if($request['method'] == 'post')
         {
             $updateURL = Config::get("updateurl", "", "update");
             $versions = json_decode(file_get_contents("{$updateURL}/version.json"));
@@ -153,10 +153,11 @@ class CoreComponent extends Component
                         }
                     }
                     
-                    Request::init('core')->doUpdate(array(
+                    Table::init('core.components')->setRecord(array(
                         'component_version'=> trim($version),
                         'component_name' => $component->component_name
-                    ));
+                    ))
+                    ->doUpdate();
                 }
                 
                 //we want to run this no matter what, this will allow us to manually update the files and run this anyways
@@ -186,7 +187,7 @@ class CoreComponent extends Component
     */
     public function action_components($smarty, $smartyLoader, $request)
     {
-        if($request['methode'] == 'post')
+        if($request['method'] == 'post')
         {
             $components = Config::getComponenets();
             
@@ -194,10 +195,23 @@ class CoreComponent extends Component
             {
                 $key = "auth_".$component->component_name;
                 
-                if(isset($request[$key]) || (!isset($request[$key]) && $component->component_auth < 15))
+                if(!isset($request[$key]))
+                {
+                    $total = 15;
+                }
+                else
                 {
                     $total = 15 - array_sum($request[$key]);
-                    Request::init('core')->doUpdate(array("component_auth" => $total, "component_name" => $component->component_name));
+                }
+                
+                if($total != $component->component_auth)
+                {
+                    Table::init('core.components')
+                        ->setRecord((object) array(
+                            "component_auth" => $total, 
+                            "component_name" => $component->component_name
+                        ))
+                        ->doUpdate();
                 }
             }
             

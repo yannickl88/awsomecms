@@ -240,7 +240,7 @@ class Controller
     * @param $data          Array of data
     * @return               Mixed
     */
-    public static function makeRequest($component, $methode = "GET", $data = array())
+    public static function makeRequest($component, $method = "GET", $data = array())
     {
         $config = Config::getInstance();
         
@@ -248,7 +248,7 @@ class Controller
         {
             $request = new Request();
         
-            $request->methode = $methode;
+            $request->method = $method;
             $request->component = $component;
             $request->action = $request->translateAction();
             
@@ -328,7 +328,7 @@ class Controller
     * @desc call and action on an component
     * 
     * @param $component     Component name (string)
-    * @param $action        Action (Methode) name
+    * @param $action        Action (method) name
     * @param $parameters    Array with parameters
     * @return               Mixed
     */

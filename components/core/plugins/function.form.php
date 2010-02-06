@@ -28,13 +28,14 @@ function smarty_function_form($params, &$smarty)
     }
     
     //call the action for the form
-    $tableObject = Table::init($params['table']);
     $componentObject = Component::init($component);
     
-    $action = $params['action'];
+    $action = $params['form'];
+    $tableObject = null;
     
-    if(empty($params['component']))
+    if(!isset($params['component']) && isset($params['table']))
     {
+        $tableObject = Table::init($params['table']);
         $action = $tableObject->getAction($params['form']);
     }
     
@@ -48,11 +49,11 @@ function smarty_function_form($params, &$smarty)
         {
             case 'POST' :
                 $request = $_POST;
-                $request['methode'] = 'post';
+                $request['method'] = 'post';
                 break;
             default :
                 $request = $_GET;
-                $request['methode'] = 'get';
+                $request['method'] = 'get';
                 break;
         }
         

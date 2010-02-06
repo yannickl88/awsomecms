@@ -31,7 +31,7 @@ class ContactComponent extends Component
     */
     public function action_add($smarty, $smartyLoader, $request)
     {
-        if($request['methode'] == 'post')
+        if($request['method'] == 'post')
         {
             if($this->validate($request, "/".Config::get('contactadd', 'contactadd', 'admin'), "add"))
             {
@@ -51,7 +51,7 @@ class ContactComponent extends Component
     */
     public function action_edit($smarty, $smartyLoader, $request)
     {
-        if($request['methode'] == 'post')
+        if($request['method'] == 'post')
         {
             if($this->validate($request, "/".Config::get('contactedit', 'contactedit', 'admin'), "edit"))
             {
@@ -84,7 +84,7 @@ class ContactComponent extends Component
     */
     public function action_delete($smarty, $smartyLoader, $request)
     {
-        if($request['methode'] == 'post')
+        if($request['method'] == 'post')
         {
             $this->delete($request);
             
@@ -131,7 +131,7 @@ class ContactComponent extends Component
     */
     public function action_send($smarty, $smartyLoader, $request)
     {
-        if($request['methode'] == 'post' && isset($request['form_id']) && is_numeric($request['form_id']))
+        if($request['method'] == 'post' && isset($request['form_id']) && is_numeric($request['form_id']))
         {
             $form = $this->select(array("form_id" => $request['form_id']));
             $form = $form[0];

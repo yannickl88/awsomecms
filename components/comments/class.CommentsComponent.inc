@@ -50,7 +50,7 @@ class CommentsComponent extends Component
     */
     public function action_reply($smarty, $smartyLoader, $request)
     {
-        if($request['methode'] == 'post' && isset($request['comment_hook']))
+        if($request['method'] == 'post' && isset($request['comment_hook']))
         {
             $requestObj = Request::init('comments');
             $request['comment_time'] = date('c');

@@ -47,6 +47,30 @@ class PrivilegesTable extends Table
     protected function update($query, $data = null) {}
     protected function delete($query, $data = null) {}
     
+    /**
+     * @see core/Table#doDelete($data)
+     * 
+     * Because we need to know how many privileges there are we do not want to delete them. 
+     * Rather we set them as deleted so we can still cout them
+     */
+    public function doDelete($data = array())
+    {
+        $this->validate(Field::DELETE);
+        
+        $query = SQLQuery::doUpdate();
+        $query->table($this->name);
+        $query->update('privilege_name', '*deleted*');
+        
+        foreach($this->fields as $field)
+        {
+            //still calling the delete, we need the where stuff they add. 
+            //And since this is an Update delete items will be ignored.
+            $field->delete($query, $this->record[0]);
+        }
+        
+        return $query->exec();
+    }
+    
     public function getAction($mode)
     {
         if(!is_numeric($mode))
