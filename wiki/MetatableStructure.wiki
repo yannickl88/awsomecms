@@ -54,3 +54,11 @@ Finally it sets a couple of URLs needed to know where to redirect or link to whe
 
 When looking at the rest of the code, you can see that there are 4 CRUD methods. Each for the corresponding action. These function (can) add additional data to a query. In this case, everything that is fetched is ordered by news_date.
 The idea behind this is that the Table parent does the work and ask it's subclass if he has forgotten something. Rather then the subclass telling the parent he need something more. It's a subtle difference that makes things just a little easier.
+
+When you want to do something with the table, all you have to do is call the appropiate action.
+{{{
+Table::init("news.news")
+    ->setRecord((object) $request)
+    ->doInsert();
+}}}
+It is recommended to use the static `Table::init()` rather then creating the table with `new`. This is because `init()` will store the table and this retain it's record data.
