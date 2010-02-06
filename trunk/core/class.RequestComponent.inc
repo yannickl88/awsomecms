@@ -10,15 +10,15 @@ class Request
     private static $requests;
     
     public $component;
-    public $methode;
+    public $method;
     public $action;
     
     /**
-    * @desc translate the HTTP methode to SQL methode
+    * @desc translate the HTTP method to SQL method
     */
     public function translateAction()
     {
-        switch($this->methode)
+        switch($this->method)
         {
             case "POST" :
                 return "INSERT";
@@ -43,7 +43,7 @@ class RequestComponent
 {
     /**
     * @desc handel the request for data through HTTP, all data comes from the 
-    * URL. Eg: http://<host>/<component>, the action is based on the HTTP methode
+    * URL. Eg: http://<host>/<component>, the action is based on the HTTP method
     * 
     * @return               Echo of the data json encoded
     */
@@ -53,14 +53,14 @@ class RequestComponent
         
         //create the request
         $request = new Request();
-        $request->methode = $_SERVER['REQUEST_METHOD'];
+        $request->method = $_SERVER['REQUEST_METHOD'];
         
         $url = 'http://' . $_SERVER['SERVER_NAME'] . $_SERVER['REQUEST_URI'];
         $request->component = substr($url, strlen($config->get("proxy", 'www.google.com', 'proxy'))+1);
         $request->component = substr($request->component, 0, strrpos($request->component, "?"));
         $request->action = $request->translateAction();
         
-        switch($request->methode)
+        switch($request->method)
         {
             case "POST" :
                 $data = $_POST;
@@ -77,7 +77,7 @@ class RequestComponent
         $components = $config->getRequests();
         $needsAuth = true;
         
-        switch($request->methode)
+        switch($request->method)
         {
             case "GET":
                 $needsAuth = Config::hasFlag($components[$request->component]->component_auth, (int) $config->get('auth_select', 0, 'core'));

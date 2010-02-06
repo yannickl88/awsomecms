@@ -22,7 +22,7 @@ class GroupsComponent extends Component
     }
     public function action_add($smarty, $smartyLoader, $request)
     {
-        if($request['methode'] == 'post')
+        if($request['method'] == 'post')
         {
             $this->setCurrentTable("groups");
             if($this->validate($request, "/".Config::get('groupsadd', 'groupsadd', 'admin'), "add"))
@@ -56,7 +56,7 @@ class GroupsComponent extends Component
     
     public function action_edit($smarty, $smartyLoader, $request)
     {
-        if($request['methode'] == 'post')
+        if($request['method'] == 'post')
         {
             $this->setCurrentTable("groups");
             if($this->validate($request, "/".Config::get('groupsedit', 'groupsedit', 'admin'), "edit"))
@@ -105,7 +105,7 @@ class GroupsComponent extends Component
     {
         $groupRequest = Request::init('groups.groups');
         
-        if($request['methode'] == 'post')
+        if($request['method'] == 'post')
         {
             $groupRequest->doDelete($request);
             
@@ -183,7 +183,7 @@ class GroupsComponent extends Component
     
     public function hook_useradd($smarty, $request)
     {
-        if($request['methode'] == 'post')
+        if($request['method'] == 'post')
         {
             $requestObj = Request::init('groups.usersgroups');
             $requestObj->doInsert(array("group_id" => Config::get('defaultgroup', 2, 'groups'), "user_id" => $request['user_id']));
@@ -193,7 +193,7 @@ class GroupsComponent extends Component
     
     public function hook_userdel($smarty, $request)
     {
-        if($request['methode'] == 'post')
+        if($request['method'] == 'post')
         {
             $requestObj = Request::init('groups.usersgroups');
             $requestObj->doDelete(array("user_id" => $request['user_id']));

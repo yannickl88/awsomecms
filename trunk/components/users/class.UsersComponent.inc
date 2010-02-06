@@ -199,26 +199,18 @@ class UsersComponent extends Component
     
     public function action_privdelete($smarty, $smartyLoader, $request)
     {
-        $requestObj = Request::init('users.privileges');
+        $table = Table::init('users.privileges')
+            ->setRecord((object) $request);
         
         if($request['method'] == 'post')
         {
-            $requestObj->doDelete($request);
+            $table->doDelete($request);
             
             $this->redirect("/".Config::get('privadmin', 'privadmin', 'admin'));
         }
-        else
+        elseif(!$request['privilege_id'])
         {
-            if($request['privilege_name'])
-            {
-                $record = $requestObj->doSelect($request);
-                
-                $smarty->assign("record", $record);
-            }
-            else
-            {
-                $this->redirect("/".Config::get('privadmin', 'privadmin', 'admin'));
-            }
+            $this->redirect("/".Config::get('privadmin', 'privadmin', 'admin'));
         }
     }
     

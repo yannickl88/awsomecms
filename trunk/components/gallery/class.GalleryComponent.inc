@@ -20,7 +20,7 @@ class GalleryComponent extends Component
     
     public function action_add($smarty, $smartyLoader, $request)
     {
-        if($request['methode'] == 'post')
+        if($request['method'] == 'post')
         {
             if($this->validate($request, "/".Config::get('galleryadd', 'galleryadd', 'admin'), "add"))
             {
@@ -69,7 +69,7 @@ class GalleryComponent extends Component
     {
         $requestObj = Request::init("gallery");
         
-        if($request['methode'] == 'post')
+        if($request['method'] == 'post')
         {
             if($this->validate($request, "/".Config::get('galleryedit', 'galleryedit', 'admin'), "edit"))
             {
@@ -134,7 +134,7 @@ class GalleryComponent extends Component
     {
         $requestObj = Request::init("gallery");
         
-        if($request['methode'] == 'post')
+        if($request['method'] == 'post')
         {
             $record = $requestObj->doSelect($request);
             
