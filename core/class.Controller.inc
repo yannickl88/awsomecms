@@ -1,17 +1,44 @@
 <?php
+/**
+ * This file is part of the A.W.S.O.M.E.cms distribution.
+ * Detailed copyright and licensing information can be found
+ * in the doc/COPYRIGHT and doc/LICENSE files which should be
+ * included in the distribution.
+ *
+ * @package core
+ *
+ * @copyright (c) 2009-2010 Yannick de Lange
+ * @license http://www.gnu.org/licenses/gpl.txt
+ *
+ * @version $Revision$
+ */
 import('/core/class.Component.inc');
 import('/core/class.RequestComponent.inc');
 
-/** @desc Exception thrown if the given component is not installed or found */ 
+/** 
+ * Exception thrown if the given component is not installed or found
+ *  
+ * @author Yannick <yannick.l.88@gmail.com>
+ */ 
 class ComponentNotFoundException extends Exception {}
-/** @desc Exception thrown if the given action for an component could not be found */ 
+/** 
+ * Exception thrown if the given action for an component could not be found 
+ * 
+ * @author Yannick <yannick.l.88@gmail.com>
+ */ 
 class ActionNotFoundException extends Exception {}
-/** @desc Exception thrown if controller is waiting for the setData to be called */ 
+/** 
+ * Exception thrown if controller is waiting for the setData to be called 
+ * 
+ * @author Yannick <yannick.l.88@gmail.com>
+ */ 
 class NotInstanciatedException extends Exception {}
 
 /**
-* @desc Controller class that handels all the incomming data requests
-*/
+ * Controller class that handels all the incomming data requests
+ * 
+ * @author Yannick <yannick.l.88@gmail.com>
+ */
 class Controller
 {
     private static $instance;
@@ -26,10 +53,10 @@ class Controller
     public $lastRecord;
     
     /**
-    * @desc singelton
-    * 
-    * @return Controller
-    */
+     * singelton
+     *
+     * @return Controller
+     */
     public static function getInstance()
     {
         if (!self::$instance instanceof self) {
@@ -37,22 +64,20 @@ class Controller
         }
         return self::$instance;
     }
-    
     /**
-    * @desc constructor
-    */
+     * constructor
+     */
     private function __construct()
     {
         $this->components = array();
         $this->lastRecord = array();
     }
-    
     /**
-    * @desc set the data for this controller, this should be called before anything else
-    * 
-    * @param $smarty        Smarty object
-    * @param $smartyLoader  SmartyLoader object
-    */
+     * Set the data for this controller, this should be called before anything else
+     *
+     * @param Smarty $smarty
+     * @param SmartyPageLoader $smartyLoader
+     */
     public function setData($smarty, $smartyLoader)
     {
         $this->smarty = $smarty;
@@ -60,14 +85,13 @@ class Controller
         
         $this->instanciated = true;
     }
-    
     /**
-    * @desc serve a page to the user
-    * 
-    * @param $action        Action
-    * @param $component     Component name
-    * @return               HTML
-    */
+     * Serve a page to the user
+     *
+     * @param string $action        Action
+     * @param string $component     Component name
+     * @return string
+     */
     public function dispatch($action = "index", $component = "core")
     {
         if(!$this->instanciated)
@@ -172,16 +196,15 @@ class Controller
         //redirect if set
         $this->redirect();
     }
-    
     /**
-    * @desc handel a request for a component
-    * 
-    * @param $action        Action
-    * @param $component     Component name
-    * @param $request       Array of parameters
-    * @param $functionPrefix String of the prefix for the function to be called
-    * @return               HTML
-    */
+     * Handel a request for a component
+     *
+     * @param string $action
+     * @param string $component
+     * @param array $request
+     * @param string $functionPrefix    String of the prefix for the function to be called
+     * @return string
+     */
     private function handleRequest($action, $component, &$request, $functionPrefix = "action")
     {
         $actionHandler = $functionPrefix."_".$action;
@@ -231,15 +254,14 @@ class Controller
             exit;
         }
     }
-    
     /**
-    * @desc make a reqest for data to an component
-    * 
-    * @param $action        Action
-    * @param $component     Component name
-    * @param $data          Array of data
-    * @return               Mixed
-    */
+     * Make a reqest for data to an component
+     *
+     * @param string $action
+     * @param string $component
+     * @param array $data
+     * @return string
+     */
     public static function makeRequest($component, $method = "GET", $data = array())
     {
         $config = Config::getInstance();
@@ -270,13 +292,12 @@ class Controller
         
         return $output;
     }
-    
     /**
-    * @desc Get the user auth data for the session
-    * 
-    * @param $user_id       Id from the user
-    * @return               Array with data
-    */
+     * Get the user auth data for the session
+     *
+     * @param int $user_id
+     * @return array
+     */
     public function auth($user_id)
     {
         if(!$this->instanciated)
@@ -296,14 +317,13 @@ class Controller
             return false;
         }
     }
-    
     /**
-    * @desc Check if the user is a valid one
-    * 
-    * @param $user_name     User name
-    * @param $user_pass     User password
-    * @return               Boolean
-    */
+     * Check if the user is a valid one
+     *
+     * @param string $user_name
+     * @param string $user_pass
+     * @return boolean
+     */
     public function auth_login($user_name, $user_pass)
     {
         if(!$this->instanciated)
@@ -323,15 +343,14 @@ class Controller
             return false;
         }
     }
-    
     /**
-    * @desc call and action on an component
-    * 
-    * @param $component     Component name (string)
-    * @param $action        Action (method) name
-    * @param $parameters    Array with parameters
-    * @return               Mixed
-    */
+     * Call and action on an component
+     *
+     * @param string $component
+     * @param string $action
+     * @param array $parameters
+     * @return mixed
+     */
     private function callComponentAction($component, $actionHandler, $parameters)
     {
         $config = Config::getInstance();
@@ -356,13 +375,12 @@ class Controller
             throw new ComponentNotFoundException();
         }
     }
-    
     /**
-    * @desc Do an redirect, based on what is set.
-    * 
-    * @param $url           Url to redirect to
-    * @param $data          Array with data to be send
-    */
+     * Do an redirect, based on what is set.
+     *
+     * @param string $url
+     * @param array $data
+     */
     public function redirect()
     {
         if($this->redirect)
@@ -379,12 +397,20 @@ class Controller
             exit;
         }
     }
-    
+    /**
+     * Set the redirect, this can be used to prospone the redirect till everything is done executing
+     * 
+     * @param string $url
+     */
     public function setRedirect($url)
     {
         $this->redirect = $url;
     }
-    
+    /**
+     * Get the smarty object
+     * 
+     * @return Smarty
+     */
     public function getSmarty()
     {
         return $this->smarty;

@@ -1,9 +1,24 @@
 <?php
+/**
+ * This file is part of the A.W.S.O.M.E.cms distribution.
+ * Detailed copyright and licensing information can be found
+ * in the doc/COPYRIGHT and doc/LICENSE files which should be
+ * included in the distribution.
+ *
+ * @package core
+ *
+ * @copyright (c) 2009-2010 Yannick de Lange
+ * @license http://www.gnu.org/licenses/gpl.txt
+ *
+ * @version $Revision$
+ */
 import('/core/class.InvalidFormException.inc');
 
 /**
-* @desc superclass for all the components
-*/
+ * Superclass for all the components
+ * 
+ * @author Yannick <yannick.l.88@gmail.com>
+ */
 class Component
 {
     private static $components;
@@ -15,10 +30,10 @@ class Component
     protected $currentTable;
     
     /**
-    * @desc constructor
-    * 
-    * @param $component     Component name
-    */
+     * constructor
+     *
+     * @param string $component
+     */
     public function __construct($component)
     {
         $this->component = $component;
@@ -30,13 +45,12 @@ class Component
             $this->fields = array();
         }
     }
-    
     /**
-    * Initialisation of the component corresponding with the give name
-    * 
-    * @param $component     String
-    * @return               Component object or false when it cannot be found
-    */
+     * Initialisation of the component corresponding with the give name
+     *
+     * @param string $component
+     * @return Component
+     */
     public static function init($component)
     {
         if(isset(Component::$components[$component]))
@@ -74,75 +88,65 @@ class Component
             }
         }
     }
-    
     /**
-    * Set the default request that is linked to the component, default is the same as the component name
-    * 
-    * @param $request       String
-    */
+     * Set the default request that is linked to the component, default is the same as the component name
+     *
+     * @param string $request
+     */
     protected function setDefaultRequest($request)
     {
         $this->request = $request;
     }
-    
     /**
-    * @desc Do an select for the component
-    * 
-    * @deprecated           Please use the requests
-    * @param $data          Array with data to be send
-    * @return               Mixed
-    */
+     * @deprecated Please use the tables
+     *
+     * @param array $data
+     * @return Mixed
+     */
     public function select($data = array())
     {
-        Debugger::getInstance()->warning('Depricated ::select(), use the request object');
+        Debugger::getInstance()->warning('Depricated ::select(), use the table object');
         return Request::init($this->request)->doSelect($data);
     }
-    
     /**
-    * @desc Do an delete for the component
-    * 
-    * @deprecated           Please use the requests
-    * @param $data          Array with data to be send
-    * @return               Mixed
-    */
+     * @deprecated Please use the tables
+     *
+     * @param array $data
+     * @return Mixed
+     */
     public function delete($data = array())
     {
-        Debugger::getInstance()->warning('Depricated ::delete(), use the request object');
+        Debugger::getInstance()->warning('Depricated ::delete(), use the table object');
         return Request::init($this->request)->doDelete($data);
     }
-    
     /**
-    * @desc Do an update for the component
-    * 
-    * @deprecated           Please use the requests
-    * @param $data          Array with data to be send
-    * @return               Mixed
-    */
+     * @deprecated Please use the tables
+     *
+     * @param array $data
+     * @return Mixed
+     */
     public function update($data = array())
     {
-        Debugger::getInstance()->warning('Depricated ::update(), use the request object');
+        Debugger::getInstance()->warning('Depricated ::update(), use the table object');
         return Request::init($this->request)->doUpdate($data);
     }
-    
     /**
-    * @desc Do an insert for the component
-    * 
-    * @deprecated           Please use the requests
-    * @param $data          Array with data to be send
-    * @return               Mixed
-    */
+     * @deprecated Please use the tables
+     *
+     * @param array $data
+     * @return Mixed
+     */
     public function insert($data = array())
     {
-        Debugger::getInstance()->warning('Depricated ::insert(), use the request object');
+        Debugger::getInstance()->warning('Depricated ::insert(), use the table object');
         return Request::init($this->request)->doInsert($data);
     }
-    
     /**
-    * @desc Do an redirect
-    * 
-    * @param $url           Url to redirect to
-    * @param $data          Array with data to be send
-    */
+     * Do an redirect
+     *
+     * @param string $url
+     * @param array $data
+     */
     protected function redirect($url, $data = array())
     {
         $query = '';
@@ -166,21 +170,27 @@ class Component
         Controller::getInstance()->setRedirect($url);
         Controller::getInstance()->redirect();
     }
-    
     /**
-    * @desc Do an ajax return (just data, no HTML) in json format
-    * 
-    * @param $data          Mixed data to be outputted
-    */
+     * Do an ajax return (just data, no HTML) in json format
+     *
+     * @param mixed $data
+     */
     protected function ajax($data = true)
     {
         //header('Content-type: application/json');
         echo json_encode($data);
         exit;
     }
-    
+    /**
+     * Get the fields for this component
+     * @deprecated Use tables
+     * 
+     * @return array
+     */
     protected function getFields()
     {
+        Debugger::getInstance()->warning('Depricated ::getFields(), use the table to specifie the table layout');
+        
         if($this->multiTable)
         {
             if(isset($this->currentTable) && array_key_exists($this->currentTable, $this->fields))
@@ -198,12 +208,26 @@ class Component
             return $this->fields;
         }
     }
-    
+    /**
+     * Set the current table to be validated against
+     * @deprecated Use tables
+     * 
+     * @param string $table
+     */
     protected function setCurrentTable($table)
     {
+        Debugger::getInstance()->warning('Depricated ::setCurrentTable(), use the table to specifie the table layout');
+        
         $this->currentTable = $table;
     }
-    
+    /**
+     * Register menu items for this component
+     * 
+     * @param Menu $menu
+     */
     public function registerMenuItems($menu) { }
+    /**
+     * Execute a task for the cron. This called in the interval secified in the config files.
+     */
     public function execCron() { }
 }

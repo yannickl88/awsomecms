@@ -1,6 +1,24 @@
 <?php
+/**
+ * This file is part of the A.W.S.O.M.E.cms distribution.
+ * Detailed copyright and licensing information can be found
+ * in the doc/COPYRIGHT and doc/LICENSE files which should be
+ * included in the distribution.
+ *
+ * @package core
+ *
+ * @copyright (c) 2009-2010 Yannick de Lange
+ * @license http://www.gnu.org/licenses/gpl.txt
+ *
+ * @version $Revision$
+ */
 import('/core/class.InvalidFormException.inc');
 
+/**
+ * Abstract class that handels all the information about a table
+ * 
+ * @author Yannick <yannick.l.88@gmail.com>
+ */
 abstract class Table
 {
     private static $tables;
@@ -70,7 +88,6 @@ abstract class Table
             }
         }
     }
-    
     /**
     * Set the urls the Table needs to have for redirection on errors
     * 
@@ -89,7 +106,6 @@ abstract class Table
         
         return $this;
     }
-    
     /**
     * Constructor for Table
     * 
@@ -105,7 +121,6 @@ abstract class Table
         
         return $this;
     }
-    
     /**
     * Assign the table to a component with an action. 
     * 
@@ -120,7 +135,6 @@ abstract class Table
         
         return $this;
     }
-    
     /**
     * Add Field to the table
     * 
@@ -148,7 +162,6 @@ abstract class Table
         
         return $this;
     }
-    
     /**
     * This is designed to give fast acces to the toHTML functions
     * 
@@ -174,7 +187,12 @@ abstract class Table
                 break;
         }
     }
-    
+    /**
+     * Get a field based on it's name, NULL when there was no field found
+     * 
+     * @param string $name
+     * @return Field
+     */
     public function getField($name)
     {
         foreach($this->fields as $field)
@@ -187,12 +205,15 @@ abstract class Table
         
         return null;
     }
-    
+    /**
+     * Get all the fields in this table
+     * 
+     * @return array
+     */
     public function getFields()
     {
         return $this->fields;
     }
-    
     /**
      * Get the title of this tabel record. This is a pre-parsed string with the values from the record
      * 
@@ -202,7 +223,6 @@ abstract class Table
     {
         return $this->title;
     }
-    
     /**
      * Set the title of this tabel record. This is a string with the field names between [ and ]
      * 
@@ -215,7 +235,6 @@ abstract class Table
         
         return $this;
     }
-    
     /**
     * Set the current record of the table
     * 
@@ -243,7 +262,6 @@ abstract class Table
         
         return $this;
     }
-    
     /**
     * Set the current error record of the table, this has priority over the current one
     * 
@@ -271,7 +289,6 @@ abstract class Table
         
         return $this;
     }
-    
     /**
     * Get the HTML representation of this field.
     * NOTE:Do not overwrite this function. Use the toHTML_add/edit/view instaid if you want to change the way the HTML looks
@@ -297,7 +314,11 @@ abstract class Table
                 break;
         }
     }
-    
+    /**
+     * Convert this table to a string
+     * 
+     * @return string
+     */
     public function __toString()
     {
         try
@@ -309,12 +330,20 @@ abstract class Table
             return nl2br($e->__toString());
         }
     }
-    
+    /**
+     * Sort the fields by their sort values
+     */
     protected function sortFields()
     {
         usort($this->fields, array($this, "handleSort"));
     }
-    
+    /**
+     * Sorthing algorithem
+     * 
+     * @param Field $a
+     * @param Field $b
+     * @return int
+     */
     protected function handleSort($a, $b)
     {
         if ($a->sort == $b->sort)
@@ -323,7 +352,11 @@ abstract class Table
         }
         return ($a->sort < $b->sort) ? -1 : 1;
     }
-    
+    /**
+     * HTML representation for add Form
+     * 
+     * @return string
+     */
     protected function toHTML_add()
     {
         $html = $this->getErrors();
@@ -348,6 +381,11 @@ abstract class Table
         
         return $html;
     }
+    /**
+     * HTML representation for edit Form
+     * 
+     * @return string
+     */
     protected function toHTML_edit()
     {
         $data = $this->doSelect($this->record[0])->getRow();
@@ -382,6 +420,11 @@ abstract class Table
         
         return $html;
     }
+    /**
+     * HTML representation for view Form
+     * 
+     * @return string
+     */
     protected function toHTML_view()
     {
         $data = $this->doSelect($this->record[0])->getRows();
@@ -477,6 +520,11 @@ abstract class Table
         
         return $html;
     }
+    /**
+     * HTML representation for delete Form
+     * 
+     * @return string
+     */
     protected function toHTML_delete()
     {
         $data = $this->doSelect($this->record[0])->getRows();
@@ -525,7 +573,13 @@ abstract class Table
         
         return $html;
     }
-    
+    /**
+     * A way to parse the title string.
+     * 
+     * @param string $title
+     * @param array $data
+     * @return string
+     */
     protected function parseTitle($title, $data)
     {
         $matches = array();
@@ -538,8 +592,6 @@ abstract class Table
         
         return $title;
     }
-
-    
     /**
     * Preform a select on the table
     * 
@@ -643,6 +695,11 @@ abstract class Table
         
         return $query->exec();
     }
+    /**
+     * Get the JavaScript for this table
+     * 
+     * @return string
+     */
     protected function getJavascript()
     {
         $html = "<script type='text/javascript'>\n";
@@ -651,6 +708,11 @@ abstract class Table
         
         return $html;
     }
+    /**
+     * Get the HTML for if there were any errors
+     * 
+     * @return string
+     */
     protected function getErrors()
     {
         if(isset($this->errorFields))
@@ -694,7 +756,6 @@ abstract class Table
         
         return $html;
     }
-    
     /**
      * Mapping of the action to the actuly hidden field content.
      * When in need of custom mapping, like if you have two tables for one component, override this method
@@ -723,7 +784,12 @@ abstract class Table
                 break;
         }
     }
-    
+    /**
+     * String to an action that the table can understand
+     * 
+     * @param string $string
+     * @return int
+     */
     protected function string2action($string)
     {
         switch($string)
@@ -740,12 +806,39 @@ abstract class Table
                 break;
         }
     }
-    
+    /**
+     * Aditional Select data
+     * 
+     * @param SQLQuery $query
+     * @param Object $data
+     */
     abstract protected function select($query, $data = null);
+    /**
+     * Aditional Insert data
+     * 
+     * @param SQLQuery $query
+     * @param Object $data
+     */
     abstract protected function insert($query, $data = null);
+    /**
+     * Aditional Update data
+     * 
+     * @param SQLQuery $query
+     * @param Object $data
+     */
     abstract protected function update($query, $data = null);
+    /**
+     * Aditional Delete data
+     * 
+     * @param SQLQuery $query
+     * @param Object $data
+     */
     abstract protected function delete($query, $data = null);
-    
+    /**
+     * Validate the data with the fields in this table. If not valid a InvalidFormException is thrown
+     * 
+     * @param int $mode
+     */
     public function validate($mode = Field::ADD)
     {
         $redirect;

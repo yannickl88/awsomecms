@@ -1,7 +1,23 @@
 <?php
 /**
-* @desc wrapper around the condig file
-*/
+ * This file is part of the A.W.S.O.M.E.cms distribution.
+ * Detailed copyright and licensing information can be found
+ * in the doc/COPYRIGHT and doc/LICENSE files which should be
+ * included in the distribution.
+ *
+ * @package core
+ *
+ * @copyright (c) 2009-2010 Yannick de Lange
+ * @license http://www.gnu.org/licenses/gpl.txt
+ *
+ * @version $Revision$
+ */
+
+/**
+ * Configuration class, this is used to retrive all the data from seperate config files
+ *
+ * @author Yannick <yannick.l.88@gmail.com>
+ */
 class Config
 {
     private static $instance;
@@ -12,9 +28,10 @@ class Config
     private $requests;
     
     /**
-    * @desc singelton
-    * @return Config
-    */
+     * singelton
+     *
+     * @return Config
+     */
     public static function getInstance()
     {
         if (!self::$instance instanceof self) {
@@ -22,30 +39,28 @@ class Config
         }
         return self::$instance;
     }
-    
     /**
-    * @desc get something from the config
-    * 
-    * @param $key           String with the config key
-    * @param $default       Mixed, default value
-    * @param $section       String with the section name (optional)
-    */
+     * Get something from the config
+     *
+     * @param string $key
+     * @param mixed $default
+     * @param string $section
+     * @return mixed
+     */
     public static function get($key, $default, $section = false)
     {
         return self::getInstance()->getItem($key, $default, $section);
     }
-    
     /**
-    * @desc constructor
-    */
+     * constructor
+     */
     private function __construct()
     {
         $this->fillData();
     }
-    
     /**
-    * @desc populate the ini array
-    */
+     * Populate the config from the ini files
+     */
     private function fillData()
     {
         global $websiteroot;
@@ -101,14 +116,14 @@ class Config
         
         $this->data['websiteroot'] = $websiteroot;
     }
-    
     /**
-    * @desc get something from the config
-    * 
-    * @param $key           String with the config key
-    * @param $default       Mixed, default value
-    * @param $section       String with the section name (optional)
-    */
+     * Get something from the config
+     *
+     * @param string $key
+     * @param mixed $default
+     * @param string $section
+     * @return mixed
+     */
     public function getItem($key, $default, $section = false)
     {
         if($section === false)
@@ -134,23 +149,21 @@ class Config
             }
         }
     }
-    
     /**
-    * @desc reload the config values, this should be called when the config is changed during the execution of a page
-    * 
-    */
+     * reload the config values, this should be called when the config is changed during the execution of a page
+     */
     public function reload()
     {
         $this->fillData();
     }
-    
     /**
-    * @desc set something for the current request
-    * 
-    * @param $key           String with the config key
-    * @param $default       Mixed, default value
-    * @param $section       String with the section name (optional)
-    */
+     * Set something for the current request.
+     * Note that the value is not saved in a config.
+     *
+     * @param string $key
+     * @param mixed $default
+     * @param string $section
+     */
     public function set($key, $value, $section = false)
     {
         if($section === false)
@@ -162,7 +175,10 @@ class Config
             $this->data[$section][$key] = $value;
         }
     }
-    
+    /**
+     * Reload the configs that were found in the database. 
+     * This should be called when something changes in the components table.
+     */
     public function reloadComponenets()
     {
         //clear the cache, seeing as we changed the components
@@ -181,11 +197,10 @@ class Config
         $this->componenets = false;
     }
     /**
-    * @desc get an list of all installed components
-    * 
-    * @return               Array with components 
-    *                        Eg: array(componentname => component_name, component_requests, component_path, component_auth, component_patchlevel)
-    */
+     * Get an list of all installed components
+     *
+     * @return Array
+     */
     public function getComponenets()
     {
         if(!$this->componenets)
@@ -235,28 +250,26 @@ class Config
         
         return $this->componenets;
     }
-    
     /**
-    * Check whenever a component is installed
-    * 
-    * @param $component     String with the component name
-    * @return               Boolean
-    */
+     * Check whenever a component is installed
+     *
+     * @param string $component
+     * @return boolean
+     */
     public function isComponentInstalled($component)
     {
         $components = $this->getComponenets();
         
         return isset($component[$component]);
     }
-    
     /**
-    * @desc get the hook for the action, if there is one
-    * 
-    * @param $component     String with the component name
-    * @param $action        String with the action (without prefix)
-    * @param $prepost       String with type pre|post
-    * @return               callback to the function or False when there is none
-    */
+     * Get the hook for the action, if there is one
+     *
+     * @param string $component
+     * @param string $action        (without prefix)
+     * @param string $prepost
+     * @return callback to the function or False when there is none
+     */
     public function getHook($component, $action, $prepost)
     {
         if(!$this->hooks)
@@ -308,11 +321,11 @@ class Config
         }
     }
     /**
-    * @desc get an list of all installed requests
-    * 
-    * @return               Array with requests 
-    *                        Eg: array(request => component_name, component_requests, component_path, component_auth, component_patchlevel)
-    */
+     * Get an list of all installed requests
+     * @deprecated Do not use request, use tables :)
+     *
+     * @return Array
+     */
     public function getRequests()
     {
         if(!$this->componenets)
@@ -322,7 +335,13 @@ class Config
         
         return $this->requests;
     }
-    
+    /**
+     * Check if a value contains another value. This is done using bitwise comparison
+     * 
+     * @param int $int
+     * @param int $flag
+     * @return boolean
+     */
     public static function hasFlag($int, $flag)
     {
         return (($int & $flag) == $flag);

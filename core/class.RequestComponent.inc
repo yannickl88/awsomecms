@@ -1,9 +1,25 @@
 <?php
-/** @desc Exception thrown when you cannot make an call to that action */ 
+/**
+ * This file is part of the A.W.S.O.M.E.cms distribution.
+ * Detailed copyright and licensing information can be found
+ * in the doc/COPYRIGHT and doc/LICENSE files which should be
+ * included in the distribution.
+ *
+ * @package core
+ *
+ * @copyright (c) 2009-2010 Yannick de Lange
+ * @license http://www.gnu.org/licenses/gpl.txt
+ *
+ * @version $Revision$
+ */
+
+/** 
+ * Exception thrown when you cannot make an call to that action 
+ */ 
 class ForbiddenException extends Exception {}
 
 /**
-* @desc request object, datawrapper for an request call
+* request object, datawrapper for an request call
 */
 class Request
 {
@@ -14,8 +30,8 @@ class Request
     public $action;
     
     /**
-    * @desc translate the HTTP method to SQL method
-    */
+     * translate the HTTP method to SQL method
+     */
     public function translateAction()
     {
         switch($this->method)
@@ -37,15 +53,18 @@ class Request
 }
 
 /**
-* @desc superclass for all component request classes
-*/
+ * superclass for all component request classes
+ * 
+ * @author Yannick <yannick.l.88@gmail.com>
+ * @deprecated Please use the Table instaid of this
+ */
 class RequestComponent
 {
     /**
-    * @desc handel the request for data through HTTP, all data comes from the 
+    * handel the request for data through HTTP, all data comes from the 
     * URL. Eg: http://<host>/<component>, the action is based on the HTTP method
     * 
-    * @return               Echo of the data json encoded
+    * @return string
     */
     public static function handelRequest()
     {
@@ -150,79 +169,93 @@ class RequestComponent
         
         exit;
     }
-    
     /**
-    * @desc Do an redirect
-    * 
-    * @param $url           Url to redirect to
-    * @param $data          Array with data to be send
-    */
+     * Do an redirect
+     *
+     * @param string $url           Url to redirect to
+     * @param array $data           Array with data to be send
+     */
     protected function redirect($url)
     {
         header("Location: {$url}");
         exit;
     }
-    
     /**
-    * @desc Do an select call
-    * 
-    * @param $request       Request
-    * @param $data          Array with data
-    * @return               Mixed
-    */
+     * Do an select call
+     *
+     * @param array $data          Array with data
+     * @return Mixed
+     */
     protected function do_SELECT($data = array())
     {
         throw new ForbiddenException();
     }
-    
     /**
-    * @desc Do an delete call
-    * 
-    * @param $request       Request
-    * @param $data          Array with data
-    * @return               Mixed
-    */
+     * Do an delete call
+     *
+     * @param array $data          Array with data
+     * @return Mixed
+     */
     protected function do_DELETE($data = array())
     {
         throw new ForbiddenException();
     }
-    
     /**
-    * @desc Do an update call
-    * 
-    * @param $request       Request
-    * @param $data          Array with data
-    * @return               Mixed
-    */
+     * Do an update call
+     *
+     * @param array $data          Array with data
+     * @return Mixed
+     */
     protected function do_UPDATE($data = array())
     {
         throw new ForbiddenException();
     }
-    
     /**
-    * @desc Do an insert call
-    * 
-    * @param $request       Request
-    * @param $data          Array with data
-    * @return               Mixed
-    */
+     * Do an insert call
+     *
+     * @param array $data          Array with data
+     * @return Mixed
+     */
     protected function do_INSERT($data = array())
     {
         throw new ForbiddenException();
     }
-    
+    /**
+     * Preform an Select
+     * 
+     * @param array $data          Array with data
+     * @return Mixed
+     */
     public function doSelect($data = array())
     {
         return $this->do_SELECT($data);
     }
+    /**
+     * Preform an Update
+     * 
+     * @param array $data          Array with data
+     * @return Mixed
+     */
     public function doUpdate($data = array())
     {
         return $this->do_UPDATE($data);
     }
+    /**
+     * Preform an Insert
+     * 
+     * @param array $data          Array with data
+     * @return Mixed
+     */
     public function doInsert($data = array())
     {
         return $this->do_INSERT($data);
     }
+    /**
+     * Preform an Delete
+     * 
+     * @param array $data          Array with data
+     * @return Mixed
+     */
     public function doDelete($data = array())
     {
         return $this->do_DELETE($data);

@@ -1,31 +1,53 @@
 <?php
-/** @desc Exception thrown when a page could not be found */ 
+/**
+ * This file is part of the A.W.S.O.M.E.cms distribution.
+ * Detailed copyright and licensing information can be found
+ * in the doc/COPYRIGHT and doc/LICENSE files which should be
+ * included in the distribution.
+ *
+ * @package core
+ *
+ * @copyright (c) 2009-2010 Yannick de Lange
+ * @license http://www.gnu.org/licenses/gpl.txt
+ *
+ * @version $Revision$
+ */
+
+/** 
+ * Exception thrown when a page could not be found 
+ * 
+ * @author Yannick <yannick.l.88@gmail.com>
+ */ 
 class PageNotFoundExeption extends Exception {}
+/**
+ * Exception to be triggered when the framework is not properly installed (No components)
+ * 
+ * @author Yannick <yannick.l.88@gmail.com>
+ */
 class NotInstalledException extends Exception {}
 
 /**
-* @desc Handel all the database loading and file checking. Also do some util 
-* actions with smarty, like loading all the plugins
-*/
+ * Handel all the database loading and file checking. Also do some util
+ * actions with smarty, like loading all the plugins
+ */
 class SmartyPageLoader
 {
     private $timestamps;
     
     /**
-    * @desc constructor
-    */
+     * constructor
+     */
     public function __construct()
     {
         $this->timestamps = array();
     }
-    
     /**
-    * @desc Get the HTML of an page
-    * 
-    * @param $url           Url of the page, Eg: "/about/me"
-    * @param $smarty_obj    Smarty object
-    * @return               HTML
-    */
+     * Get the HTML of an page
+     *
+     * @param string $url           Url of the page, Eg: "/about/me"
+     * @param Smarty $smarty_obj    Smarty object
+     * @return string
+     */
     public function getPage($url, &$smarty_obj)
     {
         $forceDefaultLayout = false;
@@ -111,15 +133,14 @@ class SmartyPageLoader
             return $page;
         }
     }
-    
     /**
-    * @desc load the template from the database
-    * 
-    * @param $tpl_name      Template name 
-    * @param $tpl_source    Template content, should be set
-    * @param $smarty_obj    Smarty object
-    * @return               Boolean
-    */
+     * load the template from the database
+     *
+     * @param string $tpl_name      Template name
+     * @param string $tpl_source    Template content, should be set
+     * @param Smarty $smarty_obj    Smarty object
+     * @return boolean
+     */
     public function getTemplate($tpl_name, &$tpl_source, &$smarty_obj)
     {
         $pageArray = explode('/', $tpl_name);
@@ -153,15 +174,14 @@ class SmartyPageLoader
             return false;
         }
     }
-    
     /**
-    * @desc check the timestamp for an template
-    * 
-    * @param $tpl_name      Template name 
-    * @param $tpl_timestamp Template timestamp, should be set
-    * @param $smarty_obj    Smarty object
-    * @return               Boolean
-    */
+     * check the timestamp for an template
+     *
+     * @param string $tpl_name      Template name
+     * @param string $tpl_timestamp Template timestamp, should be set
+     * @param Smarty $smarty_obj    Smarty object
+     * @return Boolean
+     */
     public function getTimestamp($tpl_name, &$tpl_timestamp, &$smarty_obj)
     {
         //check cache
@@ -203,37 +223,34 @@ class SmartyPageLoader
         }
         
     }
-
     /**
-    * @desc check if the template is secure
-    * 
-    * @param $tpl_name      Template name 
-    * @param $smarty_obj    Smarty object
-    * @return               Boolean
-    */
+     * check if the template is secure
+     *
+     * @param $tpl_name      Template name
+     * @param $smarty_obj    Smarty object
+     * @return               Boolean
+     */
     public function getSecure($tpl_name, &$smarty_obj)
     {
         return true;
     }
-
     /**
-    * @desc check if the template is trusted
-    * 
-    * @param $tpl_name      Template name 
-    * @param $smarty_obj    Smarty object
-    * @return               Boolean
-    */
+     * check if the template is trusted
+     *
+     * @param string $tpl_name      Template name
+     * @param Smarty $smarty_obj    Smarty object
+     * @return Boolean
+     */
     public function getTrusted($tpl_name, &$smarty_obj)
     {
-        
+        return true;
     }
-    
     /**
-    * @desc register all the smarty extentions from the components, 
-    * see http://smarty.net/manual/en/plugins.php
-    * 
-    * @param $smarty_obj    Smarty object
-    */
+     * register all the smarty extentions from the components,
+     * see http://smarty.net/manual/en/plugins.php
+     *
+     * @param Smarty $smarty_obj    Smarty object
+     */
     public function registerModulePlugins(&$smarty_obj)
     {
         try
