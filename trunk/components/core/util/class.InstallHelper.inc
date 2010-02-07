@@ -1,6 +1,32 @@
 <?php
+/**
+ * This file is part of the A.W.S.O.M.E.cms distribution.
+ * Detailed copyright and licensing information can be found
+ * in the doc/COPYRIGHT and doc/LICENSE files which should be
+ * included in the distribution.
+ *
+ * @package components.core.util
+ *
+ * @copyright (c) 2009-2010 Yannick de Lange
+ * @license http://www.gnu.org/licenses/gpl.txt
+ *
+ * @version $Revision$
+ */
+
+/**
+ * Helper class for installing and managing components
+ * 
+ * @author Yannick <yannick.l.88@gmail.com>
+ */
 class InstallHelper
 {
+    /**
+     * Download and install a component. Returns True on success and False on error
+     * 
+     * @param string $source
+     * @param string $root
+     * @return boolean
+     */
     public function downloadAndInstall($source, $root = "")
     {
         if($root == "")
@@ -35,7 +61,11 @@ class InstallHelper
             return false;
         }
     }
-    
+    /**
+     * Run the patches for a given component
+     * 
+     * @param string $component
+     */
     public function runPatches($component)
     {
         $components = Config::getInstance()->getComponenets();
@@ -51,10 +81,16 @@ class InstallHelper
             $patch = file_get_contents($component->component_path."/db/patch-{$current}.sql");
             SQL::getInstance()->multi_query($patch);
             
+            //TODO: change to table object
             Request::init('core')->doUpdate(array("component_name" => $component->component_name, "component_patchlevel" => $highest));
         }
     }
-    
+    /**
+     * Get the highest patch number for a given folder
+     * 
+     * @param string $installDir
+     * @return int
+     */
     public function getHighestPatchLevel($installDir)
     {
         $files = scandir($installDir);
@@ -75,7 +111,12 @@ class InstallHelper
         
         return $patchlevel;
     }
-    
+    /**
+     * Check if an array has numeric keys
+     * 
+     * @param array $array
+     * @return boolean
+     */
     public function is_numeric_keys($array)
     {
         foreach($array as $key => $value)
@@ -88,7 +129,12 @@ class InstallHelper
         
         return true;
     }
-    
+    /**
+     * convert a array to ini format
+     * 
+     * @param array $array
+     * @return string
+     */
     public function arrayToIni($array)
     {
         $body = '';
@@ -151,7 +197,13 @@ class InstallHelper
         }
         return $body;
     }
-    
+    /**
+     * Recusively copy a directory
+     * 
+     * @param string $source
+     * @param string $dest
+     * @param boolean $override
+     */
     public function rcopy($source, $dest, $override = true)
     {
         //is the source a file?
@@ -181,7 +233,12 @@ class InstallHelper
             }
         }
     }
-    
+    /**
+     * Uninstall a component
+     * TODO: Implement
+     * 
+     * @param string $component
+     */
     public function uninstall($component)
     {
         

@@ -17,8 +17,16 @@ importField("IntField");
 importField("PasswordField");
 importField("users.PrivlilegesField");
 
+/**
+ * User table, this handels all interaction with the user table in the database
+ * 
+ * @author Yannick <yannick.l.88@gmail.com>
+ */
 class UsersTable extends Table
 {
+    /**
+     * Constructor
+     */
     public function __construct()
     {
         parent::__construct("users");
