@@ -1,12 +1,33 @@
 <?php
+/**
+ * This file is part of the A.W.S.O.M.E.cms distribution.
+ * Detailed copyright and licensing information can be found
+ * in the doc/COPYRIGHT and doc/LICENSE files which should be
+ * included in the distribution.
+ *
+ * @package components.page
+ *
+ * @copyright (c) 2009-2010 Yannick de Lange
+ * @license http://www.gnu.org/licenses/gpl.txt
+ *
+ * @version $Revision$
+ */
 importField("Field");
 importField("IntField");
 importField("TextField");
 importField("DateField");
 importField("page.LocationField");
 
+/**
+ * Pages table, this handels all interaction with the pages table in the database
+ * 
+ * @author Yannick <yannick.l.88@gmail.com>
+ */
 class PagesTable extends Table
 {
+    /**
+     * Constructor
+     */
     public function __construct()
     {
         parent::__construct("pages");
@@ -26,7 +47,10 @@ class PagesTable extends Table
             Config::get('pagedelete', 'pagedelete', 'admin')
         );
     }
-    
+    /**
+     * (non-PHPdoc)
+     * @see core/Table#select($query, $data)
+     */
     protected function select($query, $data = null)
     {
         $query->orderby('page_name');
@@ -37,6 +61,10 @@ class PagesTable extends Table
             $query->whereWhenSet($data->where[0], $data->where[1], $data->where[2]);
         }
     }
+    /**
+     * (non-PHPdoc)
+     * @see core/Table#update($query, $data)
+     */
     protected function update($query, $data = null)
     {
         if($data && isset($data->page_timestamp))
@@ -48,9 +76,17 @@ class PagesTable extends Table
             $query->update('page_timestamp', date('c'));
         }
     }
+    /**
+     * (non-PHPdoc)
+     * @see core/Table#insert($query, $data)
+     */
     protected function insert($query, $data = null)
     {
         $query->insert('page_timestamp', date('c'));
     }
+    /**
+     * (non-PHPdoc)
+     * @see core/Table#delete($query, $data)
+     */
     protected function delete($query, $data = null) {}
 }

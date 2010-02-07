@@ -1,4 +1,23 @@
 <?php
+/**
+ * This file is part of the A.W.S.O.M.E.cms distribution.
+ * Detailed copyright and licensing information can be found
+ * in the doc/COPYRIGHT and doc/LICENSE files which should be
+ * included in the distribution.
+ *
+ * @package components.page.util
+ *
+ * @copyright (c) 2009-2010 Yannick de Lange
+ * @license http://www.gnu.org/licenses/gpl.txt
+ *
+ * @version $Revision$
+ */
+
+/**
+ * Menu item that is used in the admin menu
+ * 
+ * @author Yannick <yannick.l.88@gmail.com>
+ */
 class MenuItem
 {
     public $name;
@@ -7,6 +26,14 @@ class MenuItem
     public $parent;
     private $children;
     
+    /**
+     * Constructor
+     * 
+     * @param string $name
+     * @param string $text
+     * @param string $page
+     * @param string $parent
+     */
     public function __construct($name, $text, $page, $parent = "")
     {
         $this->children = array();
@@ -20,7 +47,12 @@ class MenuItem
         $this->page = $page;
         $this->parent = $parent;
     }
-    
+    /**
+     * Add a menu items to this item, returns true or false depending if succeded
+     * 
+     * @param MenuItem $child
+     * @return boolean
+     */
     public function addChild($child)
     {
         if($this->name == $child->parent)
@@ -42,12 +74,22 @@ class MenuItem
         
         return false;
     }
-    
+    /**
+     * sort the items in this MenuItem
+     * 
+     * @param MenuItem $child1
+     * @param MenuItem $child2
+     * @return int
+     */
     private function sort($child1, $child2)
     {
         return strcasecmp($child1->text, $child2->text);
     }
-    
+    /**
+     * Create a HTML represenation of this MenuItem
+     * 
+     * @return string
+     */
     public function toHTML()
     {
         $html = "<li onmouseover=\"adminmenu_openMenu(this);\" onmouseout=\"adminmenu_closeMenu(this);\">";
@@ -80,7 +122,11 @@ class MenuItem
         return $html;
     }
 }
-
+/**
+ * Menu class, this is the root element of the menu
+ * 
+ * @author Yannick <yannick.l.88@gmail.com>
+ */
 class Menu
 {
     private static $instance;
@@ -89,6 +135,11 @@ class Menu
     private $names;
     private $que;
     
+    /**
+     * Singelton
+     * 
+     * @return Menu
+     */
     public static function getInstance()
     {
         if(!Menu::$instance)
@@ -98,13 +149,20 @@ class Menu
         
         return Menu::$instance;
     }
-    
+    /**
+     * Constructor
+     */
     private function __construct()
     {
         $this->children = array();
         $this->que = array();
     }
-    
+    /**
+     * Add a menu items to this menu, returns true or false depending if succeded
+     * 
+     * @param MenuItem $child
+     * @return boolean
+     */
     public function addChild($child)
     {
         if($child->parent == "")
@@ -140,7 +198,11 @@ class Menu
             }
         }
     }
-    
+    /**
+     * Create HTML representation of this menu
+     * 
+     * @return string
+     */
     public function toHTML()
     {
         //run the que, the missing parents might be there now
@@ -175,7 +237,13 @@ class Menu
         
         return $html;
     }
-    
+    /**
+     * Sort the items in the menu
+     * 
+     * @param MenuItem $child1
+     * @param MenuItem $child2
+     * @return int
+     */
     private function sort($child1, $child2)
     {
         return strcasecmp($child1->text, $child2->text);
