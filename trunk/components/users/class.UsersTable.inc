@@ -1,4 +1,17 @@
 <?php
+/**
+ * This file is part of the A.W.S.O.M.E.cms distribution.
+ * Detailed copyright and licensing information can be found
+ * in the doc/COPYRIGHT and doc/LICENSE files which should be
+ * included in the distribution.
+ *
+ * @package components.users
+ *
+ * @copyright (c) 2009-2010 Yannick de Lange
+ * @license http://www.gnu.org/licenses/gpl.txt
+ *
+ * @version $Revision$
+ */
 importField("Field");
 importField("IntField");
 importField("PasswordField");
@@ -25,7 +38,10 @@ class UsersTable extends Table
             Config::get('usersdelete', 'usersdelete', 'admin')
         );
     }
-    
+    /**
+     * (non-PHPdoc)
+     * @see core/Table#select($query, $data)
+     */
     protected function select($query, $data = null)
     {
         $query->orderby('user_name');
@@ -37,7 +53,19 @@ class UsersTable extends Table
             $query->whereWhenSet('user_pass', $data->user_pass);
         }
     }
+    /**
+     * (non-PHPdoc)
+     * @see core/Table#insert($query, $data)
+     */
     protected function insert($query, $data = null) {}
+    /**
+     * (non-PHPdoc)
+     * @see core/Table#update($query, $data)
+     */
     protected function update($query, $data = null) {}
+    /**
+     * (non-PHPdoc)
+     * @see core/Table#delete($query, $data)
+     */
     protected function delete($query, $data = null) {}
 }

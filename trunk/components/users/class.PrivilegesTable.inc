@@ -1,9 +1,30 @@
 <?php
+/**
+ * This file is part of the A.W.S.O.M.E.cms distribution.
+ * Detailed copyright and licensing information can be found
+ * in the doc/COPYRIGHT and doc/LICENSE files which should be
+ * included in the distribution.
+ *
+ * @package components.users
+ *
+ * @copyright (c) 2009-2010 Yannick de Lange
+ * @license http://www.gnu.org/licenses/gpl.txt
+ *
+ * @version $Revision$
+ */
 importField("Field");
 importField("IntField");
 
+/**
+ * Privileges tabel.
+ * 
+ * @author Yannick <yannick.l.88@gmail.com>
+ */
 class PrivilegesTable extends Table
 {
+    /**
+     * @see core/Table#__construct($name)
+     */
     public function __construct()
     {
         parent::__construct("privileges");
@@ -22,7 +43,10 @@ class PrivilegesTable extends Table
             Config::get('privdelete', 'privdelete', 'admin')
         );
     }
-    
+    /**
+     * (non-PHPdoc)
+     * @see core/Table#select($query, $data)
+     */
     protected function select($query, $data = null)
     {
         $query->orderby('privilege_name');
@@ -34,6 +58,10 @@ class PrivilegesTable extends Table
             $query->whereWhenSet('privilege_int', $data->privilege_int);
         }
     }
+    /**
+     * (non-PHPdoc)
+     * @see core/Table#insert($query, $data)
+     */
     protected function insert($query, $data = null)
     {
         $rows = SQLQuery::doSelect()
@@ -43,10 +71,16 @@ class PrivilegesTable extends Table
         
         $query->insert('privilege_int', pow(2, count($rows)));
     }
-    
+    /**
+     * (non-PHPdoc)
+     * @see core/Table#update($query, $data)
+     */
     protected function update($query, $data = null) {}
+    /**
+     * (non-PHPdoc)
+     * @see core/Table#delete($query, $data)
+     */
     protected function delete($query, $data = null) {}
-    
     /**
      * @see core/Table#doDelete($data)
      * 
@@ -70,7 +104,12 @@ class PrivilegesTable extends Table
         
         return $query->exec();
     }
-    
+    /**
+     * @see core/Table#getAction($mode)
+     * 
+     * Since this tabel is assigned to the users, we need a different set of actions. 
+     * So we override this function to accomodate for that.
+     */
     public function getAction($mode)
     {
         if(!is_numeric($mode))

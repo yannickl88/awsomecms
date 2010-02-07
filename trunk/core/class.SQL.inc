@@ -1,7 +1,35 @@
 <?php
-class SQLExeption extends Exception { }
-class SQLConnenectionExeption extends SQLExeption { }
+/**
+ * This file is part of the A.W.S.O.M.E.cms distribution.
+ * Detailed copyright and licensing information can be found
+ * in the doc/COPYRIGHT and doc/LICENSE files which should be
+ * included in the distribution.
+ *
+ * @package core
+ *
+ * @copyright (c) 2009-2010 Yannick de Lange
+ * @license http://www.gnu.org/licenses/gpl.txt
+ *
+ * @version $Revision$
+ */
 
+/**
+ * SQLException when there was an error in executing a given Query
+ * 
+ * @author Yannick <yannick.l.88@gmail.com>
+ */
+class SQLExeption extends Exception { }
+/**
+ * SQLException when there was a problem connecting to the database
+ * 
+ * @author Yannick <yannick.l.88@gmail.com>
+ */
+class SQLConnenectionExeption extends SQLExeption { }
+/**
+ * Abstraction of a SQL query
+ * 
+ * @author Yannick <yannick.l.88@gmail.com>
+ */
 class SQLQuery
 {
     private $select;
@@ -42,7 +70,6 @@ class SQLQuery
         
         $this->action = $action;
     }
-    
     /**
     * return the action for this query
     * 
@@ -52,7 +79,6 @@ class SQLQuery
     {
         return $this->action;
     }
-    
     /**
     * Create a select query object
     * 
@@ -67,7 +93,6 @@ class SQLQuery
         
         return $query;
     }
-    
     /**
     * Create a insert query object
     * 
@@ -82,7 +107,6 @@ class SQLQuery
         
         return $query;
     }
-    
     /**
     * Create a update query object
     * 
@@ -97,7 +121,6 @@ class SQLQuery
         
         return $query;
     }
-    
     /**
     * Create a delete query object
     * 
@@ -108,7 +131,6 @@ class SQLQuery
         $query = new SQLQuery('delete');
         return $query;
     }
-    
     /**
     * add select statement
     * 
@@ -130,7 +152,6 @@ class SQLQuery
         
         return $this;
     }
-    
     /**
     * add insert statement
     * 
@@ -148,7 +169,6 @@ class SQLQuery
         
         return $this;
     }
-    
     /**
     * add insert statement, only when the value is set
     * 
@@ -165,7 +185,6 @@ class SQLQuery
         
         return $this;
     }
-    
     /**
     * add update statement
     * 
@@ -183,7 +202,6 @@ class SQLQuery
         
         return $this;
     }
-    
     /**
     * add update statement, only when the value is set
     * 
@@ -200,7 +218,6 @@ class SQLQuery
         
         return $this;
     }
-    
     /**
     * add tabel
     * 
@@ -213,7 +230,6 @@ class SQLQuery
         
         return $this;
     }
-    
     /**
     * add where statement
     * 
@@ -270,7 +286,6 @@ class SQLQuery
         
         return $this;
     }
-    
     /**
     * add where statement, only when the value is set
     * 
@@ -289,7 +304,6 @@ class SQLQuery
         
         return $this;
     }
-    
     /**
     * add group statement
     * 
@@ -302,7 +316,6 @@ class SQLQuery
         
         return $this;
     }
-    
     /**
     * add order statement
     * 
@@ -321,7 +334,6 @@ class SQLQuery
         
         return $this;
     }
-    
     /**
     * add limit statement
     * 
@@ -335,7 +347,6 @@ class SQLQuery
         
         return $this;
     }
-    
     /**
     * add join statement
     * 
@@ -351,10 +362,14 @@ class SQLQuery
         
         return $this;
     }
-    
+    /**
+     * Check if a value is empty
+     * 
+     * @param string $value
+     * @return boolean
+     */
     public static function isEmpty($value)
     {
-        //((isset($value) && is_numeric($value)) || (isset($value) && !is_numeric($value) && !empty($value)))
         if(isset($value))
         {
             if($value == "")
@@ -377,7 +392,6 @@ class SQLQuery
         
         return true;
     }
-    
     /**
     * execute the statement
     * 
@@ -401,7 +415,6 @@ class SQLQuery
             break;
         }
     }
-    
     /**
     * execute the statement as an select
     * 
@@ -457,7 +470,6 @@ class SQLQuery
         
         return SQL::getInstance()->query($query);
     }
-    
     /**
     * execute the statement as an insert
     * 
@@ -493,7 +505,6 @@ class SQLQuery
         
         return SQL::getInstance()->query($query);
     }
-    
     /**
     * execute the statment as an update
     * 
@@ -547,7 +558,6 @@ class SQLQuery
         
         return SQL::getInstance()->query($query);
     }
-    
     /**
     * execute statment as an Delete
     * 
@@ -579,7 +589,11 @@ class SQLQuery
         return SQL::getInstance()->query($query);
     }
 }
-
+/**
+ * SQLRecord that is a wrapper for all data generated from the queries
+ * 
+ * @author Yannick <yannick.l.88@gmail.com>
+ */
 class SQLRecord
 {
     public $record;
@@ -603,12 +617,20 @@ class SQLRecord
             $this->insertID = SQL::getInstance()->getPDOInstance()->lastInsertId();
         }
     }
-    
+    /**
+     * Get all the rows that were returned by the query
+     * 
+     * @return unknown_type
+     */
     public function getRows()
     {
         return $this->records;
     }
-    
+    /**
+     * Get a row and move the interal point one place ahead. returns false when there are no more rows
+     * 
+     * @return Object
+     */
     public function getRow()
     {
         $this->index++;
@@ -622,23 +644,37 @@ class SQLRecord
             return false;
         }   
     }
-    
+    /**
+     * reset the internal pointer
+     */
     public function reset()
     {
         $this->index = 0;
     }
-    
+    /**
+     * Get the amount of rows returned by the query
+     * 
+     * @return int
+     */
     public function count()
     {
         return $this->count;
     }
-    
+    /**
+     * Get the latest ID from the last insert. This is 0 when there was no insert done
+     * 
+     * @return int
+     */
     public function insertID()
     {
         return $this->insertID;
     }
 }
-
+/**
+ * SQL class that handels the connection to the database
+ * 
+ * @author Yannick <yannick.l.88@gmail.com>
+ */
 class SQL
 {
     private static $instance;
@@ -652,6 +688,11 @@ class SQL
     
     private $PDOconnection;
     
+    /**
+     * Get a SQL instance
+     * 
+     * @return SQL
+     */
     public static function getInstance()
     {
         if(!isset(self::$instance))
@@ -671,24 +712,35 @@ class SQL
         
         try
         {
-            $this->PDOconnection = new PDO ("mysql:host={$this->host};dbname={$this->database}","{$this->username}","{$this->password}");
+            $this->PDOconnection = new PDO("mysql:host={$this->host};dbname={$this->database}","{$this->username}","{$this->password}");
         }
         catch(PDOException $e)
         {
             $this->triggerSQLError("Could not connect to host '{$this->host}'", 2);
         }
     }
-    
+    /**
+     * Reconnect with the database
+     */
     public function reconnect()
     {
         $this->PDOconnection = new PDO ("mysql:host={$this->host};dbname={$this->database}","{$this->username}","{$this->password}");
     }
-    
+    /**
+     * Get the PDO instance that this SQL class uses
+     * 
+     * @return PDO
+     */
     public function getPDOInstance()
     {
         return $this->PDOconnection;
     }
-    
+    /**
+     * Execute a query
+     * 
+     * @param string $query
+     * @return SQLRecord
+     */
     public function query($query)
     {
         if(!empty($query))
@@ -714,7 +766,12 @@ class SQL
         
         return $result;
     }
-    
+    /**
+     * Execute multiple queries
+     * 
+     * @param string $queries
+     * @return array    containing SQLRecords
+     */
     public function multi_query($queries)
     {
         //parse the queries
@@ -752,7 +809,12 @@ class SQL
         
         return $results;
     }
-    
+    /**
+     * Trigger a SQL exception and throws it
+     * 
+     * @param string $error
+     * @param int $type     1: SQLExeption, 2:SQLConnenectionExeption
+     */
     private function triggerSQLError($error, $type = 1)
     {
         switch($type)

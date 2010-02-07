@@ -1,6 +1,24 @@
 <?php
+/**
+ * This file is part of the A.W.S.O.M.E.cms distribution.
+ * Detailed copyright and licensing information can be found
+ * in the doc/COPYRIGHT and doc/LICENSE files which should be
+ * included in the distribution.
+ *
+ * @package core.fields
+ *
+ * @copyright (c) 2009-2010 Yannick de Lange
+ * @license http://www.gnu.org/licenses/gpl.txt
+ *
+ * @version $Revision$
+ */
 import('/core/class.InvalidFormException.inc');
 
+/**
+ * Superclass for a Field.
+ * 
+ * @author Yannick <yannick.l.88@gmail.com>
+ */
 class Field
 {
     const ADD       = 1;
@@ -24,7 +42,6 @@ class Field
     const FORCEUPDATE   = 512;
     const DUMMY         = 1024; //does not get's added to the selection list
     
-    protected $type;
     protected $name;
     protected $displayName;
     protected $value;
@@ -71,30 +88,36 @@ class Field
         
         $this->maxSize = -1;
         
-        $this->type = "text";
-        
         return $this;
     }
-    
+    /**
+     * Check if this field has a give flag
+     * 
+     * @param int $flag
+     * @return boolean
+     */
     public function hasFlag($flag)
     {
         return Config::hasFlag($this->style, $flag);
     }
-    
-    public function getType()
-    {
-        return $this->type;
-    }
-    
+    /**
+     * Get the name of this field
+     * 
+     * @return string
+     */
     public function getName()
     {
         return $this->name;
     }
+    /**
+     * Get the name that should be show in the forms
+     * 
+     * @return string
+     */
     public function getDisplayName()
     {
         return $this->displayName;
     }
-    
     /**
     * Set the Value of this field
     * 
@@ -106,7 +129,6 @@ class Field
         $this->value = $value;
         return $this;
     }
-    
     /**
     * Set the Value of this field with an result object
     * 
@@ -118,7 +140,6 @@ class Field
         $name = $this->getName();
         return $this->setValue($record->$name);
     }
-    
     /**
     * request the data from this field
     * 
@@ -144,7 +165,12 @@ class Field
             return $value;
         }
     }
-    
+    /**
+     * Check if this field has a value that is not empty
+     * 
+     * @param array $data
+     * @return boolean
+     */
     public function hasValue($data = null)
     {
         if(!empty($data))
@@ -156,7 +182,12 @@ class Field
             return !SQLQuery::isEmpty($this->value);
         }
     }
-    
+    /**
+     * Check if this field is required
+     * 
+     * @param int $mode
+     * @return boolean
+     */
     public function isRequired($mode)
     {
         if($mode == Field::ADD && $this->hasFlag(Field::OPTIONAL_ADD))
@@ -172,7 +203,6 @@ class Field
             return true;
         }
     }
-    
     /**
     * Set the field to be required
     * 
@@ -184,69 +214,81 @@ class Field
         $this->required = ($required === true);
         return $this;
     }
-    
+    /**
+     * Check if this field can be null
+     * 
+     * @return boolean
+     */
     public function canBeNull()
     {
         return $this->null;
     }
-    
     /**
-    * Set the field to be null
-    * 
-    * @param boolean $null
-    * @return Field
-    */
+     * Set the field to be null
+     *
+     * @param boolean $null
+     * @return Field
+     */
     public function setCanBeNull($null = true)
     {
         $this->null = ($null === true);
         return $this;
     }
-    
+    /**
+     * Get the default value of this field
+     * 
+     * @return mixed
+     */
     public function getDefaultValue()
     {
         return $this->defaultValue;
     }
-    
     /**
-    * Set the field to have a default value
-    * 
-    * @param mixed $value
-    * @return Field
-    */
+     * Set the field to have a default value
+     *
+     * @param mixed $value
+     * @return Field
+     */
     public function setDefaultValue($value)
     {
         $this->defaultValue = $value;
         return $this;
     }
-    
+    /**
+     * get the max size of this field
+     * 
+     * @return int
+     */
     public function getMaxSize()
     {
         return $this->maxSize;
     }
-    
     /**
-    * Set the field max size, -1 to have no size
-    * 
-    * @param int $size
-    * @return Field
-    */
+     * Set the field max size, -1 to have no size
+     *
+     * @param int $size
+     * @return Field
+     */
     public function setMaxSize($size)
     {
         $this->maxSize = (int) $value;
         return $this;
     }
-    
+    /**
+     * Check if this field in an index field
+     * 
+     * @return boolean
+     */
     public function isIndex()
     {
         return $this->index > 0;
     }
-    
     /**
-    * Set the field ability to have an index
-    * 
-    * @param string $index      FIELD::INDEX, FIELD::NO_INDEX, FIELD::STR_INDEX
-    * @return Field
-    */
+     * Set the field ability to have an index
+     *
+     * @param string $index      FIELD::INDEX, FIELD::NO_INDEX, FIELD::STR_INDEX
+     * @return Field
+     */
     public function setIndex($index = FIELD::NO_INDEX)
     {
         switch($index)
@@ -259,7 +301,12 @@ class Field
         }
         return $this;
     }
-    
+    /**
+     * check if this field is visible
+     * 
+     * @param int $mode
+     * @return boolean
+     */
     public function visible($mode = Field::VIEW)
     {
         return (
@@ -269,13 +316,12 @@ class Field
             ($mode == Field::DELETE)
         );
     }
-    
     /**
-    * This is designed to give fast acces to the toHTML functions
-    * 
-    * @param string $name
-    * @return string
-    */
+     * This is designed to give fast acces to the toHTML functions
+     *
+     * @param string $name
+     * @return string
+     */
     public function __get($name)
     {
         switch($name)
@@ -295,13 +341,12 @@ class Field
                 break;
         }
     }
-    
     /**
-    * Get the HTML representation of this field.
-    * NOTE:Do not overwrite this function. Use the toHTML_add/edit/view instaid if you want to change the way the HTML looks
-    * 
-    * @param int $mode
-    */
+     * Get the HTML representation of this field.
+     * NOTE:Do not overwrite this function. Use the toHTML_add/edit/view instaid if you want to change the way the HTML looks
+     *
+     * @param int $mode
+     */
     public function toHTML($mode = Field::ADD)
     {
         switch($mode)
@@ -326,12 +371,20 @@ class Field
                 break;
         }
     }
-    
+    /**
+     * String representation of this field
+     * 
+     * @return string
+     */
     public function __toString()
     {
         return $this->toHTML(Field::VIEW);
     }
-    
+    /**
+     * Create a HTML representation of add field
+     * 
+     * @return string
+     */
     protected function toHTML_add()
     {
         $value = $this->getDefaultValue();
@@ -343,24 +396,45 @@ class Field
         
         return "<input type='text' name='{$this->getName()}' id='{$this->getName()}' value='{$value}'/>";
     }
+    /**
+     * Create a HTML representation of edit field
+     * 
+     * @return string
+     */
     protected function toHTML_edit()
     {
         return "<input type='text' name='{$this->getName()}' id='{$this->getName()}' value='{$this->getValue()}'/>";
     }
+    /**
+     * Create a HTML representation of hidden field
+     * 
+     * @return string
+     */
     protected function toHTML_edit_hidden()
     {
         return "<input type='hidden' name='{$this->getName()}' id='{$this->getName()}' value='{$this->getValue()}'/>";
     }
+    /**
+     * Create a HTML representation of view field
+     * 
+     * @return string
+     */
     protected function toHTML_view()
     {
         return $this->getValue();
     }
+    /**
+     * get the javascript for this field
+     * 
+     * @return string
+     */
     public function getJavascript()
     {
         return "";
     }
-    
     /**
+     * Add select data for this field to a query
+     * 
      * @param $query SQLquery
      * @param $data
      */
@@ -377,6 +451,12 @@ class Field
         }
         $query->select($this->getName());
     }
+    /**
+     * Add insert data for this field to a query
+     * 
+     * @param $query SQLquery
+     * @param $data
+     */
     public function insert($query, $data = array())
     {
         if($this->hasFlag(Field::DUMMY) || $this->hasFlag(Field::AUTOKEY))
@@ -392,6 +472,12 @@ class Field
             $query->insertWhenSet($this->getName(), $this->value2db($this->getValue($data)));
         }
     }
+    /**
+     * Add update data for this field to a query
+     * 
+     * @param $query SQLquery
+     * @param $data
+     */
     public function update($query, $data = array())
     {
         if($this->hasFlag(Field::DUMMY))
@@ -427,6 +513,12 @@ class Field
             }
         }
     }
+    /**
+     * Add delete data for this field to a query
+     * 
+     * @param $query SQLquery
+     * @param $data
+     */
     public function delete($query, $data = array())
     {
         if($this->hasFlag(Field::DUMMY))
@@ -446,7 +538,11 @@ class Field
             }
         }
     }
-    
+    /**
+     * Validate the data for this field. This throws a FormException when not valid
+     * 
+     * @param int $mode
+     */
     public function validate($mode)
     {
         $value = $this->getValue();

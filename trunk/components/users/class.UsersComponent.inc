@@ -1,13 +1,40 @@
 <?php
+/**
+ * This file is part of the A.W.S.O.M.E.cms distribution.
+ * Detailed copyright and licensing information can be found
+ * in the doc/COPYRIGHT and doc/LICENSE files which should be
+ * included in the distribution.
+ *
+ * @package components.users
+ *
+ * @copyright (c) 2009-2010 Yannick de Lange
+ * @license http://www.gnu.org/licenses/gpl.txt
+ *
+ * @version $Revision$
+ */
 import('/core/class.Component.inc');
 
+/**
+ * User component and the actions that it can do.
+ * This components gives you the option to create different users inside a
+ * system, these users can be assigned a name and password and privilages. If
+ * the group component is installed, privilages will be delegated there
+ * 
+ * @author Yannick <yannick.l.88@gmail.com>
+ */
 class UsersComponent extends Component
 {
     public function __construct()
     {
         parent::__construct('users');
     }
-    
+    /**
+     * Internal function to handle login. This checks user and password and
+     * if they are filled in or throws and FormException otherwise.
+     * 
+     * @param array $request
+     * @param string $redirect
+     */
     private function login($request, $redirect)
     {
         //extra custom validation
@@ -44,7 +71,13 @@ class UsersComponent extends Component
         
         $this->redirect($redirect);
     }
-    
+    /**
+     * Login and redirect to the admin section
+     * 
+     * @param Smarty $smarty
+     * @param SmartyPageLoader $smartyLoader
+     * @param array $request
+     */
     public function action_login($smarty, $smartyLoader, $request)
     {
         if($request['method'] == 'post')
@@ -52,7 +85,13 @@ class UsersComponent extends Component
             $this->login($request, "/".$_GET['url']);
         }
     }
-    
+    /**
+     * Login and redirect to the index
+     * 
+     * @param Smarty $smarty
+     * @param SmartyPageLoader $smartyLoader
+     * @param array $request
+     */
     public function action_admin_login($smarty, $smartyLoader, $request)
     {
         if($request['method'] == 'post')
@@ -60,7 +99,13 @@ class UsersComponent extends Component
             $this->login($request, "/".Config::get('location', 'location', 'admin'));
         }
     }
-    
+    /**
+     * Add a user
+     * 
+     * @param Smarty $smarty
+     * @param SmartyPageLoader $smartyLoader
+     * @param array $request
+     */
     public function action_add($smarty, $smartyLoader, $request)
     {
         if($request['method'] == 'post')
@@ -84,18 +129,14 @@ class UsersComponent extends Component
             
             $this->redirect("/".Config::get('usersadmin', 'usersadmin', 'admin'));
         }
-        else
-        {
-            if(!Config::getInstance()->isComponentInstalled("groups"))
-            {
-                $privRequest = Request::init('users.privileges');
-                $smarty->assign("privileges", $privRequest->doSelect());
-            }
-        }
-        
-        return $request;
     }
-    
+    /**
+     * Edit a user
+     * 
+     * @param Smarty $smarty
+     * @param SmartyPageLoader $smartyLoader
+     * @param array $request
+     */
     public function action_edit($smarty, $smartyLoader, $request)
     {
         if($request['method'] == 'post')
@@ -132,10 +173,14 @@ class UsersComponent extends Component
                 $this->redirect("/".Config::get('usersadmin', 'usersadmin', 'admin'));
             }
         }
-        
-        return $request;
     }
-    
+    /**
+     * Delete a user
+     * 
+     * @param Smarty $smarty
+     * @param SmartyPageLoader $smartyLoader
+     * @param array $request
+     */
     public function action_delete($smarty, $smartyLoader, $request)
     {
         if($request['method'] == 'post')
@@ -159,7 +204,13 @@ class UsersComponent extends Component
             }
         }
     }
-    
+    /**
+     * Add a privilege
+     * 
+     * @param Smarty $smarty
+     * @param SmartyPageLoader $smartyLoader
+     * @param array $request
+     */
     public function action_privadd($smarty, $smartyLoader, $request)
     {
         if($request['method'] == 'post')
@@ -183,7 +234,13 @@ class UsersComponent extends Component
             $this->redirect("/".Config::get('privadmin', 'privadmin', 'admin'));
         }
     }
-    
+    /**
+     * Edit a privilege
+     * 
+     * @param Smarty $smarty
+     * @param SmartyPageLoader $smartyLoader
+     * @param array $request
+     */
     public function action_privedit($smarty, $smartyLoader, $request)
     {
         $table = Table::init('users.privileges')
@@ -196,7 +253,13 @@ class UsersComponent extends Component
             $this->redirect("/".Config::get('privadmin', 'privadmin', 'admin'));
         }
     }
-    
+    /**
+     * Delete a privilege
+     * 
+     * @param Smarty $smarty
+     * @param SmartyPageLoader $smartyLoader
+     * @param array $request
+     */
     public function action_privdelete($smarty, $smartyLoader, $request)
     {
         $table = Table::init('users.privileges')
@@ -213,7 +276,12 @@ class UsersComponent extends Component
             $this->redirect("/".Config::get('privadmin', 'privadmin', 'admin'));
         }
     }
-    
+    /**
+     * Get the privileges the user has
+     * 
+     * @param Object $userRow
+     * @return array
+     */
     public function auth($userRow)
     {
         $privilages = Table::init('users.privileges')->doSelect();
@@ -226,7 +294,13 @@ class UsersComponent extends Component
         
         return $rights;
     }
-    
+    /**
+     * Authenticate a user
+     * 
+     * @param string $user_name
+     * @param string $user_pass
+     * @return boolean
+     */
     public function auth_login($user_name, $user_pass)
     {
         $user_pass = md5($user_pass);
@@ -251,13 +325,18 @@ class UsersComponent extends Component
             return false;
         }
     }
-    
+    /**
+     * Log a user out
+     */
     public function auth_logout()
     {
         $_SESSION['usr'] = null;
         session_destroy();
     }
-    
+    /**
+     * (non-PHPdoc)
+     * @see core/Component#registerMenuItems($menu)
+     */
     public function registerMenuItems($menu)
     {
         $menu->addChild(new MenuItem("users", "", Config::get('usersadmin', 'usersadmin', 'admin')));

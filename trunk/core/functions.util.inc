@@ -1,10 +1,39 @@
 <?php
+/**
+ * This file is part of the A.W.S.O.M.E.cms distribution.
+ * Detailed copyright and licensing information can be found
+ * in the doc/COPYRIGHT and doc/LICENSE files which should be
+ * included in the distribution.
+ *
+ * @package core
+ *
+ * @copyright (c) 2009-2010 Yannick de Lange
+ * @license http://www.gnu.org/licenses/gpl.txt
+ *
+ * @version $Revision$
+ */
+
+/**
+ * This file contains all the global function
+ */
+
+/**
+ * Import a file, with the root the framework root
+ * 
+ * @param string $file
+ */
 function import($file)
 {
     $frameworkRoot = getFrameworkRoot();
     
     require_once realpath($frameworkRoot.'/'.$file);
 }
+/**
+ * Import a field.
+ * You can use <FieldName> for core fields and <component>.<FieldName> for component specific fields.
+ * 
+ * @param string $field
+ */
 function importField($field)
 {
     $frameworkRoot = getFrameworkRoot();
@@ -22,12 +51,24 @@ function importField($field)
         require_once realpath($frameworkRoot.'/core/fields/class.'.$field.".inc");
     }
 }
-
+/**
+ * Get the root of the framework
+ * 
+ * @return string
+ */
 function getFrameworkRoot()
 {
     return dirname(dirname(__FILE__));
 }
-
+/**
+ * Error handeler for the framework
+ * 
+ * @param int $errno
+ * @param string $errstr
+ * @param string $errfile
+ * @param int $errline
+ * @return boolean
+ */
 function handleError($errno, $errstr, $errfile, $errline)
 {
     $debugger = Debugger::getInstance();
@@ -60,7 +101,13 @@ function handleError($errno, $errstr, $errfile, $errline)
     
     return true;
 }
-
+/**
+ * Parse an info file from a component
+ * 
+ * @param string $file
+ * @param string $component
+ * @return array
+ */
 function parseInfoFile($file, $component)
 {
     if(file_exists($file))
@@ -210,7 +257,12 @@ function parseInfoFile($file, $component)
         return array();
     }
 }
-
+/**
+ * Add slashes to a string only when magic_quotes_gpc is turned off.
+ * 
+ * @param string $string
+ * @return string
+ */
 function addSlashesConfig($string)
 {
     if(get_magic_quotes_gpc() === 0)

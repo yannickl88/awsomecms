@@ -1,7 +1,21 @@
 <?php
 /**
-* @desc Debugger class that handels all debug messages generated from the CMS
-*/
+ * This file is part of the A.W.S.O.M.E.cms distribution.
+ * Detailed copyright and licensing information can be found
+ * in the doc/COPYRIGHT and doc/LICENSE files which should be
+ * included in the distribution.
+ *
+ * @package core
+ *
+ * @copyright (c) 2009-2010 Yannick de Lange
+ * @license http://www.gnu.org/licenses/gpl.txt
+ *
+ * @version $Revision$
+ */
+
+/**
+ * Debugger class that handels all debug messages generated from the CMS
+ */
 class Debugger
 {
     const NOTICE    = 1;
@@ -14,10 +28,10 @@ class Debugger
     private $currentRobot;
     
     /**
-    * @desc singelton
-    * 
-    * @return Debugger      Instance of Debugger
-    */
+     * singelton
+     *
+     * @return Debugger      Instance of Debugger
+     */
     public static function getInstance()
     {
         if (!self::$instance instanceof self) {
@@ -27,20 +41,29 @@ class Debugger
     }
     
     /**
-    * @desc constructor
-    */
+     * constructor
+     */
     private function __construct()
     {
         $this->currentRobot = null;
         $this->logs = array();
         $this->log("Debugger initialized");
     }
-    
+    /**
+     * Set the robot that was used when visiting the site
+     * @param $robot
+     * @return unknown_type
+     */
     public function setRobot($robot)
     {
         $this->currentRobot = stripslashes($robot);
     }
-    
+    /**
+     * Add a log message
+     * 
+     * @param string $message
+     * @param int $level
+     */
     public function log($message, $level = Debugger::NOTICE)
     {
         global $start;
@@ -49,17 +72,29 @@ class Debugger
         
         $this->logs[] = array($level, "[{$timestamp}sec] - {$message}");
     }
-    
+    /**
+     * Add a warning message
+     * 
+     * @param string $message
+     */
     public function warning($message)
     {
         $this->log($message, Debugger::WARNING);
     }
-    
+    /**
+     * Add a error message
+     * 
+     * @param string $message
+     */
     public function error($message)
     {
         $this->log($message, Debugger::ERROR);
     }
-    
+    /**
+     * Converet the debugger to a string representation
+     * 
+     * @return string
+     */
     public function __toString() {
         if(Config::get('debug', 0, 'debug') > 0)
         {
@@ -70,7 +105,11 @@ class Debugger
             return '';
         }
     }
-    
+    /**
+     * Render the debug list as HTML
+     * 
+     * @return string
+     */
     public function renderDebug()
     {
         global $start;
