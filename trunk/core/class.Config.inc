@@ -260,7 +260,7 @@ class Config
     {
         $components = $this->getComponenets();
         
-        return isset($component[$component]);
+        return array_key_exists($component, $components);
     }
     /**
      * Get the hook for the action, if there is one
