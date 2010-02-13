@@ -1,3 +1,9 @@
+@author:Yannick <yannick.l.88@gmail.com>
+@package:components.gallery
+@copyright:(c) 2009-2010 Yannick de Lange
+@licence:http://www.gnu.org/licenses/gpl.txt
+@version:1
+
 GALLERY:
 A simple component to manage and show a series of images on a page. Using a tag, images can be grouped together
 

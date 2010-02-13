@@ -1,3 +1,4 @@
+<h3>Installed Components:</h3>
 <table style="border-collapse: collapse;">
     <tr class="header">
         <th style="width: 100px;">Framework</th>
@@ -37,7 +38,7 @@
                 <td style="vertical-align: top;">
                     {$component->info.desc}
                 </td>
-                <td style="vertical-align: top;">
+                <td style="vertical-align: top;" class="accessCell">
                     <div style="padding-left: 18px;">
                         <a href="javascript: void(0);" class="s admin_component_access{if !$component->component_auth|hasflag:$auth.auth_select} selected{/if}" onclick="toggleAccess('auth_{$component->component_name}s', this);" title="Select"></a>
                         <a href="javascript: void(0);" class="i admin_component_access{if !$component->component_auth|hasflag:$auth.auth_insert} selected{/if}" onclick="toggleAccess('auth_{$component->component_name}i', this);" title="Insert"></a>
@@ -60,6 +61,30 @@
     <input type="hidden" name="action" value="components" />
     <input type="hidden" name="component" value="core" />
 </form>
+<h3>Uninstalled Components:</h3>
+<table style="border-collapse: collapse;">
+    <tr class="header">
+        <th style="width: 100px;">Component</th>
+        <th style="width: 100px;">Status</th>
+        <th>Description</th>
+        <th style="width: 100px;"></th>
+    </tr>
+    {foreach from=$uninstalledComponents item=component name=components}
+        <tr class="row" {if $smarty.foreach.components.index % 2 == 0}style="background-color: #F1F8FF;"{/if} id="row_{$component->component_name}">
+            <td style="vertical-align: top;">
+                <i>{$component->component_name|capitalize}</i>
+            </td>
+            <td style="vertical-align: top; padding-left: 17px;" class="updateCell">
+                <button type="button" onclick="installComponent('{$component->component_name}');">Install</button>
+            </td>
+            <td style="vertical-align: top;">
+                {$component->info.desc}
+            </td>
+            <td style="vertical-align: top;" class="accessCell">
+            </td>
+        </tr>
+    {/foreach}
+</table>
 <script>
     {literal}
     function toggleAccess(id, link)
@@ -88,6 +113,22 @@
         
         $.post("/{/literal}{$smarty.get.url}{literal}", data, function(data) {
             $("#row_"+name+" .updateCell").html("<img src='/img/admin/ok-icon.png' /> Up-to-date");
+        }, "json");
+    }
+    function installComponent(name)
+    {
+        //update the cell so it show loading
+        $("#row_"+name+" .updateCell").html("<img src='/img/admin/loader.gif' /> Updating...");
+        
+        data = {
+            component: "core",
+            action: "install",
+            installComponent: name,
+            installAdmin: confirm("Would you like to install the admin pages too?")
+        };
+        
+        $.post("/{/literal}{$smarty.get.url}{literal}", data, function(data) {
+            $("#row_"+name+" .updateCell").html("<img src='/img/admin/ok-icon.png' /> Installed");
         }, "json");
     }
     function updateFramework()

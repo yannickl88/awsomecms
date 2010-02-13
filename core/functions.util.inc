@@ -121,7 +121,8 @@ function parseInfoFile($file, $component)
                 "copyright" => "",
                 "licence" => "",
                 "website" => "",
-                "image" => ""
+                "image" => "",
+                "version" => "",
             ),
             "tags" => array(),
             "modifiers" => array(),
