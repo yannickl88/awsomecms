@@ -1,3 +1,9 @@
+@author:Yannick <yannick.l.88@gmail.com>
+@package:components.page
+@copyright:(c) 2009-2010 Yannick de Lange
+@licence:http://www.gnu.org/licenses/gpl.txt
+@version:1
+
 PAGE:
 Together with the core module is this used to show pages and manage them
 TAGS:

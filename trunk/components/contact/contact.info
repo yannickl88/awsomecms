@@ -1,3 +1,9 @@
+@author:Yannick <yannick.l.88@gmail.com>
+@package:components.contact
+@copyright:(c) 2009-2010 Yannick de Lange
+@licence:http://www.gnu.org/licenses/gpl.txt
+@version:1
+
 CONTACT:
 A way to easily create and manage contact forms. Each form is build up from fields, when filled in these are send via email to the reciever.
 

@@ -1,3 +1,9 @@
+@author:Yannick <yannick.l.88@gmail.com>
+@package:components.news
+@copyright:(c) 2009-2010 Yannick de Lange
+@licence:http://www.gnu.org/licenses/gpl.txt
+@version:1
+
 NEWS:
 A simple new system that allows for new messages. News items can be grouped using a tag if needed.
 TAGS:

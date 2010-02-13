@@ -1,2 +1,7 @@
+@author:Yannick <yannick.l.88@gmail.com>
+@package:components.groups
+@copyright:(c) 2009-2010 Yannick de Lange
+@licence:http://www.gnu.org/licenses/gpl.txt
+@version:1
 GROUPS:
 Component that allowes for group based authentication, rather then user based

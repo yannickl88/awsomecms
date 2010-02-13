@@ -99,6 +99,32 @@ class CoreComponent extends Component
         }
     }
     /**
+     * Install action, this is used for the update manager.
+     *
+     * @param Smarty $smarty
+     * @param SmartyPageLoader $smartyLoader
+     * @param array $request
+     */
+    public function action_install($smarty, $smartyLoader, $request)
+    {
+        if($request['method'] == 'post')
+        {
+            $installer = new InstallHelper();
+            
+            if(isset($request['installComponent']))
+            {
+                $result = $installer->installComponent($request['installComponent'], ($request['installAdmin'] == 'true'));
+                
+                echo "true";
+                
+                Config::getInstance()->reloadComponenets();
+                
+                return;
+            }
+        }
+        echo "false";
+    }
+    /**
      * Update action, this is used for the update manager.
      *
      * @param Smarty $smarty
@@ -182,9 +208,8 @@ class CoreComponent extends Component
                 
                 return;
             }
-            
-            echo "false";
         }
+        echo "false";
     }
     /**
      * Components action, this is used for the compontent settings page
@@ -229,10 +254,13 @@ class CoreComponent extends Component
         else
         {
             $updateURL = Config::get("updateurl", "", "update");
+            $versions = new stdClass();
             
-            //fetch the current version info
-            $versions = json_decode(file_get_contents("{$updateURL}/version.json"));
-            
+            if(file_exists("{$updateURL}/version.json"))
+            {
+                //fetch the current version info
+                $versions = json_decode(file_get_contents("{$updateURL}/version.json"));
+            }
             //check if the framework is up to date
             $smarty->assign("frameworkU2D", (file_exists(getFrameworkRoot()."/version.info") && trim(file_get_contents(getFrameworkRoot()."/version.info")) == trim($versions->framework)));
             
@@ -264,8 +292,35 @@ class CoreComponent extends Component
                 $components[$component->component_name]->info = parseInfoFile($component->component_path."/{$component_name}.info", $component_name);
             }
             
-            $smarty->assign("components", $components);
+            //search for non installed components
+            $componentsDir = getFrameworkRoot()."/components";
+            $uninstalledComponents = array();
             
+            if(file_exists($componentsDir))
+            {
+                $folders = scandir($componentsDir);
+                
+                foreach($folders as $folder)
+                {
+                    $componentDir = $componentsDir."/".$folder;
+                    
+                    if($folder != "." && $folder != '..' && is_dir($componentDir) && $folder != ".svn")
+                    {
+                        //check for a info file, if so then it must be component
+                        if(!isset($components[$folder]) && file_exists($componentDir."/info.ini"))
+                        {
+                            $component = new stdClass();
+                            $component->component_name = $folder;
+                            $component->info = parseInfoFile($componentDir."/{$folder}.info", $folder);
+                            
+                            $uninstalledComponents[$component->component_name] = $component;
+                        }
+                    }
+                }
+            }
+            
+            $smarty->assign("components", $components);
+            $smarty->assign("uninstalledComponents", $uninstalledComponents);
             $smarty->assign("auth", array(
                 "auth_select" => Config::get("auth_select", 1, "core"),
                 "auth_delete" => Config::get("auth_delete", 2, "core"),
