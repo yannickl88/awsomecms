@@ -12,14 +12,14 @@
  *
  * @version $Revision$
  */
-importField("Field");
+importField("IntField");
 
 /**
  * Privileges list of check boxes
  * 
  * @author Yannick <yannick.l.88@gmail.com>
  */
-class PrivlilegesField extends Field
+class PrivlilegesField extends IntField
 {
     /**
      * (non-PHPdoc)

@@ -143,7 +143,14 @@
         };
         
         $.post("/{/literal}{$smarty.get.url}{literal}", data, function(data) {
+          if(data[0])
+          {
             $("#row_framework .updateCell").html("<img src='/img/admin/ok-icon.png' /> Up-to-date");
+          }
+          else
+          {
+            alert("there was an error when installing the component. "+data[1]); 
+          }
         }, "json");
     }
     {/literal}

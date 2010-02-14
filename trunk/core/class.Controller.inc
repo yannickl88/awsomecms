@@ -167,13 +167,16 @@ class Controller
                 
                 if(method_exists($prehookComponent, $prehookAction))
                 {
-                    $request = call_user_func(array($prehookComponent, $prehookAction), $smarty, $request);
+                    call_user_func(array($prehookComponent, $prehookAction), $smarty, $request);
                 }
             }
-            catch(Exception $e) { }
+            catch(Exception $e) 
+            {
+                Debugger::getInstance()->log("There was an error calling PRE hook {$prehook[1]} on {$prehook[0]}, '{$e->getMessage()}'");
+            }
         }
         
-        $request = $this->handleRequest($action, $component, $request);
+        $this->handleRequest($action, $component, $request);
         
         //post action
         if($posthook)
@@ -187,10 +190,13 @@ class Controller
                 
                 if(method_exists($posthookComponent, $posthookAction))
                 {
-                    $request = call_user_func(array($posthookComponent, $posthookAction), $smarty, $request);
+                    call_user_func(array($posthookComponent, $posthookAction), $smarty, $request);
                 }
             }
-            catch(Exception $e) { }
+            catch(Exception $e)
+            {
+                Debugger::getInstance()->log("There was an error calling POST hook {$posthook[1]} on {$posthook[0]}, '{$e->getMessage()}'");
+            }
         }
         
         //redirect if set

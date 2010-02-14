@@ -58,15 +58,22 @@ JS;
      */
     public function validate($mode)
     {
-        parent::validate($mode);
+        $value = $this->getValue();
         
-        if($mode == Field::ADD && ($this->isIndex() || $this->isRequired($mode)) && !$this->hasFlag(Field::AUTOKEY))
+        if(!is_int($value) && !is_numeric($value))
         {
-            throw new FormException($this, "Field was not a number");
-        }
-        elseif($mode == Field::EDIT && $this->isIndex() && !is_numeric($this->getValue()) && $this->index())
-        {
-            throw new FormException($this, "Field was not a number");
+            parent::validate($mode);
+            
+            if($mode == Field::ADD && ($this->isIndex() || $this->isRequired($mode)) && !$this->hasFlag(Field::AUTOKEY))
+            {
+                echo "asdf";
+                throw new FormException($this, "Field was not a number");
+            }
+            
+            if($mode == Field::EDIT && $this->isIndex() && !is_numeric($this->getValue()))
+            {
+                throw new FormException($this, "Field was not a number");
+            }
         }
     }
 }

@@ -36,6 +36,7 @@ function import($file)
  */
 function importField($field)
 {
+    
     $frameworkRoot = getFrameworkRoot();
     
     //check if there is a "." in there
