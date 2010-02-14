@@ -61,7 +61,13 @@ class InstallHelper
             return false;
         }
     }
-
+    /**
+     * Install a component
+     * 
+     * @param string $component
+     * @param boolean $installAdmin
+     * @return array    (result[, errormessage])
+     */
     public function installComponent($component, $installAdmin = true)
     {
         $websiteroot = Config::get("websiteroot", "");

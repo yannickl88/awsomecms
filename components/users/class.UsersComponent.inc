@@ -166,7 +166,7 @@ class UsersComponent extends Component
             if($request['user_id'])
             {
                 Table::init('users.users')
-                    ->setRecord((object) $request);
+                    ->setRequest((object) $request);
             }
             else
             {

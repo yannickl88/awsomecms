@@ -6,14 +6,6 @@ class GroupsComponent extends Component
     public function __construct()
     {
         parent::__construct('groups');
-        
-        $this->multiTable = true;
-        $this->fields = array(
-            "groups" => array(
-                "group_id" => "index",
-                "group_name" => "text",
-            ),
-        );
     }
     
     public function action_index($smarty, $smartyLoader, $request)
@@ -24,33 +16,16 @@ class GroupsComponent extends Component
     {
         if($request['method'] == 'post')
         {
-            $this->setCurrentTable("groups");
-            if($this->validate($request, "/".Config::get('groupsadd', 'groupsadd', 'admin'), "add"))
+            $id = Table::init('groups.groups')
+                ->setRecord((object) $request)
+                ->doInsert();
+            
+            foreach($request['users'] as $user)
             {
-                //sum the privlilages
-                if(!isset($request['privileges']))
-                {
-                    $request['privileges'] = array();
-                }
-                $request['group_privileges'] = array_sum($request['privileges']);
-                
-                $userRequest = Request::init('groups.groups');
-                $usersgroupsRequest = Request::init('groups.usersgroups');
-                $id = $userRequest->doInsert($request);
-                
-                //now add the links between users
-                foreach($request['users'] as $user)
-                {
-                    $usersgroupsRequest->doInsert(array("group_id" => $id, "user_id" => $user));
-                }
+                Table::init('groups.usersgroups')->setRecord((object) array("user_id" => $user, "group_id" => $id))->doInsert();
             }
             
             $this->redirect("/".Config::get('groupsadmin', 'groupsadmin', 'admin'));
-        }
-        else
-        {
-            $smarty->assign("privileges", Request::init('users.privileges')->doSelect());
-            $smarty->assign("users", Request::init('users.users')->doSelect());
         }
     }
     
@@ -58,27 +33,17 @@ class GroupsComponent extends Component
     {
         if($request['method'] == 'post')
         {
-            $this->setCurrentTable("groups");
-            if($this->validate($request, "/".Config::get('groupsedit', 'groupsedit', 'admin'), "edit"))
+            Table::init('groups.groups')
+                ->setRecord((object) $request)
+                ->doUpdate();
+            
+            //update the usersgroups references
+            $usersgroups = Table::init('groups.usersgroups');
+            $usersgroups->doDelete((object) $request);
+            
+            foreach($request['users'] as $user)
             {
-                //sum the privlilages
-                if(!isset($request['privileges']))
-                {
-                    $request['privileges'] = array();
-                }
-                $request['group_privileges'] = array_sum($request['privileges']);
-                
-                $userRequest = Request::init('groups.groups');
-                $usersgroupsRequest = Request::init('groups.usersgroups');
-                $id = $userRequest->doUpdate($request);
-                
-                //now add the links between users
-                $usersgroupsRequest->doDelete(array("group_id" => $id));
-                
-                foreach($request['users'] as $user)
-                {
-                    $usersgroupsRequest->doInsert(array("group_id" => $id, "user_id" => $user));
-                }
+                $usersgroups->setRecord((object) array("user_id" => $user, "group_id" => $request['group_id']))->doInsert();
             }
             
             $this->redirect("/".Config::get('groupsadmin', 'groupsadmin', 'admin'));
@@ -87,12 +52,18 @@ class GroupsComponent extends Component
         {
             if($request['group_id'])
             {
-                $request['showusers'] = true;
-                $record = Request::init('groups.groups')->doSelect($request);
+                $users = Table::init('groups.groups')
+                    ->doSelect((object) array("showusers" => true, 'group_id' => $request['group_id']))
+                    ->getRows();
+                    
+                $request['group_users'] = array();
+                foreach($users as $user)
+                {
+                    $request['group_users'][$user->user_id] = $user;
+                }
                 
-                $smarty->assign("record", array_shift($record));
-                $smarty->assign("privileges", Request::init('users.privileges')->doSelect());
-                $smarty->assign("users", Request::init('users.users')->doSelect());
+                Table::init('groups.groups')
+                    ->setRequest((object) $request);
             }
             else
             {
@@ -103,11 +74,13 @@ class GroupsComponent extends Component
     
     public function action_delete($smarty, $smartyLoader, $request)
     {
-        $groupRequest = Request::init('groups.groups');
-        
         if($request['method'] == 'post')
         {
-            $groupRequest->doDelete($request);
+            Table::init('groups.groups')
+                ->doDelete((object) $request);
+            
+            Table::init('groups.usersgroups')
+                ->doDelete((object) array("group_id" => $request["group_id"]));
             
             $this->redirect("/".Config::get('groupsadmin', 'groupsadmin', 'admin'));
         }
@@ -115,9 +88,8 @@ class GroupsComponent extends Component
         {
             if($request['group_id'])
             {
-                $record = $groupRequest->doSelect($request);
-                
-                $smarty->assign("record", $record);
+                Table::init('groups.groups')
+                    ->setRequest((object) $request);
             }
             else
             {
@@ -126,20 +98,11 @@ class GroupsComponent extends Component
         }
     }
     
-    public function action_admin($smarty, $smartyLoader, $request)
-    {
-        $userRequest = Request::init('groups.groups');
-        $smarty->assign("records", $userRequest->doSelect());
-        
-        //urls
-        $smarty->assign("actionurl_add", Config::get('groupsadd', 'groupsadd', 'admin'));
-        $smarty->assign("actionurl_edit", Config::get('groupsedit', 'groupsedit', 'admin'));
-        $smarty->assign("actionurl_delete", Config::get('groupsdelete', 'groupsdelete', 'admin'));
-    }
-    
     public function auth($groupRecord)
     {
-        $privilages = Request::init('users.privileges')->doSelect();
+        $privilages = Table::init('users.privileges')
+            ->doSelect()
+            ->getRows();
         $rights = array();
         
         foreach($privilages as $privilage)
@@ -154,7 +117,9 @@ class GroupsComponent extends Component
     {
         $user_pass = md5($user_pass);
         
-        $records = Request::init('groups.groups')->doSelect(array("user_name" => $user_name, "user_pass" => $user_pass));
+        $records = Table::init('groups.groups')
+            ->doSelect((object) array("user_name" => $user_name, "user_pass" => $user_pass))
+            ->getRows();
         
         foreach($records as $record)
         {
@@ -185,8 +150,12 @@ class GroupsComponent extends Component
     {
         if($request['method'] == 'post')
         {
-            $requestObj = Request::init('groups.usersgroups');
-            $requestObj->doInsert(array("group_id" => Config::get('defaultgroup', 2, 'groups'), "user_id" => $request['user_id']));
+            Table::init('groups.usersgroups')
+                ->setRecord((object) array(
+                    "group_id" => Config::get('defaultgroup', 2, 'groups'), 
+                    "user_id" => Table::init('users.users')->getInsertedID()
+                ))
+                ->doInsert();
         }
         return true;
     }
@@ -195,8 +164,8 @@ class GroupsComponent extends Component
     {
         if($request['method'] == 'post')
         {
-            $requestObj = Request::init('groups.usersgroups');
-            $requestObj->doDelete(array("user_id" => $request['user_id']));
+            Table::init('groups.usersgroups')
+                ->doDelete((object) $request);
         }
         return true;
     }

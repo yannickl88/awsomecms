@@ -30,12 +30,14 @@ abstract class Table
     protected $keys;
     protected $name;
     protected $record;
+    protected $request;
     protected $errorRecord;
     protected $errorFields;
     protected $title;
     
     protected $component;
     protected $action;
+    protected $lastInsertedID;
     
     protected $adminURL;
     protected $addURL;
@@ -238,7 +240,7 @@ abstract class Table
     /**
     * Set the current record of the table
     * 
-    * @param array $data
+    * @param Object $data
     * @return Table
     */
     public function setRecord($data)
@@ -257,6 +259,33 @@ abstract class Table
             foreach($this->fields as $field)
             {
                 $field->setData($this->record[0]);
+            }
+        }
+        
+        return $this;
+    }
+    /**
+     * Set the request data for this table
+     * 
+     * @param Object $data
+     * @return Table
+     */
+    public function setRequest($data)
+    {
+        if(!empty($data))
+        {
+            if(!is_array($data))
+            {
+                $this->request = array($data);
+            }
+            else
+            {
+                $this->request = $data;
+            }
+            
+            foreach($this->fields as $field)
+            {
+                $field->setRequestData($this->request[0]);
             }
         }
         
@@ -388,7 +417,7 @@ abstract class Table
      */
     protected function toHTML_edit()
     {
-        $data = $this->doSelect($this->record[0])->getRow();
+        $data = $this->doSelect($this->request[0])->getRow();
         
         $html_post = "";
         $html = $this->getErrors();
@@ -427,7 +456,7 @@ abstract class Table
      */
     protected function toHTML_view()
     {
-        $data = $this->doSelect($this->record[0])->getRows();
+        $data = $this->doSelect($this->request[0])->getRows();
         
         $html = "<table class=\"admin_table\">\n";
         $html .= "    <tr class=\"admin_table_row\">\n";
@@ -527,7 +556,7 @@ abstract class Table
      */
     protected function toHTML_delete()
     {
-        $data = $this->doSelect($this->record[0])->getRows();
+        $data = $this->doSelect($this->request[0])->getRows();
         
         $html = "";
         $post_html = "";
@@ -595,6 +624,7 @@ abstract class Table
     /**
     * Preform a select on the table
     * 
+    * @param array $data
     * @return SQLRecord
     */
     public function doSelect($data = array())
@@ -621,6 +651,7 @@ abstract class Table
     /**
     * Preform an insert on the table
     * 
+    * @param array $data
     * @return int, last inserted ID
     */
     public function doInsert($data = array())
@@ -632,7 +663,7 @@ abstract class Table
         
         foreach($this->fields as $field)
         {
-            $field->insert($query, $this->record[0]);
+            $field->insert($query, $data);
         }
         
         $return = $this->insert($query, $data);
@@ -642,11 +673,13 @@ abstract class Table
             return $return;
         }
         
-        return $query->exec()->insertID();
+        $this->lastInsertedID = $query->exec()->insertID();
+        return $this->getInsertedID();
     }
     /**
     * Preform an update on the table
     * 
+    * @param array $data
     * @return SQLRecord
     */
     public function doUpdate($data = array())
@@ -658,7 +691,7 @@ abstract class Table
         
         foreach($this->fields as $field)
         {
-            $field->update($query, $this->record[0]);
+            $field->update($query, $data);
         }
         
         $return = $this->update($query, $data);
@@ -673,6 +706,7 @@ abstract class Table
     /**
     * Preform a delete on the table
     * 
+    * @param array $data
     * @return SQLRecord
     */
     public function doDelete($data = array())
@@ -684,7 +718,7 @@ abstract class Table
         
         foreach($this->fields as $field)
         {
-            $field->delete($query, $this->record[0]);
+            $field->delete($query, $data);
         }
         $return = $this->delete($query, $data);
         
@@ -897,5 +931,16 @@ abstract class Table
             
             throw $exception;
         }
+    }
+    /**
+     * Get the last inserted ID for this table. 
+     * Note: this is not fetched, only kept if there was an insert. So only use
+     * this if you are sure there was an insert.
+     * 
+     * @return int
+     */
+    public function getInsertedID()
+    {
+        return $this->lastInsertedID;
     }
 }

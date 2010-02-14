@@ -115,7 +115,7 @@ class CoreComponent extends Component
             {
                 $result = $installer->installComponent($request['installComponent'], ($request['installAdmin'] == 'true'));
                 
-                echo "true";
+                echo json_decode($result);
                 
                 Config::getInstance()->reloadComponenets();
                 

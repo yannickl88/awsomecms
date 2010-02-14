@@ -168,7 +168,6 @@ class Component
         $url .= $query;
         
         Controller::getInstance()->setRedirect($url);
-        Controller::getInstance()->redirect();
     }
     /**
      * Do an ajax return (just data, no HTML) in json format

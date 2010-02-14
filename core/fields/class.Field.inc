@@ -43,8 +43,10 @@ class Field
     const DUMMY         = 1024; //does not get's added to the selection list
     
     protected $name;
+    protected $table;
     protected $displayName;
     protected $value;
+    protected $requestValue;
     protected $defaultValue;
     protected $maxSize;
     
@@ -57,16 +59,28 @@ class Field
     protected $index;
     
     /**
-    * Constructor of the field
-    * 
-    * @param string $name
-    * @param mixed $value
-    * @return Field
-    */
+     * Constructor of the field
+     *
+     * @param string $name
+     * @param mixed $value
+     * @return Field
+     */
     public function __construct($name, $displayName = "", $style = 0)
     {
         $this->style = $style;
-        $this->name = $name;
+        
+        $nameArray = explode(".", $name);
+        
+        if(count($nameArray) == 2)
+        {
+            $this->name = $nameArray[1];
+            $this->table = $nameArray[0];
+        }
+        else
+        {
+            $this->name = $name;
+            $this->table = null;
+        }
         $this->displayName = ucfirst($displayName);
         $this->value = "";
         
@@ -119,36 +133,58 @@ class Field
         return $this->displayName;
     }
     /**
-    * Set the Value of this field
-    * 
-    * @param mixed $value
-    * @return Field
-    */
+     * Set the Value of this field
+     *
+     * @param mixed $value
+     * @return Field
+     */
     public function setValue($value)
     {
         $this->value = $value;
         return $this;
     }
     /**
-    * Set the Value of this field with an result object
-    * 
-    * @param Object $value
-    * @return Field
-    */
+     * Set the value that the field got in the request
+     * 
+     * @param mixed $value
+     * @return Field
+     */
+    public function setRequestValue($value)
+    {
+        $this->requestValue = $value;
+        return $this;
+    }
+    /**
+     * Set the Value of this field with an result object
+     *
+     * @param Object $value
+     * @return Field
+     */
     public function setData($record)
     {
         $name = $this->getName();
         return $this->setValue($record->$name);
     }
     /**
-    * request the data from this field
-    * 
-    * @param Object $data       Record object to fetch the data from
-    * @return mixed
-    */
+     * Set the request value of this field with an request object
+     * 
+     * @param Object $record
+     * @return Field
+     */
+    public function setRequestData($record)
+    {
+        $name = $this->getName();
+        return $this->setRequestValue($record->$name);
+    }
+    /**
+     * get the data from this field
+     *
+     * @param Object $data       Record object to fetch the data from
+     * @return mixed
+     */
     public function getValue($data = null)
     {
-        if(!empty($data))
+        if($data != null)
         {
             $name = $this->getName();
             return $data->$name;
@@ -156,6 +192,31 @@ class Field
         else
         {
             $value = $this->value;
+            
+            if(SQLQuery::isEmpty($value))
+            {
+                $value = $this->getDefaultValue();
+            }
+            
+            return $value;
+        }
+    }
+    /**
+     * get the request data from this field
+     * 
+     * @param Object $data
+     * @return mixed
+     */
+    public function getRequestValue($data = null)
+    {
+        if($data != null)
+        {
+            $name = $this->getName();
+            return $data->$name;
+        }
+        else
+        {
+            $value = $this->requestValue;
             
             if(SQLQuery::isEmpty($value))
             {
@@ -204,11 +265,11 @@ class Field
         }
     }
     /**
-    * Set the field to be required
-    * 
-    * @param boolean $required
-    * @return Field
-    */
+     * Set the field to be required
+     *
+     * @param boolean $required
+     * @return Field
+     */
     public function setRequired($required = true)
     {
         $this->required = ($required === true);
@@ -447,9 +508,9 @@ class Field
         
         if($this->isIndex())
         {
-            $query->whereWhenSet($this->getName(), $this->value2db($this->getValue($data)));
+            $query->whereWhenSet($this->getDBName(), $this->value2db($this->getValue($data)));
         }
-        $query->select($this->getName());
+        $query->select($this->getDBName());
     }
     /**
      * Add insert data for this field to a query
@@ -465,11 +526,11 @@ class Field
         }
         if($this->isRequired(Field::ADD) || $this->hasFlag(Field::FORCEUPDATE))
         {
-            $query->insert($this->getName(), $this->value2db($this->getValue()));
+            $query->insert($this->getDBName(), $this->value2db($this->getValue()));
         }
         else
         {
-            $query->insertWhenSet($this->getName(), $this->value2db($this->getValue($data)));
+            $query->insertWhenSet($this->getDBName(), $this->value2db($this->getValue($data)));
         }
     }
     /**
@@ -489,27 +550,27 @@ class Field
         {
             if($this->isRequired(Field::EDIT) || $this->hasFlag(Field::FORCEUPDATE))
             {
-                $query->update($this->getName(), $this->value2db($this->getValue($data)));
+                $query->update($this->getDBName(), $this->value2db($this->getValue($data)));
             }
             else
             {
-                $query->updateWhenSet($this->getName(), $this->value2db($this->getValue($data)));
+                $query->updateWhenSet($this->getDBName(), $this->value2db($this->getValue($data)));
             }
         }
         else
         {
             if($this->hasFlag(Field::FORCEUPDATE))
             {
-                $query->update($this->getName(), $this->value2db($this->getValue($data)));
+                $query->update($this->getDBName(), $this->value2db($this->getValue($data)));
             }
             
             if($this->isRequired(Field::EDIT))
             {
-                $query->where($this->getName(), $this->value2db($this->getValue($data)));
+                $query->where($this->getDBName(), $this->value2db($this->getValue($data)));
             }
             else
             {
-                $query->whereWhenSet($this->getName(), $this->value2db($this->getValue($data)));
+                $query->whereWhenSet($this->getDBName(), $this->value2db($this->getValue($data)));
             }
         }
     }
@@ -530,11 +591,11 @@ class Field
         {
             if($this->isRequired(Field::DELETE))
             {
-                $query->where($this->getName(), $this->value2db($this->getValue($data)));
+                $query->where($this->getDBName(), $this->value2db($this->getValue($data)));
             }
             else
             {
-                $query->whereWhenSet($this->getName(), $this->value2db($this->getValue($data)));
+                $query->whereWhenSet($this->getDBName(), $this->value2db($this->getValue($data)));
             }
         }
     }
@@ -547,10 +608,19 @@ class Field
     {
         $value = $this->getValue();
         
-        if(($mode == Field::ADD || $mode == Field::EDIT) &&
+        if($mode == Field::ADD &&
             $this->isRequired($mode) && 
-            empty($value) && 
-            ($this->hasFlag(Field::AUTOKEY) == false && $mode != Field::EDIT)
+            empty($value) &&
+            $this->hasFlag(Field::AUTOKEY) == false &&
+            !$this->hasFlag(Field::DUMMY)
+        )
+        {
+            throw new FormException($this, "Field was not filled in");
+        }
+        if($mode == Field::EDIT &&
+            $this->isRequired($mode) && 
+            empty($value) &&
+            !$this->hasFlag(Field::DUMMY)
         )
         {
             throw new FormException($this, "Field was not filled in");
@@ -565,5 +635,21 @@ class Field
     public function value2db($value)
     {
         return $value;
+    }
+    /**
+     * Get the name to be used in the SQL queries
+     * 
+     * @return string
+     */
+    public function getDBName()
+    {
+        if($this->table)
+        {
+            return $this->table.".".$this->getName();
+        }
+        else
+        {
+            return $this->getName();
+        }
     }
 }
