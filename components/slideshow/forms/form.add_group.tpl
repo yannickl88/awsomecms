@@ -16,7 +16,7 @@
             <label for="group_title">Title:</label>
         </div>
         <div class="admin_form_field">
-            <input type="text" name="group_title" id="group_title" value="{$FORMERROR.record.image_title}"/>
+            <input type="text" name="group_title" id="group_title" value="{$FORMERROR.record->image_title}"/>
         </div>
     </div>
     <div class="admin_form_row">
@@ -77,10 +77,7 @@
         onChange: function(file, extension){
             if($('#image_title').val() == '')
             {
-                alert("Please fill in a title");
-                $('#image_title').focus();
-                
-                return false;
+              $("#image_title").val(file.substr(0, file.lastIndexOf(".")));
             }
         },
         onSubmit: function(file, extension){
@@ -112,7 +109,7 @@
             var html = "";
             
             html += "<li id='image" + response[0].image_id + "'>";
-            html += "<a href='javascript: removeImage(" + response[0].image_id + ");'><img src='/img/icons/image_delete.png'/></a> ";
+            html += "<a href='javascript: removeImage(" + response[0].image_id + ");'><img src='/img/icons/delete.png'/></a> ";
             html += response[0].image_title;
             html += "<input type='hidden' name='images[]' value='" + response[0].image_id + "'>";
             html += "</li>";
@@ -135,7 +132,7 @@
                 var html = "";
                 
                 html += "<li id='image" + $(value).val() + "'>";
-                html += "<a href='javascript: removeImage(" + $(value).val() + ");'><img src='/img/icons/image_delete.png'/></a> ";
+                html += "<a href='javascript: removeImage(" + $(value).val() + ");'><img src='/img/icons/delete.png'/></a> ";
                 html += $(value).text();
                 html += "<input type='hidden' name='images[]' value='" + $(value).val() + "'>";
                 html += "</li>";

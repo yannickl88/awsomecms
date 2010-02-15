@@ -24,7 +24,7 @@
             <label for="image_image">Image:</label>
         </div>
         <div class="admin_form_field">
-            <input type="file" name="image_image" id="image_image" />
+            <input type="file" name="image_image" id="image_image"/>
         </div>
     </div>
     <div class="admin_form_row">
@@ -42,3 +42,16 @@
     <input type="hidden" name="action" value="add_image" />
     <input type="hidden" name="component" value="slideshow" />
 </form>
+<script>
+    {literal}
+    $().ready(function(e) {
+        $("#image_image").change(function(e) {
+            if($("#image_title").val() == "")
+            {
+                var title = $("#image_image").val();
+                $("#image_title").val(title.substr(0, title.lastIndexOf(".")));
+            }
+        });
+    });
+    {/literal}
+</script>

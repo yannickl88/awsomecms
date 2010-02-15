@@ -16,7 +16,7 @@
             <label for="comment_username">Name/E-mail<span class="required">*</span>:</label>
         </div>
         <div class="form_field">
-            <input type="text" name="comment_username" id="comment_username" value="{$FORMERROR.record.comment_username}"/>
+            <input type="text" name="comment_username" id="comment_username" value="{$FORMERROR.record->comment_username}"/>
         </div>
     </div>
     <div class="form_row">
@@ -24,7 +24,7 @@
             <label for="comment_text">Reply<span class="required">*</span>:</label>
         </div>
         <div class="form_field">
-            <textarea name="comment_text" id="comment_text" rows="5" cols="30">{$FORMERROR.record.$fieldcode}</textarea>
+            <textarea name="comment_text" id="comment_text" rows="5" cols="30">{$FORMERROR.record->comment_text}</textarea>
         </div>
     </div>
     <div class="form_row form_submit">

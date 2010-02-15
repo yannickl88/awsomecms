@@ -43,3 +43,16 @@
     <input type="hidden" name="action" value="edit_image" />
     <input type="hidden" name="component" value="slideshow" />
 </form>
+<script>
+    {literal}
+    $().ready(function(e) {
+        $("#image_image").change(function(e) {
+            if($("#image_title").val() == "")
+            {
+                var title = $("#image_image").val();
+                $("#image_title").val(title.substr(0, title.lastIndexOf(".")));
+            }
+        });
+    });
+    {/literal}
+</script>
