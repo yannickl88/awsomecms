@@ -83,7 +83,9 @@
                         <img src="/img/admin/logo.png" />
                     </a>
                     <div id="headerLinks">
-                        <a href="/doc.php" id="doc" target="_blank">Doc</a> | 
+                        {if $HASDOC}
+                        <a href="/doc.php" id="doc" target="_blank">Doc</a> |
+                        {/if} 
                         <a href="/">View site</a> | 
                         <a href="/?logout=true">Log out</a>
                     </div>
