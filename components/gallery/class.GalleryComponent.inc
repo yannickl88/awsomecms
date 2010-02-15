@@ -6,150 +6,100 @@ class GalleryComponent extends Component
     public function __construct()
     {
         parent::__construct('gallery');
-        
-        $this->fields = array(
-            "image_id" => "index",
-            "image_title" => "text"
-        );
-    }
-    
-    public function action_index($smarty, $smartyLoader, $request)
-    {
-        
     }
     
     public function action_add($smarty, $smartyLoader, $request)
     {
         if($request['method'] == 'post')
         {
-            if($this->validate($request, "/".Config::get('galleryadd', 'galleryadd', 'admin'), "add"))
-            {
-                $requestObj = Request::init("gallery");
-                
-                $request["image_url"] = "";
-                $request["image_urlthumb"] = "";
-                $request["image_width"] = 0;
-                $request["image_height"] = 0;
-                
-                $id = $requestObj->doInsert($request);
-                
-                $request["image_id"] = $id;
-                list($request["image_url"], $request["image_width"], $request["image_height"]) = $this->handleFileUpload($id, 'image_image');
-                if($request['image_tumb_generate'] == 'on')
-                {
-                    list($request["image_urlthumb"], $request["image_thumbwidth"], $request["image_thumbheight"]) = $this->createThumb($id, $request["image_url"]);
-                }
-                else
-                {
-                    list($request["image_urlthumb"], $request["image_thumbwidth"], $request["image_thumbheight"]) = $this->handleThumbUpload($id, 'image_thumb');
-                }
-                
-                if(!$request["image_urlthumb"])
-                {
-                    $exception = new InvalidFormException($request, Config::get('contactadd', 'contactadd', 'admin'), "The form was not valid");
-                    $exception->addInvalidField($field, "Field was not filled in");
-                    die("ERROR");
-                }
-                
-                $id = $requestObj->doUpdate($request);
-            }
+            $this->validate($request, "/".Config::get('galleryadd', 'galleryadd', 'admin'), "add");
             
-            if($request['uploadMore'] == 1)
+            $request["image_url"] = "";
+            $request["image_urlthumb"] = "";
+            $request["image_width"] = 0;
+            $request["image_height"] = 0;
+            
+            $id = Table::init("gallery.images")
+                ->setRecord((object) $request)
+                ->doInsert();
+            
+            $request["image_id"] = $id;
+            
+            list($request["image_url"], $request["image_width"], $request["image_height"]) = $this->handleFileUpload($id, 'image_image');
+            
+            if($request['image_tumb_generate'] == 'on')
             {
-                $this->redirect("/".Config::get('galleryadd', 'galleryadd', 'admin'));
+                list($request["image_urlthumb"], $request["image_thumbwidth"], $request["image_thumbheight"]) = $this->createThumb($id, $request["image_url"]);
             }
             else
             {
-                $this->redirect("/".Config::get('galleryadmin', 'galleryadmin', 'admin'));
+                list($request["image_urlthumb"], $request["image_thumbwidth"], $request["image_thumbheight"]) = $this->handleThumbUpload($id, 'image_thumb');
             }
+            
+            if(!$request["image_urlthumb"])
+            {
+                $exception = new InvalidFormException($request, Config::get('contactadd', 'contactadd', 'admin'), "The form was not valid");
+                $exception->addInvalidField($field, "Field was not filled in");
+                die("ERROR");
+            }
+            
+            Table::init("gallery.images")
+                ->setRecord((object) $request)
+                ->doUpdate();
         }
+        
+        $this->redirect("/".Config::get('galleryadmin', 'galleryadmin', 'admin'));
     }
     
     public function action_edit($smarty, $smartyLoader, $request)
     {
-        $requestObj = Request::init("gallery");
-        
         if($request['method'] == 'post')
         {
-            if($this->validate($request, "/".Config::get('galleryedit', 'galleryedit', 'admin'), "edit"))
-            {
-                $record = $requestObj->doSelect($request);
-                
-                $id = $request['image_id'];
-                
-                if($_FILES['image_image'] && !empty($_FILES['image_image']['tmp_name']))
-                {
-                    //remove old one
-                    if($record[0]->image_url != '' && file_exists(Config::get('websiteroot', '.').$record[0]->image_url) && is_file(Config::get('websiteroot', '.').$record[0]->image_url))
-                    {
-                        @unlink(Config::get('websiteroot', '.').'/'.$record[0]->image_url);
-                    }
-                    
-                    //upload new one
-                    list($request["image_url"], $request["image_width"], $request["image_height"]) = $this->handleFileUpload($id, 'image_image');
-                    
-                    if($request['image_tumb_generate'] == 'on')
-                    {
-                        if($record[0]->image_urlthumb != '' && file_exists(Config::get('websiteroot', '.').$record[0]->image_urlthumb) && is_file(Config::get('websiteroot', '.').$record[0]->image_urlthumb))
-                        {
-                            @unlink(Config::get('websiteroot', '.').$record[0]->image_urlthumb);
-                        }
-                        list($request["image_urlthumb"], $request["image_thumbwidth"], $request["image_thumbheight"]) = $this->createThumb($id, $request["image_url"]);
-                    }
-                }
-                
-                if($_FILES['image_thumb'])
-                {
-                    //remove old one
-                    if(file_exists(Config::get('websiteroot', '.').'/'.Config::get('uploaddir', 'img/upload/', 'gallery').$record[0]->image_urlthumb) && is_file(Config::get('websiteroot', '.').$record[0]->image_urlthumb))
-                    {
-                        unlink(Config::get('websiteroot', '.').'/'.Config::get('uploaddir', 'img/upload/', 'gallery').$record[0]->image_urlthumb);
-                    }
-                    
-                    //upload new one
-                    list($request["image_urlthumb"], $request["image_thumbwidth"], $request["image_thumbheight"]) = $this->handleThumbUpload($id, 'image_thumb');
-                }
-                
-                $requestObj->doUpdate($request);
-            }
+            $this->validate($request, "/".Config::get('galleryedit', 'galleryedit', 'admin'), "edit");
             
-            $this->redirect("/".Config::get('galleryadmin', 'galleryadmin', 'admin'));
-        }
-        else
-        {
-            if($request['image_id'])
-            {
-                $record = $requestObj->doSelect($request);
-                
-                $smarty->assign("record", $record[0]);
-            }
-            else
-            {
-                $this->redirect("/".Config::get('galleryadmin', 'galleryadmin', 'admin'));
-            }
-        }
-    }
-    
-    public function action_delete($smarty, $smartyLoader, $request)
-    {
-        $requestObj = Request::init("gallery");
-        
-        if($request['method'] == 'post')
-        {
-            $record = $requestObj->doSelect($request);
+            $record = Table::init("gallery.images")
+                ->setRequest((object) $request)
+                ->doSelect()
+                ->getRows();
             
             $id = $request['image_id'];
             
-            //remove old one
-            if(file_exists(Config::get('websiteroot', '.').$record[0]->image_url))
+            if($_FILES['image_image'] && !empty($_FILES['image_image']['tmp_name']))
             {
-                @unlink(Config::get('websiteroot', '.').'/'.$record[0]->image_url);
+                //remove old one
+                if($record[0]->image_url != '' && file_exists(Config::get('websiteroot', '.').$record[0]->image_url) && is_file(Config::get('websiteroot', '.').$record[0]->image_url))
+                {
+                    @unlink(Config::get('websiteroot', '.').'/'.$record[0]->image_url);
+                }
+                
+                //upload new one
+                list($request["image_url"], $request["image_width"], $request["image_height"]) = $this->handleFileUpload($id, 'image_image');
+                
+                if($request['image_tumb_generate'] == 'on')
+                {
+                    if($record[0]->image_urlthumb != '' && file_exists(Config::get('websiteroot', '.').$record[0]->image_urlthumb) && is_file(Config::get('websiteroot', '.').$record[0]->image_urlthumb))
+                    {
+                        @unlink(Config::get('websiteroot', '.').$record[0]->image_urlthumb);
+                    }
+                    list($request["image_urlthumb"], $request["image_thumbwidth"], $request["image_thumbheight"]) = $this->createThumb($id, $request["image_url"]);
+                }
             }
-            if(file_exists(Config::get('websiteroot', '.').$record[0]->image_urlthumb))
+            
+            if($_FILES['image_thumb'])
             {
-                @unlink(Config::get('websiteroot', '.').$record[0]->image_urlthumb);
+                //remove old one
+                if(file_exists(Config::get('websiteroot', '.').'/'.Config::get('uploaddir', 'img/upload/', 'gallery').$record[0]->image_urlthumb) && is_file(Config::get('websiteroot', '.').$record[0]->image_urlthumb))
+                {
+                    unlink(Config::get('websiteroot', '.').'/'.Config::get('uploaddir', 'img/upload/', 'gallery').$record[0]->image_urlthumb);
+                }
+                
+                //upload new one
+                list($request["image_urlthumb"], $request["image_thumbwidth"], $request["image_thumbheight"]) = $this->handleThumbUpload($id, 'image_thumb');
             }
-            $requestObj->doDelete($request);
+            
+            Table::init("gallery.images")
+                ->setRecord((object) $request)
+                ->doUpdate();
             
             $this->redirect("/".Config::get('galleryadmin', 'galleryadmin', 'admin'));
         }
@@ -157,7 +107,10 @@ class GalleryComponent extends Component
         {
             if($request['image_id'])
             {
-                $record = $requestObj->doSelect($request);
+                $record = Table::init("gallery.images")
+                    ->setRequest((object) $request)
+                    ->doSelect()
+                    ->getRow();
                 
                 $smarty->assign("record", $record);
             }
@@ -168,14 +121,48 @@ class GalleryComponent extends Component
         }
     }
     
-    public function action_admin($smarty, $smartyLoader, $request)
+    public function action_delete($smarty, $smartyLoader, $request)
     {
-        $smarty->assign("records", Request::init("gallery")->doSelect());
-        
-        //urls
-        $smarty->assign("actionurl_add", Config::get('galleryadd', 'galleryadd', 'admin'));
-        $smarty->assign("actionurl_edit", Config::get('galleryedit', 'galleryedit', 'admin'));
-        $smarty->assign("actionurl_delete", Config::get('gallerydelete', 'gallerydelete', 'admin'));
+        if($request['method'] == 'post')
+        {
+            $record = Table::init("gallery.images")
+                ->setRequest((object) $request)
+                ->doSelect()
+                ->getRow();
+            
+            $id = $request['image_id'];
+            
+            //remove old one
+            if(file_exists(Config::get('websiteroot', '.').$record->image_url))
+            {
+                @unlink(Config::get('websiteroot', '.').'/'.$record->image_url);
+            }
+            if(file_exists(Config::get('websiteroot', '.').$record->image_urlthumb))
+            {
+                @unlink(Config::get('websiteroot', '.').$record->image_urlthumb);
+            }
+            Table::init("gallery.images")
+                ->setRequest((object) $request)
+                ->doDelete();
+            
+            $this->redirect("/".Config::get('galleryadmin', 'galleryadmin', 'admin'));
+        }
+        else
+        {
+            if($request['image_id'])
+            {
+                $record = Table::init("gallery.images")
+                    ->setRequest((object) $request)
+                    ->doSelect()
+                    ->getRows();
+                
+                $smarty->assign("record", $record);
+            }
+            else
+            {
+                $this->redirect("/".Config::get('galleryadmin', 'galleryadmin', 'admin'));
+            }
+        }
     }
     
     private function handleFileUpload($id, $name)
@@ -288,54 +275,61 @@ class GalleryComponent extends Component
     {
         $valid = true;
         $index = -1;
-        $exception = new InvalidFormException($data, $redirectOnFailure, "The form was not valid");
+        $exception = new InvalidFormException($data, $redirectOnFailure, "gallery.images", "The form was not valid");
+        $exception->setRedirectData(array("image_id" => $data["image_id"]));
         
         //check if the file did actully upload
         if($_FILES['image_image']['error'] > 0) //uh-oh error
         {
-            $error = "";
-            
-            switch($_FILES['image_image']['error'])
+            if($mode == "edit" && $_FILES['image_image']['error'] != 4)
             {
-                case 1:
-                case 2:
-                case 3:
-                    $error = "Filesize is to large";
-                    break;
-                case 4:
-                    $error = "No file selected";
-                    break;
-                case 5:
-                    $error = "Cannot write file to disk";
-                    break;
+                $error = "";
+                
+                switch($_FILES['image_image']['error'])
+                {
+                    case 1:
+                    case 2:
+                    case 3:
+                        $error = "Filesize is to large";
+                        break;
+                    case 4:
+                        $error = "No file selected";
+                        break;
+                    case 5:
+                        $error = "Cannot write file to disk";
+                        break;
+                }
+                
+                $exception->addInvalidField('image_image', $error);
+                throw $exception;
             }
-            
-            $exception->addInvalidField('image_image', $error);
-            throw $exception;
         }
         
         //check if the file did actully upload
         if($data['image_tumb_generate'] != 'on' && $_FILES['image_thumb']['error'] > 0) //uh-oh error
         {
-            $error = "";
-            
-            switch($_FILES['image_thumb']['error'])
+            if($mode == "edit" && $_FILES['image_thumb']['error'] != 4)
             {
-                case 1:
-                case 2:
-                case 3:
-                    $error = "Filesize is to large";
-                    break;
-                case 4:
-                    $error = "No file selected";
-                    break;
-                case 5:
-                    $error = "Cannot write file to disk";
-                    break;
+                $error = "";
+                
+                switch($_FILES['image_thumb']['error'])
+                {
+                    case 1:
+                    case 2:
+                    case 3:
+                        $error = "Filesize is to large";
+                        break;
+                    case 4:
+                        $error = "No file selected";
+                        break;
+                    case 5:
+                        $error = "Cannot write file to disk";
+                        break;
+                }
+                
+                $exception->addInvalidField('image_thumb', $error);
+                throw $exception;
             }
-            
-            $exception->addInvalidField('image_thumb', $error);
-            throw $exception;
         }
         
         if($data['image_tumb_generate'] != 'on')
@@ -347,27 +341,9 @@ class GalleryComponent extends Component
             if($tempInfo[0] > $maxDimentions[0] || $tempInfo[1] > $maxDimentions[1])
             {
                 $exception->addInvalidField('image_thumb', "Tumb image was to large");
-                
-                if($mode == "edit")
-                {
-                    foreach($this->fields as $field => $type)
-                    {
-                        //check for index
-                        if($index == -1 && $type == 'index')
-                        {
-                            $index = $field;
-                            break;
-                        }
-                    }
-                    
-                    $exception->setRedirectData(array($index => $data[$index]));
-                }
-                
                 throw $exception;
             }
         }
-        
-        return parent::validate($data, $redirectOnFailure, $mode);
     }
     
     public function registerMenuItems($menu)

@@ -524,7 +524,7 @@ class Field
         }
         else
         {
-            $query->insertWhenSet($this->getDBName(), $this->value2db($this->getValue($data)));
+            $query->insertWhenSet($this->getDBName(), $this->value2db($this->getValue()));
         }
     }
     /**
@@ -544,27 +544,27 @@ class Field
         {
             if($this->isRequired(Field::EDIT) || $this->hasFlag(Field::FORCEUPDATE))
             {
-                $query->update($this->getDBName(), $this->value2db($this->getValue($data)));
+                $query->update($this->getDBName(), $this->value2db($this->getValue()));
             }
             else
             {
-                $query->updateWhenSet($this->getDBName(), $this->value2db($this->getValue($data)));
+                $query->updateWhenSet($this->getDBName(), $this->value2db($this->getValue()));
             }
         }
         else
         {
             if($this->hasFlag(Field::FORCEUPDATE))
             {
-                $query->update($this->getDBName(), $this->value2db($this->getValue($data)));
+                $query->update($this->getDBName(), $this->value2db($this->getValue()));
             }
             
             if($this->isRequired(Field::EDIT))
             {
-                $query->where($this->getDBName(), $this->value2db($this->getValue($data)));
+                $query->where($this->getDBName(), $this->value2db($this->getValue()));
             }
             else
             {
-                $query->whereWhenSet($this->getDBName(), $this->value2db($this->getValue($data)));
+                $query->whereWhenSet($this->getDBName(), $this->value2db($this->getValue()));
             }
         }
     }

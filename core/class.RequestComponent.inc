@@ -138,17 +138,18 @@ class RequestComponent
         }
         
         //handle request
-        $proxyObject = Table::init($request->table)
-            ->setExternal(true);
+        $proxyObject = Table::init($request->table);
         
         if($proxyObject)
         {
+            
             unset($data['username']);
             unset($data['password']);
             unset($data['url']);
             
             try
             {
+                $proxyObject->setExternal(true);
                 $proxyObject->setRequest((object) $data);
                 $proxyObject->setRecord((object) $data);
                 

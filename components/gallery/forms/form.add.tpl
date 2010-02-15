@@ -16,7 +16,7 @@
             <label for="image_title">Title:</label>
         </div>
         <div class="admin_form_field">
-            <input type="text" name="image_title" id="image_title" value="{$FORMERROR.record.image_title}"/>
+            <input type="text" name="image_title" id="image_title" value="{$FORMERROR.record->image_title}"/>
         </div>
     </div>
     <div class="admin_form_row">
@@ -32,8 +32,8 @@
             <label for="image_thumb">Tumb:</label>
         </div>
         <div class="admin_form_field">
-            <input type="file" name="image_thumb" id="image_thumb" {if $FORMERROR.record.image_tumb_generate}disabled="disabled"{/if}/>
-            <input type="checkbox" name="image_tumb_generate" id="image_tumb_generate" {if $FORMERROR.record.image_tumb_generate}checked="checked"{/if}/> Generate
+            <input type="file" name="image_thumb" id="image_thumb" {if $FORMERROR.record->image_tumb_generate}disabled="disabled"{/if}/>
+            <input type="checkbox" name="image_tumb_generate" id="image_tumb_generate" {if $FORMERROR.record->image_tumb_generate}checked="checked"{/if}/> Generate
         </div>
     </div>
     <div class="admin_form_row">
@@ -41,12 +41,11 @@
             <label for="image_tag">Tag:</label>
         </div>
         <div class="admin_form_field">
-            <input type="text" name="image_tag" id="image_tag" value="{$FORMERROR.record.image_tag}"/>
+            <input type="text" name="image_tag" id="image_tag" value="{$FORMERROR.record->image_tag}"/>
         </div>
     </div>
     <div class="admin_form_row admin_form_submit">
         <input type="submit" value="Save" id="user_submit" class="admin_form_submit">
-        <input type="checkbox" value="1" name="uploadMore"> Upload More
     </div>
     <input type="hidden" name="action" value="add" />
     <input type="hidden" name="component" value="gallery" />
