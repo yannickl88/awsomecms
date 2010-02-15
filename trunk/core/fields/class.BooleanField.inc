@@ -12,14 +12,14 @@
  *
  * @version $Revision$
  */
-importField("Field");
+importField("IntField");
 
 /**
  * Boolean field.
  * 
  * @author Yannick <yannick.l.88@gmail.com>
  */
-class BooleanField extends Field
+class BooleanField extends IntField
 {
     /**
      * (non-PHPdoc)

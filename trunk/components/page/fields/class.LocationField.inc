@@ -21,6 +21,8 @@ importField("Field");
  */
 class LocationField extends Field
 {
+    protected $displayPages;
+    
     /**
      * Constructor
      * 
@@ -28,9 +30,11 @@ class LocationField extends Field
      * @param string $displayName
      * @param int $style
      */
-    public function __construct($name, $displayName = "", $style=0)
+    public function __construct($name, $displayName = "", $style=0, $displayPages = false)
     {
         parent::__construct($name, $displayName, $style|Field::HIDE_VIEW);
+        
+        $this->displayPages = $displayPages;
     }
     /**
      * (non-PHPdoc)
@@ -41,7 +45,7 @@ class LocationField extends Field
         $smarty = Controller::getInstance()->getSmarty();
         
         $html = "";
-        $html .= smarty_function_admintree(array("javascript" => $this->getName(), "folderonly" => true), $smarty);
+        $html .= smarty_function_admintree(array("javascript" => $this->getName(), "folderonly" => !$this->displayPages), $smarty);
         $html .= "<input type='text' name='{$this->name}' id='{$this->name}' value='{$this->defaultValue}'/>";
         return $html;
     }
@@ -54,7 +58,7 @@ class LocationField extends Field
         $smarty = Controller::getInstance()->getSmarty();
         
         $html = "";
-        $html .= smarty_function_admintree(array("javascript" => $this->getName(), "folderonly" => true), $smarty);
+        $html .= smarty_function_admintree(array("javascript" => $this->getName(), "folderonly" => !$this->displayPages), $smarty);
         $html .= "<input type='text' name='{$this->name}' id='{$this->name}' value='{$this->value}'/>";
         
         return $html;

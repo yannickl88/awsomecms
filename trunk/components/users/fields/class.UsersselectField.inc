@@ -111,6 +111,7 @@ class UsersselectField extends Field
      */
     public function getJavascript()
     {
+        //TODO: fix this so that it can be used multiple times on the same page. Now it is depended on the field name.
         return <<<JS
             function form_UsersselectField_moveItem(from, to)
             {

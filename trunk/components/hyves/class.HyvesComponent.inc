@@ -12,8 +12,9 @@ class HyvesComponent extends Component
     {
         $xml = new SimpleXMLElement(file_get_contents(Config::get("blogurl", false, "hyves")));
         
-        $lastElement = Request::init("hyves.blog")->doSelect();
-        $lastElement = $lastElement[0];
+        $lastElement = Table::init("news.news")
+            ->doSelect()
+            ->getRow();
         
         foreach($xml->channel->item as $item)
         {
@@ -35,7 +36,9 @@ class HyvesComponent extends Component
                 break;
             }
             
-            Request::init("news")->doInsert($data);
+            Table::init("news.news")
+                ->setRecord()
+                ->doInsert($data);
         }
     }
 }

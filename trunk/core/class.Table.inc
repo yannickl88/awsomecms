@@ -256,6 +256,7 @@ abstract class Table
                 $this->record = $data;
             }
             
+            
             foreach($this->fields as $field)
             {
                 $field->setData($this->record[0]);
@@ -624,11 +625,12 @@ abstract class Table
     /**
     * Preform a select on the table
     * 
-    * @param array $data
     * @return SQLRecord
     */
-    public function doSelect($data = array())
+    public function doSelect()
     {
+        $data = $this->request[0];
+        
         $this->validate(Field::VIEW);
         
         $query = SQLQuery::doSelect();
@@ -651,11 +653,11 @@ abstract class Table
     /**
     * Preform an insert on the table
     * 
-    * @param array $data
     * @return int, last inserted ID
     */
-    public function doInsert($data = array())
+    public function doInsert()
     {
+        $data = $this->request[0];
         $this->validate(Field::ADD);
         
         $query = SQLQuery::doInsert();
@@ -679,11 +681,11 @@ abstract class Table
     /**
     * Preform an update on the table
     * 
-    * @param array $data
     * @return SQLRecord
     */
-    public function doUpdate($data = array())
+    public function doUpdate()
     {
+        $data = $this->request[0];
         $this->validate(Field::EDIT);
         
         $query = SQLQuery::doUpdate();
@@ -706,11 +708,11 @@ abstract class Table
     /**
     * Preform a delete on the table
     * 
-    * @param array $data
     * @return SQLRecord
     */
-    public function doDelete($data = array())
+    public function doDelete()
     {
+        $data = $this->request[0];
         $this->validate(Field::DELETE);
         
         $query = SQLQuery::doDelete();
