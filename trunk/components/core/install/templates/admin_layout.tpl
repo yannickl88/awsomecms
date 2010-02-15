@@ -115,12 +115,11 @@
             </div>
             <div id="contentWrapper">
                 {$content}
-                <div id="copyright">
-                    <hr /><br />
-                    <a href="http://yannickl88.nl/cms">A.W.S.O.M.E. cms</a> &copy; 2009 - 2010
-                </div>
             </div>
-            <div id="clearer"></div>
+            <div id="copyright">
+                <hr /><br />
+                <a href="http://yannickl88.nl/cms">A.W.S.O.M.E. cms</a> &copy; 2009 - 2010
+            </div>
         </div>
         {/if}
     </body>
