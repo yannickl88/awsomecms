@@ -30,7 +30,7 @@ class ImagesTable extends Table
         parent::__construct("s_images");
         $this->assign("slideshow");
         
-        $this->addField(new IntField("image_id", "", Field::AUTOKEY|Field::INDEX));
+        $this->addField(new IntField("s_images.image_id", "", Field::AUTOKEY|Field::INDEX));
         $this->addField(new Field("image_title", "Title"));
         $this->addField(new Field("image_url", "", Field::OPTIONAL|Field::HIDE));
         $this->addField(new IntField("image_width", "", Field::OPTIONAL|Field::HIDE));
@@ -49,7 +49,14 @@ class ImagesTable extends Table
      * (non-PHPdoc)
      * @see core/Table#select($query, $data)
      */
-    protected function select($query, $data = null) {}
+    protected function select($query, $data = null)
+    {
+        if($data && isset($data->group_id))
+        {
+            $query->join("s_groups_images", "s_images.image_id", "s_groups_images.image_id", "inner");
+            $query->where("group_id", $data->group_id);
+        }
+    }
     /**
      * (non-PHPdoc)
      * @see core/Table#insert($query, $data)

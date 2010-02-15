@@ -38,6 +38,7 @@ abstract class Table
     protected $component;
     protected $action;
     protected $lastInsertedID;
+    protected $fromExternal;
     
     protected $adminURL;
     protected $addURL;
@@ -120,8 +121,30 @@ abstract class Table
         $this->fields = array();
         $this->keys = array();
         $this->fieldTypes = array();
+        $this->fromExternal = false;
         
         return $this;
+    }
+    /**
+     * Set if the table is being accessed from an external source.
+     * 
+     * @param boolean $fromExternal
+     * @return Table
+     */
+    public function setExternal($fromExternal)
+    {
+        $this->fromExternal = $fromExternal;
+        
+        return $this;
+    }
+    /**
+     * Check if the table is being accessed from an external source.
+     * 
+     * @return boolean
+     */
+    public function getExternal()
+    {
+        return $this->fromExternal;
     }
     /**
     * Assign the table to a component with an action. 

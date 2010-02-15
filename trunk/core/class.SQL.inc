@@ -598,7 +598,7 @@ class SQLRecord
 {
     public $record;
     private $count;
-    private $records;
+    public $records;
     private $insertID = false;
     
     private $index = 0;

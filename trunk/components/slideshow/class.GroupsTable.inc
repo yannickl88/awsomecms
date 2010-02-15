@@ -62,5 +62,37 @@ class GroupsTable extends Table
      * @see core/Table#delete($query, $data)
      */
     protected function delete($query, $data = null) {}
-
+    /**
+     * (non-PHPdoc)
+     * @see core/Table#doSelect()
+     */
+    public function doSelect()
+    {
+        $result = parent::doSelect();
+        
+        if($this->getExternal()) //if we ask this from the external api, we need some more info
+        {
+            foreach($result->records as $record)
+            {
+                $header = Table::init("slideshow.images")
+                    ->setRequest((object) array("image_id" => $record->group_header))
+                    ->doSelect()
+                    ->getRow();
+                        
+                $record->image_id = $header->image_id;
+                $record->image_title = $header->image_title;
+                $record->image_url = $header->image_url;
+                $record->image_width = $header->image_width;
+                $record->image_height = $header->image_height;
+                $record->image_size = $header->image_size;
+                
+                $record->images = Table::init("slideshow.images")
+                    ->setRequest((object) array("group_id" => $record->group_id))
+                    ->doSelect()
+                    ->getRows();
+            }
+        }
+        
+        return $result;
+    }
 }
