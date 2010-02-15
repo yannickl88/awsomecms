@@ -24,15 +24,17 @@ function smarty_function_admintree($params, &$smarty)
 {
     $javascript = ''.$params['javascript'];
     $folderOnly = ($params['folderonly'] === true);
+    
     if(isset($params['hideadmin']))
     {
         $hideAdmin = ($params['hideadmin'] === true);
     }
     else
     {
-        $hideAdmin = Config::get("hideadmintree", true, "admin");
+        $hideAdmin = Config::get("hideadmintree", true, "admin") === "1";
     }
 
+    
     $tree = array();
 
     $currentFolder = '/';
@@ -40,7 +42,7 @@ function smarty_function_admintree($params, &$smarty)
 
     if($hideAdmin)
     {
-        $table->setRecord((object) array("where" => array('page_location', "/admin/%", "NOT LIKE")));
+        $table->setRequest((object) array("where" => array('page_location', "/admin/%", "NOT LIKE")));
     }
 
     $result = $table->doSelect()->getRows();

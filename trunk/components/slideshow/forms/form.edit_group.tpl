@@ -10,6 +10,7 @@
         {/foreach}
     </script>
 {/if}
+<h2>Edit {$record->group_title}</h2>
 <form method="post" action="/" class="admin_form admin_slideshow_group_add" enctype="multipart/form-data">
     <div class="admin_form_row">
         <div class="admin_form_label">

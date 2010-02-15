@@ -1,3 +1,4 @@
+<h2>Layout mappings</h2>
 <form method="post" action="/" class="admin_form admin_core_layout">
     <table>
         <tr class="header">

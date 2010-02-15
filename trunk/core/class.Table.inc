@@ -413,6 +413,7 @@ abstract class Table
     protected function toHTML_add()
     {
         $html = $this->getErrors();
+        $html .= "<h2>Add to ".$this->component."</h2>\n";
         $html .= "<form method=\"post\" action=\"/\" class=\"admin_form admin_add\">\n";
         
         foreach($this->fields as $field)
@@ -445,6 +446,7 @@ abstract class Table
         
         $html_post = "";
         $html = $this->getErrors();
+        $html .= "<h2>Edit ".$this->parseTitle($this->title, $data)."</h2>\n";
         $html .= "<form method=\"post\" action=\"/\" class=\"admin_form admin_edit\">\n";
         
         foreach($this->fields as $field) //@var $field Field
@@ -482,8 +484,10 @@ abstract class Table
     {
         $data = $this->doSelect($this->request[0])->getRows();
         
-        $html = "<table class=\"admin_table\">\n";
-        $html .= "    <tr class=\"admin_table_row\">\n";
+        $html = "";
+        $html .= "<h2>".ucfirst($this->component)." overview</h2>\n";
+        $html .= "<table class=\"admin_table\">\n";
+        $html .= "    <tr class=\"admin_table_header\">\n";
         foreach($this->fields as $field)
         {
             if($field->visible(Field::VIEW))
@@ -560,7 +564,7 @@ abstract class Table
         }
         
         $colspan = $cols + 1;
-        $html .= "    <tr class=\"admin_table_row\">\n";
+        $html .= "    <tr class=\"admin_table_row admin_table_actions_row\">\n";
         $html .= "        <td class=\"admin_table_cell admin_table_actions\" colspan=\"{$colspan}\">\n";
         $html .= "            <img src=\"/img/icons/add.png\" alt=\"add\"> <a href=\"/{$this->addURL}\">Add</a>\n";
         $html .= "        </td>\n";
@@ -584,6 +588,7 @@ abstract class Table
         
         $html = "";
         $post_html = "";
+        $html .= "<h2>Delete from ".$this->component."</h2>\n";
         $html .= "<form method=\"post\" action=\"/\" class=\"admin_form admin_delete\">\n";
         $html .= "    <div class=\"admin_form_row\">\n";
         $html .= "        <div class=\"admin_form_text\">\n";

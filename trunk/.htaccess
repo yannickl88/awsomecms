@@ -1,5 +1,7 @@
 AddType application/x-httpd-php .inc
 
+Options -Indexes
+
 RewriteEngine On
 # disable viewing of ini files
 RewriteRule \.(ini)$ - [F]
