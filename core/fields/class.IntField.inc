@@ -60,7 +60,11 @@ JS;
     {
         $value = $this->getValue();
         
-        if(!is_int($value) && !is_numeric($value))
+        if(is_int($value) || is_numeric($value))
+        {
+            return;
+        }
+        else
         {
             parent::validate($mode);
             

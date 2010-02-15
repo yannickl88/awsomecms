@@ -7,35 +7,48 @@ import('/core/class.Component.inc');
 class ContactComponent extends Component
 {
     /**
-    * Constructor class for the contact component
-    */
+     * Constructor class for the contact component
+     */
     public function __construct()
     {
         parent::__construct('contact');
-        
-        $this->fields = array(
-            "form_id" => "index",
-            "form_name" => "text",
-            "form_to" => "text",
-            "form_subject" => "text",
-            "form_thanks" => "text"
-        );
     }
-    
     /**
-    * Add action, this is called when a contact form is added
-    * 
-    * @param Smarty $smarty
-    * @param SmartyPageLoader $smartyLoader
-    * @param array $request
-    */
+     * Add action, this is called when a contact form is added
+     *
+     * @param Smarty $smarty
+     * @param SmartyPageLoader $smartyLoader
+     * @param array $request
+     */
     public function action_add($smarty, $smartyLoader, $request)
     {
         if($request['method'] == 'post')
         {
-            if($this->validate($request, "/".Config::get('contactadd', 'contactadd', 'admin'), "add"))
+            $id = Table::init("contact.forms")
+                ->setRecord((object) $request)
+                ->doInsert();
+            
+            $fields;
+            parse_str($request['form_fields'], $fields);
+            
+            if($fields["field_sort"] != null)
             {
-                $id = $this->insert($request);
+                asort($fields["field_sort"]);
+                
+                foreach($fields["field_sort"] as $key => $value)
+                {
+                    $record = (object) array(
+                        "field_form" => $id,
+                        "field_name" => $fields["field_name"][$key],
+                        "field_code" => $fields["field_code"][$key],
+                        "field_type" => (int) $fields["field_type"][$key],
+                        "field_required" => (int) $fields["field_required"][$key],
+                    );
+                    
+                    Table::init("contact.formfields")
+                        ->setRecord((object) $record)
+                        ->doInsert();
+                }
             }
             
             $this->redirect("/".Config::get('contactadmin', 'contactadmin', 'admin'));
@@ -53,9 +66,36 @@ class ContactComponent extends Component
     {
         if($request['method'] == 'post')
         {
-            if($this->validate($request, "/".Config::get('contactedit', 'contactedit', 'admin'), "edit"))
+            Table::init("contact.forms")
+                ->setRecord((object) $request)
+                ->doUpdate();
+            
+            Table::init("contact.formfields")
+                ->setRequest((object) array("form_id" => $request['form_id']))
+                ->doDelete();
+            
+            $id = $request['form_id'];
+            $fields;
+            parse_str($request['form_fields'], $fields);
+            
+            if($fields["field_sort"] != null)
             {
-                $this->update($request);
+                asort($fields["field_sort"]);
+                
+                foreach($fields["field_sort"] as $key => $value)
+                {
+                    $record = (object) array(
+                        "field_form" => $id,
+                        "field_name" => $fields["field_name"][$key],
+                        "field_code" => $fields["field_code"][$key],
+                        "field_type" => (int) $fields["field_type"][$key],
+                        "field_required" => (int) $fields["field_required"][$key],
+                    );
+                    
+                    Table::init("contact.formfields")
+                        ->setRecord((object) $record)
+                        ->doInsert();
+                }
             }
             
             $this->redirect("/".Config::get('contactadmin', 'contactadmin', 'admin'), array("form_id" => $request['form_id']));
@@ -64,9 +104,13 @@ class ContactComponent extends Component
         {
             if($request['form_id'])
             {
-                $record = $this->select($request);
+                $request['form_fields'] = Table::init("contact.formfields")
+                    ->setRequest((object) $request)
+                    ->doSelect()
+                    ->getRows();
                 
-                $smarty->assign("record", $record[0]);
+                Table::init("contact.forms")
+                    ->setRequest((object) $request);
             }
             else
             {
@@ -86,7 +130,13 @@ class ContactComponent extends Component
     {
         if($request['method'] == 'post')
         {
-            $this->delete($request);
+            Table::init("contact.formfields")
+                ->setRequest((object) array("form_id" => $request['form_id']))
+                ->doDelete();
+            
+            Table::init("contact.forms")
+                ->setRequest((object) $request)
+                ->doDelete();
             
             $this->redirect("/".Config::get('contactadmin', 'contactadmin', 'admin'));
         }
@@ -94,32 +144,14 @@ class ContactComponent extends Component
         {
             if($request['form_id'])
             {
-                $record = $this->select($request);
-                
-                $smarty->assign("record", $record);
+                Table::init("contact.forms")
+                    ->setRequest((object) $request);
             }
             else
             {
                 $this->redirect("/".Config::get('contactadd', 'contactadd', 'admin'));
             }
         }
-    }
-    
-    /**
-    * Admin action, this is called when a showing the admin overview of the forms
-    * 
-    * @param Smarty $smarty
-    * @param SmartyPageLoader $smartyLoader
-    * @param array $request
-    */
-    public function action_admin($smarty, $smartyLoader, $request)
-    {
-        $smarty->assign("records", $this->select());
-        
-        //urls
-        $smarty->assign("actionurl_add", Config::get('contactadd', 'contactadd', 'admin'));
-        $smarty->assign("actionurl_edit", Config::get('contactedit', 'contactedit', 'admin'));
-        $smarty->assign("actionurl_delete", Config::get('contactdelete', 'contactdelete', 'admin'));
     }
     
     /**
@@ -133,9 +165,15 @@ class ContactComponent extends Component
     {
         if($request['method'] == 'post' && isset($request['form_id']) && is_numeric($request['form_id']))
         {
-            $form = $this->select(array("form_id" => $request['form_id']));
-            $form = $form[0];
-            
+            $form = Table::init("contact.forms")
+                ->setRequest((object) array("form_id" => $request['form_id']))
+                ->doSelect()
+                ->getRow();
+            $fields = Table::init("contact.formfields")
+                ->setRequest((object) array("form_id" => $request['form_id']))
+                ->doSelect()
+                ->getRows();
+                
             $to         = $form->form_to;
             $bcc        = $form->form_bcc;
             $subject    = $form->form_subject;
@@ -150,7 +188,7 @@ class ContactComponent extends Component
             
             $e = new InvalidFormException($request, $request['url'], "Password do not match");
             
-            foreach($form->fields as $field)
+            foreach($fields as $field)
             {
                 if($field->field_required == 1 && trim($request[$field->field_code]) == '')
                 {

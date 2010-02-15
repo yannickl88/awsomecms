@@ -192,12 +192,6 @@ class Field
         else
         {
             $value = $this->value;
-            
-            if(SQLQuery::isEmpty($value))
-            {
-                $value = $this->getDefaultValue();
-            }
-            
             return $value;
         }
     }
@@ -610,7 +604,7 @@ class Field
         
         if($mode == Field::ADD &&
             $this->isRequired($mode) && 
-            empty($value) &&
+            !$this->hasValue($value) &&
             $this->hasFlag(Field::AUTOKEY) == false &&
             !$this->hasFlag(Field::DUMMY)
         )
@@ -619,7 +613,7 @@ class Field
         }
         if($mode == Field::EDIT &&
             $this->isRequired($mode) && 
-            empty($value) &&
+            !$this->hasValue($value) &&
             !$this->hasFlag(Field::DUMMY)
         )
         {
