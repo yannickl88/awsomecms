@@ -3,11 +3,19 @@
 html, body {
     font-family: Verdana;
     font-size: 11px;
-    background-image: url(/img/admin/carbon.gif);
-    
     height:100%;
     margin:0;
     padding:0;
+}
+body {
+    background-image: url(/img/admin/carbon2.gif);
+    background-color: #ffffff;
+    background-repeat: repeat-y;
+}
+body.login {
+    background-image: url(/img/admin/carbon.gif);
+    background-color: transparent;
+    background-repeat: repeat;
 }
 img {
     border: 0;
@@ -24,12 +32,11 @@ h1 {
 {
     height:auto !important;
     min-height: 100%;
+    background-color: #ffffff;
 }
 #sidebarWrapper {
     width: 250px;
-    position: absolute;
-    left: 0;
-    top: 0;
+    position: absolute; 
 }
 #sidebarHeader {
     color: #747474;
@@ -121,8 +128,12 @@ h1 {
 #mainWrapper {
     margin-left: 250px;
     padding: 0 10px 0 20px;
-    background-color: #ffffff;
-    min-height: 100%;
+    height: 100%;
+}
+#clearer{
+    position: relative;
+    bottom: 0;
+    clear: both;
 }
 #mainHeader {
     padding-top: 10px;
