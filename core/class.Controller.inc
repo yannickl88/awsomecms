@@ -224,12 +224,20 @@ class Controller
             $_SESSION['FORMERROR'] = serialize($e);
             
             $url = $e->getRedirect();
+            $query = "?";
             $data = $e->getRedirectData();
             
             foreach($data as $key => $item)
             {
-                $url .= '&'.$key.'='.$item;
+                if($query != "?")
+                {
+                    $query .= "&";
+                }
+                
+                $query .= $key.'='.$item;
             }
+            
+            $url .= $query;
             
             if(Config::get('debug', 0, 'debug') > 1)
             {
