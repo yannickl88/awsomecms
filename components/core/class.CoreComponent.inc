@@ -67,6 +67,7 @@ class CoreComponent extends Component
         $smarty->assign("URL", $_GET['url']);
         $smarty->assign("isADMIN", (preg_match('/^'.preg_quote(Config::get('location', 'admin/', 'admin'), '/').'(.*?)/si', $_GET['url'])) === 1);
         $smarty->assign("USR", $_SESSION['usr']);
+        $smarty->assign("HASDOC", file_exists(Config::get("websiteroot", "/")."/doc.php"));
     }
     /**
      * Layout action, this is used for the layout mapping page.
