@@ -1,0 +1,1 @@
+ALTER TABLE `components` DROP `component_requests`

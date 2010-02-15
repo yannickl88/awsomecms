@@ -49,6 +49,12 @@ function smarty_function_form($params, &$smarty)
     if(!isset($params['component']) && isset($params['table']))
     {
         $tableObject = Table::init($params['table']);
+        
+        if(!$tableObject)
+        {
+            return "Could not find table '{$params['table']}'";
+        }
+        
         $action = $tableObject->getAction($params['form']);
     }
     

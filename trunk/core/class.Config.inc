@@ -25,7 +25,6 @@ class Config
     private $data;
     private $componenets;
     private $hooks;
-    private $requests;
     
     /**
      * singelton
@@ -217,7 +216,6 @@ class Config
             else
             {
                 $this->componenets = array();
-                $this->requests = array();
                 
                 $result = SQLQuery::doSelect()
                     ->table('components')
@@ -226,22 +224,6 @@ class Config
                 while($row = $result->getRow())
                 {
                     $this->componenets[$row->component_name] = $row;
-                    $requests = explode(';', $row->component_requests);
-                    
-                    foreach($requests as $request)
-                    {
-                        if($request != '')
-                        {
-                            if($row->component_name != $request || count($requests) > 1)
-                            {
-                                $this->requests[$row->component_name.".".$request] = $row;
-                            }
-                            else
-                            {
-                                $this->requests[$request] = $row;
-                            }
-                        }
-                    }
                 }
                 
                 file_put_contents($cachefile, serialize(array($this->componenets, $this->requests)));
@@ -319,21 +301,6 @@ class Config
         {
             return false;
         }
-    }
-    /**
-     * Get an list of all installed requests
-     * @deprecated Do not use request, use tables :)
-     *
-     * @return Array
-     */
-    public function getRequests()
-    {
-        if(!$this->componenets)
-        {
-            $this->getComponenets();
-        }
-        
-        return $this->requests;
     }
     /**
      * Check if a value contains another value. This is done using bitwise comparison

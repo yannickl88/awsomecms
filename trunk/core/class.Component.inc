@@ -98,50 +98,6 @@ class Component
         $this->request = $request;
     }
     /**
-     * @deprecated Please use the tables
-     *
-     * @param array $data
-     * @return Mixed
-     */
-    public function select($data = array())
-    {
-        Debugger::getInstance()->warning('Depricated ::select(), use the table object');
-        return Request::init($this->request)->doSelect($data);
-    }
-    /**
-     * @deprecated Please use the tables
-     *
-     * @param array $data
-     * @return Mixed
-     */
-    public function delete($data = array())
-    {
-        Debugger::getInstance()->warning('Depricated ::delete(), use the table object');
-        return Request::init($this->request)->doDelete($data);
-    }
-    /**
-     * @deprecated Please use the tables
-     *
-     * @param array $data
-     * @return Mixed
-     */
-    public function update($data = array())
-    {
-        Debugger::getInstance()->warning('Depricated ::update(), use the table object');
-        return Request::init($this->request)->doUpdate($data);
-    }
-    /**
-     * @deprecated Please use the tables
-     *
-     * @param array $data
-     * @return Mixed
-     */
-    public function insert($data = array())
-    {
-        Debugger::getInstance()->warning('Depricated ::insert(), use the table object');
-        return Request::init($this->request)->doInsert($data);
-    }
-    /**
      * Do an redirect
      *
      * @param string $url

@@ -1,3 +1,3 @@
-INSERT INTO `pages` (`page_name`, `page_location`, `page_template`, `page_timestamp`) VALUES('index', '/admin/', 'Welcome to the admin section', '2009-09-12 00:31:07');
-INSERT INTO `pages` (`page_name`, `page_location`, `page_template`, `page_timestamp`) VALUES('layout', '/admin/core/', '{form component=''core'' form=''layout''}', '2009-10-28 10:15:51');
-INSERT INTO `pages` (`page_name`, `page_location`, `page_template`, `page_timestamp`) VALUES('components', '/admin/core/', '{form component=''core'' form=''components''}', '2009-11-14 19:34:00');
+INSERT INTO `pages` (`page_name`, `page_location`, `page_template`, `page_timestamp`) VALUES('index', '/admin/', 'Welcome to the admin section', NOW());
+INSERT INTO `pages` (`page_name`, `page_location`, `page_template`, `page_timestamp`) VALUES('layout', '/admin/core/', '{form component=''core'' form=''layout''}', NOW());
+INSERT INTO `pages` (`page_name`, `page_location`, `page_template`, `page_timestamp`) VALUES('components', '/admin/core/', '{form component=''core'' form=''components''}', NOW());

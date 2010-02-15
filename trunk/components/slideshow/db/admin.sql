@@ -1,8 +1,8 @@
-INSERT INTO `pages` (`page_name`, `page_location`, `page_template`, `page_timestamp`) VALUES('add', '/admin/slideshow/image/', '{form component=''slideshow'' form=''add_image''}', '2009-09-19 14:34:19');
-INSERT INTO `pages` (`page_name`, `page_location`, `page_template`, `page_timestamp`) VALUES('admin', '/admin/slideshow/group/', '{form component=''slideshow'' form=''admin_group''}', '2009-09-19 14:35:59');
-INSERT INTO `pages` (`page_name`, `page_location`, `page_template`, `page_timestamp`) VALUES('add', '/admin/slideshow/group/', '{form component=''slideshow'' form=''add_group''}', '2009-09-19 14:37:41');
-INSERT INTO `pages` (`page_name`, `page_location`, `page_template`, `page_timestamp`) VALUES('edit', '/admin/slideshow/group/', '{form component=''slideshow'' form=''edit_group''}', '2009-09-19 22:40:28');
-INSERT INTO `pages` (`page_name`, `page_location`, `page_template`, `page_timestamp`) VALUES('edit', '/admin/slideshow/image/', '{form component=''slideshow'' form=''edit_image''}', '2009-09-20 00:09:35');
-INSERT INTO `pages` (`page_name`, `page_location`, `page_template`, `page_timestamp`) VALUES('delete', '/admin/slideshow/group/', '{form component=''slideshow'' form=''delete_group''}', '2009-09-20 00:17:19');
-INSERT INTO `pages` (`page_name`, `page_location`, `page_template`, `page_timestamp`) VALUES('delete', '/admin/slideshow/image/', '{form component=''slideshow'' form=''delete_image''}', '2009-09-20 00:17:34');
-INSERT INTO `pages` (`page_name`, `page_location`, `page_template`, `page_timestamp`) VALUES('admin', '/admin/slideshow/image/', '{form component=''slideshow'' form=''admin_image''}', '2009-09-19 14:34:13');
+INSERT INTO `pages` (`page_name`, `page_location`, `page_template`, `page_timestamp`) VALUES('add', '/admin/slideshow/image/', '{form component=''slideshow'' form=''add_image''}', NOW());
+INSERT INTO `pages` (`page_name`, `page_location`, `page_template`, `page_timestamp`) VALUES('admin', '/admin/slideshow/group/', '{form table=''slideshow.groups'' form=''admin''}', NOW());
+INSERT INTO `pages` (`page_name`, `page_location`, `page_template`, `page_timestamp`) VALUES('add', '/admin/slideshow/group/', '{form component=''slideshow'' form=''add_group''}', NOW());
+INSERT INTO `pages` (`page_name`, `page_location`, `page_template`, `page_timestamp`) VALUES('edit', '/admin/slideshow/group/', '{form component=''slideshow'' form=''edit_group''}', NOW());
+INSERT INTO `pages` (`page_name`, `page_location`, `page_template`, `page_timestamp`) VALUES('edit', '/admin/slideshow/image/', '{form component=''slideshow'' form=''edit_image''}', NOW());
+INSERT INTO `pages` (`page_name`, `page_location`, `page_template`, `page_timestamp`) VALUES('delete', '/admin/slideshow/group/', '{form component=''slideshow'' form=''delete_group''}', NOW());
+INSERT INTO `pages` (`page_name`, `page_location`, `page_template`, `page_timestamp`) VALUES('delete', '/admin/slideshow/image/', '{form table=''slideshow.images'' form=''delete''}', NOW());
+INSERT INTO `pages` (`page_name`, `page_location`, `page_template`, `page_timestamp`) VALUES('admin', '/admin/slideshow/image/', '{form table=''slideshow.images'' form=''admin''}', NOW());
