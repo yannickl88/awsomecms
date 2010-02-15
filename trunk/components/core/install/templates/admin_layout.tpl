@@ -75,13 +75,14 @@
             {/literal}
         </script>
     </head>
-    <body>
-        {if $URL == "admin/login"}
-            <div id="loginWrapper">
-                <span class="header">Admin login</span>
-                {$content}
-            </div>
+    {if $URL == "admin/login"}
+    <body class="login">
+        <div id="loginWrapper">
+            <span class="header">Admin login</span>
+            {$content}
+        </div>
         {else}
+    <body>
         <div id="sidebarWrapper">
             <div id="sidebarHeader">
                 <a href="/admin/" id="headerLink">
@@ -119,6 +120,7 @@
                     <a href="http://yannickl88.nl/cms">A.W.S.O.M.E. cms</a> &copy; 2009 - 2010
                 </div>
             </div>
+            <div id="clearer"></div>
         </div>
         {/if}
     </body>
