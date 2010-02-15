@@ -76,45 +76,50 @@
         </script>
     </head>
     <body>
-        <div id="siteWrapper">
-            <div id="sidebarWrapper">
-                <div id="sidebarHeader">
-                    <a href="/admin/" id="headerLink">
-                        <img src="/img/admin/logo.png" />
-                    </a>
-                    <div id="headerLinks">
-                        {if $HASDOC}
-                        <a href="/doc.php" id="doc" target="_blank">Doc</a> |
-                        {/if} 
-                        <a href="/">View site</a> | 
-                        <a href="/?logout=true">Log out</a>
-                    </div>
-                </div>
-                <div id="adminMenuWrapper">
-                    {adminmenu}
-                </div>
-                <div id="adminTreeWrapper">
-                    <ul class="title">
-                        <li><a class="title">Site Pages</a>
-                            <div id="treeWrapper">
-                                {admintree}
-                            </div>
-                        </li>
-                    </ul>
+        {if $URL == "admin/login"}
+            <div id="loginWrapper">
+                <span class="header">Admin login</span>
+                {$content}
+            </div>
+        {else}
+        <div id="sidebarWrapper">
+            <div id="sidebarHeader">
+                <a href="/admin/" id="headerLink">
+                    <img src="/img/admin/logo.png" />
+                </a>
+                <div id="headerLinks">
+                    {if $HASDOC}
+                    <a href="/doc.php" id="doc" target="_blank">Doc</a> |
+                    {/if} 
+                    <a href="/">View site</a> | 
+                    <a href="/?logout=true">Log out</a>
                 </div>
             </div>
-            <div id="mainWrapper">
-                <div id="mainHeader">
-                    <h1>Welcome {$USR.user_name|capitalize}</h1>
-                </div>
-                <div id="contentWrapper">
-                    {$content}
-                    <div id="copyright">
-                        <hr /><br />
-                        <a href="http://yannickl88.nl/cms">A.W.S.O.M.E. cms</a> &copy; 2009 - 2010
-                    </div>
+            <div id="adminMenuWrapper">
+                {adminmenu}
+            </div>
+            <div id="adminTreeWrapper">
+                <ul class="title">
+                    <li><a class="title">Site Pages</a>
+                        <div id="treeWrapper">
+                            {admintree}
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div id="mainWrapper">
+            <div id="mainHeader">
+                <h1>Welcome {$USR.user_name|capitalize}</h1>
+            </div>
+            <div id="contentWrapper">
+                {$content}
+                <div id="copyright">
+                    <hr /><br />
+                    <a href="http://yannickl88.nl/cms">A.W.S.O.M.E. cms</a> &copy; 2009 - 2010
                 </div>
             </div>
         </div>
+        {/if}
     </body>
 </html>

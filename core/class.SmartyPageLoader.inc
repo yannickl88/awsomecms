@@ -62,7 +62,8 @@ class SmartyPageLoader
         {
             if(Config::get('needslogin', false, 'admin') && $smarty_obj->get_template_vars('isADMIN') === true && !($_SESSION['usr']['auth']['admin'] === true))
             {
-                $url = '/'.Config::get('login', '', 'admin');
+                $url = Config::get('login', '', 'admin');
+                $smarty_obj->assign("URL", $url);
             }
             $page = $smarty_obj->fetch("scf:{$url}");
         }
