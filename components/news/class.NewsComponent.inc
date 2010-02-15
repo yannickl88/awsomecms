@@ -114,7 +114,7 @@ class NewsComponent extends Component
     public function registerMenuItems($menu)
     {
         $menu->addChild(new MenuItem("news", "", Config::get('newsadmin', 'newsadmin', 'admin')));
-        $menu->addChild(new MenuItem("newsadmin", "Admin", Config::get('newsadmin', 'newsadmin', 'admin'), "news"));
-        $menu->addChild(new MenuItem("newsadd", "Add", Config::get('newsadd', 'newsadd', 'admin'), "news"));
+        $menu->addChild(new MenuItem("newsadmin", "News", Config::get('newsadmin', 'newsadmin', 'admin'), "news"));
+        $menu->addChild(new MenuItem("newsadd", "Add News", Config::get('newsadd', 'newsadd', 'admin'), "news"));
     }
 }

@@ -90,9 +90,39 @@ class MenuItem
      * 
      * @return string
      */
-    public function toHTML()
+    public function toHTML(&$selected)
     {
-        $html = "<li onmouseover=\"adminmenu_openMenu(this);\" onmouseout=\"adminmenu_closeMenu(this);\">";
+        //check if this is selected
+        $classes = array("adminmenuitem");
+        
+        if($_GET['url'] == $this->page)
+        {
+            if(count($this->children) == 0)
+            {
+                $classes[] = "selected";
+            }
+            $selected = true;
+        }
+        
+        $child_html = "";
+        
+        if(count($this->children) > 0)
+        {
+            $child_html .= "<ul>";
+            foreach($this->children as $childNode)
+            {
+                $child_html .= $childNode->toHTML($selected);
+            }
+            $child_html .= "</ul>";
+        }
+        
+        
+        if($selected)
+        {
+            $classes[] = "active";
+        }
+        
+        $html = "<li class='".implode(" ", $classes)."'>";
         if(empty($this->page))
         {
             $html .= "<a>{$this->text}";
@@ -102,21 +132,8 @@ class MenuItem
             $html .= "<a href=\"/{$this->page}\">{$this->text}";
         }
         
-        if(count($this->children) > 0)
-        {
-            $html .= "<span style='float: right'>&#187;</span>";
-        }
         $html .= "</a>";
-        
-        if(count($this->children) > 0)
-        {
-            $html .= "<ul>";
-            foreach($this->children as $childNode)
-            {
-                $html .= $childNode->toHTML();
-            }
-            $html .= "</ul>";
-        }
+        $html .= $child_html;
         $html .= "</li>";
         
         return $html;
@@ -227,12 +244,13 @@ class Menu
             }
         }
         
+        
         $html = "<ul>";
         foreach($this->children as $childNode)
         {
-            $html .= $childNode->toHTML();
+            $selected = false;
+            $html .= $childNode->toHTML($selected);
         }
-        $html .= "<li onmouseout=\"adminmenu_closeMenu(this);\" onmouseover=\"adminmenu_openMenu(this);\"><a href=\"/?logout=true\" class=\"\">Logout</a></li>";
         $html .= "</ul>";
         
         return $html;

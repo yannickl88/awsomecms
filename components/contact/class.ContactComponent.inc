@@ -230,7 +230,6 @@ class ContactComponent extends Component
     public function registerMenuItems($menu)
     {
         $menu->addChild(new MenuItem("contact", "", Config::get('contactadmin', 'contactadmin', 'admin')));
-        $menu->addChild(new MenuItem("forms", "", Config::get('contactadmin', 'contactadmin', 'admin'), "contact"));
-        $menu->addChild(new MenuItem("formsadd", "Add", Config::get('contactadd', 'contactadd', 'admin'), "contact"));
+        $menu->addChild(new MenuItem("forms", "Forms", Config::get('contactadmin', 'contactadmin', 'admin'), "contact"));
     }
 }

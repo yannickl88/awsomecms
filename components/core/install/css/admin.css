@@ -1,107 +1,122 @@
 /* ADMIN CSS FILE */
 
 body {
-    margin: 10px;
+    margin: 0px;
     font-family: Verdana;
     font-size: 11px;
+    background-image: url(/img/admin/carbon.gif);
+    background-color: #ffffff;
+    background-repeat: repeat-y;
 }
 img {
     border: 0;
 }
-/* ADMIN LAYOUT */
-#sideWrapper {
-    width: 200px;
-    float: left;
-}
-#contentWrapper {
-    margin-left: 200px;
-    background-image: url(/img/admin/main-bg.png);
-    background-position: top right;
-    background-repeat: no-repeat;
-    min-height: 480px;
-    padding: 10px;
-}
-#treeWrapper {
-    height: 350px;
-    overflow: auto;
-}
-#headerWrapper {
-    height: 50px;
-    background-image: url(/img/admin/header-bg.png);
-}
-#copyWrapper {
-    color: #c0c0c0;
-    font-size: 10px;
-    text-align: center;
-}
-#copyWrapper a{
-    color: #c0c0c0;
-}
-#copyWrapper a:hover{
-    color: #333333;
-}
-.debug {
-    clear: both;
-    color: #52687a;
-}
-.backtosite {
-    padding-top: 10px;
-    color: #ffffff;
-    text-decoration: none;
-    font-size: 12px;
-    font-weight: bold;
-}
-.backtosite img {
-    vertical-align: -10px;
-}
-
-/* ADMIN MENU */
-#menuWrapper ul {
+h1 {
+    font-size: 30px;
     margin: 0;
     padding: 0;
-    list-style: none;
-    width: 200px;
-    border-bottom: 1px solid #D8EBFD;
+    font-family: Verdana;
+    font-weight: normal;
 }
-#menuWrapper ul li {
-    position: relative;
-    background-color: #c0c0c0;
+/* ADMIN LAYOUT */
+#sidebarWrapper {
+    width: 250px;
+    float: left;
 }
-#menuWrapper ul li ul {
-    position: absolute;
-    width: 120px;
-    display: none;
+#sidebarHeader {
+    color: #747474;
+    height: 100px;
 }
-#menuWrapper ul li ul li {
-    position: relative;
-    top: 2px;
-    left: 2px;
-}
-#menuWrapper ul li ul li a {
-    position: relative;
-    bottom: 2px;
-    right: 2px;
-}
-#menuWrapper ul li a {
+#sidebarHeader #headerLink {
+    padding: 10px 0 0 10px;
     display: block;
+}
+#headerLinks {
+    text-align: right;
+    padding-right: 10px;
+}
+#sidebarHeader a {
+    color: #ededed;
     text-decoration: none;
+}
+#sidebarHeader a:HOVER {
+    color: #ffffff;
+    text-decoration: underline;
+}
+#adminMenuWrapper ul,
+#adminTreeWrapper ul.title
+{
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    text-align: right;
+}
+#adminMenuWrapper ul li a,
+#adminTreeWrapper .title a.title
+{
+    background-image: url(/img/admin/menu.gif);
+    background-repeat: no-repeat;
+    background-position: 100% -48px;
+    display: block;
+    height: 24px;
+    margin-bottom: 3px;
+    padding-right: 10px;
+    font-size: 18px;
+    color: #ffffff;
+    text-decoration: none;
+}
+#adminMenuWrapper ul li.active a
+{
     color: #000000;
-    background-color: #ffffff;
-    padding: 3px 5px 3px 5px;
-    border: 1px solid #D8EBFD;
-    border-bottom: 0;
-    cursor: pointer;
+    background-position: top right;
 }
-#menuWrapper ul li a:hover, #menuWrapper ul li a.open {
-    background-color: #F1F8FF;
+#adminMenuWrapper ul li ul li a
+{
+    background-image: none;
+    height: 18px;
+    font-size: 13px;
+    color: #bbbbbb;
 }
-
+#adminMenuWrapper ul li.active ul li a
+{
+    color: #bbbbbb;
+}
+#adminMenuWrapper ul li ul li a:HOVER {
+    background-position: 100% -72px;
+    background-image: url(/img/admin/menu.gif);
+    color: #ffffff;
+}
+#adminMenuWrapper ul li ul li.selected a
+{
+    background-position: 100% -24px;
+    background-image: url(/img/admin/menu.gif);
+    color: #ffffff;
+    font-weight: bold;
+}
+#copyright {
+    color: #bbbbbb;
+}
+#copyright hr{
+    width: 120px;
+    border: 0;
+    border-top: 1px solid #bbbbbb;
+    float: left;
+}
+#copyright a{
+    color: #909090;
+}
+#copyright a:hover{
+    color: #333333;
+    text-decoration: none;
+}
 /* ADMIN TREE */
 #treeWrapper {
-    border: 1px solid;
-    border-color: transparent #D8EBFD transparent #D8EBFD;
+    margin: 0 0 50px 60px;
+    width: 190px;
+    overflow: auto;
 }
 .treeNode {
+    text-align: left;
     padding-left: 10px;
 }
 .treeNode img {
@@ -110,6 +125,7 @@ img {
 .treeNode a {
     padding-left: 20px;
     text-decoration: none;
+    color: #bbbbbb;
 }
 .treeNode a.folder {
     height: 16px;
@@ -148,7 +164,55 @@ img {
 .viewIcon {
     background-image: url(/img/icons/page_view.png);
 }
-
+/* MAIN SITE*/
+#mainWrapper {
+    margin-left: 250px;
+    padding: 10px 10px 10px 20px;
+}
+#mainHeader {
+    padding-bottom: 10px;
+}
+#mainHeader .header {
+    font-size: 30px;
+    font-weight: bold;
+}
+.admin_table {
+    border-collapse: collapse;
+    width: 100%;
+    height: 100px;
+}
+.admin_table th {
+    background-image: url(/img/admin/tableheader.png);
+    background-position: bottom;
+    background-repeat: repeat-x;
+    height: 25px;
+    border-bottom: 2px solid #337db7;
+    font-family: Arial;
+    font-size: 15px;
+}
+.admin_table .admin_table_cell {
+    text-align: center;
+}
+.admin_table .admin_table_actions {
+    width: 40px;
+}
+.admin_table .admin_table_row {
+    border-top: 1px solid #a9c8e1;
+}
+.admin_table .highlighted {
+    background-color: #dfebf4;
+}
+.admin_table .admin_table_actions_row {
+    height: 20px;
+    border-top: 2px solid #337db7;
+}
+.admin_table .admin_table_actions_row .admin_table_actions {
+    text-align: right;
+    padding-right: 10px;
+}
+.admin_table .admin_table_actions_row .admin_table_actions a {
+    text-decoration: none;
+}
 /* ADMIN FORMS */
 .admin_form_label {
     float: left;
@@ -180,21 +244,7 @@ img {
 .tinyfield {
     width: 25px !important;
 }
-.admin_table {
-    width: 100%;
-    border-collapse: collapse;
-    text-align: center;
-}
-.admin_table th {
-    background: #d8ebfd;
-    height: 20px;
-}
-.admin_table tr.highlighted {
-    background: #f1f8ff;
-}
-.admin_table .admin_table_actions {
-    width: 50px;
-}
+/* CORE COMPONENT */
 .admin_component_access {
     display: block; 
     float: left; 

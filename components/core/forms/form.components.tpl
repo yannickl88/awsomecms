@@ -1,3 +1,4 @@
+<h2>Components overview</h2>
 <h3>Installed Components:</h3>
 <table style="border-collapse: collapse;">
     <tr class="header">
