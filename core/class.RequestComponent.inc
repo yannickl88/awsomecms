@@ -26,6 +26,7 @@ class Request
     private static $requests;
     
     public $component;
+    public $table;
     public $method;
     public $action;
     
@@ -75,8 +76,15 @@ class RequestComponent
         $request->method = $_SERVER['REQUEST_METHOD'];
         
         $url = 'http://' . $_SERVER['SERVER_NAME'] . $_SERVER['REQUEST_URI'];
-        $request->component = substr($url, strlen($config->get("proxy", 'www.google.com', 'proxy'))+1);
-        $request->component = substr($request->component, 0, strrpos($request->component, "?"));
+        $request->table = substr($url, strlen($config->get("proxy", 'www.google.com', 'proxy'))+1);
+        if(strrpos($request->table, "?") > 0)
+        {
+            $request->table = substr($request->table, 0, strrpos($request->table, "?"));
+        }
+        
+        $tableArr = explode(".", $request->table);
+        
+        $request->component = $tableArr[0];
         $request->action = $request->translateAction();
         
         switch($request->method)
@@ -93,7 +101,7 @@ class RequestComponent
             break;
         }
         
-        $components = $config->getRequests();
+        $components = $config->getComponenets();
         $needsAuth = true;
         
         switch($request->method)
@@ -130,7 +138,8 @@ class RequestComponent
         }
         
         //handle request
-        $proxyObject = Request::init($request->component);
+        $proxyObject = Table::init($request->table)
+            ->setExternal(true);
         
         if($proxyObject)
         {
@@ -140,7 +149,11 @@ class RequestComponent
             
             try
             {
-                $result = call_user_func(array($proxyObject, 'do'.ucfirst(strtolower($request->action))), $data);
+                $proxyObject->setRequest((object) $data);
+                $proxyObject->setRecord((object) $data);
+                
+                $result = call_user_func(array($proxyObject, 'do'.ucfirst(strtolower($request->action))));
+                $result = $result->getRows();
             }
             catch(ProxyForbiddenException $e)
             {
