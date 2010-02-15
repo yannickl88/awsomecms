@@ -23,13 +23,13 @@ h1 {
 #siteWrapper
 {
     height:auto !important;
-    margin: 0 auto;
     min-height: 100%;
-    position: relative;
 }
 #sidebarWrapper {
     width: 250px;
-    float: left;
+    position: absolute;
+    left: 0;
+    top: 0;
 }
 #sidebarHeader {
     color: #747474;
@@ -117,6 +117,21 @@ h1 {
     color: #333333;
     text-decoration: none;
 }
+/* MAIN SITE*/
+#mainWrapper {
+    margin-left: 250px;
+    padding: 0 10px 0 20px;
+    background-color: #ffffff;
+    min-height: 100%;
+}
+#mainHeader {
+    padding-top: 10px;
+    padding-bottom: 10px;
+}
+#mainHeader .header {
+    font-size: 30px;
+    font-weight: bold;
+}
 /* ADMIN TREE */
 #treeWrapper {
     margin: 0 0 50px 60px;
@@ -172,20 +187,7 @@ h1 {
 .viewIcon {
     background-image: url(/img/icons/page_view.png);
 }
-/* MAIN SITE*/
-#mainWrapper {
-    margin-left: 250px;
-    padding: 10px 10px 10px 20px;
-    background-color: #ffffff;
-    min-height: 100%;
-}
-#mainHeader {
-    padding-bottom: 10px;
-}
-#mainHeader .header {
-    font-size: 30px;
-    font-weight: bold;
-}
+/* ADMIN TABLES */
 .admin_table {
     border-collapse: collapse;
     width: 100%;
