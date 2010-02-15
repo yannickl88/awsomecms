@@ -11,13 +11,14 @@
         <link type="text/css" rel="stylesheet" href="/css/admin.css" media="screen" />
         <link type="text/css" rel="stylesheet" href="/css/lightbox.css" media="screen" />
         <link type="text/css" rel="stylesheet" href="/css/jHtmlArea.css" media="screen" />
+        <link type="text/css" rel="stylesheet" href="/css/datePicker.css" media="screen" />
         <script type="text/javascript" src="http://www.google.com/jsapi"></script>
         <script type="text/javascript">
             {literal}
             // <![CDATA[ 
             // Load jQuery
-            google.load("jquery", "1.3.1", {uncompressed:false});
-            google.load("jqueryui", "1.5.3");
+            google.load("jquery", "1.4.1", {uncompressed:false});
+            google.load("jqueryui", "1.7.2");
             // ]]> 
             {/literal}
         </script>
@@ -26,7 +27,6 @@
         <script type="text/javascript" src="/js/jquery.lightbox.js"></script>
         <script type="text/javascript" src="/js/ajaxupload.3.5.js"></script>
         <script type="text/javascript" src="http://js.nicedit.com/nicEdit-latest.js"></script>
-        <script type="text/javascript" src="/js/adminmenu.js"></script>
         <script type="text/javascript">
             {literal}
             $(document).ready(function(){
@@ -77,28 +77,42 @@
     </head>
     <body>
         <div id="siteWrapper">
-            <div id="headerWrapper">
-                <img src="/img/admin/header-right.png" style="float: right;"/>
-                <a href="/" style="float: right;" class="backtosite"><img src="/img/admin/backtosite.png"/> Back to site</a>
-                <a href="/doc.php" style="float: right;" class="backtosite" id="doc"><img src="/img/admin/help.png"/></a>
-                <a href="/admin/"><img src="/img/admin/header-left.png" /></a>
-            </div>
-            <div id="sideWrapper">
-                <div id="menuWrapper">
+            <div id="sidebarWrapper">
+                <div id="sidebarHeader">
+                    <a href="/admin/" id="headerLink">
+                        <img src="/img/admin/logo.png" />
+                    </a>
+                    <div id="headerLinks">
+                        <a href="/doc.php" id="doc" target="_blank">Doc</a> | 
+                        <a href="/">View site</a> | 
+                        <a href="/?logout=true">Log out</a>
+                    </div>
+                </div>
+                <div id="adminMenuWrapper">
                     {adminmenu}
                 </div>
-                <div id="treeWrapper">
-                    {admintree}
-                </div>
-                <img src="/img/admin/tree-bottom.png" />
-                <div id="copyWrapper">
-                    <a href="http://yannickl88.nl/cms" target="_blank">A.W.S.O.M.E. cms</a> &copy; 2009 - 2010
+                <div id="adminTreeWrapper">
+                    <ul class="title">
+                        <li><a class="title">Site Pages</a>
+                            <div id="treeWrapper">
+                                {admintree}
+                            </div>
+                        </li>
+                    </ul>
                 </div>
             </div>
-            <div id="contentWrapper">
-                {$content}
+            <div id="mainWrapper">
+                <div id="mainHeader">
+                    <h1>Welcome {$USR.user_name|capitalize}</h1>
+                </div>
+                <div id="contentWrapper">
+                    {$content}
+                    <div id="copyright">
+                        <hr /><br />
+                        <a href="http://yannickl88.nl/cms">A.W.S.O.M.E. cms</a> &copy; 2009 - 2010
+                    </div>
+                </div>
             </div>
         </div>
-        {renderdebug}
     </body>
 </html>
