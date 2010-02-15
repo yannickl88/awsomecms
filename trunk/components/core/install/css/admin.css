@@ -1,12 +1,13 @@
 /* ADMIN CSS FILE */
 
-body {
-    margin: 0px;
+html, body {
     font-family: Verdana;
     font-size: 11px;
     background-image: url(/img/admin/carbon.gif);
-    background-color: #ffffff;
-    background-repeat: repeat-y;
+    
+    height:100%;
+    margin:0;
+    padding:0;
 }
 img {
     border: 0;
@@ -19,6 +20,13 @@ h1 {
     font-weight: normal;
 }
 /* ADMIN LAYOUT */
+#siteWrapper
+{
+    height:auto !important;
+    margin: 0 auto;
+    min-height: 100%;
+    position: relative;
+}
 #sidebarWrapper {
     width: 250px;
     float: left;
@@ -168,6 +176,8 @@ h1 {
 #mainWrapper {
     margin-left: 250px;
     padding: 10px 10px 10px 20px;
+    background-color: #ffffff;
+    min-height: 100%;
 }
 #mainHeader {
     padding-bottom: 10px;
@@ -256,3 +266,21 @@ h1 {
 .admin_component_access.i { background-position: -16px -16px; } .admin_component_access.i.selected { background-position: -16px 0; } .admin_component_access.i:hover { background-position: -16px -32px; }
 .admin_component_access.u { background-position: -32px -16px; } .admin_component_access.u.selected { background-position: -32px 0; } .admin_component_access.u:hover { background-position: -32px -32px; }
 .admin_component_access.d { background-position: -48px -16px; } .admin_component_access.d.selected { background-position: -48px 0; } .admin_component_access.d:hover { background-position: -48px -32px; }
+/* LOGIN */
+#loginWrapper {
+    background-color: #ffffff;
+    width: 500px;
+    height: 105px;
+    margin-left: -265px;
+    margin-top: -120px;
+    position: absolute;
+    top: 50%;
+    padding: 10px 30px 30px 30px;
+    left: 50%;
+}
+#loginWrapper .header {
+    font-size: 20px;
+    font-weight: bold;
+    padding-bottom: 10px;
+    display: block;
+}
