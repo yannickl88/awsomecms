@@ -6,19 +6,6 @@ class SlideshowComponent extends Component
     public function __construct()
     {
         parent::__construct('slideshow');
-        $this->setDefaultRequest("images");
-        $this->multiTable = true;
-        
-        $this->fields = array(
-            "s_images" => array(
-                "image_id" => "index",
-                "image_title" => "text"
-            ),
-            "s_groups" => array(
-                "group_id" => "index",
-                "group_title" => "text"
-            )
-        );
     }
     
     public function action_index($smarty, $smartyLoader, $request) {}
@@ -28,66 +15,63 @@ class SlideshowComponent extends Component
         //we have special actions here, mostly because this is used as answer for post, ajax and internal use
         if($request['method'] == 'post')
         {
-            $requestObj = Request::init('slideshow.images');
-            $this->setCurrentTable('s_images');
-            
-            if($request['ajax'] == 'true' || $request['internal'] == 'true' || $this->validate($request, "/".Config::get('slideshow_imageadd', 'slideshow_imageadd', 'admin'), "add"))
+            //check if the file did actully upload
+            if($_FILES['image_image']['error'] > 0) //uh-oh error
             {
-                //check if the file did actully upload
-                if($_FILES['image_image']['error'] > 0) //uh-oh error
+                $error = "";
+                
+                switch($_FILES['image_image']['error'])
                 {
-                    $error = "";
-                    
-                    switch($_FILES['image_image']['error'])
-                    {
-                        case 1:
-                        case 2:
-                        case 3:
-                            $error = "Filesize is to large";
-                            break;
-                        case 4:
-                            $error = "No file selected";
-                            break;
-                        case 5:
-                            $error = "Cannot write file to disk";
-                            break;
-                    }
-                    
-                    if($request['ajax'] == 'true')
-                    {
-                        $this->ajax(array("error" => $error));
-                    }
-                    else if($request['internal'] == 'true')
-                    {
-                        return false;
-                    }
-                    else
-                    {
-                        $e = new InvalidFormException($request, "/".Config::get('slideshow_imageadd', 'slideshow_imageadd', 'admin'));
-                        $e->addInvalidField('image_image', $error);
-                        throw $e;
-                    }
+                    case 1:
+                    case 2:
+                    case 3:
+                        $error = "Filesize is to large";
+                        break;
+                    case 4:
+                        $error = "No file selected";
+                        break;
+                    case 5:
+                        $error = "Cannot write file to disk";
+                        break;
                 }
                 
-                $request["image_url"] = "";
-                $request["image_width"] = 0;
-                $request["image_height"] = 0;
-                
-                $id = $requestObj->doInsert($request);
-                
-                $request["image_id"] = $id;
-                
-                list($request["image_url"], $request["image_width"], $request["image_height"]) = $this->handleFileUpload($id, 'image_image');
-                
-                
-                $requestObj->doUpdate($request);
+                if($request['ajax'] == 'true')
+                {
+                    $this->ajax(array("error" => $error));
+                }
+                else if($request['internal'] == 'true')
+                {
+                    return false;
+                }
+                else
+                {
+                    $e = new InvalidFormException($request, "/".Config::get('slideshow_imageadd', 'slideshow_imageadd', 'admin'));
+                    $e->addInvalidField('image_image', $error);
+                    throw $e;
+                }
             }
             
-            if($request['ajax'] == 'true')
+            $request["image_url"] = "";
+            $request["image_width"] = 0;
+            $request["image_height"] = 0;
+            
+            $id = Table::init('slideshow.images')
+                ->setRecord((object) $request)
+                ->doInsert();
+            
+            $request["image_id"] = $id;
+            
+            list($request["image_url"], $request["image_width"], $request["image_height"]) = $this->handleFileUpload($id, 'image_image');
+            
+            Table::init('slideshow.images')
+                ->setRecord((object) $request)
+                ->doUpdate();
+            
+            if($request['ajax'] === 'true')
             {
-                $this->ajax($requestObj->doSelect(array('image_id' => $id)));
+                $this->ajax(Table::init('slideshow.images')->doSelect(array('image_id' => $id))->getRows());
             }
-            else if($request['internal'] == 'true')
+            else if($request['internal'] === 'true')
             {
                 return $id;
             }
@@ -102,8 +86,6 @@ class SlideshowComponent extends Component
     {
         if($request['method'] == 'post')
         {
-            $requestObj = Request::init('slideshow.images');
-            
             if(!empty($_FILES['image_image']['name']))
             {
                 //check if the file did actully upload
@@ -142,7 +124,10 @@ class SlideshowComponent extends Component
                     }
                 }
                 
-                $image = $requestObj->doSelect($request);
+                $image = Table::init('slideshow.images')
+                    ->setRequest((object) $request)
+                    ->doSelect()
+                    ->getRows();
                 
                 if(file_exists(Config::get('websiteroot', '.').$image[0]->image_url))
                 {
@@ -153,11 +138,13 @@ class SlideshowComponent extends Component
                 list($request["image_url"], $request["image_width"], $request["image_height"]) = $this->handleFileUpload($request["image_id"], 'image_image');
             }
             
-            $requestObj->doUpdate($request);
+            Table::init('slideshow.images')
+                ->setRecord((object) $request)
+                ->doUpdate();
             
             if($request['ajax'] == 'true')
             {
-                $this->ajax($requestObj->doSelect(array('image_id' => $id)));
+                $this->ajax(Table::init('slideshow.images')->doSelect(array('image_id' => $id))->getRows());
             }
             else if($request['internal'] == 'true')
             {
@@ -172,9 +159,7 @@ class SlideshowComponent extends Component
         {
             if($request['image_id'])
             {
-                $record = Request::init('slideshow.images')->doSelect($request);
-                
-                $smarty->assign("record", $record[0]);
+                $smarty->assign("record", Table::init('slideshow.images')->setRequest((object) $request)->doSelect()->getRow());
             }
             else
             {
@@ -185,11 +170,12 @@ class SlideshowComponent extends Component
     
     public function action_delete_image($smarty, $smartyLoader, $request)
     {
-        $requestObj = Request::init('slideshow.images');
-        
         if($request['method'] == 'post')
         {
-            $images = $requestObj->doSelect($request);
+            $images = Table::init('slideshow.images')
+                ->setRequest((object) $request)
+                ->doSelect()
+                ->getRows();
             
             foreach($images as $image)
             {
@@ -199,7 +185,9 @@ class SlideshowComponent extends Component
                 }
             }
             
-            $requestObj->doDelete($request);
+            Table::init('slideshow.images')
+                ->setRequest((object) $request)
+                ->doDelete();
             
             $this->redirect("/".Config::get('slideshow_imageadmin', 'slideshow_imageadmin', 'admin'));
         }
@@ -207,7 +195,8 @@ class SlideshowComponent extends Component
         {
             if($request['image_id'])
             {
-                $smarty->assign("record", $requestObj->doSelect($request));
+                Table::init('slideshow.images')
+                    ->setRequest((object) $request);
             }
             else
             {
@@ -216,53 +205,41 @@ class SlideshowComponent extends Component
         }
     }
     
-    public function action_admin_image($smarty, $smartyLoader, $request)
-    {
-        $smarty->assign("records", Request::init('slideshow.images')->doSelect());
-        
-        //urls
-        $smarty->assign("actionurl_add", Config::get('slideshow_imageadd', 'slideshow_imageadd', 'admin'));
-        $smarty->assign("actionurl_edit", Config::get('slideshow_imageedit', 'slideshow_imageedit', 'admin'));
-        $smarty->assign("actionurl_delete", Config::get('slideshow_imagedelete', 'slideshow_imagedelete', 'admin'));
-    }
-    
     public function action_add_group($smarty, $smartyLoader, $request)
     {
         if($request['method'] == 'post')
         {
-            $requestObj = Request::init('slideshow.groups');
-            $this->setCurrentTable('s_groups');
-            
-            if($this->validate($request, "/".Config::get('slideshow_groupadd', 'slideshow_groupadd', 'admin'), "add"))
+            //upload the image
+            $request['internal'] = 'true';
+            $request['image_title'] = $request['group_title']." Header";
+            //is there an upload?
+            if(!empty($_FILES['image_image']['temp_name']))
             {
-                //upload the image
-                $request['internal'] = 'true';
-                $request['image_title'] = $request['group_title']." Header";
-                //is there an upload?
-                if(!empty($_FILES['image_image']['temp_name']))
-                {
-                    $request['group_header'] = $this->action_add_image($smarty, $smartyLoader, $request);
-                }
-                else //check dropdown
-                {
-                    $request['group_header'] = $request['image_image_select'];
-                }
-                
-                //add the group
-                $id = $requestObj->doInsert($request);
-                
-                //now the images
-                foreach($request['images'] as $image)
-                {
-                    Request::init('slideshow.groupsimages')->doInsert(array('group_id' => $id, 'image_id' => $image));
-                }
+                $request['group_header'] = $this->action_add_image($smarty, $smartyLoader, $request);
+            }
+            else //check dropdown
+            {
+                $request['group_header'] = $request['image_image_select'];
+            }
+            
+            //add the group
+            $id = Table::init('slideshow.groups')
+                ->setRecord((object) $request)
+                ->doInsert();
+            
+            //now the images
+            foreach($request['images'] as $image)
+            {
+                Table::init('slideshow.groupsimages')
+                    ->setRecord((object) array('group_id' => $id, 'image_id' => $image))
+                    ->doInsert();
             }
             
             $this->redirect("/".Config::get('slideshow_groupadmin', 'slideshow_groupadmin', 'admin'));
         }
         else
         {
-            $smarty->assign("images", Request::init('slideshow.images')->doSelect());
+            $smarty->assign("images", Table::init('slideshow.images')->doSelect()->getRows());
         }
     }
     
@@ -270,37 +247,40 @@ class SlideshowComponent extends Component
     {
         if($request['method'] == 'post')
         {
-            $requestObj = Request::init('slideshow.groups');
-            $this->setCurrentTable('s_groups');
+            $id = $request['group_id'];
             
-            if($this->validate($request, "/".Config::get('slideshow_groupadd', 'slideshow_groupadd', 'admin'), "add"))
+            
+            if(!empty($_FILES['image_image']['name']))
             {
-                $id = $request['group_id'];
+                $group = Table::init('slideshow.groups')
+                    ->setRequest((object) $request)
+                    ->doSelect();
                 
-                if(!empty($_FILES['image_image']['name']))
-                {
-                    $group = $requestObj->doSelect($request);
-                    
-                    //upload the image
-                    $request['internal'] = 'true';
-                    $request['image_title'] = $request['group_title']." Header";
-                    $request['group_header'] = $this->action_add_image($smarty, $smartyLoader, $request);
-                }
-                else //check dropdown
-                {
-                    $request['group_header'] = $request['image_image_select'];
-                }
-                
-                //update the group
-                $requestObj->doUpdate($request);
-                
-                //now the images
-                Request::init('slideshow.groupsimages')->doDelete(array('group_id' => $id));
-                
-                foreach($request['images'] as $image)
-                {
-                    Request::init('slideshow.groupsimages')->doInsert(array('group_id' => $id, 'image_id' => $image));
-                }
+                //upload the image
+                $request['internal'] = 'true';
+                $request['image_title'] = $request['group_title']." Header";
+                $request['group_header'] = (int) $this->action_add_image($smarty, $smartyLoader, $request);
+            }
+            else //check dropdown
+            {
+                $request['group_header'] = (int) $request['image_image_select'];
+            }
+            //update the group
+            Table::init('slideshow.groups')
+                ->setRequest((object) $request)
+                ->setRecord((object) $request)
+                ->doUpdate();
+            
+            //now the images
+            Table::init('slideshow.groupsimages')
+                ->setRecord((object) array('group_id' => $id))
+                ->doDelete();
+            
+            foreach($request['images'] as $image)
+            {
+                Table::init('slideshow.groupsimages')
+                    ->setRecord((object) array('group_id' => $id, 'image_id' => $image))
+                    ->doInsert();
             }
             
             $this->redirect("/".Config::get('slideshow_groupadmin', 'slideshow_groupadmin', 'admin'));
@@ -309,9 +289,17 @@ class SlideshowComponent extends Component
         {
             if($request['group_id'])
             {
-                $record = Request::init('slideshow.groups')->doSelect($request);
-                $images = Request::init('slideshow.images')->doSelect();
-                $groupimages = Request::init('slideshow.groupsimages')->doSelect($request);
+                $record = Table::init('slideshow.groups')
+                    ->setRequest((object) $request)
+                    ->doSelect()
+                    ->getRow();
+                $images = Table::init('slideshow.images')
+                    ->doSelect()
+                    ->getRows();
+                $groupimages = Table::init('slideshow.groupsimages')
+                    ->setRequest((object) $request)
+                    ->doSelect()
+                    ->getRows();
                 
                 $images_ids = array();
                 
@@ -320,7 +308,7 @@ class SlideshowComponent extends Component
                     $images_ids[] = $image->image_id;
                 }
                 
-                $smarty->assign("record", $record[0]);
+                $smarty->assign("record", $record);
                 $smarty->assign("images", $images);
                 $smarty->assign("images_ids", $images_ids);
                 $smarty->assign("groupimages", $groupimages);

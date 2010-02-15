@@ -38,14 +38,16 @@
         </div>
         <div class="admin_form_field">
             <ul id="group_images">
-                {foreach from=$groupimages item=image}
+                {foreach from=$images item=image}
+                {if !$image->image_id|notin:$images_ids}
                 <li id="image{$image->image_id}">
                     <a href="javascript: removeImage({$image->image_id});">
-                        <img src="/img/icons/image_delete.png">
+                        <img src="/img/icons/delete.png">
                     </a>
                     {$image->image_title}
                     <input name="images[]" value="{$image->image_id}" type="hidden">
                 </li>
+                {/if}
                 {/foreach}
             </ul>
             <div>
@@ -89,10 +91,7 @@
         onChange: function(file, extension){
             if($('#image_title').val() == '')
             {
-                alert("Please fill in a title");
-                $('#image_title').focus();
-                
-                return false;
+              $("#image_title").val(file.substr(0, file.lastIndexOf(".")));
             }
         },
         onSubmit: function(file, extension){
@@ -124,7 +123,7 @@
             var html = "";
             
             html += "<li id='image" + response[0].image_id + "'>";
-            html += "<a href='javascript: removeImage(" + response[0].image_id + ");'><img src='/img/icons/image_delete.png'/></a> ";
+            html += "<a href='javascript: removeImage(" + response[0].image_id + ");'><img src='/img/icons/delete.png'/></a> ";
             html += response[0].image_title;
             html += "<input type='hidden' name='images[]' value='" + response[0].image_id + "'>";
             html += "</li>";
@@ -147,7 +146,7 @@
                 var html = "";
                 
                 html += "<li id='image" + $(value).val() + "'>";
-                html += "<a href='javascript: removeImage(" + $(value).val() + ");'><img src='/img/icons/image_delete.png'/></a> ";
+                html += "<a href='javascript: removeImage(" + $(value).val() + ");'><img src='/img/icons/delete.png'/></a> ";
                 html += $(value).text();
                 html += "<input type='hidden' name='images[]' value='" + $(value).val() + "'>";
                 html += "</li>";
