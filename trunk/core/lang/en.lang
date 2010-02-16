@@ -17,5 +17,6 @@
     "or":                   "or",
     "small":                "small",
     "large":                "large",
-    "deletefrom":           "delete from"
+    "deletefrom":           "delete from",
+    "welcomeadmin":         "Welcome to the admin section."
 }

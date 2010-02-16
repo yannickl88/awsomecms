@@ -9,13 +9,14 @@
     "save":                 "opslaan",
     "addto":                "toevoegen aan",
     "edit":                 "bewerken",
-    "delete":               "wissen",
+    "delete":               "verwijderen",
     "add":                  "toevoegen",
     "norecords":            "Geen records",
     "areyousuredelete":     "Weet u zeker dat u dit item wilt verwijderen?",
     "deleteselected":       "Verwijder de geselecteerde items",
     "or":                   "of",
     "small":                "klein",
-    "large":                "groot"
-    "deletefrom":           "Verwijder uit"
+    "large":                "groot",
+    "deletefrom":           "Verwijder uit",
+    "welcomeadmin":         "Welkom in het admin gedeelte."
 }
