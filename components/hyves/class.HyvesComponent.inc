@@ -1,13 +1,37 @@
 <?php
+/**
+ * This file is part of the A.W.S.O.M.E.cms distribution.
+ * Detailed copyright and licensing information can be found
+ * in the doc/COPYRIGHT and doc/LICENSE files which should be
+ * included in the distribution.
+ *
+ * @package components.hyves
+ *
+ * @copyright (c) 2009-2010 Yannick de Lange
+ * @license http://www.gnu.org/licenses/gpl.txt
+ *
+ * @version $Revision$
+ */
 import('/core/class.Component.inc');
 
+/**
+ * This is more of an link to hyves, via a cron job blog post can be imported and added to the news component
+ * 
+ * @author Yannick <yannick.l.88@gmail.com>
+ */
 class HyvesComponent extends Component
 {
+    /**
+     * Constructor
+     */
     public function __construct()
     {
         parent::__construct('hyves');
     }
-    
+    /**
+     * (non-PHPdoc)
+     * @see core/Component#execCron()
+     */
     public function execCron()
     {
         $xml = new SimpleXMLElement(file_get_contents(Config::get("blogurl", false, "hyves")));

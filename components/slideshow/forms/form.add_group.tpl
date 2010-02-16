@@ -10,7 +10,7 @@
         {/foreach}
     </script>
 {/if}
-<h2>{"addto"|text} {"comp_slideshow"|text}</h2>
+<h2>{"addto"|text|capitalize} {"comp_slideshow"|text}</h2>
 <form method="post" action="/" class="admin_form admin_slideshow_group_add" enctype="multipart/form-data">
     <div class="admin_form_row">
         <div class="admin_form_label">

@@ -1,4 +1,17 @@
 <?php
+/**
+ * This file is part of the A.W.S.O.M.E.cms distribution.
+ * Detailed copyright and licensing information can be found
+ * in the doc/COPYRIGHT and doc/LICENSE files which should be
+ * included in the distribution.
+ *
+ * @package components.contact
+ *
+ * @copyright (c) 2009-2010 Yannick de Lange
+ * @license http://www.gnu.org/licenses/gpl.txt
+ *
+ * @version $Revision$
+ */
 import('/core/class.Component.inc');
 
 /**
@@ -54,14 +67,13 @@ class ContactComponent extends Component
             $this->redirect("/".Config::get('contactadmin', 'contactadmin', 'admin'));
         }
     }
-    
     /**
-    * Edit action, this is called when a contact form is edited
-    * 
-    * @param Smarty $smarty
-    * @param SmartyPageLoader $smartyLoader
-    * @param array $request
-    */
+     * Edit action, this is called when a contact form is edited
+     *
+     * @param Smarty $smarty
+     * @param SmartyPageLoader $smartyLoader
+     * @param array $request
+     */
     public function action_edit($smarty, $smartyLoader, $request)
     {
         if($request['method'] == 'post')
@@ -118,14 +130,13 @@ class ContactComponent extends Component
             }
         }
     }
-    
     /**
-    * Delete action, this is called when a form is deleted
-    * 
-    * @param Smarty $smarty
-    * @param SmartyPageLoader $smartyLoader
-    * @param array $request
-    */
+     * Delete action, this is called when a form is deleted
+     *
+     * @param Smarty $smarty
+     * @param SmartyPageLoader $smartyLoader
+     * @param array $request
+     */
     public function action_delete($smarty, $smartyLoader, $request)
     {
         if($request['method'] == 'post')
@@ -153,14 +164,13 @@ class ContactComponent extends Component
             }
         }
     }
-    
     /**
-    * Send action, this is called when a form is submitted
-    * 
-    * @param Smarty $smarty
-    * @param SmartyPageLoader $smartyLoader
-    * @param array $request
-    */
+     * Send action, this is called when a form is submitted
+     *
+     * @param Smarty $smarty
+     * @param SmartyPageLoader $smartyLoader
+     * @param array $request
+     */
     public function action_send($smarty, $smartyLoader, $request)
     {
         if($request['method'] == 'post' && isset($request['form_id']) && is_numeric($request['form_id']))
@@ -221,12 +231,11 @@ class ContactComponent extends Component
             $this->redirect($form->form_thanks);
         }
     }
-    
     /**
-    * Function for registering menu items to the admin menu
-    * 
-    * @param Menu $menu
-    */
+     * Function for registering menu items to the admin menu
+     *
+     * @param Menu $menu
+     */
     public function registerMenuItems($menu)
     {
         $menu->addChild(new MenuItem("contact", Config::get('contactadmin', 'contactadmin', 'admin')));

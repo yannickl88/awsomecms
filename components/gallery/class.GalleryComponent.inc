@@ -1,13 +1,42 @@
 <?php
+/**
+ * This file is part of the A.W.S.O.M.E.cms distribution.
+ * Detailed copyright and licensing information can be found
+ * in the doc/COPYRIGHT and doc/LICENSE files which should be
+ * included in the distribution.
+ *
+ * @package components.gallery
+ *
+ * @copyright (c) 2009-2010 Yannick de Lange
+ * @license http://www.gnu.org/licenses/gpl.txt
+ *
+ * @version $Revision$
+ */
 import('/core/class.Component.inc');
 
+/**
+ * A simple component to manage and show a series of images on a page. Using a tag, images can be grouped together
+ * 
+ * @author Yannick <yannick.l.88@gmail.com>
+ */
 class GalleryComponent extends Component
 {
+    /**
+     * Constructor
+     * 
+     * @return unknown_type
+     */
     public function __construct()
     {
         parent::__construct('gallery');
     }
-    
+    /**
+     * Action to add an image
+     * 
+     * @param Smarty $smarty
+     * @param SmartyPageLoader $smartyLoader
+     * @param array $request
+     */
     public function action_add($smarty, $smartyLoader, $request)
     {
         if($request['method'] == 'post')
@@ -50,7 +79,13 @@ class GalleryComponent extends Component
         
         $this->redirect("/".Config::get('galleryadmin', 'galleryadmin', 'admin'));
     }
-    
+    /**
+     * Action to edit an image
+     * 
+     * @param Smarty $smarty
+     * @param SmartyPageLoader $smartyLoader
+     * @param array $request
+     */
     public function action_edit($smarty, $smartyLoader, $request)
     {
         if($request['method'] == 'post')
@@ -120,7 +155,13 @@ class GalleryComponent extends Component
             }
         }
     }
-    
+    /**
+     * Action to delete an image
+     * 
+     * @param Smarty $smarty
+     * @param SmartyPageLoader $smartyLoader
+     * @param array $request
+     */
     public function action_delete($smarty, $smartyLoader, $request)
     {
         if($request['method'] == 'post')
@@ -164,7 +205,13 @@ class GalleryComponent extends Component
             }
         }
     }
-    
+    /**
+     * Upload a file to the server
+     * 
+     * @param int $id       Image id
+     * @param string $name
+     * @return array
+     */
     private function handleFileUpload($id, $name)
     {
         $file = $_FILES[$name]['name'];
@@ -189,7 +236,13 @@ class GalleryComponent extends Component
             return false;
         }
     }
-    
+    /**
+     * Handle thumb upload
+     * 
+     * @param int $id       Image id
+     * @param string $name
+     * @return array
+     */
     private function handleThumbUpload($id, $name)
     {
         $file = $_FILES[$name]['name'];
@@ -216,7 +269,13 @@ class GalleryComponent extends Component
             return false;
         }
     }
-    
+    /**
+     * Generate the thumb from an image
+     * 
+     * @param int $id       Image ID
+     * @param string $originalUrl
+     * @return array
+     */
     private function createThumb($id, $originalUrl)
     {
         $file = basename($originalUrl);
@@ -270,7 +329,13 @@ class GalleryComponent extends Component
             
         return array('/'.Config::get('uploaddir', 'img/upload/', 'gallery').$destName, $destInfo[0], $destInfo[1]);
     }
-    
+    /**
+     * Custom validation to check if the image was correcly uploaded
+     * 
+     * @param array $data
+     * @param string $redirectOnFailure
+     * @param string $mode
+     */
     protected function validate($data, $redirectOnFailure, $mode = "edit")
     {
         $valid = true;
@@ -345,7 +410,10 @@ class GalleryComponent extends Component
             }
         }
     }
-    
+    /**
+     * (non-PHPdoc)
+     * @see core/Component#registerMenuItems($menu)
+     */
     public function registerMenuItems($menu)
     {
         $menu->addChild(new MenuItem("gallery", Config::get('galleryadmin', 'galleryadmin', 'admin')));

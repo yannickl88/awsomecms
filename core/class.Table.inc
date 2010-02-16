@@ -588,7 +588,7 @@ abstract class Table
         
         $html = "";
         $post_html = "";
-        $html .= "<h2>".Language::get("deletefrom")." ".Language::get("comp_".$this->component)."</h2>\n";
+        $html .= "<h2>".ucfirst(Language::get("deletefrom"))." ".Language::get("comp_".$this->component)."</h2>\n";
         $html .= "<form method=\"post\" action=\"/\" class=\"admin_form admin_delete\">\n";
         $html .= "    <div class=\"admin_form_row\">\n";
         $html .= "        <div class=\"admin_form_text\">\n";
@@ -611,7 +611,7 @@ abstract class Table
                     $title = $row->$title;
                 }
             }
-            $html .= "                <li><img src=\"/img/icons/page.png\" alt=\"\">{$title}</li>\n";
+            $html .= "                <li>{$title}</li>\n";
             
             foreach($this->keys as $field)
             {

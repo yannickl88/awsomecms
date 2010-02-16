@@ -58,7 +58,7 @@ JS;
      */
     public function validate($mode)
     {
-        $value = $this->getValue();
+        $value = $this->value2db($this->getValue());
         
         if(is_int($value) || is_numeric($value))
         {
@@ -70,7 +70,6 @@ JS;
             
             if($mode == Field::ADD && ($this->isIndex() || $this->isRequired($mode)) && !$this->hasFlag(Field::AUTOKEY))
             {
-                echo "asdf";
                 throw new FormException($this, "Field was not a number");
             }
             

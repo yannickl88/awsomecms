@@ -1,4 +1,0 @@
-INSERT INTO `pages` (`page_name`, `page_location`, `page_template`, `page_timestamp`) VALUES('add', '/admin/skimspots/', '{form component=''skimfo'' form=''add_skimspot''}', '2009-09-12 23:05:20');
-INSERT INTO `pages` (`page_name`, `page_location`, `page_template`, `page_timestamp`) VALUES('add', '/admin/locations/', '{form component=''skimfo'' form=''add_location''}', '2009-09-12 23:13:33');
-INSERT INTO `pages` (`page_name`, `page_location`, `page_template`, `page_timestamp`) VALUES('admin', '/admin/slideshow/image/', '{form component=''slideshow'' form=''admin_image''}', '2009-09-19 14:34:13');
-INSERT INTO `pages` (`page_name`, `page_location`, `page_template`, `page_timestamp`) VALUES('admin', '/admin/skimspots/', '{form component=''skimfo'' form=''admin_skimspot''}', '2009-09-12 23:16:05');

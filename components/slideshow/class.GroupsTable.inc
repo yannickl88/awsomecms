@@ -95,4 +95,29 @@ class GroupsTable extends Table
         
         return $result;
     }
+    /**
+     * (non-PHPdoc)
+     * @see core/Table#getAction($mode)
+     */
+    public function getAction($mode)
+    {
+        if(!is_numeric($mode))
+        {
+            $mode = $this->string2action($mode);
+        }
+        
+        switch($mode)
+        {
+            case Field::EDIT:
+                return "edit_group";
+                break;
+            case Field::DELETE:
+                return "delete_group";
+                break;
+            case Field::ADD:
+            default:
+                return "add_group";
+                break;
+        }
+    }
 }

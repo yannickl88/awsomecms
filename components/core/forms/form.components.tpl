@@ -1,10 +1,11 @@
 <h2>{"compoverview"|text}</h2>
 <h3>{"installedcomp"|text}:</h3>
-<table style="border-collapse: collapse;">
+<table class="admin_table">
     <tr class="header">
         <th style="width: 100px;">{"framework"|text}</th>
         <th style="width: 100px;">{"status"|text}</th>
         <th>{"description"|text}</th>
+        <th style="width: 100px;"></th>
     </tr>
     <tr class="row" id="row_framework">
         <td style="vertical-align: top;">
@@ -16,11 +17,13 @@
         <td style="vertical-align: top;">
             This is the framework that makes everything come together. It is what handels the actions and calls the components when needed.
         </td>
+        <td style="vertical-align: top;" class="accessCell">
+        </td>
     </tr>
 </table>
 <br />
 <form method="post" action="/" class="admin_form admin_core_components">
-    <table style="border-collapse: collapse;">
+    <table class="admin_table">
         <tr class="header">
             <th style="width: 100px;">{"component"|text}</th>
             <th style="width: 100px;">{"status"|text}</th>
@@ -28,7 +31,7 @@
             <th style="width: 100px;">{"pubaccess"|text}</th>
         </tr>
         {foreach from=$components item=component name=components}
-            <tr class="row" {if $smarty.foreach.components.index % 2 == 0}style="background-color: #F1F8FF;"{/if} id="row_{$component->component_name}">
+            <tr class="row{if $smarty.foreach.components.index % 2 == 1} highlighted{/if}" id="row_{$component->component_name}">
                 <td style="vertical-align: top;">
                     <i>{$component->component_name|capitalize}</i>
                 </td>
@@ -63,7 +66,7 @@
     <input type="hidden" name="component" value="core" />
 </form>
 <h3>{"uninstalledcomp"|text}:</h3>
-<table style="border-collapse: collapse;">
+<table class="admin_table">
     <tr class="header">
         <th style="width: 100px;">{"component"|text}</th>
         <th style="width: 100px;">{"status"|text}</th>

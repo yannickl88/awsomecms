@@ -16,5 +16,6 @@
     "deleteselected":       "Delete the selected items",
     "or":                   "or",
     "small":                "small",
-    "large":                "large"
+    "large":                "large",
+    "deletefrom":           "delete from"
 }
