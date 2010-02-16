@@ -32,13 +32,13 @@ class FormsTable extends Table
         parent::__construct("forms");
         $this->assign("contact");
         
-        $this->addField(new IntField("form_id", "", Field::AUTOKEY|Field::INDEX));
-        $this->addField(new Field("form_name", "Name"), 1);
-        $this->addField(new Field("form_to", "To", Field::HIDE_VIEW), 2);
-        $this->addField(new Field("form_bcc", "Bcc", Field::HIDE_VIEW), 3);
-        $this->addField(new Field("form_subject", "Subject"), 4);
-        $this->addField(new LocationField("form_thanks", "Thanks page", Field::HIDE_VIEW, true), 5);
-        $this->addField(new FieldsField("form_fields", "Fields", Field::DUMMY), 6);
+        $this->addField(new IntField("form_id", Field::AUTOKEY|Field::INDEX));
+        $this->addField(new Field("form_name"), 1);
+        $this->addField(new Field("form_to", Field::HIDE_VIEW), 2);
+        $this->addField(new Field("form_bcc", Field::HIDE_VIEW), 3);
+        $this->addField(new Field("form_subject"), 4);
+        $this->addField(new LocationField("form_thanks", Field::HIDE_VIEW, true), 5);
+        $this->addField(new FieldsField("form_fields", Field::DUMMY), 6);
         $this->setTitle("[form_name]");
         
         $this->setURLs(

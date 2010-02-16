@@ -413,7 +413,7 @@ abstract class Table
     protected function toHTML_add()
     {
         $html = $this->getErrors();
-        $html .= "<h2>Add to ".$this->component."</h2>\n";
+        $html .= "<h2>".ucfirst(Language::get("addto"))." ".Language::get("comp_".$this->component)."</h2>\n";
         $html .= "<form method=\"post\" action=\"/\" class=\"admin_form admin_add\">\n";
         
         foreach($this->fields as $field)
@@ -427,7 +427,7 @@ abstract class Table
             }
         }
         $html .= "<div class=\"admin_form_row admin_form_submit\">\n";
-        $html .= "<input type='submit' value='Save' />\n";
+        $html .= "<input type='submit' value='".ucfirst(Language::get("save"))."' />\n";
         $html .= "</div>\n";
         $html .= $this->getAssignment(Field::ADD);
         $html .= "</form>\n";
@@ -446,7 +446,7 @@ abstract class Table
         
         $html_post = "";
         $html = $this->getErrors();
-        $html .= "<h2>Edit ".$this->parseTitle($this->title, $data)."</h2>\n";
+        $html .= "<h2>".ucfirst(Language::get("edit"))." ".$this->parseTitle($this->title, $data)."</h2>\n";
         $html .= "<form method=\"post\" action=\"/\" class=\"admin_form admin_edit\">\n";
         
         foreach($this->fields as $field) //@var $field Field
@@ -466,7 +466,7 @@ abstract class Table
             }
         }
         $html .= "<div class=\"admin_form_row admin_form_submit\">\n";
-        $html .= "<input type='submit' value='Save' />\n";
+        $html .= "<input type='submit' value='".ucfirst(Language::get("save"))."' />\n";
         $html .= "</div>\n";
         $html .= $html_post;
         $html .= $this->getAssignment(Field::EDIT);
@@ -485,7 +485,7 @@ abstract class Table
         $data = $this->doSelect($this->request[0])->getRows();
         
         $html = "";
-        $html .= "<h2>".ucfirst($this->component)." overview</h2>\n";
+        $html .= "<h2>".ucfirst(Language::get("comp_".$this->component))." ".Language::get("overview")."</h2>\n";
         $html .= "<table class=\"admin_table\">\n";
         $html .= "    <tr class=\"admin_table_header\">\n";
         foreach($this->fields as $field)
@@ -539,8 +539,8 @@ abstract class Table
             
             //actions
             $html .= "        <td class=\"admin_table_cell admin_table_actions\">\n";
-            $html .= "            <a href='/{$this->editURL}{$queryString}'><img src=\"/img/icons/edit.png\" alt=\"edit\"></a>";
-            $html .= "            <a href='/{$this->deleteURL}{$queryString}'><img src=\"/img/icons/delete.png\" alt=\"delete\"</a>\n";
+            $html .= "            <a href='/{$this->editURL}{$queryString}'><img src=\"/img/icons/edit.png\" alt=\"".Language::get("edit")."\"></a>";
+            $html .= "            <a href='/{$this->deleteURL}{$queryString}'><img src=\"/img/icons/delete.png\" alt=\"".Language::get("delete")."\"</a>\n";
             $html .= "        </td>\n";
             $html .= "        <td class=\"admin_table_cell admin_table_actions\">\n";
             $html .= "            <input type=\"checkbox\" value=\"".$this->keys[0]->getValue($row)."\" name=\"action[]\" class=\"actioncheckbox\">\n";
@@ -560,16 +560,16 @@ abstract class Table
             }
             
             $colspan = $cols + 2;
-            $html .= "        <td class=\"admin_table_cell\" colspan=\"{$colspan}\">No Records</td>\n";
+            $html .= "        <td class=\"admin_table_cell\" colspan=\"{$colspan}\">".Language::get("norecords")."</td>\n";
         }
         
         $colspan = $cols + 1;
         $html .= "    <tr class=\"admin_table_row admin_table_actions_row\">\n";
         $html .= "        <td class=\"admin_table_cell admin_table_actions\" colspan=\"{$colspan}\">\n";
-        $html .= "            <img src=\"/img/icons/add.png\" alt=\"add\"> <a href=\"/{$this->addURL}\">Add</a>\n";
+        $html .= "            <img src=\"/img/icons/add.png\" alt=\"add\"> <a href=\"/{$this->addURL}\">".ucfirst(Language::get("add"))."</a>\n";
         $html .= "        </td>\n";
         $html .= "        <td class=\"admin_table_cell\">\n";
-        $html .= "            <a href=\"javascript: void(0);\" onclick=\"deleteMultiple('/{$this->deleteURL}', '{$this->keys[0]->getName()}', $('.actioncheckbox'));\"><img src=\"/img/icons/delete.png\" alt=\"delete selected\"></a>\n";
+        $html .= "            <a href=\"javascript: void(0);\" onclick=\"deleteMultiple('/{$this->deleteURL}', '{$this->keys[0]->getName()}', $('.actioncheckbox'));\"><img src=\"/img/icons/delete.png\" alt=\"".Language::get("deleteselected")."\"></a>\n";
         $html .= "        </td>\n";
         $html .= "    </tr>\n";
         $html .= "</table>\n";
@@ -588,11 +588,11 @@ abstract class Table
         
         $html = "";
         $post_html = "";
-        $html .= "<h2>Delete from ".$this->component."</h2>\n";
+        $html .= "<h2>".Language::get("deletefrom")." ".Language::get("comp_".$this->component)."</h2>\n";
         $html .= "<form method=\"post\" action=\"/\" class=\"admin_form admin_delete\">\n";
         $html .= "    <div class=\"admin_form_row\">\n";
         $html .= "        <div class=\"admin_form_text\">\n";
-        $html .= "            Are you sure you want to delete this item? <br />\n";
+        $html .= "            ".Language::get("areyousuredelete")." <br />\n";
         $html .= "            <ul>\n";
         
         foreach($data as $row)
@@ -623,7 +623,7 @@ abstract class Table
         $html .= "        </div>\n";
         $html .= "    </div>\n";
         $html .= "    <div class=\"admin_form_row admin_form_submit\">\n";
-        $html .= "        <input type=\"submit\" value=\"Delete\" id=\"page_submit\" class=\"admin_form_submit\">\n";
+        $html .= "        <input type=\"submit\" value=\"".ucfirst(Language::get("delete"))."\" id=\"page_submit\" class=\"admin_form_submit\">\n";
         $html .= "    </div>\n";
         $html .= $post_html;
         $html .= $this->getAssignment(Field::DELETE);

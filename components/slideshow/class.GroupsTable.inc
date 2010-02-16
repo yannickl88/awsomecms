@@ -30,9 +30,9 @@ class GroupsTable extends Table
         parent::__construct("s_groups");
         $this->assign("slideshow");
         
-        $this->addField(new IntField("group_id", "", Field::AUTOKEY|Field::INDEX));
-        $this->addField(new Field("group_title", "Title"));
-        $this->addField(new IntField("group_header", "", Field::HIDE));
+        $this->addField(new IntField("group_id", Field::AUTOKEY|Field::INDEX));
+        $this->addField(new Field("group_title"));
+        $this->addField(new IntField("group_header", Field::HIDE));
         $this->setTitle("[group_title]");
         
         $this->setURLs(

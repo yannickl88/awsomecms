@@ -33,11 +33,11 @@ class PagesTable extends Table
         parent::__construct("pages");
         $this->assign("page");
         
-        $this->addField(new IntField("page_id", "", Field::INDEX|Field::AUTOKEY));
-        $this->addField(new Field("page_name", "Name"), 1);
-        $this->addField(new LocationField("page_location", "Location"), 2);
-        $this->addField(new TextField("page_template", "Content"), 3);
-        $this->addField(new DateField("page_timestamp", "", Field::HIDE));
+        $this->addField(new IntField("page_id", Field::INDEX|Field::AUTOKEY));
+        $this->addField(new Field("page_name"), 1);
+        $this->addField(new LocationField("page_location"), 2);
+        $this->addField(new TextField("page_template"), 3);
+        $this->addField(new DateField("page_timestamp", Field::HIDE));
         $this->setTitle("[page_name]");
         
         $this->setURLs(

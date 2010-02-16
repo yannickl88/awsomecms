@@ -1,6 +1,6 @@
-<h2>Components authentication</h2>
+<h2>{"componentauth"|text}</h2>
 <p>
-    Select the privliages needed to execute the given action on a component. This is needed to garantee a secure CMS.
+    {"selectpriv"|text}
 </p>
 <form method="post" action="/" class="admin_form admin_core_auth">
     <div id="core_auth">
@@ -35,7 +35,7 @@
     {/foreach}
     </div>
     <div class="admin_form_row admin_form_submit">
-        <input type="submit" value="Save" id="component_submit" class="admin_form_submit">
+        <input type="submit" value="{"save"|text|capitalize}" id="component_submit" class="admin_form_submit">
     </div>
     <input type="hidden" name="action" value="auth" />
     <input type="hidden" name="component" value="core" />

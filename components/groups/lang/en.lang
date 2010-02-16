@@ -1,0 +1,7 @@
+{
+    "comp_groups":          "Groups",
+    "menu_groupsadmin":     "Groups",
+    "field_group_name":     "Name",
+    "field_group_privileges": "Privliveges",
+    "field_group_users":    "Users"
+}

@@ -31,13 +31,13 @@ class ComponentsTable extends Table
         parent::__construct("components");
         $this->assign("core");
         
-        $this->addField(new Field("component_name", "Name", Field::STR_INDEX));
-        $this->addField(new TextField("component_requests", "", Field::OPTIONAL));
-        $this->addField(new Field("component_path", "", Field::OPTIONAL));
-        $this->addField(new IntField("component_auth", "", Field::OPTIONAL));
-        $this->addField(new IntField("component_patchlevel", "", Field::OPTIONAL));
-        $this->addField(new Field("component_version", "", Field::OPTIONAL));
-        $this->addField(new Field("component_updateurl", "", Field::OPTIONAL));
+        $this->addField(new Field("component_name", Field::STR_INDEX));
+        $this->addField(new TextField("component_requests", Field::OPTIONAL));
+        $this->addField(new Field("component_path", Field::OPTIONAL));
+        $this->addField(new IntField("component_auth", Field::OPTIONAL));
+        $this->addField(new IntField("component_patchlevel", Field::OPTIONAL));
+        $this->addField(new Field("component_version", Field::OPTIONAL));
+        $this->addField(new Field("component_updateurl", Field::OPTIONAL));
         $this->setTitle("[component_name]");
     }
     /**

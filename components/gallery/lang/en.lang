@@ -1,0 +1,10 @@
+{
+    "comp_gallery":         "Gallery",
+    "menu_gallery":         "Gallery",
+    "menu_galleryadmin":    "Images",
+    "menu_galleryadd":      "Add Image",
+    "field_image_title":    "Title",
+    "field_image_tag":      "Tag",
+    "field_image_thumb":    "Thumb",
+    "generate":             "Generate"
+}

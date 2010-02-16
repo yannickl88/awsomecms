@@ -32,12 +32,12 @@ class GroupsTable extends Table
         parent::__construct("groups");
         $this->assign("groups");
         
-        $this->addField(new IntField("groups.group_id", "", Field::INDEX|Field::AUTOKEY));
-        $this->addField(new Field("group_name", "Name"), 1);
-        $privField = new PrivlilegesField("group_privileges", "Privliveges", Field::HIDE_VIEW);
+        $this->addField(new IntField("groups.group_id", Field::INDEX|Field::AUTOKEY));
+        $this->addField(new Field("group_name"), 1);
+        $privField = new PrivlilegesField("group_privileges", Field::HIDE_VIEW);
         $privField->setDefaultValue(0);
         $this->addField($privField, 2);
-        $this->addField(new UsersselectField("group_users", "Users", Field::DUMMY), 3);
+        $this->addField(new UsersselectField("group_users", Field::DUMMY), 3);
         $this->setTitle("[group_name]");
         
         $this->setURLs(

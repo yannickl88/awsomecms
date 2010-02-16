@@ -30,9 +30,9 @@ class LocationField extends Field
      * @param string $displayName
      * @param int $style
      */
-    public function __construct($name, $displayName = "", $style=0, $displayPages = false)
+    public function __construct($name, $style=0, $displayPages = false)
     {
-        parent::__construct($name, $displayName, $style|Field::HIDE_VIEW);
+        parent::__construct($name, $style|Field::HIDE_VIEW);
         
         $this->displayPages = $displayPages;
     }

@@ -28,9 +28,9 @@ class FieldsField extends Field
      * @param string $displayName
      * @param int $style
      */
-    public function __construct($name, $displayName = "", $style=0)
+    public function __construct($name, $style=0)
     {
-        parent::__construct($name, $displayName, $style|Field::HIDE_VIEW);
+        parent::__construct($name, $style|Field::HIDE_VIEW);
     }
     /**
      * (non-PHPdoc)
@@ -38,18 +38,21 @@ class FieldsField extends Field
      */
     protected function toHTML_add()
     {
+        $lang = Language::getInstance();
+        $add = ucfirst($lang->getText("add"));
+        
         $html = <<<HTML
             <table id="{$this->getName()}">
                 <tr>
-                    <th>Name</th>
-                    <th>Code</th>
-                    <th>Type</th>
-                    <th>Required</th>
-                    <th>Order</th>
+                    <th>{$lang->getText("field_name")}</th>
+                    <th>{$lang->getText("field_code")}</th>
+                    <th>{$lang->getText("field_type")}</th>
+                    <th>{$lang->getText("field_required")}</th>
+                    <th>{$lang->getText("field_order")}</th>
                     <th></th>
                 </tr>
             </table>
-            <a href="javascript: void(0);" onclick="addFieldsRow();">Add</a>
+            <a href="javascript: void(0);" onclick="addFieldsRow();">{$add}</a>
             <input type="hidden" id="{$this->getName()}_fields" name="{$this->getName()}" value="" />
 HTML;
         return $html;
@@ -60,16 +63,19 @@ HTML;
      */
     protected function toHTML_edit()
     {
+        $lang = Language::getInstance();
+        
         $fields = $this->getRequestValue();
+        $add = ucfirst($lang->getText("add"));
         
         $html = <<<HTML
             <table id="{$this->getName()}">
                 <tr>
-                    <th>Name</th>
-                    <th>Code</th>
-                    <th>Type</th>
-                    <th>Required</th>
-                    <th>Order</th>
+                    <th>{$lang->getText("field_name")}</th>
+                    <th>{$lang->getText("field_code")}</th>
+                    <th>{$lang->getText("field_type")}</th>
+                    <th>{$lang->getText("field_required")}</th>
+                    <th>{$lang->getText("field_order")}</th>
                     <th></th>
                 </tr>
 HTML;
@@ -77,6 +83,29 @@ HTML;
         $count2 = 1;
         foreach($fields as $field)
         {
+            $fieldTypeSelected = array("", "", "", "");
+            switch($field->field_type)
+            {
+                case 1:
+                    $fieldTypeSelected[0] = 'selected="selected"';
+                    break;
+                case 2:
+                    $fieldTypeSelected[1] = 'selected="selected"';
+                    break;
+                case 3:
+                    $fieldTypeSelected[2] = 'selected="selected"';
+                    break;
+                case 4:
+                    $fieldTypeSelected[3] = 'selected="selected"';
+                    break;
+            }
+            $fieldRequired = "";
+            
+            if($field->field_required == 1)
+            {
+                $fieldRequired = 'checked="checked"';
+            }
+            
             $html .= <<<HTML
                     <tr class="fieldrow">
                         <td>
@@ -87,14 +116,14 @@ HTML;
                         </td>
                         <td>
                             <select class="field_type smallfield">
-                                <option value='1' {if $field->field_type == 1} selected="selected" {/if}>Text</option>
-                                <option value='2' {if $field->field_type == 2} selected="selected" {/if}>Password</option>
-                                <option value='3' {if $field->field_type == 3} selected="selected" {/if}>Textarea</option>
-                                <option value='4' {if $field->field_type == 4} selected="selected" {/if}>Gender</option>
+                                <option value='1' {$fieldTypeSelected[0]}>{$lang->getText("field_type_text")}</option>
+                                <option value='2' {$fieldTypeSelected[1]}>{$lang->getText("field_type_pass")}</option>
+                                <option value='3' {$fieldTypeSelected[2]}>{$lang->getText("field_type_area")}</option>
+                                <option value='4' {$fieldTypeSelected[3]}>{$lang->getText("field_type_gend")}</option>
                             </select>
                         </td>
                         <td>
-                            <input type="checkbox" class="field_required" value="1" {if $field->field_required == 1} checked="checked" {/if}/>
+                            <input type="checkbox" class="field_required" value="1" {$fieldRequired}  {/if}/>
                         </td>
                         <td>
                             <input type="text" class="field_sort tinyfield" value="{$count2}"/>
@@ -109,7 +138,7 @@ HTML;
         }
         $html .= <<<HTML
             </table>
-            <a href="javascript: void(0);" onclick="addFieldsRow();">Add</a>
+            <a href="javascript: void(0);" onclick="addFieldsRow();">{$add}</a>
             <input type="hidden" id="{$this->getName()}_fields" name="{$this->getName()}" value="" />
 HTML;
         return $html;
@@ -120,6 +149,8 @@ HTML;
      */
     public function getJavascript()
     {
+        $lang = Language::getInstance();
+        
         //TODO: fix this so that it can be used multiple times on the same page. Now it is depended on the field name.
         return <<<JS
             $("#{$this->getName()}").ready(function(e) {
@@ -161,10 +192,10 @@ HTML;
                         </td>\
                         <td>\
                             <select class="field_type smallfield">\
-                                <option value="1" >Text</option>\
-                                <option value="2" >Password</option>\
-                                <option value="3" >Textarea</option>\
-                                <option value="4" >Gender</option>\
+                                <option value="1" >{$lang->getText("field_type_text")}</option>\
+                                <option value="2" >{$lang->getText("field_type_pass")}</option>\
+                                <option value="3" >{$lang->getText("field_type_area")}</option>\
+                                <option value="4" >{$lang->getText("field_type_gend")}</option>\
                             </select>\
                         </td>\
                         <td>\

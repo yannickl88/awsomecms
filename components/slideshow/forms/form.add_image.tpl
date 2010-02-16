@@ -10,11 +10,11 @@
         {/foreach}
     </script>
 {/if}
-<h2>Add to images</h2>
+<h2>{"addto"|text|capitalize} {"comp_slideshow"|text}</h2>
 <form method="post" action="/" class="admin_form admin_gallery_add" enctype="multipart/form-data">
     <div class="admin_form_row">
         <div class="admin_form_label">
-            <label for="image_title">Title:</label>
+            <label for="image_title">{"field_image_title"|text}:</label>
         </div>
         <div class="admin_form_field">
             <input type="text" name="image_title" id="image_title" value="{$FORMERROR.record.image_title}"/>
@@ -22,7 +22,7 @@
     </div>
     <div class="admin_form_row">
         <div class="admin_form_label">
-            <label for="image_image">Image:</label>
+            <label for="image_image">{"field_image_image"|text}:</label>
         </div>
         <div class="admin_form_field">
             <input type="file" name="image_image" id="image_image"/>
@@ -30,15 +30,15 @@
     </div>
     <div class="admin_form_row">
         <div class="admin_form_label">
-            <label for="image_image">Size:</label>
+            <label for="image_image">{"field_image_size"|text}:</label>
         </div>
         <div class="admin_form_field">
-            <input type="radio" name="image_size" id="image_size" value="1"/>Small
-            <input type="radio" name="image_size" id="image_size" value="2" checked="checked"/>Large
+            <input type="radio" name="image_size" id="image_size" value="1"/>{"small"|text|capitalize}
+            <input type="radio" name="image_size" id="image_size" value="2" checked="checked"/>{"large"|text|capitalize}
         </div>
     </div>
     <div class="admin_form_row admin_form_submit">
-        <input type="submit" value="Save" id="user_submit" class="admin_form_submit">
+        <input type="submit" value="{"save"|text|capitalize}" id="user_submit" class="admin_form_submit">
     </div>
     <input type="hidden" name="action" value="add_image" />
     <input type="hidden" name="component" value="slideshow" />
