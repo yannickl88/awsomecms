@@ -78,7 +78,7 @@
     {if $URL == "admin/login"}
     <body class="login">
         <div id="loginWrapper">
-            <span class="header">Admin login</span>
+            <span class="header">{"adminlogin"|text}</span>
             {$content}
         </div>
     {else}
@@ -90,10 +90,10 @@
                 </a>
                 <div id="headerLinks">
                     {if $HASDOC}
-                    <a href="/doc.php" id="doc" target="_blank">Doc</a> |
+                    <a href="/doc.php" id="doc" target="_blank">{"doc"|text}</a> |
                     {/if} 
-                    <a href="/">View site</a> | 
-                    <a href="/?logout=true">Log out</a>
+                    <a href="/">{"viewsite"|text}</a> | 
+                    <a href="/?logout=true">{"logout"|text}</a>
                 </div>
             </div>
             <div id="adminMenuWrapper">
@@ -101,7 +101,7 @@
             </div>
             <div id="adminTreeWrapper">
                 <ul class="title">
-                    <li><a class="title">Site Pages</a>
+                    <li><a class="title">{"sitepages"|text}</a>
                         <div id="treeWrapper">
                             {admintree}
                         </div>
@@ -111,7 +111,7 @@
         </div>
         <div id="mainWrapper">
             <div id="mainHeader">
-                <h1>Welcome {$USR.user_name|capitalize}</h1>
+                <h1>{"welcome"|text} {$USR.user_name|capitalize}</h1>
             </div>
             <div id="contentWrapper">
                 {foreach from=$NOTIFICATIONS item=note key=id}

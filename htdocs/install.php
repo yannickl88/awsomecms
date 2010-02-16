@@ -1,12 +1,28 @@
 <?php
+/**
+ * This file is part of the A.W.S.O.M.E.cms distribution.
+ * Detailed copyright and licensing information can be found
+ * in the doc/COPYRIGHT and doc/LICENSE files which should be
+ * included in the distribution.
+ *
+ * @copyright (c) 2009-2010 Yannick de Lange
+ * @license http://www.gnu.org/licenses/gpl.txt
+ *
+ * @version $Revision$
+ */
 session_start();
 
-if(!file_exists('install'))
+if(!file_exists('./install/')) //can we even do an install?
 {
     header("Location: /");
     exit;
 }
-
+/**
+ * Check if all keys in an array are numbers
+ * 
+ * @param array $array
+ * @return boolean
+ */
 function is_numeric_keys($array)
 {
     foreach($array as $key => $value)
@@ -19,7 +35,12 @@ function is_numeric_keys($array)
     
     return true;
 }
-
+/**
+ * Convert an array to ini format
+ * 
+ * @param array $array
+ * @return string
+ */
 function arrayToIni($array)
 {
     $body = '';
@@ -82,7 +103,12 @@ function arrayToIni($array)
     }
     return $body;
 }
-
+/**
+ * Recursivly copy one directory to another
+ * 
+ * @param string $source
+ * @param string $dest
+ */
 function rcopy($source, $dest)
 {
     //is the source a file?
@@ -109,7 +135,11 @@ function rcopy($source, $dest)
         }
     }
 }
-
+/**
+ * Install the database
+ * 
+ * @return array()      [boolean, errormessage]
+ */
 function installDB()
 {
     //prepare the database
@@ -147,6 +177,12 @@ function installDB()
         return array(false, "could not connect to DB");
     }
 }
+/**
+ * Get the highest patch level
+ * 
+ * @param string $installDir
+ * @return int
+ */
 function getHighestPatchLevel($installDir)
 {
     $files = scandir($installDir);
@@ -167,6 +203,11 @@ function getHighestPatchLevel($installDir)
     
     return $patchlevel;
 }
+/**
+ * Install the components
+ * 
+ * @return array()      [boolean, errormessage]
+ */
 function installComponents()
 {
     global $websiteroot;
@@ -322,7 +363,11 @@ function installComponents()
     
     return array(true);
 }
-
+/**
+ * Write the config file
+ * 
+ * @return boolean
+ */
 function saveConfig()
 {
     global $websiteroot;

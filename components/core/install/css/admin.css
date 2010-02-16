@@ -159,6 +159,9 @@ h1 {
     text-decoration: none;
     color: #bbbbbb;
 }
+.admin_form .treeNode a {
+    color: #000000;
+}
 .treeNode a.folder {
     height: 16px;
     display: block;
@@ -325,6 +328,8 @@ h1 {
     font-size: 13px;
     margin: 5px;
     text-align: center;
+    -moz-border-radius: 10px;
+    -webkit-border-radius: 10px;
 }
 .notification a {
     color: #7c5a00;

@@ -1,3 +1,3 @@
-INSERT INTO `pages` (`page_name`, `page_location`, `page_template`, `page_timestamp`) VALUES('index', '/admin/', 'Welcome to the admin section', NOW());
+INSERT INTO `pages` (`page_name`, `page_location`, `page_template`, `page_timestamp`) VALUES('index', '/admin/', '{"welcomeadmin"|text}', NOW());
 INSERT INTO `pages` (`page_name`, `page_location`, `page_template`, `page_timestamp`) VALUES('layout', '/admin/core/', '{form component=''core'' form=''layout''}', NOW());
 INSERT INTO `pages` (`page_name`, `page_location`, `page_template`, `page_timestamp`) VALUES('components', '/admin/core/', '{form component=''core'' form=''components''}', NOW());
