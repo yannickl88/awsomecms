@@ -1,0 +1,10 @@
+{
+    "comp_gallery":         "Gallery",
+    "menu_gallery":         "Gallery",
+    "menu_galleryadmin":    "Afbeeldingen",
+    "menu_galleryadd":      "Afbeelding toevoegen",
+    "field_image_title":    "Titel",
+    "field_image_tag":      "Tag",
+    "field_image_thumb":    "Thumb",
+    "generate":             "Genereer"
+}

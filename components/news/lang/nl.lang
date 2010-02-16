@@ -1,0 +1,11 @@
+{
+    "comp_news":            "Nieuws",
+    "menu_news":            "Nieuws",
+    "menu_newsadmin":       "Nieuws",
+    "menu_newsadd":         "Nieuws toevoegen",
+    "field_news_title":     "Titel",
+    "field_news_user":      "Gebruiker",
+    "field_news_date":      "Datum",
+    "field_news_tag":       "Tag",
+    "field_news_text":      "Inhoud"
+}

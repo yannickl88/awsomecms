@@ -1,0 +1,20 @@
+{
+    "comp_contact":         "Contact",
+    "menu_contact":         "Contact",
+    "menu_forms":           "Formulieren",
+    "field_form_name":      "Naam",
+    "field_form_to":        "Aan",
+    "field_form_bcc":       "Bcc",
+    "field_form_subject":   "Onderwerp",
+    "field_form_thanks":    "Thanks pagina",
+    "field_form_fields":    "Velden",
+    "field_name":           "Naam",
+    "field_code":           "Code",
+    "field_type":           "Type",
+    "field_required":       "Verplicht",
+    "field_order":          "Bestellen",
+    "field_type_text":      "Tekst",
+    "field_type_pass":      "Wachtwoord",
+    "field_type_area":      "Textarea",
+    "field_type_gend":      "Geslacht"
+}

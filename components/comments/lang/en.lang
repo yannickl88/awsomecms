@@ -2,6 +2,5 @@
     "comp_comment":         "Comments",
     "field_comment_text":   "Reply",
     "field_comment_username": "Name/E-mail",
-    "field_comment_hook": "Name/E-mail",
-    "field_comment_username": "Hook",
+    "field_comment_hook":   "Hook"
 }
