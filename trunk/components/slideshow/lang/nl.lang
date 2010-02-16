@@ -1,0 +1,14 @@
+{
+    "comp_slideshow":       "Slideshow",
+    "menu_slideshow":       "Slideshow",
+    "menu_slideshowgrp":    "Groepen",
+    "menu_slideshowimg":    "Afbeeldingen",
+    "field_group_title":    "Titel",
+    "field_group_header":   "Kop",
+    "field_image_groups":   "Afbeeldingen",
+    "field_image_image":    "Afbeelding",
+    "field_image_size":     "Grootte",
+    "promptforfile":        "U wordt promted voor een bestand",
+    "oruploadnew":          "Of upload een nieuwe",
+    "upload":               "Upload"
+}

@@ -1,0 +1,20 @@
+{
+    "welcome":              "Welkom",
+    "doc":                  "Doc",
+    "viewsite":             "Bekijk site",
+    "logout":               "Uitloggen",
+    "adminlogin":           "Admin login",
+    "sitepages":            "Site pagina's",
+    "overview":             "overzicht",
+    "save":                 "opslaan",
+    "addto":                "toevoegen aan",
+    "edit":                 "bewerken",
+    "delete":               "wissen",
+    "add":                  "toevoegen",
+    "norecords":            "Geen records",
+    "areyousuredelete":     "Weet u zeker dat u dit item wilt verwijderen?",
+    "deleteselected":       "Verwijder de geselecteerde items",
+    "or":                   "of",
+    "small":                "klein",
+    "large":                "groot"
+}

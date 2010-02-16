@@ -1,0 +1,7 @@
+{
+    "comp_groups":          "Groepen",
+    "menu_groupsadmin":     "Groepen",
+    "field_group_name":     "Naam",
+    "field_group_privileges":"Privliveges",
+    "field_group_users":    "Gebruikers"
+}

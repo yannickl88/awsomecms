@@ -1,0 +1,8 @@
+{
+    "comp_page":            "Page",
+    "menu_page":            "Page",
+    "menu_addpage":         "Voeg pagina",
+    "field_page_name":      "Naam",
+    "field_page_location":  "Locatie",
+    "field_page_template":  "Inhoud"
+}

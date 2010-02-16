@@ -1,0 +1,12 @@
+{
+    "comp_users":           "Gebruikers",
+    "menu_users":           "Gebruikers",
+    "menu_privadmin":       "Privileges",
+    "menu_usersadmin":      "Gebruikers",
+    "field_privilege_name": "Naam",
+    "field_user_name":      "Naam",
+    "field_user_pass":      "Wachtwoord",
+    "field_user_pass2":     "Opnieuw",
+    "field_user_privileges":"Privliveges",
+    "login":                "inloggen"
+}
