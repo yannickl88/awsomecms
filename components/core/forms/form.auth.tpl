@@ -12,7 +12,7 @@
                 <ul>
                 {foreach from=$component->actions item=action key=blaat name=actions}
                     {if $blaat|notin:$exceptions}
-                    <li>
+                    <li class="actionItem">
                         <div class="action">
                             {$action}
                         </div>
@@ -23,6 +23,7 @@
                                 {$priv->privilege_name}
                             </div>
                         {/foreach}
+                        <div class="clearSpacer"></div>
                         </div>
                     </li>
                     {/if}

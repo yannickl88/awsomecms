@@ -373,4 +373,32 @@ class InstallHelper
     {
         
     }
+    /**
+     * remove a directorcy and it's content
+     * 
+     * @param string $source
+     */
+    public function remove($source)
+    {
+        $source = realpath($source);
+        
+        if(is_dir($source))
+        {
+            $files = scandir($source);
+            
+            foreach($files as $file)
+            {
+                if($file != "." && $file != '..')
+                {
+                    $this->remove($source."/".$file);
+                }
+            }
+            
+            rmdir($source);
+        }
+        else
+        {
+            unlink($source);
+        }
+    }
 }

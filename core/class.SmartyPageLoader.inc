@@ -52,6 +52,24 @@ class SmartyPageLoader
     {
         $forceDefaultLayout = false;
         
+        //check if there is an install DIR
+        $note = Notifications::getInstance();
+        if(file_exists(Config::get("websiteroot", "/")."/install") && Config::get("doNotCheckInstall", true))
+        {
+            if(!$note->hasNotification("installnotremoved"))
+            {
+                $text = "There still seems to be an install directory, keeping it there is a <b>very high security risk</b>. <a href='javascript: deleteInstall();'>Click here to remove the Install directories.</a>";
+                $text .= "<script>";
+                $text .= "function deleteInstall() { getComponent(\"core\", \"deleteinstall\", null, function(data) { $('#notification_installnotremoved').remove(); }); }";
+                $text .= "</script>";
+                $note->addNotification($text, "*", "installnotremoved");
+            }
+        }
+        else
+        {
+            $note->removeNotification("*","installnotremoved");
+        }
+        
         if(preg_match('/(.*)\/$/i', $url) === 1 || $url == '')
         {
             $url .= 'index';
