@@ -81,7 +81,7 @@
             <span class="header">Admin login</span>
             {$content}
         </div>
-        {else}
+    {else}
     <body>
         <div id="sidebarWrapper">
             <div id="sidebarHeader">
@@ -114,12 +114,18 @@
                 <h1>Welcome {$USR.user_name|capitalize}</h1>
             </div>
             <div id="contentWrapper">
+                {foreach from=$NOTIFICATIONS item=note key=id}
+                    <div class="notification" id="notification_{$id}">
+                        {$note}
+                    </div>
+                {/foreach}
                 {$content}
             </div>
             <div id="copyright">
                 <hr /><br />
                 <a href="http://yannickl88.nl/cms">A.W.S.O.M.E. cms</a> &copy; 2009 - 2010
             </div>
+            {renderdebug}
         </div>
         {/if}
     </body>

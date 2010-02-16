@@ -391,6 +391,19 @@ class CoreComponent extends Component
             $smarty->assign("record", $values);
         }
     }
+    public function action_deleteinstall($smarty, $smartyLoader, $request)
+    {
+        $websiteRoot = Config::get("websiteroot");
+        $installHelper = new InstallHelper();
+        
+        $installHelper->remove($websiteRoot."/install/");
+        $installHelper->remove($websiteRoot."/install.php");
+        
+        //remove the notification
+        Notifications::getInstance()->removeNotification("*","installnotremoved");
+        
+        $this->ajax(true);
+    }
     /**
      * (non-PHPdoc)
      * @see core/Component#registerMenuItems($menu)

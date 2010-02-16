@@ -295,3 +295,37 @@ h1 {
     padding-bottom: 10px;
     display: block;
 }
+/* CORE AUTH */
+#core_auth .component {
+    font-weight: bold;
+}
+#core_auth .actionItem {
+    list-style: none;
+}
+#core_auth .action {
+    float: left;
+    width: 160px;
+    font-style: italic;
+}
+#core_auth .privsWrapper {
+    margin-left: 160px;
+}
+#core_auth .priv {
+    float: left;
+    width: 100px;
+}
+#core_auth .clearSpacer {
+    clear: both;
+}
+/* NOTIFICATIONS */
+.notification {
+    border: 1px dashed #fedd00;
+    background-color: #fff29d;
+    padding: 15px;
+    font-size: 13px;
+    margin: 5px;
+    text-align: center;
+}
+.notification a {
+    color: #7c5a00;
+}

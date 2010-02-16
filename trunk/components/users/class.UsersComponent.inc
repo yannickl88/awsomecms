@@ -219,7 +219,7 @@ class UsersComponent extends Component
                 ->setRecord((object) $request);
             
             //check if name is not yet chosen, we do not wat duplicates
-            if($table->doSelect((object) $request)->count() == 0)
+            if($table->setRequest((object) $request)->doSelect()->count() == 0)
             {
                 $table->doInsert();
             }

@@ -39,7 +39,144 @@ class NotInstanciatedException extends Exception {}
  * @author Yannick <yannick.l.88@gmail.com>
  */
 class UnauthException extends Exception {}
-
+/**
+ * Manager for handeling notifications
+ * 
+ * @author Yannick <yannick.l.88@gmail.com>
+ */
+class Notifications
+{
+    private $notifications;
+    private $map;
+    
+    /**
+     * Singelton
+     * 
+     * @return Notifications
+     */
+    public static function getInstance()
+    {
+        if($_SESSION['notifications'])
+        {
+            return unserialize($_SESSION['notifications']);
+        }
+        else
+        {
+            return new Notifications();
+        }
+    }
+    /**
+     * Constructor
+     */
+    private function __construct()
+    {
+        $this->notifications = array();
+        $this->map["ids"] = array();
+        $this->map["url"] = array();
+        $this->save();
+    }
+    /**
+     * Add a notifications for a given URL
+     * 
+     * @param string $mess
+     * @param string $url
+     */
+    public function addNotification($mess, $url, $id = false)
+    {
+        if(!$id)
+        {
+            $id = md5($mess);
+        }
+        
+        if(!isset($this->notifications[$id]))
+        {
+            $this->notifications[$id] = $mess;
+            $this->map["ids"][$id] = $url;
+            if(!isset($this->map["url"][$url]))
+            {
+                $this->map["url"][$url] = array();
+            }
+            $this->map["url"][$url][] = $id;
+            $this->save();
+        }
+    }
+    /**
+     * Check if a given notification already exists
+     * 
+     * @param string $key
+     * @return boolean
+     */
+    public function hasNotification($key)
+    {
+        return isset($this->notifications[$id]);
+    }
+    /**
+     * Get the notifications for a give URL
+     * 
+     * @param string $url
+     * @return array
+     */
+    public function getNotifications($url = false)
+    {
+        $notes = array();
+        
+        if(!$url)
+        {
+            $url = $_GET['URL'];
+        }
+        
+        if(isset($this->map["url"][$url]) && is_array($this->map["url"][$url]) && count($this->map["url"][$url]) > 0)
+        {
+            foreach($this->map["url"][$url] as $key)
+            {
+                $notes[$key] = $this->notifications[$key];
+            }
+            removeNotification($url);
+        }
+        if(isset($this->map["url"]["*"]) && is_array($this->map["url"]["*"]) && count($this->map["url"]["*"]) > 0)
+        {
+            foreach($this->map["url"]["*"] as $key)
+            {
+                $notes[$key] = $this->notifications[$key];
+            }
+        }
+        
+        return $notes;
+    }
+    /**
+     * Save the notications to the session. 
+     * 
+     * Note: This is also called when changes happen inside this object
+     */
+    public function save()
+    {
+        $_SESSION['notifications'] = serialize($this);
+    } 
+    /**
+     * remove the notifications for an URL
+     * 
+     * @param string $url
+     */
+    public function removeNotification($url, $id = false)
+    {
+        if($id === false)
+        {
+            foreach($this->map["url"][$url] as $key)
+            {
+                unset($this->map["ids"][$key]);
+                unset($this->notifications["ids"][$key]);
+            }
+            unset($this->map["url"][$url]);
+        }
+        else
+        {
+            unset($this->map["ids"][$id]);
+            unset($this->notifications["ids"][$id]);
+            unset($this->map["url"][$url][array_search($id, $this->map["url"][$url])]);
+        }
+        $this->save();
+    }
+}
 /**
  * Controller class that handels all the incomming data requests
  * 
@@ -88,7 +225,6 @@ class Controller
     {
         $this->smarty = $smarty;
         $this->smartyLoader = $smartyLoader;
-        
         $this->instanciated = true;
     }
     /**
@@ -117,6 +253,7 @@ class Controller
                 break;
         }
         
+        
         if(isset($_SESSION['FORMERROR']))
         {
             import('/core/class.InvalidFormException.inc');
@@ -138,6 +275,7 @@ class Controller
             }
         }
         
+        $this->smarty->assign("NOTIFICATIONS", Notifications::getInstance()->getNotifications($_GET['url']));
         //add extra session related things to smarty
         try
         {
@@ -252,8 +390,7 @@ class Controller
                 
                 if(!$valid)
                 {
-                    echo "You do not have enough premissions to preform this action";
-                    return;
+                    throw new ForbiddenException();
                 }
             }
         }

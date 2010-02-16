@@ -57,6 +57,16 @@ catch(NotInstalledException $e)
         }
     }
 }
+catch(ForbiddenException $e)
+{
+    header("HTTP/1.0 403 Forbidden");
+    echo "You do not have access to preform this action";
+    
+    if(Config::get('debug', 0, 'debug') >= 1)
+    {
+        echo "<br /><br /><b>".get_class($e)."</b>: ".$e->getMessage()."<pre>".$e->getTraceAsString()."</pre>";
+    }
+}
 catch(Exception $e)
 {
     header("HTTP/1.0 500 Internal Server Error");
