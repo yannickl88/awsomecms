@@ -9,3 +9,7 @@ CREATE TABLE IF NOT EXISTS `news` (
   `news_extlink` varchar(200) default NULL,
   PRIMARY KEY  (`news_id`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=latin1 ;
+
+INSERT INTO `auth` (`auth_component`, `auth_action`, `auth_privilage`) VALUES('news', 'action_add', 'admin');
+INSERT INTO `auth` (`auth_component`, `auth_action`, `auth_privilage`) VALUES('news', 'action_delete', 'admin');
+INSERT INTO `auth` (`auth_component`, `auth_action`, `auth_privilage`) VALUES('news', 'action_edit', 'admin');

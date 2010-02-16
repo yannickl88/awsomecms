@@ -57,13 +57,12 @@ class SmartyPageLoader
             $url .= 'index';
         }
         
-        
         try
         {
             if(Config::get('needslogin', false, 'admin') && $smarty_obj->get_template_vars('isADMIN') === true && !($_SESSION['usr']['auth']['admin'] === true))
             {
                 $url = Config::get('login', '', 'admin');
-                $smarty_obj->assign("URL", $url);
+                $smarty_obj->assign("URL", $url); //reassign the URL var
             }
             $page = $smarty_obj->fetch("scf:{$url}");
         }

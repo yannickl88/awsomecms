@@ -33,6 +33,12 @@ class ActionNotFoundException extends Exception {}
  * @author Yannick <yannick.l.88@gmail.com>
  */ 
 class NotInstanciatedException extends Exception {}
+/**
+ * Exception to be triggered when the current user does not have the proper authorization
+ * 
+ * @author Yannick <yannick.l.88@gmail.com>
+ */
+class UnauthException extends Exception {}
 
 /**
  * Controller class that handels all the incomming data requests
@@ -214,6 +220,43 @@ class Controller
     private function handleRequest($action, $component, &$request, $functionPrefix = "action")
     {
         $actionHandler = $functionPrefix."_".$action;
+        $exceptions = $this->getActionAuthExceptions();
+        
+        if(!in_array($component.".".$actionHandler, $exceptions))
+        {
+            //check the authentication
+            $auth = SQLQuery::doSelect()
+                ->table("auth")
+                ->where("auth_component", $component)
+                ->where("auth_action ", $actionHandler)
+                ->exec()
+                ->getRows();
+            
+            if(count($auth) > 0)
+            {
+                $valid = false;
+                
+                foreach($auth as $authRow)
+                {
+                    if($authRow->auth_privilage == "*guest*")
+                    {
+                        $valid = true;
+                        break;
+                    }
+                    elseif($_SESSION['usr']['auth'][$authRow->auth_privilage])
+                    {
+                        $valid = true;
+                        break;
+                    }
+                }
+                
+                if(!$valid)
+                {
+                    echo "You do not have enough premissions to preform this action";
+                    return;
+                }
+            }
+        }
         
         try
         {
@@ -428,5 +471,20 @@ class Controller
     public function getSmarty()
     {
         return $this->smarty;
+    }
+    /**
+     * List of action that do not need auth checking
+     * 
+     * @return array
+     */
+    public function getActionAuthExceptions()
+    {
+        $exceptions = array(
+            "core.action_index"
+        );
+        
+        $exceptions[] = Config::get("component", "", "session").".action_".Config::get("action", "", "session");
+        
+        return $exceptions;
     }
 }

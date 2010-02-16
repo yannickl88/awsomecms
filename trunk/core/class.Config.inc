@@ -219,6 +219,7 @@ class Config
                 
                 $result = SQLQuery::doSelect()
                     ->table('components')
+                    ->orderBy("component_name")
                     ->exec();
                 
                 while($row = $result->getRow())

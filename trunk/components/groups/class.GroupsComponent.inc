@@ -8,10 +8,6 @@ class GroupsComponent extends Component
         parent::__construct('groups');
     }
     
-    public function action_index($smarty, $smartyLoader, $request)
-    {
-        
-    }
     public function action_add($smarty, $smartyLoader, $request)
     {
         if($request['method'] == 'post')

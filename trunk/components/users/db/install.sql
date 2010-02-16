@@ -28,3 +28,10 @@ CREATE TABLE IF NOT EXISTS `users` (
 
 INSERT INTO `users` (`user_name`, `user_pass`, `user_privileges`) VALUES
 ('admin', 'fe01ce2a7fbac8fafaed7c982a04e229', 1);
+
+INSERT INTO `auth` (`auth_component`, `auth_action`, `auth_privilage`) VALUES('users', 'action_add', 'admin');
+INSERT INTO `auth` (`auth_component`, `auth_action`, `auth_privilage`) VALUES('users', 'action_delete', 'admin');
+INSERT INTO `auth` (`auth_component`, `auth_action`, `auth_privilage`) VALUES('users', 'action_edit', 'admin');
+INSERT INTO `auth` (`auth_component`, `auth_action`, `auth_privilage`) VALUES('users', 'action_privadd', 'admin');
+INSERT INTO `auth` (`auth_component`, `auth_action`, `auth_privilage`) VALUES('users', 'action_privdelete', 'admin');
+INSERT INTO `auth` (`auth_component`, `auth_action`, `auth_privilage`) VALUES('users', 'action_privedit', 'admin');
