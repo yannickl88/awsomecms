@@ -32,16 +32,16 @@ class UsersTable extends Table
         parent::__construct("users");
         $this->assign("users");
         
-        $this->addField(new IntField("user_id", "", Field::INDEX|Field::AUTOKEY));
-        $this->addField(new Field("user_name", "Name"));
-        $this->addField(new PasswordField("user_pass", "Password", Field::OPTIONAL_EDIT));
-        $this->addField(new PasswordField("user_pass2", "Again", Field::DUMMY));
+        $this->addField(new IntField("user_id", Field::INDEX|Field::AUTOKEY));
+        $this->addField(new Field("user_name"));
+        $this->addField(new PasswordField("user_pass", Field::OPTIONAL_EDIT));
+        $this->addField(new PasswordField("user_pass2", Field::DUMMY));
         $style = Field::HIDE_VIEW;
         if(Config::getInstance()->isComponentInstalled("groups"))
         {
             $style = Field::HIDE;
         }
-        $privField = new PrivlilegesField("user_privileges", "Privliveges", $style);
+        $privField = new PrivlilegesField("user_privileges", $style);
         $privField->setDefaultValue(0);
         $this->addField($privField);
         $this->setTitle("[user_name]");

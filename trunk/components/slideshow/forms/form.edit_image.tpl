@@ -10,11 +10,11 @@
         {/foreach}
     </script>
 {/if}
-<h2>Edit {$record->image_title}</h2>
+<h2>{"edit"|text|capitalize} {$record->image_title}</h2>
 <form method="post" action="/" class="admin_form admin_gallery_add" enctype="multipart/form-data">
     <div class="admin_form_row">
         <div class="admin_form_label">
-            <label for="image_title">Title:</label>
+            <label for="image_title">{"field_image_title"|text}:</label>
         </div>
         <div class="admin_form_field">
             <input type="text" name="image_title" id="image_title" value="{$record->image_title}"/>
@@ -22,7 +22,7 @@
     </div>
     <div class="admin_form_row">
         <div class="admin_form_label">
-            <label for="image_image">Image:</label>
+            <label for="image_image">{"field_image_image"|text}:</label>
         </div>
         <div class="admin_form_field">
             <input type="file" name="image_image" id="image_image" />
@@ -30,15 +30,15 @@
     </div>
     <div class="admin_form_row">
         <div class="admin_form_label">
-            <label for="image_image">Size:</label>
+            <label for="image_image">{"field_image_size"|text}:</label>
         </div>
         <div class="admin_form_field">
-            <input type="radio" name="image_size" id="image_size" value="1" {if $record->image_size eq 1}checked="checked"{/if}/>Small
-            <input type="radio" name="image_size" id="image_size" value="2" {if $record->image_size eq 2}checked="checked"{/if}/>Large
+            <input type="radio" name="image_size" id="image_size" value="1" {if $record->image_size eq 1}checked="checked"{/if}/>{"small"|text|capitalize}
+            <input type="radio" name="image_size" id="image_size" value="2" {if $record->image_size eq 2}checked="checked"{/if}/>{"large"|text|capitalize}
         </div>
     </div>
     <div class="admin_form_row admin_form_submit">
-        <input type="submit" value="Save" id="user_submit" class="admin_form_submit">
+        <input type="submit" value="{"save"|text|capitalize}" id="user_submit" class="admin_form_submit">
     </div>
     <input type="hidden" name="image_id" value="{$record->image_id}" />
     <input type="hidden" name="action" value="edit_image" />

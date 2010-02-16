@@ -394,8 +394,8 @@ class SlideshowComponent extends Component
     }
     public function registerMenuItems($menu)
     {
-        $menu->addChild(new MenuItem("slideshow", "", ""));
-        $menu->addChild(new MenuItem("slideshowimg", "Images", Config::get('slideshow_imageadmin', 'slideshow_imageadmin', 'admin'), "slideshow"));
-        $menu->addChild(new MenuItem("slideshowgrp", "Groups", Config::get('slideshow_groupadmin', 'slideshow_groupadmin', 'admin'), "slideshow"));
+        $menu->addChild(new MenuItem("slideshow", ""));
+        $menu->addChild(new MenuItem("slideshowimg", Config::get('slideshow_imageadmin', 'slideshow_imageadmin', 'admin'), "slideshow"));
+        $menu->addChild(new MenuItem("slideshowgrp", Config::get('slideshow_groupadmin', 'slideshow_groupadmin', 'admin'), "slideshow"));
     }
 }

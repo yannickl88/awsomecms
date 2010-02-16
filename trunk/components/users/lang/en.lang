@@ -1,0 +1,12 @@
+{
+    "comp_users":           "Users",
+    "menu_users":           "Users",
+    "menu_privadmin":       "Privileges",
+    "menu_usersadmin":      "Users",
+    "field_privilege_name": "Name",
+    "field_user_name":      "Name",
+    "field_user_pass":      "Password",
+    "field_user_pass2":     "Again",
+    "field_user_privileges":"Privliveges",
+    "login":                "login"
+}

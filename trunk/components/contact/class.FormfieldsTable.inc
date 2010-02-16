@@ -31,7 +31,7 @@ class FormfieldsTable extends Table
         parent::__construct("form_fields");
         $this->assign("contact");
         
-        $this->addField(new IntField("field_id", "", Field::AUTOKEY));
+        $this->addField(new IntField("field_id", Field::AUTOKEY));
         $this->addField(new IntField("field_form"));
         $this->addField(new Field("field_name"));
         $this->addField(new Field("field_code"));

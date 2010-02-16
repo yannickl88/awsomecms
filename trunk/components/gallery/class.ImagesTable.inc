@@ -30,15 +30,15 @@ class ImagesTable extends Table
         parent::__construct("images");
         $this->assign("gallery");
         
-        $this->addField(new IntField("image_id", "", Field::INDEX|Field::AUTOKEY));
-        $this->addField(new Field("image_title", "Title"), 1);
-        $this->addField(new Field("image_url", "", Field::OPTIONAL|Field::HIDE));
-        $this->addField(new Field("image_urlthumb", "", Field::OPTIONAL|Field::HIDE));
-        $this->addField(new IntField("image_width", "", Field::OPTIONAL|Field::HIDE));
-        $this->addField(new IntField("image_height", "", Field::OPTIONAL|Field::HIDE));
-        $this->addField(new IntField("image_thumbwidth", "", Field::OPTIONAL|Field::HIDE));
-        $this->addField(new IntField("image_thumbheight", "", Field::OPTIONAL|Field::HIDE));
-        $this->addField(new Field("image_tag", "Tag", Field::OPTIONAL), 2);
+        $this->addField(new IntField("image_id", Field::INDEX|Field::AUTOKEY));
+        $this->addField(new Field("image_title"), 1);
+        $this->addField(new Field("image_url", Field::OPTIONAL|Field::HIDE));
+        $this->addField(new Field("image_urlthumb", Field::OPTIONAL|Field::HIDE));
+        $this->addField(new IntField("image_width", Field::OPTIONAL|Field::HIDE));
+        $this->addField(new IntField("image_height", Field::OPTIONAL|Field::HIDE));
+        $this->addField(new IntField("image_thumbwidth", Field::OPTIONAL|Field::HIDE));
+        $this->addField(new IntField("image_thumbheight", Field::OPTIONAL|Field::HIDE));
+        $this->addField(new Field("image_tag", Field::OPTIONAL), 2);
         $this->setTitle("[image_title]");
         
         $this->setURLs(

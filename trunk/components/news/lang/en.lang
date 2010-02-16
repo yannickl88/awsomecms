@@ -1,0 +1,11 @@
+{
+    "comp_news":            "News",
+    "menu_news":            "News",
+    "menu_newsadmin":       "News",
+    "menu_newsadd":         "Add News",
+    "field_news_title":     "Title",
+    "field_news_user":      "User",
+    "field_news_date":      "Date",
+    "field_news_tag":       "Tag",
+    "field_news_text":      "Content"
+}

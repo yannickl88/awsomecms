@@ -1,9 +1,9 @@
-<h2>Layout mappings</h2>
+<h2>{"layoutmapping"|text}</h2>
 <form method="post" action="/" class="admin_form admin_core_layout">
     <table>
         <tr class="header">
-            <th>URL</th>
-            <th>Layout</th>
+            <th>{"url"|text}</th>
+            <th>{"layout"|text}</th>
         </tr>
         {foreach from=$maping item=map}
             <tr class="row">
@@ -13,7 +13,7 @@
         {/foreach}
     </table>
     <div class="admin_form_row admin_form_submit">
-        <input type="submit" value="Save" id="user_submit" class="admin_form_submit">
+        <input type="submit" value="{"save"|text|capitalize}" id="user_submit" class="admin_form_submit">
     </div>
     <input type="hidden" name="action" value="layout" />
     <input type="hidden" name="component" value="core" />

@@ -339,8 +339,8 @@ class UsersComponent extends Component
      */
     public function registerMenuItems($menu)
     {
-        $menu->addChild(new MenuItem("users", "", Config::get('usersadmin', 'usersadmin', 'admin')));
-        $menu->addChild(new MenuItem("usersadmin", "Users", Config::get('usersadmin', 'usersadmin', 'admin'), "users"));
-        $menu->addChild(new MenuItem("privadmin", "Privileges", Config::get('privadmin', 'privadmin', 'admin'), "users"));
+        $menu->addChild(new MenuItem("users", Config::get('usersadmin', 'usersadmin', 'admin')));
+        $menu->addChild(new MenuItem("usersadmin", Config::get('usersadmin', 'usersadmin', 'admin'), "users"));
+        $menu->addChild(new MenuItem("privadmin", Config::get('privadmin', 'privadmin', 'admin'), "users"));
     }
 }

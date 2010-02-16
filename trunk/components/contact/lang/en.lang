@@ -1,0 +1,20 @@
+{
+    "comp_contact":         "Contact",
+    "menu_contact":         "Contact",
+    "menu_forms":           "Forms",
+    "field_form_name":      "Name",
+    "field_form_to":        "To",
+    "field_form_bcc":       "Bcc",
+    "field_form_subject":   "Subject",
+    "field_form_thanks":    "Thanks page",
+    "field_form_fields":    "Fields",
+    "field_name":           "Name",
+    "field_code":           "Code",
+    "field_type":           "Type",
+    "field_required":       "Required",
+    "field_order":          "Order",
+    "field_type_text":      "Text",
+    "field_type_pass":      "Password",
+    "field_type_area":      "Textarea",
+    "field_type_gend":      "Gender"
+}

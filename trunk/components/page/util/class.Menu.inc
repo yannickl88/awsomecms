@@ -34,7 +34,7 @@ class MenuItem
      * @param string $page
      * @param string $parent
      */
-    public function __construct($name, $text, $page, $parent = "")
+    public function __construct($name, $page, $parent = "")
     {
         $this->children = array();
         
@@ -43,7 +43,7 @@ class MenuItem
         {
             $text = ucfirst($name);
         }
-        $this->text = $text;
+        $this->text = Language::get("menu_".$name);
         $this->page = $page;
         $this->parent = $parent;
     }

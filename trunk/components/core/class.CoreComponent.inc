@@ -410,9 +410,9 @@ class CoreComponent extends Component
      */
     public function registerMenuItems($menu)
     {
-        $menu->addChild(new MenuItem("system", "", ""));
-        $menu->addChild(new MenuItem("layoutmaps", "Layout Mapping", Config::get('corelayout', 'corelayout', 'admin'), "system"));
-        $menu->addChild(new MenuItem("components", "Components", Config::get('corecomponents', 'corecomponents', 'admin'), "system"));
-        $menu->addChild(new MenuItem("auth", "Authentication", Config::get('coreauth', 'coreauth', 'admin'), "system"));
+        $menu->addChild(new MenuItem("system", ""));
+        $menu->addChild(new MenuItem("layoutmaps", Config::get('corelayout', 'corelayout', 'admin'), "system"));
+        $menu->addChild(new MenuItem("components", Config::get('corecomponents', 'corecomponents', 'admin'), "system"));
+        $menu->addChild(new MenuItem("auth", Config::get('coreauth', 'coreauth', 'admin'), "system"));
     }
 }

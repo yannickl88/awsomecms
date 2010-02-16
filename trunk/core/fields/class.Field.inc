@@ -65,7 +65,7 @@ class Field
      * @param mixed $value
      * @return Field
      */
-    public function __construct($name, $displayName = "", $style = 0)
+    public function __construct($name, $style = 0)
     {
         $this->style = $style;
         
@@ -81,7 +81,7 @@ class Field
             $this->name = $name;
             $this->table = null;
         }
-        $this->displayName = ucfirst($displayName);
+        $this->displayName = Language::get("field_".$name);
         $this->value = "";
         
         $this->defaultValue = false;

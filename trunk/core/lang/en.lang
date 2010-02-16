@@ -1,0 +1,20 @@
+{
+    "welcome":              "Welcome",
+    "doc":                  "Doc",
+    "viewsite":             "View site",
+    "logout":               "Log out",
+    "adminlogin":           "Admin login",
+    "sitepages":            "Site pages",
+    "overview":             "overview",
+    "save":                 "save",
+    "addto":                "add to",
+    "edit":                 "edit",
+    "delete":               "delete",
+    "add":                  "add",
+    "norecords":            "No records",
+    "areyousuredelete":     "Are you sure you want to delete this item?",
+    "deleteselected":       "Delete the selected items",
+    "or":                   "or",
+    "small":                "small",
+    "large":                "large"
+}

@@ -30,12 +30,12 @@ class ImagesTable extends Table
         parent::__construct("s_images");
         $this->assign("slideshow");
         
-        $this->addField(new IntField("s_images.image_id", "", Field::AUTOKEY|Field::INDEX));
-        $this->addField(new Field("image_title", "Title"));
-        $this->addField(new Field("image_url", "", Field::OPTIONAL|Field::HIDE));
-        $this->addField(new IntField("image_width", "", Field::OPTIONAL|Field::HIDE));
-        $this->addField(new IntField("image_height", "", Field::OPTIONAL|Field::HIDE));
-        $this->addField(new IntField("image_size", "", Field::OPTIONAL|Field::HIDE));
+        $this->addField(new IntField("s_images.image_id", Field::AUTOKEY|Field::INDEX));
+        $this->addField(new Field("image_title"));
+        $this->addField(new Field("image_url", Field::OPTIONAL|Field::HIDE));
+        $this->addField(new IntField("image_width", Field::OPTIONAL|Field::HIDE));
+        $this->addField(new IntField("image_height", Field::OPTIONAL|Field::HIDE));
+        $this->addField(new IntField("image_size", Field::OPTIONAL|Field::HIDE));
         $this->setTitle("[image_title]");
         
         $this->setURLs(

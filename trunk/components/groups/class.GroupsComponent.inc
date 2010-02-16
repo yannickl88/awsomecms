@@ -168,6 +168,6 @@ class GroupsComponent extends Component
     
     public function registerMenuItems($menu)
     {
-        $menu->addChild(new MenuItem("groupsadmin", "Groups", Config::get('groupsadmin', 'groupsadmin', 'admin'), "users"));
+        $menu->addChild(new MenuItem("groupsadmin", Config::get('groupsadmin', 'groupsadmin', 'admin'), "users"));
     }
 }

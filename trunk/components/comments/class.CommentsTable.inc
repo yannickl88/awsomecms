@@ -32,11 +32,11 @@ class CommentsTable extends Table
         parent::__construct("comments");
         $this->assign("comments");
         
-        $this->addField(new IntField("comment_id", "", Field::AUTOKEY|Field::INDEX));
-        $this->addField(new TextField("comment_text", "Reply"));
-        $this->addField(new Field("comment_username", "Name/E-mail"));
-        $this->addField(new Field("comment_hook", "Hook", Field::OPTIONAL|Field::HIDE));
-        $this->addField(new DateField("comment_time", "", Field::HIDE));
+        $this->addField(new IntField("comment_id", Field::AUTOKEY|Field::INDEX));
+        $this->addField(new TextField("comment_text"));
+        $this->addField(new Field("comment_username"));
+        $this->addField(new Field("comment_hook", Field::OPTIONAL|Field::HIDE));
+        $this->addField(new DateField("comment_time", Field::HIDE));
     }
     /**
      * (non-PHPdoc)

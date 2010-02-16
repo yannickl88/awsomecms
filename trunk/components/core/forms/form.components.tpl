@@ -1,10 +1,10 @@
-<h2>Components overview</h2>
-<h3>Installed Components:</h3>
+<h2>{"compoverview"|text}</h2>
+<h3>{"installedcomp"|text}:</h3>
 <table style="border-collapse: collapse;">
     <tr class="header">
-        <th style="width: 100px;">Framework</th>
-        <th style="width: 100px;">Status</th>
-        <th>Description</th>
+        <th style="width: 100px;">{"framework"|text}</th>
+        <th style="width: 100px;">{"status"|text}</th>
+        <th>{"description"|text}</th>
     </tr>
     <tr class="row" id="row_framework">
         <td style="vertical-align: top;">
@@ -22,10 +22,10 @@
 <form method="post" action="/" class="admin_form admin_core_components">
     <table style="border-collapse: collapse;">
         <tr class="header">
-            <th style="width: 100px;">Component</th>
-            <th style="width: 100px;">Status</th>
-            <th>Description</th>
-            <th style="width: 100px;">Public Access</th>
+            <th style="width: 100px;">{"component"|text}</th>
+            <th style="width: 100px;">{"status"|text}</th>
+            <th>{"description"|text}</th>
+            <th style="width: 100px;">{"pubaccess"|text}</th>
         </tr>
         {foreach from=$components item=component name=components}
             <tr class="row" {if $smarty.foreach.components.index % 2 == 0}style="background-color: #F1F8FF;"{/if} id="row_{$component->component_name}">
@@ -34,17 +34,17 @@
                 </td>
                 <td style="vertical-align: top;" class="updateCell">
                     <img src="/img/admin/{if $component->U2D === "???"}unknown{elseif $component->U2D}ok{else}fail{/if}-icon.png" /> 
-                    {if $component->U2D === "???"}Unknown{elseif $component->U2D}Up-to-date{else}<button type="button" onclick="updateComponent('{$component->component_name}');">Update</button>{/if}
+                    {if $component->U2D === "???"}{"unknown"|text}{elseif $component->U2D}{"uptodate"|text}{else}<button type="button" onclick="updateComponent('{$component->component_name}');">{"update"|text|capitalize}</button>{/if}
                 </td>
                 <td style="vertical-align: top;">
                     {$component->info.desc}
                 </td>
                 <td style="vertical-align: top;" class="accessCell">
                     <div style="padding-left: 18px;">
-                        <a href="javascript: void(0);" class="s admin_component_access{if !$component->component_auth|hasflag:$auth.auth_select} selected{/if}" onclick="toggleAccess('auth_{$component->component_name}s', this);" title="Select"></a>
-                        <a href="javascript: void(0);" class="i admin_component_access{if !$component->component_auth|hasflag:$auth.auth_insert} selected{/if}" onclick="toggleAccess('auth_{$component->component_name}i', this);" title="Insert"></a>
-                        <a href="javascript: void(0);" class="u admin_component_access{if !$component->component_auth|hasflag:$auth.auth_update} selected{/if}" onclick="toggleAccess('auth_{$component->component_name}u', this);" title="Update"></a>
-                        <a href="javascript: void(0);" class="d admin_component_access{if !$component->component_auth|hasflag:$auth.auth_delete} selected{/if}" onclick="toggleAccess('auth_{$component->component_name}d', this);" title="Delete"></a>
+                        <a href="javascript: void(0);" class="s admin_component_access{if !$component->component_auth|hasflag:$auth.auth_select} selected{/if}" onclick="toggleAccess('auth_{$component->component_name}s', this);" title={"select"|text|capitalize}></a>
+                        <a href="javascript: void(0);" class="i admin_component_access{if !$component->component_auth|hasflag:$auth.auth_insert} selected{/if}" onclick="toggleAccess('auth_{$component->component_name}i', this);" title="{"insert"|text|capitalize}"></a>
+                        <a href="javascript: void(0);" class="u admin_component_access{if !$component->component_auth|hasflag:$auth.auth_update} selected{/if}" onclick="toggleAccess('auth_{$component->component_name}u', this);" title="{"update"|text|capitalize}"></a>
+                        <a href="javascript: void(0);" class="d admin_component_access{if !$component->component_auth|hasflag:$auth.auth_delete} selected{/if}" onclick="toggleAccess('auth_{$component->component_name}d', this);" title="{"delete"|text|capitalize}"></a>
                         <span style="display: none;">
                         <input name="auth_{$component->component_name}[]" id="auth_{$component->component_name}s" value="{$auth.auth_select}" type="checkbox"{if !$component->component_auth|hasflag:$auth.auth_select} checked="checked"{/if} />
                         <input name="auth_{$component->component_name}[]" id="auth_{$component->component_name}i" value="{$auth.auth_insert}" type="checkbox"{if !$component->component_auth|hasflag:$auth.auth_insert} checked="checked"{/if} /> 
@@ -57,17 +57,17 @@
         {/foreach}
     </table>
     <div class="admin_form_row admin_form_submit">
-        <input type="submit" value="Save" id="component_submit" class="admin_form_submit">
+        <input type="submit" value="{"save"|text|capitalize}" id="component_submit" class="admin_form_submit">
     </div>
     <input type="hidden" name="action" value="components" />
     <input type="hidden" name="component" value="core" />
 </form>
-<h3>Uninstalled Components:</h3>
+<h3>{"uninstalledcomp"|text}:</h3>
 <table style="border-collapse: collapse;">
     <tr class="header">
-        <th style="width: 100px;">Component</th>
-        <th style="width: 100px;">Status</th>
-        <th>Description</th>
+        <th style="width: 100px;">{"component"|text}</th>
+        <th style="width: 100px;">{"status"|text}</th>
+        <th>{"description"|text}</th>
         <th style="width: 100px;"></th>
     </tr>
     {foreach from=$uninstalledComponents item=component name=components}
@@ -76,7 +76,7 @@
                 <i>{$component->component_name|capitalize}</i>
             </td>
             <td style="vertical-align: top; padding-left: 17px;" class="updateCell">
-                <button type="button" onclick="installComponent('{$component->component_name}');">Install</button>
+                <button type="button" onclick="installComponent('{$component->component_name}');">{"install"|text}</button>
             </td>
             <td style="vertical-align: top;">
                 {$component->info.desc}
