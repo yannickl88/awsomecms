@@ -18,3 +18,7 @@ CREATE TABLE IF NOT EXISTS `usersgroups` (
 INSERT INTO `usersgroups` (`group_id`, `user_id`) VALUES
 (1, 1),
 (2, 1);
+
+INSERT INTO `auth` (`auth_component`, `auth_action`, `auth_privilage`) VALUES('groups', 'action_add', 'admin');
+INSERT INTO `auth` (`auth_component`, `auth_action`, `auth_privilage`) VALUES('groups', 'action_delete', 'admin');
+INSERT INTO `auth` (`auth_component`, `auth_action`, `auth_privilage`) VALUES('groups', 'action_edit', 'admin');

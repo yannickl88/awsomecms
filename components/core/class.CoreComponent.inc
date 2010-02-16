@@ -330,6 +330,67 @@ class CoreComponent extends Component
             ));
         }
     }
+    public function action_auth($smarty, $smartyLoader, $request)
+    {
+        $components = Config::getInstance()->getComponenets();
+        
+        if($request['method'] == 'post')
+        {
+            Table::init("core.auth")
+                ->doDelete();
+            
+            foreach($components as $component)
+            {
+                $actions = getActions($component->component_name);
+                
+                foreach($actions as $key => $action)
+                {
+                    $key = str_replace(".", "_", $key);
+                    
+                    if($request[$key])
+                    {
+                        foreach($request[$key] as $priv)
+                        {
+                            Table::init("core.auth")
+                                ->setRecord((object) array("auth_component" => $component->component_name, "auth_action" => $action, "auth_privilage" => $priv))
+                                ->doInsert();
+                        }
+                    }
+                }
+            }
+            $this->redirect("/".Config::get('coreauth', 'coreauth', 'admin'));
+        }
+        else
+        {
+            $exceptions = Controller::getInstance()->getActionAuthExceptions();
+            
+            $values = array();
+            $auths = Table::init("core.auth")
+                ->doSelect()
+                ->getRows();
+            
+            foreach($auths as $auth)
+            {
+                if(!isset($values[$auth->auth_component.".".$auth->auth_action]))
+                {
+                    $values[$auth->auth_component.".".$auth->auth_action] = array();
+                }
+                
+                $values[$auth->auth_component.".".$auth->auth_action][] = $auth->auth_privilage;
+            }
+            foreach($components as $component)
+            {
+                $component->actions = getActions($component->component_name);
+                $component->actions_length = count($component->actions);
+            }
+            
+            //TODO: fix depedancie
+            $smarty->assign("privileges", Table::init('users.privileges')->doSelect()->getRows());
+            $smarty->assign("exceptions", $exceptions);
+            $smarty->assign("components", $components);
+            $smarty->assign("record", $values);
+        }
+    }
     /**
      * (non-PHPdoc)
      * @see core/Component#registerMenuItems($menu)
@@ -339,5 +400,6 @@ class CoreComponent extends Component
         $menu->addChild(new MenuItem("system", "", ""));
         $menu->addChild(new MenuItem("layoutmaps", "Layout Mapping", Config::get('corelayout', 'corelayout', 'admin'), "system"));
         $menu->addChild(new MenuItem("components", "Components", Config::get('corecomponents', 'corecomponents', 'admin'), "system"));
+        $menu->addChild(new MenuItem("auth", "Authentication", Config::get('coreauth', 'coreauth', 'admin'), "system"));
     }
 }

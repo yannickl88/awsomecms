@@ -274,3 +274,22 @@ function addSlashesConfig($string)
     
     return $string;
 }
+function getActions($component)
+{
+    $actions = array();
+    
+    $componentObj = Component::init($component);
+    $methods = get_class_methods($componentObj);
+    
+    foreach($methods as $method)
+    {
+        if(strpos($method, "action") === 0)
+        {
+            $actions[$component.".".$method] = $method;
+        }
+    }
+    
+    asort($actions);
+    
+    return $actions;
+}

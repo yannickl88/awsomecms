@@ -8,8 +8,6 @@ class SlideshowComponent extends Component
         parent::__construct('slideshow');
     }
     
-    public function action_index($smarty, $smartyLoader, $request) {}
-    
     public function action_add_image($smarty, $smartyLoader, $request)
     {
         //we have special actions here, mostly because this is used as answer for post, ajax and internal use

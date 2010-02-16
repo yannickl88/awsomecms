@@ -284,7 +284,7 @@ class UsersComponent extends Component
      */
     public function auth($userRow)
     {
-        $privilages = Table::init('users.privileges')->doSelect();
+        $privilages = Table::init('users.privileges')->doSelect()->getRows();
         $rights = array();
         
         foreach($privilages as $privilage)

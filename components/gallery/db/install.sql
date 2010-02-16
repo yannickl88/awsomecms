@@ -9,4 +9,8 @@ CREATE TABLE IF NOT EXISTS `images` (
   `image_thumbheight` int(11) NOT NULL,
   `image_tag` varchar(200) NOT NULL,
   PRIMARY KEY  (`image_id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=5 ;
+) ENGINE=MyISAM  DEFAULT CHARSET=latin1;
+
+INSERT INTO `auth` (`auth_component`, `auth_action`, `auth_privilage`) VALUES('gallery', 'action_add', 'admin');
+INSERT INTO `auth` (`auth_component`, `auth_action`, `auth_privilage`) VALUES('gallery', 'action_delete', 'admin');
+INSERT INTO `auth` (`auth_component`, `auth_action`, `auth_privilage`) VALUES('gallery', 'action_edit', 'admin');
