@@ -1,13 +1,40 @@
 <?php
+/**
+ * This file is part of the A.W.S.O.M.E.cms distribution.
+ * Detailed copyright and licensing information can be found
+ * in the doc/COPYRIGHT and doc/LICENSE files which should be
+ * included in the distribution.
+ *
+ * @package components.slideshow
+ *
+ * @copyright (c) 2009-2010 Yannick de Lange
+ * @license http://www.gnu.org/licenses/gpl.txt
+ *
+ * @version $Revision$
+ */
 import('/core/class.Component.inc');
 
+/**
+ * A fancy way if creating a flash slideshow, in this slideshow groups can be created which contain images and a header image.
+ * 
+ * @author Yannick <yannick.l.88@gmail.com>
+ */
 class SlideshowComponent extends Component
 {
+    /**
+     * Constructor
+     */
     public function __construct()
     {
         parent::__construct('slideshow');
     }
-    
+    /**
+     * Action for adding a image
+     * 
+     * @param Smarty $smarty
+     * @param SmartyPageLoader $smartyLoader
+     * @param array $request
+     */
     public function action_add_image($smarty, $smartyLoader, $request)
     {
         //we have special actions here, mostly because this is used as answer for post, ajax and internal use
@@ -79,7 +106,13 @@ class SlideshowComponent extends Component
             }
         }
     }
-    
+    /**
+     * Action for editing a image
+     * 
+     * @param Smarty $smarty
+     * @param SmartyPageLoader $smartyLoader
+     * @param array $request
+     */
     public function action_edit_image($smarty, $smartyLoader, $request)
     {
         if($request['method'] == 'post')
@@ -165,7 +198,13 @@ class SlideshowComponent extends Component
             }
         }
     }
-    
+    /**
+     * Action for deleting a image
+     * 
+     * @param Smarty $smarty
+     * @param SmartyPageLoader $smartyLoader
+     * @param array $request
+     */
     public function action_delete_image($smarty, $smartyLoader, $request)
     {
         if($request['method'] == 'post')
@@ -202,7 +241,13 @@ class SlideshowComponent extends Component
             }
         }
     }
-    
+    /**
+     * Action for adding a groups
+     * 
+     * @param Smarty $smarty
+     * @param SmartyPageLoader $smartyLoader
+     * @param array $request
+     */
     public function action_add_group($smarty, $smartyLoader, $request)
     {
         if($request['method'] == 'post')
@@ -240,7 +285,13 @@ class SlideshowComponent extends Component
             $smarty->assign("images", Table::init('slideshow.images')->doSelect()->getRows());
         }
     }
-    
+    /**
+     * Action for editing a group
+     * 
+     * @param Smarty $smarty
+     * @param SmartyPageLoader $smartyLoader
+     * @param array $request
+     */
     public function action_edit_group($smarty, $smartyLoader, $request)
     {
         if($request['method'] == 'post')
@@ -317,21 +368,27 @@ class SlideshowComponent extends Component
             }
         }
     }
-    
+    /**
+     * Action for deleting a group
+     * 
+     * @param Smarty $smarty
+     * @param SmartyPageLoader $smartyLoader
+     * @param array $request
+     */
     public function action_delete_group($smarty, $smartyLoader, $request)
     {
-        $requestObj = Request::init('slideshow.groups');
-        
         if($request['method'] == 'post')
         {
-            $record = $requestObj->doSelect($request);
-            
             $id = $request['group_id'];
             
             //remove images linked to this group
-            Request::init('slideshow.groupsimages')->doDelete(array("group_id" => $id));
+            Table::init('slideshow.groupsimages')
+                ->setRequest((object) array("group_id" => $id))
+                ->doDelete();
             
-            $requestObj->doDelete(array("group_id" => $id));
+            Table::init('slideshow.groups')
+                ->setRequest((object) array("group_id" => $id))
+                ->doDelete();
             
             $this->redirect("/".Config::get('slideshow_groupadmin', 'slideshow_groupadmin', 'admin'));
         }
@@ -339,7 +396,8 @@ class SlideshowComponent extends Component
         {
             if($request['group_id'])
             {
-                $smarty->assign("record", $requestObj->doSelect($request));
+                Table::init('slideshow.groups')
+                    ->setRequest((object) $request);
             }
             else
             {
@@ -347,17 +405,13 @@ class SlideshowComponent extends Component
             }
         }
     }
-    
-    public function action_admin_group($smarty, $smartyLoader, $request)
-    {
-        $smarty->assign("records", Request::init('slideshow.groups')->doSelect());
-        
-        //urls
-        $smarty->assign("actionurl_add", Config::get('slideshow_groupadd', 'slideshow_groupadd', 'admin'));
-        $smarty->assign("actionurl_edit", Config::get('slideshow_groupedit', 'slideshow_groupedit', 'admin'));
-        $smarty->assign("actionurl_delete", Config::get('slideshow_groupdelete', 'slideshow_groupdelete', 'admin'));
-    }
-    
+    /**
+     * Upload an image
+     * 
+     * @param int $id       Image ID
+     * @param string $name
+     * @return array
+     */
     private function handleFileUpload($id, $name)
     {
         $file = $_FILES[$name]['name'];
@@ -392,6 +446,10 @@ class SlideshowComponent extends Component
             return false;
         }
     }
+    /**
+     * (non-PHPdoc)
+     * @see core/Component#registerMenuItems($menu)
+     */
     public function registerMenuItems($menu)
     {
         $menu->addChild(new MenuItem("slideshow", ""));

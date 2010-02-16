@@ -600,7 +600,7 @@ class Field
      */
     public function validate($mode)
     {
-        $value = $this->getValue();
+        $value = $this->value2db($this->getValue());
         
         if($mode == Field::ADD &&
             $this->isRequired($mode) && 

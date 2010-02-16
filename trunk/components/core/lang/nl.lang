@@ -8,7 +8,7 @@
     "selectpriv":           "Selecteer de privliages nodig zijn om de bepaalde actie van een component te kunnen uitvoeren. Dit is nodig om een veilige CMS te garanderen.",
     "compoverview":         "Onderdelen overzicht",
     "installedcomp":        "Geinstaleerde Componenten",
-    "framework":            "Kader",
+    "framework":            "Framework",
     "status":               "Status",
     "component":            "Component",
     "pubaccess":            "Publieke Toegang",
