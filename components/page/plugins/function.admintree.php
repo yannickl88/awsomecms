@@ -121,21 +121,21 @@ function pages_renderTree($tree, $theme, $hidden, $javascript = '', $folderOnly 
 
                 if($hidden && !isset($_COOKIE['menu'.$id]))
                 {
-                    $html .= '<a id="link'.$id.'" class="folder link'.$id.'" href="javascript: void(0)" onClick="admin_toggleTree(\''.$id.'\')" onMouseOver="$(this).addClass(\'focus\')" onMouseOut="$(this).removeClass(\'focus\')">';
+                    $html .= '<a id="link'.$id.'" class="folder link'.$id.'" href="#" onClick="return admin_toggleTree(\''.$id.'\');" onMouseOver="$(this).addClass(\'focus\')" onMouseOut="$(this).removeClass(\'focus\')">';
                 }
                 else
                 {
-                    $html .= '<a id="link'.$id.'" class="folder open link'.$id.'" href="javascript: void(0)" onClick="admin_toggleTree(\''.$id.'\')" onMouseOver="$(this).addClass(\'focus\')"  onMouseOut="$(this).removeClass(\'focus\')">';
+                    $html .= '<a id="link'.$id.'" class="folder open link'.$id.'" href="#" onClick="return admin_toggleTree(\''.$id.'\');" onMouseOver="$(this).addClass(\'focus\')"  onMouseOut="$(this).removeClass(\'focus\')">';
                 }
                 $html .= '</a>';
 
                 if($javascript != '')
                 {
-                    $html .= '<a href="javascript: void(0);" onClick="$(\'#'.$javascript.'\')[0].value = \''.$node['location'].'\';" style="padding: 0;">';
+                    $html .= '<a href="#" onClick="$(\'#'.$javascript.'\').val(\''.$node['location'].'\'); return false;" style="padding: 0;">';
                 }
                 else
                 {
-                    $html .= '<a href="javascript: void(0)" onClick="admin_toggleTree(\''.$id.'\')" style="padding: 0;">';
+                    $html .= '<a href="#" onClick="return admin_toggleTree(\''.$id.'\');" style="padding: 0;">';
                 }
                 $html .= '<img src="/img/icons/page_folder.png" />';
                 $html .= $key;
@@ -155,13 +155,13 @@ function pages_renderTree($tree, $theme, $hidden, $javascript = '', $folderOnly 
             {
                 if($javascript != '')
                 {
-                    $html .= '<a href="javascript: void(0);" onClick="$(\'#'.$javascript.'\')[0].value = \''.$node->page_location.$node->page_name.'\';">';
+                    $html .= '<a href="#" onClick="$(\'#'.$javascript.'\').val(\''.$node->page_location.$node->page_name.'\'); return false;">';
                 }
                 else
                 {
-                    $html .= '<a class="deleteIcon" href="/'.Config::get('pagedelete', 'pagedelete', 'admin').'&page_id='.$node->page_id.'"></a>';
+                    $html .= '<a class="deleteIcon" href="/'.Config::get('pagedelete', 'pagedelete', 'admin').'&amp;page_id='.$node->page_id.'"></a>';
                     $html .= '<a class="viewIcon" href="'.$node->page_location.$node->page_name.'"></a>';
-                    $html .= '<a href="/'.Config::get('pageedit', 'pageedit', 'admin').'&page_id='.$node->page_id.'" >';
+                    $html .= '<a href="/'.Config::get('pageedit', 'pageedit', 'admin').'&amp;page_id='.$node->page_id.'" >';
                 }
                 if($node->page_name == 'index')
                 {

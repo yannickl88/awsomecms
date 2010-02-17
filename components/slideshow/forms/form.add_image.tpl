@@ -4,7 +4,7 @@
         <ul id="errorlist">
         </ul>
     </div>
-    <script>
+    <script type='text/javascript'>
         {foreach from=$FORMERROR.fields key=field item=error}
             addFieldError('{$field}', '{$error}');
         {/foreach}
@@ -33,17 +33,17 @@
             <label for="image_image">{"field_image_size"|text}:</label>
         </div>
         <div class="admin_form_field">
-            <input type="radio" name="image_size" id="image_size" value="1"/>{"small"|text|ucfirst}
-            <input type="radio" name="image_size" id="image_size" value="2" checked="checked"/>{"large"|text|ucfirst}
+            <input type="radio" name="image_size" id="image_size1" value="1"/>{"small"|text|ucfirst}
+            <input type="radio" name="image_size" id="image_size2" value="2" checked="checked"/>{"large"|text|ucfirst}
         </div>
     </div>
     <div class="admin_form_row admin_form_submit">
-        <input type="submit" value="{"save"|text|ucfirst}" id="user_submit" class="admin_form_submit">
+        <input type="submit" value="{"save"|text|ucfirst}" id="user_submit" class="admin_form_submit" />
     </div>
     <input type="hidden" name="action" value="add_image" />
     <input type="hidden" name="component" value="slideshow" />
 </form>
-<script>
+<script type='text/javascript'>
     {literal}
     $().ready(function(e) {
         $("#image_image").change(function(e) {

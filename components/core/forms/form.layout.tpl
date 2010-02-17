@@ -13,12 +13,12 @@
         {/foreach}
     </table>
     <div class="admin_form_row admin_form_submit">
-        <input type="submit" value="{"save"|text|ucfirst}" id="user_submit" class="admin_form_submit">
+        <input type="submit" value="{"save"|text|ucfirst}" id="user_submit" class="admin_form_submit" />
     </div>
     <input type="hidden" name="action" value="layout" />
     <input type="hidden" name="component" value="core" />
 </form>
-<script>
+<script type="text/javascript">
     {literal}
     function isEmpty(row)
     {
@@ -57,7 +57,7 @@
         
         if(isEmpty(row) == false)
         {
-            var newrow = $("<tr class=\"row\"><td><input type=\"text\" /></td><td><input type=\"text\" /></td></tr>");
+            var newrow = $("<tr class=\"row\"><td><input type=\"text\" /><\/td><td><input type=\"text\" /><\/td><\/tr>");
             newrow.find("input[type=text]").blur(checkField);
             $(".admin_core_layout table").append(newrow);
         }

@@ -44,10 +44,10 @@
                 </td>
                 <td style="vertical-align: top;" class="accessCell">
                     <div style="padding-left: 18px;">
-                        <a href="javascript: void(0);" class="s admin_component_access{if !$component->component_auth|hasflag:$auth.auth_select} selected{/if}" onclick="toggleAccess('auth_{$component->component_name}s', this);" title={"select"|text|ucfirst}></a>
-                        <a href="javascript: void(0);" class="i admin_component_access{if !$component->component_auth|hasflag:$auth.auth_insert} selected{/if}" onclick="toggleAccess('auth_{$component->component_name}i', this);" title="{"insert"|text|ucfirst}"></a>
-                        <a href="javascript: void(0);" class="u admin_component_access{if !$component->component_auth|hasflag:$auth.auth_update} selected{/if}" onclick="toggleAccess('auth_{$component->component_name}u', this);" title="{"update"|text|ucfirst}"></a>
-                        <a href="javascript: void(0);" class="d admin_component_access{if !$component->component_auth|hasflag:$auth.auth_delete} selected{/if}" onclick="toggleAccess('auth_{$component->component_name}d', this);" title="{"delete"|text|ucfirst}"></a>
+                        <a href="#" class="s admin_component_access{if !$component->component_auth|hasflag:$auth.auth_select} selected{/if}" onclick="return toggleAccess('auth_{$component->component_name}s', this);" title={"select"|text|ucfirst}></a>
+                        <a href="#" class="i admin_component_access{if !$component->component_auth|hasflag:$auth.auth_insert} selected{/if}" onclick="return toggleAccess('auth_{$component->component_name}i', this);" title="{"insert"|text|ucfirst}"></a>
+                        <a href="#" class="u admin_component_access{if !$component->component_auth|hasflag:$auth.auth_update} selected{/if}" onclick="return toggleAccess('auth_{$component->component_name}u', this);" title="{"update"|text|ucfirst}"></a>
+                        <a href="#" class="d admin_component_access{if !$component->component_auth|hasflag:$auth.auth_delete} selected{/if}" onclick="return toggleAccess('auth_{$component->component_name}d', this);" title="{"delete"|text|ucfirst}"></a>
                         <span style="display: none;">
                         <input name="auth_{$component->component_name}[]" id="auth_{$component->component_name}s" value="{$auth.auth_select}" type="checkbox"{if !$component->component_auth|hasflag:$auth.auth_select} checked="checked"{/if} />
                         <input name="auth_{$component->component_name}[]" id="auth_{$component->component_name}i" value="{$auth.auth_insert}" type="checkbox"{if !$component->component_auth|hasflag:$auth.auth_insert} checked="checked"{/if} /> 
@@ -60,7 +60,7 @@
         {/foreach}
     </table>
     <div class="admin_form_row admin_form_submit">
-        <input type="submit" value="{"save"|text|ucfirst}" id="component_submit" class="admin_form_submit">
+        <input type="submit" value="{"save"|text|ucfirst}" id="component_submit" class="admin_form_submit" />
     </div>
     <input type="hidden" name="action" value="components" />
     <input type="hidden" name="component" value="core" />
@@ -89,7 +89,7 @@
         </tr>
     {/foreach}
 </table>
-<script>
+<script type="text/javascript">
     {literal}
     function toggleAccess(id, link)
     {
@@ -103,6 +103,8 @@
             $(link).addClass("selected");
             $("#"+id).attr("checked", true);
         }
+
+        return false;
     }
     function updateComponent(name)
     {
@@ -118,6 +120,8 @@
         $.post("/{/literal}{$smarty.get.url}{literal}", data, function(data) {
             $("#row_"+name+" .updateCell").html("<img src='/img/admin/ok-icon.png' /> Up-to-date");
         }, "json");
+
+        return false;
     }
     function installComponent(name)
     {
@@ -134,6 +138,8 @@
         $.post("/{/literal}{$smarty.get.url}{literal}", data, function(data) {
             $("#row_"+name+" .updateCell").html("<img src='/img/admin/ok-icon.png' /> Installed");
         }, "json");
+
+        return false;
     }
     function updateFramework()
     {
@@ -156,6 +162,8 @@
             alert("there was an error when installing the component. "+data[1]); 
           }
         }, "json");
+
+        return false;
     }
     {/literal}
 </script>

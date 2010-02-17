@@ -22,6 +22,8 @@ function deleteMultiple(url, key, checkboxes)
     });
     
     document.location = url+"?"+querystring;
+    
+    return false;
 }
 /**
  * Mark a field that it had an error
@@ -38,6 +40,8 @@ function addFieldError(field, message)
             $('#errorlist').append("<li><label for='"+field+"'>"+$('label[for="'+field+'"]').html()+" "+message+"</label></li>");
         }
     });
+    
+    return false;
 }
 /**
  * Call a component using GET
@@ -62,6 +66,8 @@ function getComponent(component, action, data, onsucces)
     data.component = component;
     
     $.get("/", data, onsucces);
+    
+    return false;
 }
 /**
  * Call a component using POST
@@ -86,4 +92,6 @@ function postComponent(component, action, data, onsucces)
     data.component = component;
     
     $.post("/", data, onsucces);
+    
+    return false;
 }

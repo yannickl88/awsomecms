@@ -11,6 +11,8 @@ function admin_toggleTree(id)
     {
         admin_createCookie('menu'+id, true);
     }
+    
+    return false;
 }
 
 function admin_createCookie(name,value,days) {
@@ -24,6 +26,8 @@ function admin_createCookie(name,value,days) {
         var expires = "";
     
     document.cookie = name+"="+value+expires+"; path=/";
+    
+    return false;
 }
 
 function admin_readCookie(name) {
@@ -39,11 +43,13 @@ function admin_readCookie(name) {
         if (c.indexOf(nameEQ) == 0) 
             return c.substring(nameEQ.length,c.length);
     }
-    return null;
+    return false;
 }
 
 function admin_eraseCookie(name) {
     admin_createCookie(name,"",-1);
+    
+    return false;
 }
 
 function admin_hasCookie(name) {
