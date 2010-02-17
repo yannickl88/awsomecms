@@ -18,5 +18,8 @@
     "small":                "klein",
     "large":                "groot",
     "deletefrom":           "Verwijder uit",
-    "welcomeadmin":         "Welkom in het admin gedeelte."
+    "welcomeadmin":         "Welkom in het admin gedeelte.",
+    "formerror":            "Het formulier is niet correct ingevuld. Gelieve de volgende velden te controleren",
+    "error_notfilledin":    "Veld niet ingevuld",
+    "error_notnumber":      "Veld was geen nummer"
 }

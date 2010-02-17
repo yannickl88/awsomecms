@@ -784,7 +784,7 @@ abstract class Table
         if(isset($this->errorFields))
         {
             $html = "<div class=\"form_error\">\n";
-            $html .= "    The form was not filled in correctly. Please check the following fields:\n";
+            $html .= "    ".Language::get("formerror").":\n";
             $html .= "    <ul id=\"errorlist\">\n";
             $html .= "    </ul>\n";
             $html .= "</div>\n";

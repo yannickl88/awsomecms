@@ -10,5 +10,8 @@
     "field_image_size":     "Grootte",
     "promptforfile":        "U wordt promted voor een bestand",
     "oruploadnew":          "Of upload een nieuwe",
-    "upload":               "Upload"
+    "upload":               "Upload",
+    "error_filetolarge":    "Bestandsgrootte is om grote",
+    "error_nofileselect":   "Geen bestand geselecteerd",
+    "error_cennotwrite":    "Kan niet schrijven bestand op schijf"
 }

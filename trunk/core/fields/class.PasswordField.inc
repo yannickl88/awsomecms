@@ -38,7 +38,7 @@ class PasswordField extends Field
      */
     protected function toHTML_add()
     {
-        return "<input type='password' name='{$this->getName()}' id='{$this->getName()}' value='{$this->getDefaultValue()}'/>";
+        return "<input type='password' name='{$this->getName()}' id='{$this->getName()}' value='".htmlentities($this->getDefaultValue(), ENT_QUOTES)."'/>";
     }
     /**
      * (non-PHPdoc)
@@ -46,6 +46,6 @@ class PasswordField extends Field
      */
     protected function toHTML_edit()
     {
-        return "<input type='password' name='{$this->getName()}' id='{$this->getName()}' value='{$this->getDefaultValue()}'/>";
+        return "<input type='password' name='{$this->getName()}' id='{$this->getName()}' value='".htmlentities($this->getDefaultValue(), ENT_QUOTES)."'/>";
     }
 }

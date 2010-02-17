@@ -38,7 +38,7 @@ class TextField extends Field
      */
     protected function toHTML_add()
     {
-        return "<textarea name='{$this->getName()}' id='{$this->getName()}' class=\"htmleditor\" rows=\"20\" cols=\"20\">{$this->getDefaultValue()}</textarea>";
+        return "<textarea name='{$this->getName()}' id='{$this->getName()}' class=\"htmleditor\" rows=\"20\" cols=\"20\">".htmlentities($this->getDefaultValue(), ENT_QUOTES)."</textarea>";
     }
     /**
      * (non-PHPdoc)
@@ -46,6 +46,6 @@ class TextField extends Field
      */
     protected function toHTML_edit()
     {
-        return "<textarea name='{$this->getName()}' id='{$this->getName()}' class=\"htmleditor\" rows=\"20\" cols=\"20\">{$this->getValue()}</textarea>";
+        return "<textarea name='{$this->getName()}' id='{$this->getName()}' class=\"htmleditor\" rows=\"20\" cols=\"20\">".htmlentities($this->getValue(), ENT_QUOTES)."</textarea>";
     }
 }

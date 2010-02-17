@@ -39,17 +39,17 @@ class UsersComponent extends Component
     {
         //extra custom validation
         $valid = true;
-        $e = new InvalidFormException($request, $redirect, "users.users");
+        $e = new InvalidFormException(array((object) $request), $redirect, "users.users");
         
         if(empty($request['user_name']))
         {
             $valid = false;
-            $e->addInvalidField('user_name', "Field was not filled in");
+            $e->addInvalidField('user_name', Language::get("error_notfilledin"));
         }
         if(empty($request['user_pass']))
         {
             $valid = false;
-            $e->addInvalidField('user_pass', "Field was not filled in");
+            $e->addInvalidField('user_pass', Language::get("error_notfilledin"));
         }
         
         if($valid)
@@ -58,7 +58,7 @@ class UsersComponent extends Component
             
             if(!$loggedin || ($loggedin && $_SESSION['usr']['auth']['admin'] !== true))
             {
-                $e->addInvalidField('user_name', "Username and Password do not match");
+                $e->addInvalidField('user_name', Language::get("error_nomatch"));
                 $e->addInvalidField('user_pass', "");
                 
                 throw $e;
@@ -147,7 +147,7 @@ class UsersComponent extends Component
                 $e = new InvalidFormException(array((object) $request), "/".Config::get('usersedit', 'usersedit', 'admin'), "users.users", "Password do not match");
                 
                 $e->setRedirectData(array("user_id" => $request["user_id"]));
-                $e->addInvalidField('user_pass', "Passwords do not match");
+                $e->addInvalidField('user_pass', Language::get("error_passwordsnomatch"));
                 $e->addInvalidField('user_pass2', "");
                 
                 throw $e;
@@ -226,7 +226,7 @@ class UsersComponent extends Component
             else
             {
                 $e = new InvalidFormException($request, "/".Config::get('privadd', 'privadd', 'admin'), "users.privileges", "Privilage already exists");
-                $e->addInvalidField('privilege_name', "Please select another name");
+                $e->addInvalidField('privilege_name', Language::get("error_selectothername"));
                 
                 throw $e;
             }

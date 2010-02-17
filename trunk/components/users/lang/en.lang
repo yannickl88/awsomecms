@@ -8,5 +8,8 @@
     "field_user_pass":      "Password",
     "field_user_pass2":     "Again",
     "field_user_privileges":"Privliveges",
-    "login":                "login"
+    "login":                "login",
+    "error_nomatch":        "Username and Password do not match",
+    "error_passwordsnomatch": "Passwords do not match",
+    "error_selectothername": "Please select another name, this one already exists"
 }
