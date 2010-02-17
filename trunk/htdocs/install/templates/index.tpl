@@ -91,8 +91,8 @@
                     <label for="setting_proxypass">Password</label><input type="password" id="setting_proxypass" disabled="disabled"/><br/>
                     <br />
                     Administation:<br/>
-                    <label for="setting_adminlocation">Admin Location</label><input type="text" id="setting_adminlocation" value="admin/"/><br/>
-                    <label for="setting_adminlogin">Admin Login Page</label><input type="text" id="setting_adminlogin" value="login"/><br/>
+                    <label for="setting_adminlocation">Admin Location</label><input type="text" id="setting_adminlocation" value="{$setting_adminlocation}"/><br/>
+                    <label for="setting_adminlogin">Admin Login Page</label><input type="text" id="setting_adminlogin" value="{$setting_adminlogin}"/><br/>
                     <input type="checkbox" id="setting_needslogin" checked="checked"/> Need login to access Admin area <br/>
                     <input type="checkbox" id="setting_default" checked="checked"/> Install default admin pages <br/>
                 </div>
