@@ -449,44 +449,6 @@ class Controller
         }
     }
     /**
-     * Make a reqest for data to an component
-     *
-     * @param string $action
-     * @param string $component
-     * @param array $data
-     * @return string
-     */
-    public static function makeRequest($component, $method = "GET", $data = array())
-    {
-        $config = Config::getInstance();
-        
-        try
-        {
-            $request = new Request();
-        
-            $request->method = $method;
-            $request->component = $component;
-            $request->action = $request->translateAction();
-            
-            $componentObject = Request::init($component);
-            
-            if($componentObject)
-            {
-                $output = call_user_func(array($componentObject, 'do'.ucfirst(strtolower($request->action))), $data);
-            }
-            else
-            {
-                $output = false;
-            }
-        }
-        catch(ForbiddenException $e)
-        {
-            $output = false;
-        }
-        
-        return $output;
-    }
-    /**
      * Get the user auth data for the session
      *
      * @param int $user_id

@@ -211,8 +211,9 @@ class InstallHelper
             $patch = file_get_contents($component->component_path."/db/patch-{$current}.sql");
             SQL::getInstance()->multi_query($patch);
             
-            //TODO: change to table object
-            Request::init('core')->doUpdate(array("component_name" => $component->component_name, "component_patchlevel" => $highest));
+            Table::init('core.components')
+                ->setRecord((object) array("component_name" => $component->component_name, "component_patchlevel" => $highest))
+                ->doUpdate();
         }
     }
     /**

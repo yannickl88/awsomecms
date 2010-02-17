@@ -22,7 +22,6 @@
  */
 function smarty_function_newstags($params, &$smarty)
 {
-    $newsComponent = Request::init('news');
     $template = "news/news_tags.tpl";
     
     //select
