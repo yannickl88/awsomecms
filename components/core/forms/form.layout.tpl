@@ -13,7 +13,7 @@
         {/foreach}
     </table>
     <div class="admin_form_row admin_form_submit">
-        <input type="submit" value="{"save"|text|capitalize}" id="user_submit" class="admin_form_submit">
+        <input type="submit" value="{"save"|text|ucfirst}" id="user_submit" class="admin_form_submit">
     </div>
     <input type="hidden" name="action" value="layout" />
     <input type="hidden" name="component" value="core" />

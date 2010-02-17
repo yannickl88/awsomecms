@@ -10,7 +10,7 @@
         {/foreach}
     </script>
 {/if}
-<h2>{"edit"|text|capitalize} {$record->group_title}</h2>
+<h2>{"edit"|text|ucfirst} {$record->group_title}</h2>
 <form method="post" action="/" class="admin_form admin_slideshow_group_add" enctype="multipart/form-data">
     <div class="admin_form_row">
         <div class="admin_form_label">
@@ -59,15 +59,15 @@
                     {/if}
                     {/foreach}
                 </select><br/>
-                <button id="add_image" type="button" style="width: 70px;" onclick="addImage();">{"add"|text|capitalize}</button><br />
+                <button id="add_image" type="button" style="width: 70px;" onclick="addImage();">{"add"|text|ucfirst}</button><br />
                 {"oruploadnew"|text}:<br/>
                 <div style="margin-top: 10px;">
                     <div>
                         <div style="float: left; width: 75px;">{"field_image_title"|text}</div><input type="text" id="image_title" style="width: 250px;"/>
                     </div>
                     <div id="image_size">
-                        <input type="radio" value="1" name="image_size_dummy"/>{"small"|text|capitalize}
-                        <input type="radio" value="2" name="image_size_dummy" checked="checked"/>{"large"|text|capitalize}
+                        <input type="radio" value="1" name="image_size_dummy"/>{"small"|text|ucfirst}
+                        <input type="radio" value="2" name="image_size_dummy" checked="checked"/>{"large"|text|ucfirst}
                     </div>
                     <button id="upload_image" type="button" style="width: 70px;">{"upload"|text}</button> ({"promptforfile"|text})
                 </div>
@@ -75,7 +75,7 @@
         </div>
     </div>
     <div class="admin_form_row admin_form_submit">
-        <input type="submit" value="{"save"|text|capitalize}" id="user_submit" class="admin_form_submit">
+        <input type="submit" value="{"save"|text|ucfirst}" id="user_submit" class="admin_form_submit">
     </div>
     <input type="hidden" name="group_id" value="{$record->group_id}" />
     <input type="hidden" name="action" value="edit_group" />

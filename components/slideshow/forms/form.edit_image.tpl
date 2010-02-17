@@ -10,7 +10,7 @@
         {/foreach}
     </script>
 {/if}
-<h2>{"edit"|text|capitalize} {$record->image_title}</h2>
+<h2>{"edit"|text|ucfirst} {$record->image_title}</h2>
 <form method="post" action="/" class="admin_form admin_gallery_add" enctype="multipart/form-data">
     <div class="admin_form_row">
         <div class="admin_form_label">
@@ -33,12 +33,12 @@
             <label for="image_image">{"field_image_size"|text}:</label>
         </div>
         <div class="admin_form_field">
-            <input type="radio" name="image_size" id="image_size" value="1" {if $record->image_size eq 1}checked="checked"{/if}/>{"small"|text|capitalize}
-            <input type="radio" name="image_size" id="image_size" value="2" {if $record->image_size eq 2}checked="checked"{/if}/>{"large"|text|capitalize}
+            <input type="radio" name="image_size" id="image_size" value="1" {if $record->image_size eq 1}checked="checked"{/if}/>{"small"|text|ucfirst}
+            <input type="radio" name="image_size" id="image_size" value="2" {if $record->image_size eq 2}checked="checked"{/if}/>{"large"|text|ucfirst}
         </div>
     </div>
     <div class="admin_form_row admin_form_submit">
-        <input type="submit" value="{"save"|text|capitalize}" id="user_submit" class="admin_form_submit">
+        <input type="submit" value="{"save"|text|ucfirst}" id="user_submit" class="admin_form_submit">
     </div>
     <input type="hidden" name="image_id" value="{$record->image_id}" />
     <input type="hidden" name="action" value="edit_image" />
