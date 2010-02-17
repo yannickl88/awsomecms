@@ -52,7 +52,7 @@ class FieldsField extends Field
                     <th></th>
                 </tr>
             </table>
-            <a href="javascript: void(0);" onclick="addFieldsRow();">{$add}</a>
+            <a href="#" onclick="return addFieldsRow();">{$add}</a>
             <input type="hidden" id="{$this->getName()}_fields" name="{$this->getName()}" value="" />
 HTML;
         return $html;
@@ -129,7 +129,7 @@ HTML;
                             <input type="text" class="field_sort tinyfield" value="{$count2}"/>
                         </td>
                         <td>
-                            <a href="javascript: void(0)"><img src="/img/icons/cross.png" id="deleteIcon" onclick="deleteFieldsRow({$count})"/></a>
+                            <a href="#" onclick="return deleteFieldsRow({$count});"><img src="/img/icons/cross.png" id="deleteIcon"/></a>
                         </td>
                     </tr>
 HTML;
@@ -138,7 +138,7 @@ HTML;
         }
         $html .= <<<HTML
             </table>
-            <a href="javascript: void(0);" onclick="addFieldsRow();">{$add}</a>
+            <a href="#" onclick="return addFieldsRow();">{$add}</a>
             <input type="hidden" id="{$this->getName()}_fields" name="{$this->getName()}" value="" />
 HTML;
         return $html;
@@ -179,6 +179,8 @@ HTML;
                 });
                 
                 $("#{$this->getName()}_fields").val(string);
+                
+                return false;
             }
             function addFieldsRow()
             {
@@ -186,36 +188,40 @@ HTML;
                     <tr class="fieldrow">\
                         <td>\
                             <input type="text" class="field_name smallfield" value=""/>\
-                        </td>\
+                        <\/td>\
                         <td>\
                             <input type="text" class="field_code smallfield" value=""/>\
-                        </td>\
+                        <\/td>\
                         <td>\
                             <select class="field_type smallfield">\
-                                <option value="1" >{$lang->getText("field_type_text")}</option>\
-                                <option value="2" >{$lang->getText("field_type_pass")}</option>\
-                                <option value="3" >{$lang->getText("field_type_area")}</option>\
-                                <option value="4" >{$lang->getText("field_type_gend")}</option>\
-                            </select>\
-                        </td>\
+                                <option value="1" >{$lang->getText("field_type_text")}<\/option>\
+                                <option value="2" >{$lang->getText("field_type_pass")}<\/option>\
+                                <option value="3" >{$lang->getText("field_type_area")}<\/option>\
+                                <option value="4" >{$lang->getText("field_type_gend")}<\/option>\
+                            <\/select>\
+                        <\/td>\
                         <td>\
                             <input type="checkbox" class="field_required" value="1" />\
-                        </td>\
+                        <\/td>\
                         <td>\
                             <input type="text" class="field_sort tinyfield" value="'+$("#{$this->getName()} tr").length+'"/>\
-                        </td>\
+                        <\/td>\
                         <td>\
-                            <a href="javascript: void(0)"><img src="/img/icons/cross.png" id="deleteIcon" onclick="deleteFieldsRow('+($("#{$this->getName()} tr.fieldrow").length)+')"/></a>\
-                        </td>\
-                    </tr>';
+                            <a href="#" onclick="return deleteFieldsRow('+($("#{$this->getName()} tr.fieldrow").length)+')"><img src="/img/icons/cross.png" id="deleteIcon"/><\/a>\
+                        <\/td>\
+                    <\/tr>';
                 
                 $("#{$this->getName()}").append(html);
+                
+                return false;
             }
             function deleteFieldsRow(id)
             {
                 $($("#{$this->getName()} tr.fieldrow")[id]).remove();
                 
                 resetFieldsRowIds();
+                
+                return false;
             }
             function resetFieldsRowIds()
             {
@@ -223,6 +229,8 @@ HTML;
                     $(value).find("#deleteIcon").removeAttr("onclick");
                     $(value).find("#deleteIcon").click(function(e) { deleteFieldsRow(key); });
                 });
+                
+                return false;
             }
 JS;
     }

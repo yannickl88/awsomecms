@@ -58,9 +58,9 @@ class SmartyPageLoader
         {
             if(!$note->hasNotification("installnotremoved"))
             {
-                $text = "There still seems to be an install directory, keeping it there is a <b>very high security risk</b>. <a href='javascript: deleteInstall();'>Click here to remove the Install directories.</a>";
-                $text .= "<script>";
-                $text .= "function deleteInstall() { getComponent(\"core\", \"deleteinstall\", null, function(data) { $('#notification_installnotremoved').remove(); }); }";
+                $text = "There still seems to be an install directory, keeping it there is a <b>very high security risk</b>. <a href='#' onclick='return deleteInstall();'>Click here to remove the Install directories.</a>";
+                $text .= "<script type=\"text/javascript\">";
+                $text .= "function deleteInstall() { return getComponent(\"core\", \"deleteinstall\", null, function(data) { $('#notification_installnotremoved').remove(); }); }";
                 $text .= "</script>";
                 $note->addNotification($text, "*", "installnotremoved");
             }

@@ -46,13 +46,13 @@
         </div>
     </div>
     <div class="admin_form_row admin_form_submit">
-        <input type="submit" value="{"save"|text|ucfirst}" id="user_submit" class="admin_form_submit">
+        <input type="submit" value="{"save"|text|ucfirst}" id="user_submit" class="admin_form_submit" />
     </div>
     <input type="hidden" name="image_id" value="{$record->image_id}" />
     <input type="hidden" name="action" value="edit" />
     <input type="hidden" name="component" value="gallery" />
 </form>
-<script>
+<script type="text/javascript">
     {literal}
     function toggleDisabled(checkbox, fieldID)
     {

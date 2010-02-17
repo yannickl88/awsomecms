@@ -4,7 +4,7 @@
         <ul id="errorlist">
         </ul>
     </div>
-    <script>
+    <script type='text/javascript'>
         {foreach from=$FORMERROR.fields key=field item=error}
             addFieldError('{$field}', '{$error}');
         {/foreach}
@@ -42,11 +42,11 @@
                 {foreach from=$images item=image}
                 {if !$image->image_id|notin:$images_ids}
                 <li id="image{$image->image_id}">
-                    <a href="javascript: removeImage({$image->image_id});">
-                        <img src="/img/icons/delete.png">
+                    <a href="#" onclick="return removeImage({$image->image_id});">
+                        <img src="/img/icons/delete.png" />
                     </a>
                     {$image->image_title}
-                    <input name="images[]" value="{$image->image_id}" type="hidden">
+                    <input name="images[]" value="{$image->image_id}" type="hidden" />
                 </li>
                 {/if}
                 {/foreach}
@@ -59,7 +59,7 @@
                     {/if}
                     {/foreach}
                 </select><br/>
-                <button id="add_image" type="button" style="width: 70px;" onclick="addImage();">{"add"|text|ucfirst}</button><br />
+                <button id="add_image" type="button" onclick="addImage();">{"add"|text|ucfirst}</button><br />
                 {"oruploadnew"|text}:<br/>
                 <div style="margin-top: 10px;">
                     <div>
@@ -75,13 +75,13 @@
         </div>
     </div>
     <div class="admin_form_row admin_form_submit">
-        <input type="submit" value="{"save"|text|ucfirst}" id="user_submit" class="admin_form_submit">
+        <input type="submit" value="{"save"|text|ucfirst}" id="user_submit" class="admin_form_submit" />
     </div>
     <input type="hidden" name="group_id" value="{$record->group_id}" />
     <input type="hidden" name="action" value="edit_group" />
     <input type="hidden" name="component" value="slideshow" />
 </form>
-<script>
+<script type='text/javascript'>
     {literal}
     var upload = new AjaxUpload('#upload_image', 
     {
@@ -124,10 +124,10 @@
             var html = "";
             
             html += "<li id='image" + response[0].image_id + "'>";
-            html += "<a href='javascript: removeImage(" + response[0].image_id + ");'><img src='/img/icons/delete.png'/></a> ";
+            html += "<a href='#' onclick='return removeImage(" + response[0].image_id + ");'><img src='/img/icons/delete.png'/><\/a> ";
             html += response[0].image_title;
-            html += "<input type='hidden' name='images[]' value='" + response[0].image_id + "'>";
-            html += "</li>";
+            html += "<input type='hidden' name='images[]' value='" + response[0].image_id + "' />";
+            html += "<\/li>";
             
             //add to the list
             $('#group_images').append(html);
@@ -147,10 +147,10 @@
                 var html = "";
                 
                 html += "<li id='image" + $(value).val() + "'>";
-                html += "<a href='javascript: removeImage(" + $(value).val() + ");'><img src='/img/icons/delete.png'/></a> ";
+                html += "<a href='#' onclick='return removeImage(" + $(value).val() + ");'><img src='/img/icons/delete.png'/><\/a> ";
                 html += $(value).text();
-                html += "<input type='hidden' name='images[]' value='" + $(value).val() + "'>";
-                html += "</li>";
+                html += "<input type='hidden' name='images[]' value='" + $(value).val() + "' />";
+                html += "<\/li>";
                 
                 //add to the list
                 $('#group_images').append(html);
@@ -159,6 +159,8 @@
                 $(value).remove();
             }
         });
+
+        return false;
     }
     
     function removeImage(id)
@@ -166,10 +168,12 @@
         var item = $('#image'+id);
         
         //add to dropdown
-        $('#image_groups').append("<option value='" + id + "'>" + item.text() + "</option>");
+        $('#image_groups').append("<option value='" + id + "'>" + item.text() + "<\/option>");
         
         //remove from list
         item.remove();
+
+        return false;
     }
     
     {/literal}
