@@ -508,5 +508,9 @@ foreach($componentsDirs as $component)
     }
 }
 
+$ini = parse_ini_file($websiteroot.'/config-default.ini', true);
+
+$smarty->assign('setting_adminlocation', $ini['admin']['location']);
+$smarty->assign('setting_adminlogin', $ini['admin']['login']);
 $smarty->assign('components', $components);
 $smarty->display('index.tpl');
