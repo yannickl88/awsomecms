@@ -155,7 +155,7 @@ HTML;
         return <<<JS
             $("#{$this->getName()}").ready(function(e) {
                 $("#{$this->getName()}").parents("form").submit(function(e) {
-                    return prossesFields();
+                    prossesFields();
                 });
             });
         

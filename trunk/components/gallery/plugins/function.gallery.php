@@ -22,7 +22,6 @@
  */
 function smarty_function_gallery($params, &$smarty)
 {
-    $galleryComponent = Component::init('gallery');
     $data = array();
 
     if(isset($params['max']))
@@ -34,7 +33,7 @@ function smarty_function_gallery($params, &$smarty)
         $data['image_tag'] = $params['tag'];
     }
 
-    $smarty->assign("gallery", $galleryComponent->select($data));
+    $smarty->assign("gallery", Table::init('gallery.images')->setRequest((object) $data)->doSelect()->getRows());
 
     return $smarty->fetch("gallery/gallery.tpl");
 }

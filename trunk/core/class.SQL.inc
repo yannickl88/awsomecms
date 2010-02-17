@@ -650,6 +650,7 @@ class SQLRecord
     public function reset()
     {
         $this->index = 0;
+        return $this;
     }
     /**
      * Get the amount of rows returned by the query

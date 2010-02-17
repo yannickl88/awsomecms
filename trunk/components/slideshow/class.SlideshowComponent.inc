@@ -252,17 +252,17 @@ class SlideshowComponent extends Component
     {
         if($request['method'] == 'post')
         {
-            //upload the image
-            $request['internal'] = 'true';
-            $request['image_title'] = $request['group_title']." Header";
             //is there an upload?
-            if(!empty($_FILES['image_image']['temp_name']))
+            if(!empty($_FILES['image_image']['name']))
             {
-                $request['group_header'] = $this->action_add_image($smarty, $smartyLoader, $request);
+                //upload the image
+                $request['internal'] = 'true';
+                $request['image_title'] = $request['group_title']." Header";
+                $request['group_header'] = (int) $this->action_add_image($smarty, $smartyLoader, $request);
             }
             else //check dropdown
             {
-                $request['group_header'] = $request['image_image_select'];
+                $request['group_header'] = (int) $request['image_image_select'];
             }
             
             //add the group
@@ -301,10 +301,6 @@ class SlideshowComponent extends Component
             
             if(!empty($_FILES['image_image']['name']))
             {
-                $group = Table::init('slideshow.groups')
-                    ->setRequest((object) $request)
-                    ->doSelect();
-                
                 //upload the image
                 $request['internal'] = 'true';
                 $request['image_title'] = $request['group_title']." Header";

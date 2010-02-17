@@ -61,8 +61,8 @@ class HyvesComponent extends Component
             }
             
             Table::init("news.news")
-                ->setRecord()
-                ->doInsert($data);
+                ->setRecord((object) $data)
+                ->doInsert();
         }
     }
 }

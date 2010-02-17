@@ -410,7 +410,7 @@ class Field
                 return $this->toHTML_add();
                 break;
             case Field::EDIT:
-                if($this->isIndex() && !$this->hasFlag(Field::FORCEUPDATE))
+                if(!$this->visible($mode) && !$this->hasFlag(Field::FORCEUPDATE))
                 {
                     return $this->toHTML_edit_hidden();
                 }

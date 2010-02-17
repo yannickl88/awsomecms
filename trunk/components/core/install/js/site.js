@@ -8,6 +8,7 @@
 function deleteMultiple(url, key, checkboxes)
 {
     var querystring = "";
+    var count = 0;
     
     checkboxes.each(function(i, value) {
         if($(value).attr("checked"))
@@ -18,10 +19,14 @@ function deleteMultiple(url, key, checkboxes)
             }
           
             querystring += key+"[]="+$(value).val();
+            count++;
         }
     });
     
-    document.location = url+"?"+querystring;
+    if(count > 0)
+    {
+        document.location = url+"?"+querystring;
+    }
     
     return false;
 }

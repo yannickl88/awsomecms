@@ -69,12 +69,15 @@ class GroupsComponent extends Component
                 ->doUpdate();
             
             //update the usersgroups references
-            $usersgroups = Table::init('groups.usersgroups');
-            $usersgroups->doDelete((object) $request);
+            Table::init('groups.usersgroups')
+                ->setRequest((object) $request)
+                ->doDelete();
             
             foreach($request['users'] as $user)
             {
-                $usersgroups->setRecord((object) array("user_id" => $user, "group_id" => $request['group_id']))->doInsert();
+                Table::init('groups.usersgroups')
+                    ->setRecord((object) array("user_id" => $user, "group_id" => $request['group_id']))
+                    ->doInsert();
             }
             
             $this->redirect("/".Config::get('groupsadmin', 'groupsadmin', 'admin'));
@@ -84,7 +87,8 @@ class GroupsComponent extends Component
             if($request['group_id'])
             {
                 $users = Table::init('groups.groups')
-                    ->doSelect((object) array("showusers" => true, 'group_id' => $request['group_id']))
+                    ->setRequest((object) array("showusers" => true, 'group_id' => $request['group_id']))
+                    ->doSelect()
                     ->getRows();
                     
                 $request['group_users'] = array();
@@ -230,7 +234,8 @@ class GroupsComponent extends Component
         if($request['method'] == 'post')
         {
             Table::init('groups.usersgroups')
-                ->doDelete((object) $request);
+                ->setRequest((object) $request)
+                ->doDelete();
         }
         return true;
     }

@@ -4,7 +4,7 @@
         <ul id="errorlist">
         </ul>
     </div>
-    <script>
+    <script type='text/javascript'>
         {foreach from=$FORMERROR.fields key=field item=error}
             addFieldError('{$field}', '{$error}');
         {/foreach}
@@ -19,11 +19,11 @@
             <div class="form_field">
                 {assign var=fieldcode value=$row->field_code}
                 {if $row->field_type == 1}
-                    <input type="text" name="{$fieldcode}" id="{$fieldcode}" value="{$FORMERROR.record.$fieldcode}"/>
+                    <input type="text" name="{$fieldcode}" id="{$fieldcode}" value="{$FORMERROR.record->$fieldcode}"/>
                 {elseif $row->field_type == 2}
                     <input type="password" name="{$fieldcode}" id="{$fieldcode}"/>
                 {elseif $row->field_type == 3}
-                    <textarea name="{$fieldcode}" id="{$fieldcode}" rows="5" cols="30">{$FORMERROR.record.$fieldcode}</textarea>
+                    <textarea name="{$fieldcode}" id="{$fieldcode}" rows="5" cols="30">{$FORMERROR.record->$fieldcode}</textarea>
                 {elseif $row->field_type == 4}
                     <select name="{$fieldcode}" id="{$fieldcode}">
                         <option {if $FORMERROR.record.$fieldcode == 'Male'}selected="selected"{/if}>Male</option>

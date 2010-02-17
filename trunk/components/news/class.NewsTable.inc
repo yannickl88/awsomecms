@@ -38,7 +38,7 @@ class NewsTable extends Table
         $this->addField(new Field("news_title"), 1);
         $this->addField(new UsersField("news_user"), 2);
         $this->addField(new DateField("news_date"), 3);
-        $this->addField(new Field("news_tag"), 4);
+        $this->addField(new Field("news_tag", Field::OPTIONAL), 4);
         $this->addField(new TextField("news_text"), 5);
         $this->setTitle("[news_title]");
         
@@ -61,6 +61,15 @@ class NewsTable extends Table
     protected function select($query, $data = null) 
     {
         $query->orderby('news_date', "DESC");
+        
+        if($data)
+        {
+            if($data->max)
+            {
+                $query->limit($data->max);
+            }
+            $query->whereWhenSet("news_tag", $data->news_tag);
+        }
     }
     /**
      * (non-PHPdoc)

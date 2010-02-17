@@ -34,7 +34,7 @@ function smarty_function_news($params, &$smarty)
         $params['news_tag'] = $params['tag'];
     }
 
-    $smarty->assign("news", $newsComponent->doSelect($params)->getRows());
+    $smarty->assign("news", $newsComponent->setRequest((object) $params)->doSelect()->getRows());
 
     return $smarty->fetch($template);
 }
