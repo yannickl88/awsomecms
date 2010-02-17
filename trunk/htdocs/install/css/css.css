@@ -8,16 +8,16 @@ body, table {
     font-size: 11px;
 }
 body {
-    background: #7090a9 url(/install/img/main-bg.png) no-repeat;
+    background: #7090a9 url(/install/img/carbon.gif);
     margin: 0;
     padding: 0;
 }
 a:hover {
-    color: #005aa4;
+    color: #0e3f6a;
     text-decoration: underline;
 }
 a {
-    color: #003c6e;
+    color: #1464a9 ;
     text-decoration: none;
 }
 #installWrapper, #updateWrapper {
