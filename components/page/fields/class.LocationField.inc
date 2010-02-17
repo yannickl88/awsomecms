@@ -34,6 +34,7 @@ class LocationField extends Field
     {
         parent::__construct($name, $style|Field::HIDE_VIEW);
         
+        $this->setDefaultValue("/");
         $this->displayPages = $displayPages;
     }
     /**
