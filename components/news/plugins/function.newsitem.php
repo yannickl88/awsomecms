@@ -22,7 +22,7 @@
  */
 function smarty_function_newsitem($params, &$smarty)
 {
-    $newRequest = Request::init('news');
+    $table = Table::init('news.news');
     $template = "news/news_item.tpl";
     
     if(isset($params['template']))
@@ -30,11 +30,13 @@ function smarty_function_newsitem($params, &$smarty)
         $template = $params['template'];
     }
 
-    $news = $newRequest->doSelect(array_merge($params, array('news_id' => $_GET['id'])));
+    $news = $table
+        ->setRequest((object) array_merge($params, array('news_id' => $_GET['id'])))
+        ->doSelect();
     $smarty->assign("news", $news[0]);
     
     //fetch the next and previous items
-    $news2 = $newRequest->doSelect();
+    $news2 = $table->doSelect();
     
     $previtem = -1;
     $nextitem = -1;
