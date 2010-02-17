@@ -168,7 +168,8 @@ class GroupsComponent extends Component
         $user_pass = md5($user_pass);
         
         $records = Table::init('groups.groups')
-            ->doSelect((object) array("user_name" => $user_name, "user_pass" => $user_pass))
+            ->setRequest(array((object) array("user_name" => $user_name, "user_pass" => $user_pass)))
+            ->doSelect()
             ->getRows();
         
         foreach($records as $record)
