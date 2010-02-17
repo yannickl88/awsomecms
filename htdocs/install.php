@@ -500,7 +500,7 @@ foreach($componentsDirs as $component)
                 $components[$component]['hasdependencies'] = false;
             }
             
-            $components[$component]['canauth'] = $inidata['canauth'];
+            $components[$component]['canauth'] = ($inidata['canauth'] === "1");
             
             if($inidata['required'])
             {
