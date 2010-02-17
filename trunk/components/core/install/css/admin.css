@@ -145,7 +145,6 @@ h1 {
 #treeWrapper {
     margin: 0 0 50px 60px;
     width: 190px;
-    overflow: auto;
 }
 .treeNode {
     text-align: left;
