@@ -67,8 +67,8 @@ class GalleryComponent extends Component
             
             if(!$request["image_urlthumb"])
             {
-                $exception = new InvalidFormException($request, Config::get('contactadd', 'contactadd', 'admin'), "The form was not valid");
-                $exception->addInvalidField($field, "Field was not filled in");
+                $exception = new InvalidFormException(array((object) $request), Config::get('contactadd', 'contactadd', 'admin'), "gallery.images", "The form was not valid");
+                $exception->addInvalidField($field, Language::get("error_notfilledin"));
                 die("ERROR");
             }
             
@@ -355,13 +355,13 @@ class GalleryComponent extends Component
                     case 1:
                     case 2:
                     case 3:
-                        $error = "Filesize is to large";
+                        $error = Language::get("error_filetolarge");
                         break;
                     case 4:
-                        $error = "No file selected";
+                        $error = Language::get("error_nofileselect");
                         break;
                     case 5:
-                        $error = "Cannot write file to disk";
+                        $error = Language::get("error_cennotwrite");
                         break;
                 }
                 

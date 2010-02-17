@@ -6,5 +6,8 @@
     "field_image_title":    "Titel",
     "field_image_tag":      "Tag",
     "field_image_thumb":    "Thumb",
-    "generate":             "Genereer"
+    "generate":             "Genereer",
+    "error_filetolarge":    "Bestandsgrootte is om grote",
+    "error_nofileselect":   "Geen bestand geselecteerd",
+    "error_cennotwrite":    "Kan niet schrijven bestand op schijf"
 }

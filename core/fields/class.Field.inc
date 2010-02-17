@@ -449,7 +449,7 @@ class Field
             $value = $this->getValue();
         }
         
-        return "<input type='text' name='{$this->getName()}' id='{$this->getName()}' value='{$value}'/>";
+        return "<input type='text' name='{$this->getName()}' id='{$this->getName()}' value='".htmlentities($value, ENT_QUOTES)."'/>";
     }
     /**
      * Create a HTML representation of edit field
@@ -458,7 +458,7 @@ class Field
      */
     protected function toHTML_edit()
     {
-        return "<input type='text' name='{$this->getName()}' id='{$this->getName()}' value='{$this->getValue()}'/>";
+        return "<input type='text' name='{$this->getName()}' id='{$this->getName()}' value='".htmlentities($this->getValue(), ENT_QUOTES)."'/>";
     }
     /**
      * Create a HTML representation of hidden field
@@ -467,7 +467,7 @@ class Field
      */
     protected function toHTML_edit_hidden()
     {
-        return "<input type='hidden' name='{$this->getName()}' id='{$this->getName()}' value='{$this->getValue()}'/>";
+        return "<input type='hidden' name='{$this->getName()}' id='{$this->getName()}' value='".htmlentities($this->getValue(), ENT_QUOTES)."'/>";
     }
     /**
      * Create a HTML representation of view field
@@ -609,7 +609,7 @@ class Field
             !$this->hasFlag(Field::DUMMY)
         )
         {
-            throw new FormException($this, "Field was not filled in");
+            throw new FormException($this, Language::get("error_notfilledin"));
         }
         if($mode == Field::EDIT &&
             $this->isRequired($mode) && 
@@ -617,7 +617,7 @@ class Field
             !$this->hasFlag(Field::DUMMY)
         )
         {
-            throw new FormException($this, "Field was not filled in");
+            throw new FormException($this, Language::get("error_notfilledin"));
         }
     }
     /**

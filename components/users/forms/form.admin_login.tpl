@@ -16,7 +16,7 @@
             <label for="user_name">{"field_user_name"|text}:</label>
         </div>
         <div class="admin_form_field">
-            <input type="text" name="user_name" id="user_name"/ value="{$FORMERROR.record.user_name}">
+            <input type="text" name="user_name" id="user_name"/ value="{$FORMERROR.record->user_name|htmlentities}">
         </div>
     </div>
     <div class="admin_form_row">

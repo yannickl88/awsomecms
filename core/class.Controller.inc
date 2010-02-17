@@ -404,14 +404,18 @@ class Controller
             $_SESSION['FORMERROR'] = serialize($e);
             
             $url = $e->getRedirect();
-            $query = "?";
+            $query = "";
             $data = $e->getRedirectData();
             
             foreach($data as $key => $item)
             {
-                if($query != "?")
+                if($query != "")
                 {
                     $query .= "&";
+                }
+                else
+                {
+                    $query .= "?";
                 }
                 
                 $query .= $key.'='.$item;

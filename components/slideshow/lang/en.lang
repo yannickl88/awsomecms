@@ -11,5 +11,8 @@
     "field_image_groups":   "Images",
     "promptforfile":        "You will be promted for a file",
     "oruploadnew":          "Or upload a new",
-    "upload":               "Upload"
+    "upload":               "Upload",
+    "error_filetolarge":    "Filesize is to large",
+    "error_nofileselect":   "No file selected",
+    "error_cennotwrite":    "Cannot write file to disk"
 }

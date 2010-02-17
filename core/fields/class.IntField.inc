@@ -29,7 +29,7 @@ class IntField extends Field
      */
     protected function toHTML_add()
     {
-        return "<input type='text' name='{$this->getName()}' id='{$this->getName()}' value='{$this->getDefaultValue()}' size='5' onkeypress='return form_IntField_handleKey(event);'/>";
+        return "<input type='text' name='{$this->getName()}' id='{$this->getName()}' value='".htmlentities($this->getDefaultValue(), ENT_QUOTES)."' size='5' onkeypress='return form_IntField_handleKey(event);'/>";
     }
     /**
      * (non-PHPdoc)
@@ -37,7 +37,7 @@ class IntField extends Field
      */
     protected function toHTML_edit()
     {
-        return "<input type='text' name='{$this->getName()}' id='{$this->getName()}' value='{$this->getValue()}' size='5' onkeypress='return form_IntField_handleKey(event);'/>";
+        return "<input type='text' name='{$this->getName()}' id='{$this->getName()}' value='".htmlentities($this->getValue(), ENT_QUOTES)."' size='5' onkeypress='return form_IntField_handleKey(event);'/>";
     }
     /**
      * (non-PHPdoc)
@@ -70,12 +70,12 @@ JS;
             
             if($mode == Field::ADD && ($this->isIndex() || $this->isRequired($mode)) && !$this->hasFlag(Field::AUTOKEY))
             {
-                throw new FormException($this, "Field was not a number");
+                throw new FormException($this, Language::get("error_notnumber"));
             }
             
             if($mode == Field::EDIT && $this->isIndex() && !is_numeric($this->getValue()))
             {
-                throw new FormException($this, "Field was not a number");
+                throw new FormException($this, Language::get("error_notnumber"));
             }
         }
     }

@@ -50,13 +50,13 @@ class SlideshowComponent extends Component
                     case 1:
                     case 2:
                     case 3:
-                        $error = "Filesize is to large";
+                        $error = Language::get("error_filetolarge");
                         break;
                     case 4:
-                        $error = "No file selected";
+                        $error = Language::get("error_nofileselect");
                         break;
                     case 5:
-                        $error = "Cannot write file to disk";
+                        $error = Language::get("error_cennotwrite");
                         break;
                 }
                 
@@ -70,7 +70,7 @@ class SlideshowComponent extends Component
                 }
                 else
                 {
-                    $e = new InvalidFormException($request, "/".Config::get('slideshow_imageadd', 'slideshow_imageadd', 'admin'));
+                    $e = new InvalidFormException(array((object) $request), "/".Config::get('slideshow_imageadd', 'slideshow_imageadd', 'admin'), "slideshow.images");
                     $e->addInvalidField('image_image', $error);
                     throw $e;
                 }
@@ -129,13 +129,13 @@ class SlideshowComponent extends Component
                         case 1:
                         case 2:
                         case 3:
-                            $error = "Filesize is to large";
+                            $error = Language::get("error_filetolarge");
                             break;
                         case 4:
-                            $error = "No file selected";
+                            $error = Language::get("error_nofileselect");
                             break;
                         case 5:
-                            $error = "Cannot write file to disk";
+                            $error = Language::get("error_cennotwrite");
                             break;
                     }
                     
@@ -149,7 +149,7 @@ class SlideshowComponent extends Component
                     }
                     else
                     {
-                        $e = new InvalidFormException($request, "/".Config::get('slideshow_imageadd', 'slideshow_imageadd', 'admin'));
+                        $e = new InvalidFormException(array((object) $request), "/".Config::get('slideshow_imageadd', 'slideshow_imageadd', 'admin'), "slideshow.images");
                         $e->addInvalidField('image_image', $error);
                         throw $e;
                     }
