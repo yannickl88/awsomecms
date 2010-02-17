@@ -10,7 +10,7 @@
         {/foreach}
     </script>
 {/if}
-<h2>{"addto"|text|capitalize} {"comp_slideshow"|text}</h2>
+<h2>{"addto"|text|ucfirst} {"comp_slideshow"|text}</h2>
 <form method="post" action="/" class="admin_form admin_gallery_add" enctype="multipart/form-data">
     <div class="admin_form_row">
         <div class="admin_form_label">
@@ -33,12 +33,12 @@
             <label for="image_image">{"field_image_size"|text}:</label>
         </div>
         <div class="admin_form_field">
-            <input type="radio" name="image_size" id="image_size" value="1"/>{"small"|text|capitalize}
-            <input type="radio" name="image_size" id="image_size" value="2" checked="checked"/>{"large"|text|capitalize}
+            <input type="radio" name="image_size" id="image_size" value="1"/>{"small"|text|ucfirst}
+            <input type="radio" name="image_size" id="image_size" value="2" checked="checked"/>{"large"|text|ucfirst}
         </div>
     </div>
     <div class="admin_form_row admin_form_submit">
-        <input type="submit" value="{"save"|text|capitalize}" id="user_submit" class="admin_form_submit">
+        <input type="submit" value="{"save"|text|ucfirst}" id="user_submit" class="admin_form_submit">
     </div>
     <input type="hidden" name="action" value="add_image" />
     <input type="hidden" name="component" value="slideshow" />

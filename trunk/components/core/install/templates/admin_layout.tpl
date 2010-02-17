@@ -111,7 +111,7 @@
         </div>
         <div id="mainWrapper">
             <div id="mainHeader">
-                <h1>{"welcome"|text} {$USR.user_name|capitalize}</h1>
+                <h1>{"welcome"|text} {$USR.user_name|ucfirst}</h1>
             </div>
             <div id="contentWrapper">
                 {foreach from=$NOTIFICATIONS item=note key=id}

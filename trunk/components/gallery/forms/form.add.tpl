@@ -10,7 +10,7 @@
         {/foreach}
     </script>
 {/if}
-<h2>{"addto"|text|capitalize} {"comp_gallery"|text}</h2>
+<h2>{"addto"|text|ucfirst} {"comp_gallery"|text}</h2>
 <form method="post" action="/" class="admin_form admin_gallery_add" enctype="multipart/form-data">
     <div class="admin_form_row">
         <div class="admin_form_label">
@@ -34,7 +34,7 @@
         </div>
         <div class="admin_form_field">
             <input type="file" name="image_thumb" id="image_thumb" {if $FORMERROR.record->image_tumb_generate}disabled="disabled"{/if}/>
-            <input type="checkbox" name="image_tumb_generate" id="image_tumb_generate" {if $FORMERROR.record->image_tumb_generate}checked="checked"{/if}/> {"generate"|text|capitalize}
+            <input type="checkbox" name="image_tumb_generate" id="image_tumb_generate" {if $FORMERROR.record->image_tumb_generate}checked="checked"{/if}/> {"generate"|text|ucfirst}
         </div>
     </div>
     <div class="admin_form_row">
@@ -46,7 +46,7 @@
         </div>
     </div>
     <div class="admin_form_row admin_form_submit">
-        <input type="submit" value="{"save"|text|capitalize}" id="user_submit" class="admin_form_submit">
+        <input type="submit" value="{"save"|text|ucfirst}" id="user_submit" class="admin_form_submit">
     </div>
     <input type="hidden" name="action" value="add" />
     <input type="hidden" name="component" value="gallery" />

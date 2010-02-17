@@ -33,21 +33,21 @@
         {foreach from=$components item=component name=components}
             <tr class="row{if $smarty.foreach.components.index % 2 == 1} highlighted{/if}" id="row_{$component->component_name}">
                 <td style="vertical-align: top;">
-                    <i>{$component->component_name|capitalize}</i>
+                    <i>{$component->component_name|ucfirst}</i>
                 </td>
                 <td style="vertical-align: top;" class="updateCell">
                     <img src="/img/admin/{if $component->U2D === "???"}unknown{elseif $component->U2D}ok{else}fail{/if}-icon.png" /> 
-                    {if $component->U2D === "???"}{"unknown"|text}{elseif $component->U2D}{"uptodate"|text}{else}<button type="button" onclick="updateComponent('{$component->component_name}');">{"update"|text|capitalize}</button>{/if}
+                    {if $component->U2D === "???"}{"unknown"|text}{elseif $component->U2D}{"uptodate"|text}{else}<button type="button" onclick="updateComponent('{$component->component_name}');">{"update"|text|ucfirst}</button>{/if}
                 </td>
                 <td style="vertical-align: top;">
                     {$component->info.desc}
                 </td>
                 <td style="vertical-align: top;" class="accessCell">
                     <div style="padding-left: 18px;">
-                        <a href="javascript: void(0);" class="s admin_component_access{if !$component->component_auth|hasflag:$auth.auth_select} selected{/if}" onclick="toggleAccess('auth_{$component->component_name}s', this);" title={"select"|text|capitalize}></a>
-                        <a href="javascript: void(0);" class="i admin_component_access{if !$component->component_auth|hasflag:$auth.auth_insert} selected{/if}" onclick="toggleAccess('auth_{$component->component_name}i', this);" title="{"insert"|text|capitalize}"></a>
-                        <a href="javascript: void(0);" class="u admin_component_access{if !$component->component_auth|hasflag:$auth.auth_update} selected{/if}" onclick="toggleAccess('auth_{$component->component_name}u', this);" title="{"update"|text|capitalize}"></a>
-                        <a href="javascript: void(0);" class="d admin_component_access{if !$component->component_auth|hasflag:$auth.auth_delete} selected{/if}" onclick="toggleAccess('auth_{$component->component_name}d', this);" title="{"delete"|text|capitalize}"></a>
+                        <a href="javascript: void(0);" class="s admin_component_access{if !$component->component_auth|hasflag:$auth.auth_select} selected{/if}" onclick="toggleAccess('auth_{$component->component_name}s', this);" title={"select"|text|ucfirst}></a>
+                        <a href="javascript: void(0);" class="i admin_component_access{if !$component->component_auth|hasflag:$auth.auth_insert} selected{/if}" onclick="toggleAccess('auth_{$component->component_name}i', this);" title="{"insert"|text|ucfirst}"></a>
+                        <a href="javascript: void(0);" class="u admin_component_access{if !$component->component_auth|hasflag:$auth.auth_update} selected{/if}" onclick="toggleAccess('auth_{$component->component_name}u', this);" title="{"update"|text|ucfirst}"></a>
+                        <a href="javascript: void(0);" class="d admin_component_access{if !$component->component_auth|hasflag:$auth.auth_delete} selected{/if}" onclick="toggleAccess('auth_{$component->component_name}d', this);" title="{"delete"|text|ucfirst}"></a>
                         <span style="display: none;">
                         <input name="auth_{$component->component_name}[]" id="auth_{$component->component_name}s" value="{$auth.auth_select}" type="checkbox"{if !$component->component_auth|hasflag:$auth.auth_select} checked="checked"{/if} />
                         <input name="auth_{$component->component_name}[]" id="auth_{$component->component_name}i" value="{$auth.auth_insert}" type="checkbox"{if !$component->component_auth|hasflag:$auth.auth_insert} checked="checked"{/if} /> 
@@ -60,7 +60,7 @@
         {/foreach}
     </table>
     <div class="admin_form_row admin_form_submit">
-        <input type="submit" value="{"save"|text|capitalize}" id="component_submit" class="admin_form_submit">
+        <input type="submit" value="{"save"|text|ucfirst}" id="component_submit" class="admin_form_submit">
     </div>
     <input type="hidden" name="action" value="components" />
     <input type="hidden" name="component" value="core" />
@@ -76,7 +76,7 @@
     {foreach from=$uninstalledComponents item=component name=components}
         <tr class="row" {if $smarty.foreach.components.index % 2 == 0}style="background-color: #F1F8FF;"{/if} id="row_{$component->component_name}">
             <td style="vertical-align: top;">
-                <i>{$component->component_name|capitalize}</i>
+                <i>{$component->component_name|ucfirst}</i>
             </td>
             <td style="vertical-align: top; padding-left: 17px;" class="updateCell">
                 <button type="button" onclick="installComponent('{$component->component_name}');">{"install"|text}</button>
