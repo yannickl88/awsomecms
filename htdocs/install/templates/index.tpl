@@ -53,7 +53,7 @@
                                 <div class="descWrapper">
                                     <label id="label_{$key}" for="component_{$key}">{$component.name}</label>
                                     {if $component.hasdependencies}
-                                        <span class="dependson">(Depends on: {$component.dependson_string|ucfirst:true})</span>
+                                        <span class="dependson">(Depends on: {$component.dependson_string|capitalize})</span>
                                         <script type="text/javascript">
                                             {foreach from=$component.dependson item=dependson}
                                                 markDependecies('{$key}', '{$dependson}');
