@@ -1,3 +1,5 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" 
+   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html>
     <head>
         <title>Install</title>
@@ -37,7 +39,7 @@
                     <img src='/install/img/loader.gif' id="check2"/> MySQL 5.0 or higher <br />
                     <img src='/install/img/loader.gif' id="check3"/> GDMod <br />
                     <br />
-                    <a href="javascript: void(0)" onclick="action_step2();">Re-check</a>
+                    <a href="#" onclick="action_step2(); return false;">Re-check</a>
                 </div>
                 <div id="step3" style="display: none;">
                     Selected the components you want to install: <br />
