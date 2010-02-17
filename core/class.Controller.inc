@@ -266,8 +266,13 @@ class Controller
                 
                 $this->smarty->assign("FORMERROR", array("record" => $record[0], "fields" => $e->getInvalidFields()));
                 
-                Table::init($e->getTable())
-                    ->setErrorRecord($record[0], $e->getInvalidFields());
+                $table = $e->getTable();
+                
+                if(!empty($table))
+                {
+                    Table::init($e->getTable())
+                        ->setErrorRecord($record[0], $e->getInvalidFields());
+                }
             }
             else
             {

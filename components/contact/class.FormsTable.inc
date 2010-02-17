@@ -52,7 +52,13 @@ class FormsTable extends Table
      * (non-PHPdoc)
      * @see core/Table#select($query, $data)
      */
-    protected function select($query, $data = null) {}
+    protected function select($query, $data = null)
+    {
+        if($data)
+        {
+            $query->whereWhenSet("form_name", $data->form_name);
+        }
+    }
     /**
      * (non-PHPdoc)
      * @see core/Table#insert($query, $data)
@@ -68,4 +74,16 @@ class FormsTable extends Table
      * @see core/Table#delete($query, $data)
      */
     protected function delete($query, $data = null) {}
+    
+    public function doSelect()
+    {
+        $result = parent::doSelect();
+        
+        $result->getRow()->fields = Table::init("contact.formfields")
+            ->setRequest($result->reset()->getRow())
+            ->doSelect()
+            ->getRows();
+            
+        return $result->reset();
+    }
 }

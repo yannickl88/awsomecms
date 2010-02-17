@@ -52,7 +52,19 @@ class ImagesTable extends Table
      * (non-PHPdoc)
      * @see core/Table#select($query, $data)
      */
-    protected function select($query, $data = null) {}
+    protected function select($query, $data = null)
+    {
+        $query->orderBy("image_id", "desc");
+        
+        if($data)
+        {
+            if($data->max)
+            {
+                $query->limit($data->max);
+            }
+            $query->whereWhenSet("image_tag", $data->image_tag);
+        }
+    }
     /**
      * (non-PHPdoc)
      * @see core/Table#insert($query, $data)

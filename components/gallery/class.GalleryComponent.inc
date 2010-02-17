@@ -166,22 +166,25 @@ class GalleryComponent extends Component
     {
         if($request['method'] == 'post')
         {
-            $record = Table::init("gallery.images")
+            $records = Table::init("gallery.images")
                 ->setRequest((object) $request)
                 ->doSelect()
-                ->getRow();
+                ->getRows();
             
-            $id = $request['image_id'];
+            //delete for when miltiple images were given
+            foreach($records as $record)
+            {
+                //remove old one
+                if(file_exists(Config::get('websiteroot', '.').$record->image_url))
+                {
+                    @unlink(Config::get('websiteroot', '.').'/'.$record->image_url);
+                }
+                if(file_exists(Config::get('websiteroot', '.').$record->image_urlthumb))
+                {
+                    @unlink(Config::get('websiteroot', '.').$record->image_urlthumb);
+                }
+            }
             
-            //remove old one
-            if(file_exists(Config::get('websiteroot', '.').$record->image_url))
-            {
-                @unlink(Config::get('websiteroot', '.').'/'.$record->image_url);
-            }
-            if(file_exists(Config::get('websiteroot', '.').$record->image_urlthumb))
-            {
-                @unlink(Config::get('websiteroot', '.').$record->image_urlthumb);
-            }
             Table::init("gallery.images")
                 ->setRequest((object) $request)
                 ->doDelete();

@@ -125,10 +125,10 @@
     
     function addImage()
     {
-        var select = $('#image_groups');
+        var selected = $('#image_groups').val();
         
-        select.find("option").each(function(key, value) {
-            if($(value).val() == select.val())
+        $('#image_groups').find("option").each(function(key, value) {
+            if($(value).val() === selected)
             {
                 var html = "";
                 

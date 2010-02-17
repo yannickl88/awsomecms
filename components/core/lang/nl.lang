@@ -20,7 +20,7 @@
     "select":               "update",
     "insert":               "insert",
     "update":               "update",
-    "delete":               "wissen",
+    "delete":               "verwijderen",
     "layoutmapping":        "Layout mappings",
     "url":                  "URL",
     "layout":               "Layout"

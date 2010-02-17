@@ -37,7 +37,7 @@ class GroupsTable extends Table
         $privField = new PrivlilegesField("group_privileges", Field::HIDE_VIEW);
         $privField->setDefaultValue(0);
         $this->addField($privField, 2);
-        $this->addField(new UsersselectField("group_users", Field::DUMMY), 3);
+        $this->addField(new UsersselectField("group_users", Field::DUMMY|Field::HIDE_VIEW), 3);
         $this->setTitle("[group_name]");
         
         $this->setURLs(

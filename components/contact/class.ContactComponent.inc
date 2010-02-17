@@ -179,10 +179,7 @@ class ContactComponent extends Component
                 ->setRequest((object) array("form_id" => $request['form_id']))
                 ->doSelect()
                 ->getRow();
-            $fields = Table::init("contact.formfields")
-                ->setRequest((object) array("form_id" => $request['form_id']))
-                ->doSelect()
-                ->getRows();
+            $fields = $form->fields;
                 
             $to         = $form->form_to;
             $bcc        = $form->form_bcc;
@@ -196,7 +193,7 @@ class ContactComponent extends Component
                 $this->redirect($form->form_thanks);
             }
             
-            $e = new InvalidFormException(array((object) $request), $request['url'], "", "Password do not match");
+            $e = new InvalidFormException(array((object) $request), "/".$request['url'], "", "Password do not match");
             
             foreach($fields as $field)
             {

@@ -51,6 +51,8 @@ class FormfieldsTable extends Table
      */
     protected function select($query, $data = null) 
     {
+        $query->orderBy("field_id");
+        
         if($data)
         {
             $query->whereWhenSet("field_form", $data->form_id);
