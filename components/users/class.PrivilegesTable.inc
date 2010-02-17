@@ -30,7 +30,6 @@ class PrivilegesTable extends Table
         parent::__construct("privileges");
         $this->assign("users");
         
-        $this->addField(new IntField("privilege_id", Field::INDEX|Field::AUTOKEY));
         $this->addField(new Field("privilege_name", Field::FORCEUPDATE));
         $this->addField(new IntField("privilege_int", Field::HIDE|Field::OPTIONAL));
         $this->addField(new IntField("privilege_locked", Field::HIDE|Field::OPTIONAL));

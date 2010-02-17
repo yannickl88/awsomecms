@@ -73,11 +73,18 @@ class Language
         
         foreach($components as $component)
         {
-            $langArr = json_decode(file_get_contents($component->component_path."/lang/{$lang}.lang"));
-            
-            if($langArr)
+            if(file_exists($component->component_path."/lang/{$lang}.lang"))
             {
-                $this->lang[$lang] = array_merge($this->lang[$lang], (array) $langArr);
+                $langArr = json_decode(file_get_contents($component->component_path."/lang/{$lang}.lang"));
+                
+                if($langArr)
+                {
+                    $this->lang[$lang] = array_merge($this->lang[$lang], (array) $langArr);
+                }
+            }
+            else
+            {
+                $this->lang[$lang] = array_merge($this->lang[$lang], array());
             }
         }
     }

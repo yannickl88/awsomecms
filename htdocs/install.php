@@ -244,24 +244,19 @@ function installComponents()
             }
             
             //insert component into the database
-            $info = parse_ini_file($dir.'/info.ini', true);
-            $requests = '';
-            if($info['requests'])
-            {
-                $requests = implode(';', $info['requests']);
-            }
+            $ini = parse_ini_file($dir.'/info.ini', true);
+            $info = parseInfoFile($dir.'/'.$component.".info");
             $patchlevel = getHighestPatchLevel($dir.'/db');
             
             $dir = addslashes($dir);
             
-            $version = $versions->components->$component;
+            $version = $info["atlines"]["version"];
             
             $db->query(
                 "INSERT INTO 
                     `components` 
                 (
                     `component_name`, 
-                    `component_requests`, 
                     `component_path`, 
                     `component_auth`,
                     `component_patchlevel`,
@@ -270,7 +265,6 @@ function installComponents()
                 VALUES
                 (
                     '{$component}',
-                    '{$requests}',
                     '{$dir}',
                     15,
                     {$patchlevel},
@@ -279,9 +273,9 @@ function installComponents()
             );
             
             //install the hooks
-            if($info['hooks'])
+            if($ini['hooks'])
             {
-                foreach($info['hooks'] as $hook)
+                foreach($ini['hooks'] as $hook)
                 {
                     $hook_function = explode("->", $hook);
                     $hook_target = explode(":", $hook_function[0]);

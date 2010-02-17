@@ -337,6 +337,7 @@ if($env != 'update')
     output(".", true);
     rcopy($location."htdocs{$ds}install", $location."RELEASES{$ds}tmp{$ds}htdocs{$ds}install");
     rcopy($location."htdocs{$ds}install.php", $location."RELEASES{$ds}tmp{$ds}htdocs{$ds}install.php");
+    rcopy($location."htdocs{$ds}index.php", $location."RELEASES{$ds}tmp{$ds}htdocs{$ds}index.php");
     output(".", true);
     rcopy($location.'libs', $location."RELEASES{$ds}tmp{$ds}libs");
     output(".", true);
