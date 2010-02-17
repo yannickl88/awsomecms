@@ -170,7 +170,7 @@ function getHightestRevNumber($source)
         $source = realpath($source);
         $result = array();
         
-        exec("svn info -r HEAD {$source}", $result);
+        exec("svn info {$source}", $result);
         $matches = array();
         preg_match('/Last Changed Rev: ([0-9]*)/m', implode("\n", $result), $matches);
         
@@ -344,6 +344,9 @@ if($env != 'update')
     output(".", true);
     rcopy($location.'index.php', $location."RELEASES{$ds}tmp{$ds}index.php");
     output(".", true);
+    output(".", true);
+    rcopy($location.'index.php', $location."RELEASES{$ds}tmp{$ds}cron.php");
+    output(".", true);
 
     if($env != 'release' && $env != 'stable')
     {
@@ -351,12 +354,31 @@ if($env != 'update')
         output(".", true);
     }
     
+    //fetch the version numbers
+    file_put_contents($location."RELEASES{$ds}tmp{$ds}version.info", getHightestRevNumber(array($location."core", $location."docs", $location."libs")));
+    
+    $components = scandir($location."components");
+    
+    foreach($components as $component)
+    {
+        if($component != '.' && $component != '..' && $component != '.svn')
+        {
+            $compversion = getHightestRevNumber($location."components{$ds}{$component}");
+            
+            $infoContent = file_get_contents($location."RELEASES{$ds}tmp{$ds}components{$ds}{$component}{$ds}{$component}.info");
+            $infoContent = preg_replace("/@version: ?([1-9]*)/", "@version:".$compversion, $infoContent);
+            
+            file_put_contents($location."RELEASES{$ds}tmp{$ds}components{$ds}{$component}{$ds}{$component}.info", $infoContent);
+        }
+    }
+    
+    
     //archive
     if($env != 'release')
     {
         $suffix = '-'.$env;
     }
-
+    
     dir2zip($location."RELEASES{$ds}tmp", $location."RELEASES{$ds}AWSOMEcms_v{$version}{$suffix}.zip");
 
     output(".");
@@ -404,6 +426,11 @@ else
             $versions["components"][$component] = getHightestRevNumber($location."components{$ds}{$component}");
             
             rcopy($location."components{$ds}{$component}", $location."RELEASES{$ds}tmp{$ds}{$component}");
+            
+            $infoContent = file_get_contents($location."RELEASES{$ds}tmp{$ds}{$component}{$ds}{$component}.info");
+            $infoContent = preg_replace("/@version: ?([1-9]*)/", "@version:".$versions["components"][$component], $infoContent);
+            file_put_contents($location."RELEASES{$ds}tmp{$ds}{$component}{$ds}{$component}.info", $infoContent);
+            
             dir2zip($location."RELEASES{$ds}tmp{$ds}{$component}", $location."RELEASES{$ds}components{$ds}{$component}.zip");
             output(".", true);
             
