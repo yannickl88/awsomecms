@@ -415,6 +415,11 @@ class CoreComponent extends Component
         
         $this->ajax(true);
     }
+    public function action_getform($smarty, $smartyLoader, $request)
+    {
+        $html = smarty_function_form($request["data"], $smarty);
+        $this->ajax(array("html" => rawurlencode($html)));
+    }
     /**
      * (non-PHPdoc)
      * @see core/Component#registerMenuItems($menu)

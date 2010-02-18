@@ -97,6 +97,7 @@ abstract class Table
     protected $name;
     protected $record;
     protected $request;
+    protected $error;
     protected $errorRecord;
     protected $errorFields;
     protected $title;
@@ -383,12 +384,13 @@ abstract class Table
     /**
     * Set the current error record of the table, this has priority over the current one
     * 
-    * @param array $data
-    * @param array $fields
+    * @param InvalidFormException $error
     * @return Table
     */
-    public function setErrorRecord($data, $fields)
+    public function setError($error)
     {
+        $data = $error->getRecord();
+        
         if(!is_array($data))
         {
             $this->errorRecord = DataContainer::init(array($data));
@@ -398,7 +400,8 @@ abstract class Table
             $this->errorRecord = DataContainer::init($data);
         }
         
-        $this->errorFields = $fields;
+        $this->errorFields = $error->getInvalidFields();
+        $this->error = $error;
         
         foreach($this->fields as $field)
         {
@@ -847,21 +850,9 @@ abstract class Table
      */
     protected function getErrors()
     {
-        if(isset($this->errorFields))
+        if(isset($this->error))
         {
-            $html = "<div class=\"form_error\">\n";
-            $html .= "    ".Language::get("formerror").":\n";
-            $html .= "    <ul id=\"errorlist\">\n";
-            $html .= "    </ul>\n";
-            $html .= "</div>\n";
-            $html .= "<script type='text/javascript'>\n";
-            foreach($this->errorFields as $field => $error)
-            {
-                $html .= "        addFieldError('{$field}', '{$error}');\n";
-            }
-            $html .= "</script>\n";
-            
-            return $html;
+            return "".$this->error;
         }
     }
     /**

@@ -56,7 +56,7 @@ class Notifications
      */
     public static function getInstance()
     {
-        if($_SESSION['notifications'])
+        if(isset($_SESSION['notifications']))
         {
             return unserialize($_SESSION['notifications']);
         }
@@ -278,7 +278,7 @@ class Controller
                     $record = $e->getRecord();
                     
                     Table::init($e->getTable())
-                        ->setErrorRecord($record, $e->getInvalidFields());
+                        ->setError($e);
                 }
             }
             else
