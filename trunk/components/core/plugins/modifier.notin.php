@@ -22,5 +22,9 @@
 */
 function smarty_modifier_notin($element, $array)
 {
-    return !in_array($element, $array);
+    if(is_array($array))
+    {
+        return !in_array($element, $array);
+    }
+    return true;
 }

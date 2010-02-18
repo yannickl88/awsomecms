@@ -67,7 +67,7 @@ class GalleryComponent extends Component
             
             if(!$request["image_urlthumb"])
             {
-                $exception = new InvalidFormException(array((object) $request), Config::get('contactadd', 'contactadd', 'admin'), "gallery.images", "The form was not valid");
+                $exception = new InvalidFormException((object) $request, Config::get('contactadd', 'contactadd', 'admin'), "gallery.images", "The form was not valid");
                 $exception->addInvalidField($field, Language::get("error_notfilledin"));
                 die("ERROR");
             }
@@ -343,8 +343,11 @@ class GalleryComponent extends Component
     {
         $valid = true;
         $index = -1;
-        $exception = new InvalidFormException($data, $redirectOnFailure, "gallery.images", "The form was not valid");
-        $exception->setRedirectData(array("image_id" => $data["image_id"]));
+        $exception = new InvalidFormException((object) $data, $redirectOnFailure, "gallery.images", "The form was not valid");
+        if(isset($data["image_id"]))
+        {
+            $exception->setRedirectData(array("image_id" => $data["image_id"]));
+        }
         
         //check if the file did actully upload
         if($_FILES['image_image']['error'] > 0) //uh-oh error

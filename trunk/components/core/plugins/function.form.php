@@ -29,11 +29,11 @@ function smarty_function_form($params, &$smarty)
     $component;
     $table;
     
-    if(isset($params['component']))
+    if(!empty($params['component']))
     {
         $component = $params['component'];
     }
-    else
+    elseif(!empty($params['table']))
     {
         $tableID = explode(".", $params['table']);
         $component = $tableID[0];
@@ -59,8 +59,8 @@ function smarty_function_form($params, &$smarty)
     }
     
     $actionHandler = "action_".$action;
-    $prehook = Config::getInstance()->getHook($tableID[0], $params['form'], "pre");
-    $posthook = Config::getInstance()->getHook($tableID[0], $params['form'], "post");
+    $prehook = Config::getInstance()->getHook($component, $params['form'], "pre");
+    $posthook = Config::getInstance()->getHook($component, $params['form'], "post");
     
     if($componentObject)
     {

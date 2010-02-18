@@ -612,8 +612,16 @@ class SQLRecord
         if($record != null)
         {
             $this->records = $record->fetchAll(PDO::FETCH_OBJ);
-            $this->record = $this->records[0];
             $this->count = $record->rowCount();
+            
+            if($this->count > 0 && isset($this->records[0]))
+            {
+                $this->record = $this->records[0];
+            }
+            else
+            {
+                $this->record = false;
+            }
             $this->insertID = SQL::getInstance()->getPDOInstance()->lastInsertId();
         }
     }

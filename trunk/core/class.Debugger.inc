@@ -18,9 +18,10 @@
  */
 class Debugger
 {
-    const NOTICE    = 1;
-    const WARNING   = 2;
-    const ERROR     = 3;
+    const LOG       = 1;
+    const NOTICE    = 2;
+    const WARNING   = 3;
+    const ERROR     = 4;
     
     private static $instance;
     
@@ -64,7 +65,7 @@ class Debugger
      * @param string $message
      * @param int $level
      */
-    public function log($message, $level = Debugger::NOTICE)
+    public function log($message, $level = Debugger::LOG)
     {
         global $start;
         
@@ -91,6 +92,15 @@ class Debugger
         $this->log($message, Debugger::ERROR);
     }
     /**
+     * Add a notice message
+     * 
+     * @param string $message
+     */
+    public function notice($message)
+    {
+        $this->log($message, Debugger::NOTICE);
+    }
+    /**
      * Converet the debugger to a string representation
      * 
      * @return string
@@ -115,7 +125,7 @@ class Debugger
         global $start;
         $debug = '';
         
-        $baseLevel = Debugger::NOTICE;
+        $baseLevel = Debugger::LOG;
         
         foreach($this->logs as $log)
         {
@@ -144,8 +154,18 @@ class Debugger
                     }
                     
                     break;
+                    break;
+                case Debugger::NOTICE:
+                    $debug .= "<span style='color: #84a60e;' class='debugRow notice'>";
+                    
+                    if($baseLevel < Debugger::NOTICE)
+                    {
+                        $baseLevel = Debugger::NOTICE;
+                    }
+                    
+                    break;
                 default:
-                    $debug .= "<span class='debugRow notice'>";
+                    $debug .= "<span class='debugRow log'>";
                     break;
             }
             
@@ -165,6 +185,9 @@ class Debugger
                 break;
             case Debugger::ERROR:
                 $html .= "<div style='display: block; cursor: pointer; color: #ff0000;' onclick='debug_toggleDebug();'>";
+                break;
+            case Debugger::NOTICE:
+                $html .= "<div style='display: block; cursor: pointer; color: #84a60e;' onclick='debug_toggleDebug();'>";
                 break;
             default:
                 $html .= "<div style='display: block; cursor: pointer;' onclick='debug_toggleDebug();'>";

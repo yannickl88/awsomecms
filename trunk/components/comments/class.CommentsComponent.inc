@@ -35,7 +35,7 @@ class CommentsComponent extends Component
     */
     public function action_reply($smarty, $smartyLoader, $request)
     {
-        if($request['method'] == 'post' && isset($request['comment_hook']))
+        if($request['method'] == 'post')
         {
             $requestObj = Table::init('comments.comments')
                 ->setRecord((object) $request)

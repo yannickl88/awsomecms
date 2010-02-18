@@ -15,6 +15,72 @@
 import('/core/class.InvalidFormException.inc');
 
 /**
+ * Container for dynamic data, this always returnes NULL when a propertie is not found
+ * 
+ * @author Yannick <yannick.l.88@gmail.com>
+ */
+class DataContainer
+{
+    /**
+     * Getter
+     * 
+     * @param mixed $key
+     * @return mixed
+     */
+    public function __get($key)
+    {
+        if(isset($this->$key))
+        {
+            return $this->$key;
+        }
+        
+        return null;
+    }
+    /**
+     * Setter
+     * 
+     * @param mixed $key
+     * @param mixed $value
+     */
+    public function __set($key, $value)
+    {
+        $this->$key = $value;
+    }
+    /**
+     * Wrap an object or an array containing object in the DataContainer
+     * 
+     * @param object $data
+     * @return mixed
+     */
+    public static function init($data)
+    {
+        if(is_array($data))
+        {
+            $dataObj = array();
+            
+            foreach($data as $key => $value)
+            {
+                $dataObj[$key] = self::init($value);
+            }
+            
+            return $dataObj;
+        }
+        else if(is_object($data))
+        {
+            $dataObj = new DataContainer();
+            
+            foreach($data as $key => $value)
+            {
+                $dataObj->$key = $value;
+            }
+            
+            return $dataObj;
+        }
+        
+        return $data;
+    }
+}
+/**
  * Abstract class that handels all the information about a table
  * 
  * @author Yannick <yannick.l.88@gmail.com>
@@ -272,13 +338,12 @@ abstract class Table
         {
             if(!is_array($data))
             {
-                $this->record = array($data);
+                $this->record = DataContainer::init(array($data));
             }
             else
             {
-                $this->record = $data;
+                $this->record = DataContainer::init($data);
             }
-            
             
             foreach($this->fields as $field)
             {
@@ -300,11 +365,11 @@ abstract class Table
         {
             if(!is_array($data))
             {
-                $this->request = array($data);
+                $this->request = DataContainer::init(array($data));
             }
             else
             {
-                $this->request = $data;
+                $this->request = DataContainer::init($data);
             }
             
             foreach($this->fields as $field)
@@ -324,13 +389,13 @@ abstract class Table
     */
     public function setErrorRecord($data, $fields)
     {
-        if(is_array($data))
+        if(!is_array($data))
         {
-            $this->errorRecord = array((object) $data);
+            $this->errorRecord = DataContainer::init(array($data));
         }
         else
         {
-            $this->errorRecord = array($data);
+            $this->errorRecord = DataContainer::init($data);
         }
         
         $this->errorFields = $fields;
@@ -500,6 +565,7 @@ abstract class Table
         $html .= "    </tr>\n";
         
         $count = 0;
+        $cols = 0;
         foreach($data as $row)
         {
             $class = "admin_table_row";
@@ -929,7 +995,16 @@ abstract class Table
         $valid = true;
         $index = -1;
         
-        $exception = new InvalidFormException($this->record, "/".$redirect, $this->ID, "The form was not valid");
+        if($this->errorRecord)
+        {
+            $record = $this->errorRecord;
+        }
+        else
+        {
+            $record = $this->record;
+        }
+        
+        $exception = new InvalidFormException($record[0], "/".$redirect, $this->ID, "The form was not valid");
         
         foreach($this->fields as $field)
         {

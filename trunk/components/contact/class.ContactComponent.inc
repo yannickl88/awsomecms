@@ -193,7 +193,7 @@ class ContactComponent extends Component
                 $this->redirect($form->form_thanks);
             }
             
-            $e = new InvalidFormException(array((object) $request), "/".$request['url'], "", "Password do not match");
+            $e = new InvalidFormException((object) $request, "/".$request['url'], "", "Password do not match");
             
             foreach($fields as $field)
             {

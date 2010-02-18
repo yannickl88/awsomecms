@@ -1,15 +1,4 @@
-{if $FORMERROR}
-    <div class="form_error">
-        The form was not filled in correctly. Please check the following fields:
-        <ul id="errorlist">
-        </ul>
-    </div>
-    <script type='text/javascript'>
-        {foreach from=$FORMERROR.fields key=field item=error}
-            addFieldError('{$field}', '{$error}');
-        {/foreach}
-    </script>
-{/if}
+{if $FORMERROR}{$FORMERROR}{/if}
 <h2>{"edit"|text|ucfirst} {$record->image_title}</h2>
 <form method="post" action="/" class="admin_form admin_gallery_add" enctype="multipart/form-data">
     <div class="admin_form_row">

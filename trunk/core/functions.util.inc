@@ -79,13 +79,13 @@ function handleError($errno, $errstr, $errfile, $errline)
         $debugger->error("There was an error in '{$errfile}' at line {$errline}");
         $debugger->error($errstr);
     }
-    if(Config::get("debug", 0, "debug") > 1 && ($errno == E_WARNING || $errno == E_CORE_WARNING || $errno == E_USER_WARNING))
+    if($errno == E_WARNING || $errno == E_CORE_WARNING || $errno == E_USER_WARNING)
     {
-        $debugger->warning("{$errstr} '{$errfile}:{$errline}'");
+        $debugger->warning("{$errstr} '{$errfile}' @line {$errline}");
     }
-    if(Config::get("debug", 0, "debug") > 1 && ($errno == E_CORE_NOTICE || $errno == E_USER_NOTICE))
+    if($errno == E_USER_NOTICE || $errno == E_NOTICE)
     {
-        $debugger->log("{$errstr} '{$errfile}:{$errline}'");
+        $debugger->notice("{$errstr} '{$errfile}' @line {$errline}");
     }
     
     if($errno == E_ERROR || $errno == E_USER_ERROR || $errno == E_CORE_ERROR)
@@ -179,6 +179,15 @@ function parseInfoFile($file, $component)
             {
                 $tagName = explode(",", $line);
                 
+                if(!isset($tagName[0]))
+                {
+                    $tagName[0] = "";
+                }
+                if(!isset($tagName[1]))
+                {
+                    $tagName[1] = "";
+                }
+                
                 while(count($tagName) > 2)
                 {
                     
@@ -192,7 +201,7 @@ function parseInfoFile($file, $component)
                     "params" => array(),
                 );
                 
-                while($data[$currentLine][0] == " ")
+                while(isset($data[$currentLine]) && $data[$currentLine][0] == " ")
                 {
                     $data[$currentLine] = trim($data[$currentLine]);
                     
@@ -211,6 +220,10 @@ function parseInfoFile($file, $component)
                     $line2 = explode(",",trim($data[$currentLine]));
                     $currentLine++;
                     
+                    if(empty($line2[1]))
+                    {
+                        $line2[1] = "";
+                    }
                     $tag['params'][] = array(array(substr(trim($line), 1, -1), $desc), array(ucfirst($line2[0]), trim($line2[1])));
                 }
                 $result['tags'][] = $tag;
@@ -219,13 +232,18 @@ function parseInfoFile($file, $component)
             {
                 $tagName = explode(",", $line);
                 
+                if(empty($tagName[1]))
+                {
+                    $tagName[1] = "";
+                }
+                
                 $tag = array(
                     "name" => trim($tagName[0]),
                     "desc" => trim($tagName[1]),
                     "params" => array(),
                 );
                 
-                while($data[$currentLine][0] == " ")
+                while(isset($data[$currentLine]) && $data[$currentLine][0] == " ")
                 {
                     $data[$currentLine] = trim($data[$currentLine]);
                     
@@ -244,6 +262,10 @@ function parseInfoFile($file, $component)
                     $line2 = explode(",",trim($data[$currentLine]));
                     $currentLine++;
                     
+                    if(empty($line2[1]))
+                    {
+                        $line2[1] = "";
+                    }
                     $tag['params'][] = array(array(substr(trim($line), 1, -1), $desc), array(ucfirst($line2[0]), trim($line2[1])));
                 }
                 $result['modifiers'][] = $tag;
@@ -281,11 +303,14 @@ function getActions($component)
     $componentObj = Component::init($component);
     $methods = get_class_methods($componentObj);
     
-    foreach($methods as $method)
+    if($methods)
     {
-        if(strpos($method, "action") === 0)
+        foreach($methods as $method)
         {
-            $actions[$component.".".$method] = $method;
+            if(strpos($method, "action") === 0)
+            {
+                $actions[$component.".".$method] = $method;
+            }
         }
     }
     

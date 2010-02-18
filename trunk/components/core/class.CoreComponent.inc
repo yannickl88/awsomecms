@@ -37,7 +37,7 @@ class CoreComponent extends Component
     public function action_index($smarty, $smartyLoader, $request)
     {
         //check for logout
-        if($_GET['logout'] === 'true')
+        if(isset($_GET['logout']) && $_GET['logout'] === 'true')
         {
             $authComponent = Component::init(Config::get("component", "core", "auth"));
             $authComponent->auth_logout();
@@ -64,9 +64,20 @@ class CoreComponent extends Component
      */
     public function action_session($smarty, $smartyLoader, $request)
     {
+        if(!isset($_GET['url']))
+        {
+            $_GET['url'] = "";
+        }
         $smarty->assign("URL", $_GET['url']);
         $smarty->assign("isADMIN", (preg_match('/^'.preg_quote(Config::get('location', 'admin/', 'admin'), '/').'(.*?)/si', $_GET['url'])) === 1);
-        $smarty->assign("USR", $_SESSION['usr']);
+        if(!isset($_SESSION['usr']))
+        {
+            $smarty->assign("USR", null);
+        }
+        else
+        {
+            $smarty->assign("USR", $_SESSION['usr']);
+        }
         $smarty->assign("HASDOC", file_exists(Config::get("websiteroot", "/")."/doc.php"));
     }
     /**
@@ -263,7 +274,7 @@ class CoreComponent extends Component
                 $versions = json_decode(file_get_contents("{$updateURL}/version.json"));
             }
             //check if the framework is up to date
-            $smarty->assign("frameworkU2D", (file_exists(getFrameworkRoot()."/version.info") && trim(file_get_contents(getFrameworkRoot()."/version.info")) == trim($versions->framework)));
+            $smarty->assign("frameworkU2D", (file_exists(getFrameworkRoot()."/version.info") && isset($versions->framework) && trim(file_get_contents(getFrameworkRoot()."/version.info")) == trim($versions->framework)));
             
             $components = Config::getInstance()->getComponenets();
             
@@ -282,12 +293,12 @@ class CoreComponent extends Component
                     }
                     else
                     {
-                        $components[$component->component_name]->U2D = (trim($extVersions->$component_name) == $component->component_version);
+                        $components[$component->component_name]->U2D = (isset($versions->components->$component_name) && trim($extVersions->$component_name) == $component->component_version);
                     }
                 }
                 else
                 {
-                    $components[$component->component_name]->U2D = (trim($versions->components->$component_name) == $component->component_version);
+                    $components[$component->component_name]->U2D = (isset($versions->components->$component_name) && trim($versions->components->$component_name) == $component->component_version);
                 }
                 
                 $components[$component->component_name]->info = parseInfoFile($component->component_path."/{$component_name}.info", $component_name);
