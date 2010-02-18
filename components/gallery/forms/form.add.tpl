@@ -1,15 +1,4 @@
-{if $FORMERROR}
-    <div class="form_error">
-        The form was not filled in correctly. Please check the following fields:
-        <ul id="errorlist">
-        </ul>
-    </div>
-    <script>
-        {foreach from=$FORMERROR.fields key=field item=error}
-            addFieldError('{$field}', '{$error}');
-        {/foreach}
-    </script>
-{/if}
+{if $FORMERROR}{$FORMERROR}{/if}
 <h2>{"addto"|text|ucfirst} {"comp_gallery"|text}</h2>
 <form method="post" action="/" class="admin_form admin_gallery_add" enctype="multipart/form-data">
     <div class="admin_form_row">
@@ -17,7 +6,7 @@
             <label for="image_title">{"field_image_title"|text}:</label>
         </div>
         <div class="admin_form_field">
-            <input type="text" name="image_title" id="image_title" value="{$FORMERROR.record->image_title}"/>
+            <input type="text" name="image_title" id="image_title"/>
         </div>
     </div>
     <div class="admin_form_row">
@@ -33,8 +22,8 @@
             <label for="image_thumb">{"field_image_thumb"|text}:</label>
         </div>
         <div class="admin_form_field">
-            <input type="file" name="image_thumb" id="image_thumb" {if $FORMERROR.record->image_tumb_generate}disabled="disabled"{/if}/>
-            <input type="checkbox" name="image_tumb_generate" id="image_tumb_generate" {if $FORMERROR.record->image_tumb_generate}checked="checked"{/if}/> {"generate"|text|ucfirst}
+            <input type="file" name="image_thumb" id="image_thumb"/>
+            <input type="checkbox" name="image_tumb_generate" id="image_tumb_generate"/> {"generate"|text|ucfirst}
         </div>
     </div>
     <div class="admin_form_row">
@@ -42,7 +31,7 @@
             <label for="image_tag">{"field_image_tag"|text}:</label>
         </div>
         <div class="admin_form_field">
-            <input type="text" name="image_tag" id="image_tag" value="{$FORMERROR.record->image_tag}"/>
+            <input type="text" name="image_tag" id="image_tag""/>
         </div>
     </div>
     <div class="admin_form_row admin_form_submit">
@@ -80,6 +69,8 @@
         $("#image_tumb_generate").change(function(e) {
             toggleDisabled(this, 'image_thumb');
         });
+        //check if it was already set somehow
+        $("#image_thumb").attr("disabled", ($("#image_tumb_generate").val() == "on")? "disabled" : "");
     });
     {/literal}
 </script>

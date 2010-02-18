@@ -1,15 +1,4 @@
-{if $FORMERROR}
-    <div class="form_error">
-        The form was not filled in correctly. Please check the following fields:
-        <ul id="errorlist">
-        </ul>
-    </div>
-    <script type='text/javascript'>
-        {foreach from=$FORMERROR.fields key=field item=error}
-            addFieldError('{$field}', '{$error}');
-        {/foreach}
-    </script>
-{/if}
+{if $FORMERROR}{$FORMERROR}{/if}
 <form method="post" action="/" class="form contact_send">
     {foreach from=$contactform->fields item=row}
         <div class="form_row">
@@ -19,15 +8,15 @@
             <div class="form_field">
                 {assign var=fieldcode value=$row->field_code}
                 {if $row->field_type == 1}
-                    <input type="text" name="{$fieldcode}" id="{$fieldcode}" value="{$FORMERROR.record->$fieldcode}"/>
+                    <input type="text" name="{$fieldcode}" id="{$fieldcode}"/>
                 {elseif $row->field_type == 2}
                     <input type="password" name="{$fieldcode}" id="{$fieldcode}"/>
                 {elseif $row->field_type == 3}
-                    <textarea name="{$fieldcode}" id="{$fieldcode}" rows="5" cols="30">{$FORMERROR.record->$fieldcode}</textarea>
+                    <textarea name="{$fieldcode}" id="{$fieldcode}" rows="5" cols="30"></textarea>
                 {elseif $row->field_type == 4}
                     <select name="{$fieldcode}" id="{$fieldcode}">
-                        <option {if $FORMERROR.record.$fieldcode == 'Male'}selected="selected"{/if}>Male</option>
-                        <option {if $FORMERROR.record.$fieldcode == 'Female'}selected="selected"{/if}>Female{$FORMERROR.record.$fieldcode}</option>
+                        <option>Male</option>
+                        <option>Female</option>
                     </select>
                 {/if}
             </div>

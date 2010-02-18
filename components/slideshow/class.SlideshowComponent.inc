@@ -70,7 +70,7 @@ class SlideshowComponent extends Component
                 }
                 else
                 {
-                    $e = new InvalidFormException(array((object) $request), "/".Config::get('slideshow_imageadd', 'slideshow_imageadd', 'admin'), "slideshow.images");
+                    $e = new InvalidFormException((object) $request, "/".Config::get('slideshow_imageadd', 'slideshow_imageadd', 'admin'), "slideshow.images");
                     $e->addInvalidField('image_image', $error);
                     throw $e;
                 }
@@ -149,7 +149,7 @@ class SlideshowComponent extends Component
                     }
                     else
                     {
-                        $e = new InvalidFormException(array((object) $request), "/".Config::get('slideshow_imageadd', 'slideshow_imageadd', 'admin'), "slideshow.images");
+                        $e = new InvalidFormException((object) $request, "/".Config::get('slideshow_imageadd', 'slideshow_imageadd', 'admin'), "slideshow.images");
                         $e->addInvalidField('image_image', $error);
                         throw $e;
                     }

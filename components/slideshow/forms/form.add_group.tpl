@@ -1,15 +1,4 @@
-{if $FORMERROR}
-    <div class="form_error">
-        The form was not filled in correctly. Please check the following fields:
-        <ul id="errorlist">
-        </ul>
-    </div>
-    <script type='text/javascript'>
-        {foreach from=$FORMERROR.fields key=field item=error}
-            addFieldError('{$field}', '{$error}');
-        {/foreach}
-    </script>
-{/if}
+{if $FORMERROR}{$FORMERROR}{/if}
 <h2>{"addto"|text|ucfirst} {"comp_slideshow"|text}</h2>
 <form method="post" action="/" class="admin_form admin_slideshow_group_add" enctype="multipart/form-data">
     <div class="admin_form_row">
@@ -17,7 +6,7 @@
             <label for="group_title">{"field_group_title"|text}:</label>
         </div>
         <div class="admin_form_field">
-            <input type="text" name="group_title" id="group_title" value="{$FORMERROR.record->image_title}"/>
+            <input type="text" name="group_title" id="group_title"/>
         </div>
     </div>
     <div class="admin_form_row">

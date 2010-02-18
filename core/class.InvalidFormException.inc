@@ -124,4 +124,32 @@ class InvalidFormException extends Exception
     {
         $this->redirectData = $redirectData;
     }
+    
+    public function __toString()
+    {
+        $html = "";
+        $html .= "<div class=\"form_error\">\n";
+        $html .= "    ".Language::get("formerror").":\n";
+        $html .= "    <ul id=\"errorlist\">\n";
+        $html .= "    </ul>\n";
+        $html .= "</div>\n";
+        $html .= "<script>\n";
+        $html .= "        $().ready(function(e) {\n";
+        foreach($this->fields as $field => $error)
+        {
+            $html .= "            addFieldError('{$field}', '{$error}');\n";
+        }
+        
+        foreach($this->record as $field => $value)
+        {
+            if($field != "method")
+            {
+                $html .= "            setFieldValue('{$field}', \"".htmlentities($value, ENT_QUOTES)."\");\n";
+            }
+        }
+        $html .= "        });";
+        $html .= "</script>\n";
+        
+        return $html;
+    }
 }

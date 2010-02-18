@@ -108,7 +108,7 @@ class Notifications
      */
     public function hasNotification($key)
     {
-        return isset($this->notifications[$id]);
+        return isset($this->notifications[$key]);
     }
     /**
      * Get the notifications for a give URL
@@ -120,7 +120,7 @@ class Notifications
     {
         $notes = array();
         
-        if(!$url)
+        if(!$url && isset($_GET['URL']))
         {
             $url = $_GET['URL'];
         }
@@ -186,6 +186,9 @@ class Controller
 {
     private static $instance;
     
+    /**
+     * @var Smarty
+     */
     private $smarty;
     private $smartyLoader;
     private $instanciated = false;
@@ -259,19 +262,23 @@ class Controller
             import('/core/class.InvalidFormException.inc');
             
             $e = unserialize($_SESSION['FORMERROR']);
-            
-            if("/".$_GET['url'] == $e->getRedirect())
+            $url = "/";
+            if(isset($_GET['url']))
             {
-                $record = $e->getRecord();
-                
-                $this->smarty->assign("FORMERROR", array("record" => $record[0], "fields" => $e->getInvalidFields()));
+                $url = "/".$_GET['url'];
+            }
+            if(is_a($e, 'InvalidFormException') && $url == $e->getRedirect())
+            {
+                $this->smarty->assign("FORMERROR", $e);
                 
                 $table = $e->getTable();
                 
                 if(!empty($table))
                 {
+                    $record = $e->getRecord();
+                    
                     Table::init($e->getTable())
-                        ->setErrorRecord($record[0], $e->getInvalidFields());
+                        ->setErrorRecord($record, $e->getInvalidFields());
                 }
             }
             else
@@ -280,7 +287,12 @@ class Controller
             }
         }
         
-        $this->smarty->assign("NOTIFICATIONS", Notifications::getInstance()->getNotifications($_GET['url']));
+        $url = "";
+        if(isset($_GET['url']))
+        {
+            $url = $_GET['url'];
+        }
+        $this->smarty->assign("NOTIFICATIONS", Notifications::getInstance()->getNotifications($url));
         //add extra session related things to smarty
         try
         {

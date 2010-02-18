@@ -20,6 +20,7 @@ require_once realpath(dirname(__FILE__).'/functions.util.inc');
 
 import('/core/class.Debugger.inc');
 
+error_reporting(E_ALL);
 set_error_handler("handleError");
 
 import('/libs/Smarty.class.php');

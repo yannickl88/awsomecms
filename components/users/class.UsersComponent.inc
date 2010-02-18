@@ -39,7 +39,7 @@ class UsersComponent extends Component
     {
         //extra custom validation
         $valid = true;
-        $e = new InvalidFormException(array((object) $request), $redirect, "users.users");
+        $e = new InvalidFormException((object) $request, $redirect, "users.users");
         
         if(empty($request['user_name']))
         {
@@ -113,7 +113,7 @@ class UsersComponent extends Component
             //extra custom validation
             if($request['user_pass'] != $request['user_pass2'])
             {
-                $e = new InvalidFormException(array((object) $request), "/".Config::get('usersadd', 'usersadd', 'admin'), "users.users", "Password do not match");
+                $e = new InvalidFormException((object) $request, "/".Config::get('usersadd', 'usersadd', 'admin'), "users.users", "Password do not match");
                 
                 $e->addInvalidField('user_pass', "Passwords do not match");
                 $e->addInvalidField('user_pass2', "");
@@ -144,7 +144,7 @@ class UsersComponent extends Component
             //extra custom validation
             if(!empty($request['user_pass']) && $request['user_pass'] != $request['user_pass2'])
             {
-                $e = new InvalidFormException(array((object) $request), "/".Config::get('usersedit', 'usersedit', 'admin'), "users.users", "Password do not match");
+                $e = new InvalidFormException((object) $request, "/".Config::get('usersedit', 'usersedit', 'admin'), "users.users", "Password do not match");
                 
                 $e->setRedirectData(array("user_id" => $request["user_id"]));
                 $e->addInvalidField('user_pass', Language::get("error_passwordsnomatch"));
@@ -225,7 +225,7 @@ class UsersComponent extends Component
             }
             else
             {
-                $e = new InvalidFormException($request, "/".Config::get('privadd', 'privadd', 'admin'), "users.privileges", "Privilage already exists");
+                $e = new InvalidFormException((object) $request, "/".Config::get('privadd', 'privadd', 'admin'), "users.privileges", "Privilage already exists");
                 $e->addInvalidField('privilege_name', Language::get("error_selectothername"));
                 
                 throw $e;

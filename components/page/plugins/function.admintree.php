@@ -22,8 +22,12 @@
  */
 function smarty_function_admintree($params, &$smarty)
 {
-    $javascript = ''.$params['javascript'];
-    $folderOnly = ($params['folderonly'] === true);
+    $javascript = "";
+    if(isset($params['javascript']))
+    {
+        $javascript = ''.$params['javascript'];
+    }
+    $folderOnly = (isset($params['folderonly']) && $params['folderonly'] === true);
     
     if(isset($params['hideadmin']))
     {
@@ -58,7 +62,7 @@ function smarty_function_admintree($params, &$smarty)
     $tree = $sorter->sort();
 
     $html = '<div class="treeNode" style="padding: 0;">';
-    $html .= pages_renderTree($tree, $theme, true, $javascript, $folderOnly);
+    $html .= pages_renderTree($tree, true, $javascript, $folderOnly);
     $html .= '</div>';
 
     return $html;
@@ -75,7 +79,7 @@ function pages_addToTree($location, $item, &$tree, $parentLoc)
 {
     if($location == '')
     {
-        if($item->page_isfolder == 1)
+        if(isset($item->page_isfolder) && $item->page_isfolder == 1)
         {
             $tree[$item->page_name]['items'] = array();
             $tree[$item->page_name]['location'] = $parentLoc.$item->page_name.'/';
@@ -105,7 +109,7 @@ function pages_addToTree($location, $item, &$tree, $parentLoc)
  * @param boolean $folderOnly
  * @return string
  */
-function pages_renderTree($tree, $theme, $hidden, $javascript = '', $folderOnly = false)
+function pages_renderTree($tree, $hidden, $javascript = '', $folderOnly = false)
 {
     $html = '';
 
@@ -148,7 +152,7 @@ function pages_renderTree($tree, $theme, $hidden, $javascript = '', $folderOnly 
                 {
                     $html .= '<div class="treeNode sub'.$id.'">';
                 }
-                $html .= pages_renderTree($node, $theme, $hidden, $javascript, $folderOnly);
+                $html .= pages_renderTree($node, $hidden, $javascript, $folderOnly);
                 $html .= '</div>';
             }
             else if(!$folderOnly)

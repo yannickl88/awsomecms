@@ -10,8 +10,8 @@
             <div class="component">{$component->component_name}</div>
             <div>
                 <ul>
-                {foreach from=$component->actions item=action key=blaat name=actions}
-                    {if $blaat|notin:$exceptions}
+                {foreach from=$component->actions item=action key=key name=actions}
+                    {if $key|notin:$exceptions}
                     <li class="actionItem">
                         <div class="action">
                             {$action}
@@ -19,7 +19,7 @@
                         <div class="privsWrapper">
                         {foreach from=$privileges item=priv name=privileges}
                             <div class="priv">
-                                <input type="checkbox" name="{$component->component_name}.{$action}[]" value="{$priv->privilege_name}" {if !$priv->privilege_name|notin:$record.$blaat}checked="checked"{/if}/>
+                                <input type="checkbox" name="{$component->component_name}.{$action}[]" value="{$priv->privilege_name}" {if isset($record.$key) and !$priv->privilege_name|notin:$record.$key}checked="checked"{/if}/>
                                 {$priv->privilege_name}
                             </div>
                         {/foreach}

@@ -163,7 +163,12 @@ class Field
     public function setData($record)
     {
         $name = $this->getName();
-        return $this->setValue($record->$name);
+        if(isset($record->$name))
+        {
+            $this->setValue($record->$name);
+        }
+        
+        return $this;
     }
     /**
      * Set the request value of this field with an request object
@@ -174,7 +179,14 @@ class Field
     public function setRequestData($record)
     {
         $name = $this->getName();
-        return $this->setRequestValue($record->$name);
+        if(isset($record->$name))
+        {
+            return $this->setRequestValue($record->$name);
+        }
+        else
+        {
+            return null;
+        }
     }
     /**
      * get the data from this field
@@ -187,7 +199,15 @@ class Field
         if($data != null)
         {
             $name = $this->getName();
-            return $data->$name;
+            
+            if(isset($data->$name))
+            {
+                return $data->$name;
+            }
+            else
+            {
+                return null;
+            }
         }
         else
         {
