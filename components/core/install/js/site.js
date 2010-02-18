@@ -38,13 +38,36 @@ function deleteMultiple(url, key, checkboxes)
  */
 function addFieldError(field, message)
 {
-    $(document).ready(function(e) {
-        $('#'+field).parent().parent().addClass("form_error");
-        if(message != '')
-        {
-            $('#errorlist').append("<li><label for='"+field+"'>"+$('label[for="'+field+'"]').html()+" "+message+"</label></li>");
-        }
-    });
+    $('#'+field).parents(".admin_form_row").addClass("form_error");
+    
+    if(message != '')
+    {
+        $('#errorlist').append("<li><label for='"+field+"'>"+$('label[for="'+field+'"]').html()+" "+message+"</label></li>");
+    }
+    
+    return false;
+}
+function setFieldValue(field, value)
+{
+    var field = $('form *[name='+field+']');
+    
+    switch(field.attr("type"))
+    {
+        case "checkbox":
+            field.attr("checked", (value == "on")? "checked": "");
+            break;
+        case "radio":
+            field.each(function(key, inputField) {
+                $(inputField).attr("checked", (value == $(inputField).val())? "checked": "");
+            });
+            break;
+        case "textarea":
+            field.html(value);
+            break;
+        default:
+            field.val(value);
+    }
+    
     
     return false;
 }
@@ -67,10 +90,13 @@ function getComponent(component, action, data, onsucces)
         onsucces = function(data) {};
     }
     
-    data.action = action;
-    data.component = component;
+    var request = {
+        action: action,
+        component: component,
+        data: data
+    };
     
-    $.get("/", data, onsucces);
+    $.get("/", request, onsucces, "json");
     
     return false;
 }
@@ -96,7 +122,24 @@ function postComponent(component, action, data, onsucces)
     data.action = action;
     data.component = component;
     
-    $.post("/", data, onsucces);
+    $.post("/", data, onsucces, "json");
     
+    return false;
+}
+
+function openForm(component, action)
+{
+    getComponent("core", "getform", {component: component, form: action}, function(data) {
+        $("#formWrapper").html(decodeURIComponent(data.html));
+        $("#formWrapperBackground").css("display", "block");
+    });
+    return false;
+}
+function openTable(table, action)
+{
+    getComponent("core", "getform", {table: table, form: action}, function(data) {
+        $("#formWrapper").html(decodeURIComponent(data.html));
+        $("#formWrapperBackground").css("display", "block");
+    });
     return false;
 }

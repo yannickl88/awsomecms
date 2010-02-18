@@ -36,37 +36,6 @@
                     imageClickClose: false,
                     disableNavbarLinks: true
                 });
-                
-                //load the editor
-                $("form .htmleditor").each(function(key, value) {
-                    var data = {
-                        buttonList: [
-                            'bold',
-                            'italic',
-                            'underline',
-                            'left',
-                            'center',
-                            'right',
-                            'justify',
-                            'ol',
-                            'ul',
-                            'subscript',
-                            'superscript',
-                            'strikethrough',
-                            'removeformat',
-                            'hr',
-                            'image',
-                            'link',
-                            'unlink',
-                            'upload',
-                            'fontFormat',
-                            'xhtml'
-                        ],
-                        xhtml: true
-                    };
-                    
-                    new nicEditor(data).panelInstance(value);
-                });
                 $('#doc').click(function(e) {
                     window.open("/doc.php", "_blank", "width=500,height=600");
                     return false;
@@ -81,8 +50,15 @@
             <span class="header">{"adminlogin"|text}</span>
             {$content}
         </div>
+        {renderdebug}
     {else}
     <body>
+        <div id="formWrapperBackground">
+            <div id="formWrapperBorder">
+                <div id="formWrapper">
+                </div>
+            </div>
+        </div>
         <div id="sidebarWrapper">
             <div id="sidebarHeader">
                 <a href="/admin/" id="headerLink">

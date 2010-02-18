@@ -332,3 +332,29 @@ h1 {
 .notification a {
     color: #7c5a00;
 }
+/* POPUP */
+#formWrapperBackground {
+    height: 100%;
+    width: 100%;
+    position: fixed;
+    background: url(/img/admin/dialog-bg.png);
+    top: 0;
+    left: 0;
+    z-index: 1000;
+    display: none;
+}
+#formWrapperBorder {
+    background: url(/img/admin/dialog-bg.png);
+    width: 650px;
+    margin: 100px auto;
+    padding: 10px;
+    -moz-border-radius: 10px;
+    -webkit-border-radius: 10px;
+}
+#formWrapper {
+    background-color: #ffffff;
+    min-height: 300px;
+    max-height: 500px;
+    overflow: auto;
+    padding: 10px;
+}

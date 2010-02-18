@@ -48,4 +48,43 @@ class TextField extends Field
     {
         return "<textarea name='{$this->getName()}' id='{$this->getName()}' class=\"htmleditor\" rows=\"20\" cols=\"20\">".htmlentities($this->getValue(), ENT_QUOTES)."</textarea>";
     }
+    /**
+     * (non-PHPdoc)
+     * @see core/fields/Field#getJavascript()
+     */
+    public function getJavascript()
+    {
+        return <<<JS
+            //load the editor
+            $("#{$this->getName()}").ready(function() {
+                var data = {
+                    buttonList: [
+                        'bold',
+                        'italic',
+                        'underline',
+                        'left',
+                        'center',
+                        'right',
+                        'justify',
+                        'ol',
+                        'ul',
+                        'subscript',
+                        'superscript',
+                        'strikethrough',
+                        'removeformat',
+                        'hr',
+                        'image',
+                        'link',
+                        'unlink',
+                        'upload',
+                        'fontFormat',
+                        'xhtml'
+                    ],
+                    xhtml: true
+                };
+                
+                new nicEditor(data).panelInstance($("#{$this->getName()}")[0]);
+            });
+JS;
+    }
 }
