@@ -1,9 +1,10 @@
 CREATE TABLE IF NOT EXISTS `privileges` (
+  `privilege_id` int(11) NOT NULL auto_increment,
   `privilege_name` varchar(100) NOT NULL,
   `privilege_int` bigint(20) NOT NULL,
   `privilege_locked` tinyint(4) NOT NULL default '0',
-  PRIMARY KEY  (`privilege_name`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+  PRIMARY KEY  (`privilege_id`)
+) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=2 ;
 
 INSERT INTO `privileges` (`privilege_name`, `privilege_int`, `privilege_locked`) VALUES
 ('admin', 1, 1);
