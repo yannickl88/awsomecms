@@ -16,5 +16,8 @@
     "field_type_text":      "Tekst",
     "field_type_pass":      "Wachtwoord",
     "field_type_area":      "Tekstveld",
-    "field_type_gend":      "Geslacht"
+    "field_type_gend":      "Geslacht",
+    "male":                 "Man",
+    "female":               "Vrouw",
+    "send":                 "versturen"
 }

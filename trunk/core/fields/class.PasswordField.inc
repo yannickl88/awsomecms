@@ -48,4 +48,9 @@ class PasswordField extends Field
     {
         return "<input type='password' name='{$this->getName()}' id='{$this->getName()}' value='".htmlentities($this->getDefaultValue(), ENT_QUOTES)."'/>";
     }
+    
+    public function value2db($value)
+    {
+        return md5($value);
+    }
 }

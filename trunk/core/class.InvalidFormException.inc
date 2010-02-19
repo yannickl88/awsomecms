@@ -144,7 +144,7 @@ class InvalidFormException extends Exception
         {
             if($field != "method")
             {
-                $html .= "            setFieldValue('{$field}', \"".htmlentities($value, ENT_QUOTES)."\");\n";
+                $html .= "            setFieldValue('{$field}', \"".htmlentities("".$value, ENT_QUOTES)."\");\n";
             }
         }
         $html .= "        });";
