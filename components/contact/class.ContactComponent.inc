@@ -193,7 +193,7 @@ class ContactComponent extends Component
                 $this->redirect($form->form_thanks);
             }
             
-            $e = new InvalidFormException((object) $request, "/".$request['url'], "", "Password do not match");
+            $e = new InvalidFormException((object) $request, "/".$request['url'], "");
             
             foreach($fields as $field)
             {
@@ -201,7 +201,7 @@ class ContactComponent extends Component
                 {
                     $valid = false;
                     
-                    $e->addInvalidField($field->field_code, "Field was not filled in");
+                    $e->addInvalidField($field->field_code, Language::get("error_notfilledin"));
                     
                     continue;
                 }

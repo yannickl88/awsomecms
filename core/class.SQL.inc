@@ -643,7 +643,7 @@ class SQLRecord
     {
         $this->index++;
         
-        if($this->records[$this->index-1])
+        if(count($this->records) > 0 && $this->records[$this->index - 1])
         {
             return $this->records[$this->index-1];
         }

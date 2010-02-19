@@ -16,5 +16,8 @@
     "field_type_text":      "Text",
     "field_type_pass":      "Password",
     "field_type_area":      "Textarea",
-    "field_type_gend":      "Gender"
+    "field_type_gend":      "Gender",
+    "male":                 "Male",
+    "female":               "Female",
+    "send":                 "send"
 }

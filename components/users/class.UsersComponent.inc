@@ -306,24 +306,26 @@ class UsersComponent extends Component
         $user_pass = md5($user_pass);
         
         $record = Table::init('users.users')
-            ->doSelect(array("user_name" => $user_name, "user_pass" => $user_pass))
+            ->setRequest((object) array("user_name" => $user_name, "user_pass" => $user_pass))
+            ->doSelect()
             ->getRow();
-        $privilages = $this->auth($record);
         
-        if(count($record) == 1)
+        if(!empty($record))
         {
-            //set the session
-            $_SESSION['usr'] = array();
-            $_SESSION['usr']['user_name'] = $user_name;
-            $_SESSION['usr']['user_pass'] = $user_pass;
-            $_SESSION['usr']['auth'] = $privilages;
+            $privilages = $this->auth($record);
             
-            return true;
+            if(count($record) == 1)
+            {
+                //set the session
+                $_SESSION['usr'] = array();
+                $_SESSION['usr']['user_name'] = $user_name;
+                $_SESSION['usr']['user_pass'] = $user_pass;
+                $_SESSION['usr']['auth'] = $privilages;
+                
+                return true;
+            }
         }
-        else
-        {
-            return false;
-        }
+        return false;
     }
     /**
      * Log a user out

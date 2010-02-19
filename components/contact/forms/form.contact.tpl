@@ -15,15 +15,15 @@
                     <textarea name="{$fieldcode}" id="{$fieldcode}" rows="5" cols="30"></textarea>
                 {elseif $row->field_type == 4}
                     <select name="{$fieldcode}" id="{$fieldcode}">
-                        <option>Male</option>
-                        <option>Female</option>
+                        <option>{"male"|text|ucfirst}</option>
+                        <option>{"female"|text|ucfirst}</option>
                     </select>
                 {/if}
             </div>
         </div>
     {/foreach}
     <div class="form_row form_submit">
-        <input type="submit" value="Send" id="contact_submit" class="form_submit" />
+        <input type="submit" value="{"send"|text|ucfirst}" id="contact_submit" class="form_submit" />
     </div>
     <input type="hidden" name="form_id" value="{$contactform->form_id}" />
     <input type="hidden" name="url" value="{$URL}" />
