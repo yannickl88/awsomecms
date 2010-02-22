@@ -78,7 +78,7 @@ class Debugger
         
         $this->logs[] = array($level, "[{$timestamp}sec] - {$message}");
         
-        if($this->type == Debugger::CLI)
+        if($this->type == Debugger::CLI && $level >= 4)
         {
             echo "{$message} \n";
         }
