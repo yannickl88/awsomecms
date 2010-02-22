@@ -18,6 +18,7 @@ $websiteroot = dirname(__FILE__)."/htdocs";
 require_once $websiteroot.'/../core/init.inc';
 require_once $websiteroot.'/../libs/class.CronParser.inc';
 
+Debugger::getInstance()->setType(Debugger::CLI);
 $components = Config::getInstance()->getComponenets();
 
 $now = $lastrun = time();

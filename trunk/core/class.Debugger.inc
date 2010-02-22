@@ -23,10 +23,14 @@ class Debugger
     const WARNING   = 3;
     const ERROR     = 4;
     
+    const HTML      = "html";
+    const CLI       = "cli";
+    
     private static $instance;
     
     private $logs;
     private $currentRobot;
+    private $type;
     
     /**
      * singelton
@@ -49,6 +53,7 @@ class Debugger
         $this->currentRobot = null;
         $this->logs = array();
         $this->log("Debugger initialized");
+        $this->type = Debugger::HTML;
     }
     /**
      * Set the robot that was used when visiting the site
@@ -72,6 +77,11 @@ class Debugger
         $timestamp = round(microtime(true) - $start, 2);
         
         $this->logs[] = array($level, "[{$timestamp}sec] - {$message}");
+        
+        if($this->type == Debugger::CLI)
+        {
+            echo "{$message} \n";
+        }
     }
     /**
      * Add a warning message
@@ -249,5 +259,10 @@ class Debugger
 STR;
         
         return $html;
+    }
+    
+    public function setType($type)
+    {
+        $this->type = $type;
     }
 }
