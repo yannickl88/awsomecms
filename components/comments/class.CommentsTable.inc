@@ -16,6 +16,7 @@ importField("Field");
 importField("IntField");
 importField("TextField");
 importField("DateField");
+importField("CaptchaField");
 
 /**
  * Comments table, this handels all interaction with the comments table in the database
@@ -37,6 +38,7 @@ class CommentsTable extends Table
         $this->addField(new Field("comment_username"));
         $this->addField(new Field("comment_hook", Field::OPTIONAL|Field::HIDE));
         $this->addField(new DateField("comment_time", Field::HIDE));
+        $this->addField(new CaptchaField("captcha", Field::HIDE));
     }
     /**
      * (non-PHPdoc)
