@@ -13,6 +13,7 @@
  * @version $Revision$
  */
 import('/core/class.Component.inc');
+import('/libs/captcha/securimage.php');
 
 /**
 * Contact component class, this holds all the logic for the contact component
@@ -187,6 +188,7 @@ class ContactComponent extends Component
             
             $valid = true;
             $body = '';
+            $headers = '';
             
             if(empty($to) || empty($subject))
             {
@@ -194,6 +196,14 @@ class ContactComponent extends Component
             }
             
             $e = new InvalidFormException((object) $request, "/".$request['url'], "");
+            $img = new Securimage();
+            
+            if(!$img->check($request['captcha']))
+            {
+                $valid = false;
+                
+                $e->addInvalidField('captcha', Language::get("error_wrongcaptcha"));
+            }
             
             foreach($fields as $field)
             {

@@ -48,11 +48,18 @@ try
     $img = new securimage();
     $img->ttf_file = getFrameworkRoot()."/libs/captcha/AHGBold.ttf";
     
+    //set no caching
+    header("Expires: Mon, 26 Jul 1990 05:00:00 GMT");
+    header("Last-Modified: " . gmdate("D, d M Y H:i:s") . " GMT");
+    header("Cache-Control: no-store, no-cache, must-revalidate");
+    header("Cache-Control: post-check=0, pre-check=0", false);
+    header("Pragma: no-cache");
+    
     // Change some settings
     
-    //$img->image_width = 275;
-    //$img->image_height = 90;
-    //$img->perturbation = 0.9; // 1.0 = high distortion, higher numbers = more distortion
+    $img->image_width = 150;
+    $img->image_height = 60;
+    //$img->perturbation = 0.3; // 1.0 = high distortion, higher numbers = more distortion
     //$img->image_bg_color = new Securimage_Color("#0099CC");
     //$img->text_color = new Securimage_Color("#000000");
     //$img->text_transparency_percentage = 65; // 100 = completely transparent

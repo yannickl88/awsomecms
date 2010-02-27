@@ -22,6 +22,22 @@
             </div>
         </div>
     {/foreach}
+    <div class="admin_form_row">
+        <div class="admin_form_label">
+            <label for="captcha">{"captcha"|text}<span class="required">*</span>:</label>
+        </div>
+        <div class="admin_form_field">
+            <div style="height: 80px;">
+                <img style="float: left;" src="/securimage_show.php?sid=d28544701be50bc66afb925278e38059" id="siimage">
+                <a onclick="$('#siimage').attr('src', '/securimage_show.php?sid=' + Math.random()); return false" title="Refresh Image" href="#" style="border-style: none;" tabindex="-1">
+                    <img border="0" align="bottom" onclick="this.blur()" alt="Reload Image" src="/img/refresh.gif">
+                </a>
+                <br />
+             </div>
+             Code:<br />
+             <input type="text" class="empty" id="captcha" name="captcha">
+         </div>
+    </div>
     <div class="form_row form_submit">
         <input type="submit" value="{"send"|text|ucfirst}" id="contact_submit" class="form_submit" />
     </div>
