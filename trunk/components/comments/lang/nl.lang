@@ -2,5 +2,6 @@
     "comp_comment":         "Reacties",
     "field_comment_text":   "Antwoorden",
     "field_comment_username":"Naam / E-mail",
-    "field_comment_hook":   "Hook"
+    "field_comment_hook":   "Hook",
+    "captcha":              "Captcha"
 }

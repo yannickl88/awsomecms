@@ -18,8 +18,10 @@
     "small":                "klein",
     "large":                "groot",
     "deletefrom":           "Verwijder uit",
+    "code":                 "code",
     "welcomeadmin":         "Welkom in het admin gedeelte.",
     "formerror":            "Het formulier is niet correct ingevuld. Gelieve de volgende velden te controleren",
     "error_notfilledin":    "Veld niet ingevuld",
-    "error_notnumber":      "Veld was geen nummer"
+    "error_notnumber":      "Veld was geen nummer",
+    "error_wrongcaptcha":   "Captcha is niet correct ingevuld, probeer het opnieuw."
 }

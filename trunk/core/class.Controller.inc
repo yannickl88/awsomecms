@@ -275,11 +275,11 @@ class Controller
                 
                 if(!empty($table))
                 {
-                    $record = $e->getRecord();
-                    
                     Table::init($e->getTable())
                         ->setError($e);
                 }
+                
+                unset($_SESSION['FORMERROR']);
             }
             else
             {

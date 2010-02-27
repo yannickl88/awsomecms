@@ -51,23 +51,25 @@ function setFieldValue(field, value)
 {
     var field = $('form *[name='+field+']');
     
-    switch(field.attr("type"))
+    if(!field.hasClass("empty"))
     {
-        case "checkbox":
-            field.attr("checked", (value == "on")? "checked": "");
-            break;
-        case "radio":
-            field.each(function(key, inputField) {
-                $(inputField).attr("checked", (value == $(inputField).val())? "checked": "");
-            });
-            break;
-        case "textarea":
-            field.html(value);
-            break;
-        default:
-            field.val(value);
+        switch(field.attr("type"))
+        {
+            case "checkbox":
+                field.attr("checked", (value == "on")? "checked": "");
+                break;
+            case "radio":
+                field.each(function(key, inputField) {
+                    $(inputField).attr("checked", (value == $(inputField).val())? "checked": "");
+                });
+                break;
+            case "textarea":
+                field.html(value);
+                break;
+            default:
+                field.val(value);
+        }
     }
-    
     
     return false;
 }
