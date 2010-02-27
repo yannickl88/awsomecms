@@ -1,9 +1,7 @@
 #labels Phase-Design
 A todo list of all the things need to be done
 
-
 = Todo: =
- * Refactor some old code with newer code, so backwards copatibily can be removed.
  * Comments components need to interface with users module if installed. If users installed then need to the name/email field
  * Installer needs to delete components when that option is checked
  * Comments component should get tag to show reactions
