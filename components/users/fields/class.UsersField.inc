@@ -108,7 +108,8 @@ class UsersField extends Field
     {
         parent::select($query, $data);
         $query->join("users", $this->getName(), "user_id")
-            ->select("user_name");
+            ->select("user_name")
+            ->select("user_id");
         
     }
 }

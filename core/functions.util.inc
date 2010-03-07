@@ -318,3 +318,7 @@ function getActions($component)
     
     return $actions;
 }
+function urlEscape($string)
+{
+    return rawurlencode(strtolower(str_replace(".", "", $string)));
+}

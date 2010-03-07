@@ -48,12 +48,44 @@ class NewsComponent extends Component
         if(!empty($request['urlmapmatch']))
         {
             $record = Table::init("news.news")
-                ->setRequest((object) array("news_title" => $request['urlmapmatch']))
+                ->setRequest((object) array("news_titleurl" => $request['urlmapmatch']))
                 ->doSelect();
             
             if($record->count() == 1)
             {
-                echo $smartyLoader->getRenderedPage($record->getRow()->news_text, $_GET['url'], $smarty);
+                $news = $record->getRow();
+                $template = "news/news_item.tpl";
+                $smarty->assign("news", $news);
+                
+                //fetch the next and previous items
+                $news2 = Table::init("news.news")
+                    ->setRequest((object) array())
+                    ->doSelect()
+                    ->getRows();
+                
+                $previtem = -1;
+                $nextitem = -1;
+                
+                foreach($news2 as $key => $newsitem)
+                {
+                    if($newsitem->news_id == $news->news_id)
+                    {
+                        if($key < count($news2))
+                        {
+                            $previtem = $news2[$key + 1];
+                        }
+                        if($key > 0)
+                        {
+                            $nextitem = $news2[$key - 1];
+                        }
+                        break;
+                    }
+                }
+                
+                $smarty->assign("nextnews", $nextitem);
+                $smarty->assign("prevnews", $previtem);
+                
+                echo $smartyLoader->getRenderedPage($smarty->fetch($template), $_GET['url'], $smarty);
                 return;
             }
         }
