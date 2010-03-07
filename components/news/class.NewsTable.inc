@@ -45,6 +45,7 @@ class NewsTable extends Table
         $extField = new IntField("news_external", Field::HIDE|Field::OPTIONAL);
         $extField->setDefaultValue(0);
         $this->addField($extField);
+        $this->addField(new Field("news_extsite", Field::HIDE|Field::OPTIONAL));
         $this->addField(new BooleanField("news_extlink", Field::HIDE|Field::OPTIONAL));
         
         $this->setURLs(
@@ -70,6 +71,8 @@ class NewsTable extends Table
             }
             $query->whereWhenSet("news_title", $data->news_title);
             $query->whereWhenSet("news_tag", $data->news_tag);
+            $query->whereWhenSet("news_external", $data->news_external);
+            $query->whereWhenSet("news_extsite", $data->news_extsite);
         }
     }
     /**

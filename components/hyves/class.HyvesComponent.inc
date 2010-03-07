@@ -37,6 +37,7 @@ class HyvesComponent extends Component
         $xml = new SimpleXMLElement(file_get_contents(Config::get("blogurl", false, "hyves")));
         
         $lastElement = Table::init("news.news")
+            ->setRequest((object) array("news_external" => 1, "news_extsite" => "hyves"))
             ->doSelect()
             ->getRow();
         
@@ -53,6 +54,7 @@ class HyvesComponent extends Component
             $data['news_date'] = date("c", $date);
             $data['news_tag'] = "hyves";
             $data['news_external'] = 1;
+            $data['news_extsite'] = "hyves";
             $data['news_extlink'] = trim($item->link[0]);
             
             if($lastElement != null && $lastElement->news_title == $data['news_title'])
