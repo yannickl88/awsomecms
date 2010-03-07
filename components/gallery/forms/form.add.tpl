@@ -70,7 +70,7 @@
             toggleDisabled(this, 'image_thumb');
         });
         //check if it was already set somehow
-        $("#image_thumb").attr("disabled", ($("#image_tumb_generate").val() == "on")? "disabled" : "");
+        $("#image_thumb").attr("disabled", ($("#image_tumb_generate").attr("checked"))? "disabled" : "");
     });
     {/literal}
 </script>
