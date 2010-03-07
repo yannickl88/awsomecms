@@ -237,7 +237,7 @@ class Controller
      * @param string $component     Component name
      * @return string
      */
-    public function dispatch($action = "index", $component = "core")
+    public function dispatch($action = false, $component = false)
     {
         if(!$this->instanciated)
         {
@@ -310,6 +310,23 @@ class Controller
             {
                 $action = $request['action'];
                 unset($request['action']);
+            }
+        }
+        else
+        {
+            //set the default actions
+            $urls = Config::get("urlmap", array());
+            
+            foreach($urls as $check)
+            {
+                $matches = array();
+                if(preg_match("/^".$check['pattern']."$/", "/".$url, $matches) === 1)
+                {
+                    $component = $check['component'];
+                    $action = $check['action'];
+                    $request['urlmapmatch'] = $matches[1];
+                    break;
+                }
             }
         }
         
