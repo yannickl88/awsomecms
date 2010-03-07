@@ -48,45 +48,51 @@ class NewsComponent extends Component
         if(!empty($request['urlmapmatch']))
         {
             $record = Table::init("news.news")
-                ->setRequest((object) array("news_titleurl" => $request['urlmapmatch']))
+                ->setRequest((object) array("news_titleurl" => $request['urlmapmatch'][3]))
                 ->doSelect();
             
             if($record->count() == 1)
             {
+                //check the date given
                 $news = $record->getRow();
-                $template = "news/news_item.tpl";
-                $smarty->assign("news", $news);
+                $data = strtotime($news->news_date);
                 
-                //fetch the next and previous items
-                $news2 = Table::init("news.news")
-                    ->setRequest((object) array())
-                    ->doSelect()
-                    ->getRows();
-                
-                $previtem = -1;
-                $nextitem = -1;
-                
-                foreach($news2 as $key => $newsitem)
+                if(date("m", $data) === $request['urlmapmatch'][2] && date("Y", $data) === $request['urlmapmatch'][1])
                 {
-                    if($newsitem->news_id == $news->news_id)
+                    $template = "news/news_item.tpl";
+                    $smarty->assign("news", $news);
+                    
+                    //fetch the next and previous items
+                    $news2 = Table::init("news.news")
+                        ->setRequest((object) array())
+                        ->doSelect()
+                        ->getRows();
+                    
+                    $previtem = -1;
+                    $nextitem = -1;
+                    
+                    foreach($news2 as $key => $newsitem)
                     {
-                        if($key < count($news2))
+                        if($newsitem->news_id == $news->news_id)
                         {
-                            $previtem = $news2[$key + 1];
+                            if($key < count($news2))
+                            {
+                                $previtem = $news2[$key + 1];
+                            }
+                            if($key > 0)
+                            {
+                                $nextitem = $news2[$key - 1];
+                            }
+                            break;
                         }
-                        if($key > 0)
-                        {
-                            $nextitem = $news2[$key - 1];
-                        }
-                        break;
                     }
+                    
+                    $smarty->assign("nextnews", $nextitem);
+                    $smarty->assign("prevnews", $previtem);
+                    
+                    echo $smartyLoader->getRenderedPage($smarty->fetch($template), $_GET['url'], $smarty);
+                    return;
                 }
-                
-                $smarty->assign("nextnews", $nextitem);
-                $smarty->assign("prevnews", $previtem);
-                
-                echo $smartyLoader->getRenderedPage($smarty->fetch($template), $_GET['url'], $smarty);
-                return;
             }
         }
         
@@ -179,5 +185,38 @@ class NewsComponent extends Component
         $menu->addChild(new MenuItem("news", Config::get('newsadmin', 'newsadmin', 'admin')));
         $menu->addChild(new MenuItem("newsadmin", Config::get('newsadmin', 'newsadmin', 'admin'), "news"));
         $menu->addChild(new MenuItem("newsadd", Config::get('newsadd', 'newsadd', 'admin'), "news"));
+    }
+    /**
+     * (non-PHPdoc)
+     * @see core/Component#registerTreeItems($tree)
+     */
+    public function registerTreeItems($tree)
+    {
+        $table = Table::init("news.news", "admintree");
+        
+        $result = $table
+            ->doSelect()
+            ->getRows();
+
+        foreach($result as $row)
+        {
+            $title = $row->news_title;
+            
+            if(strlen($title) > 17)
+            {
+                $title = substr($title, 0, 15)."...";
+            }
+            
+            $date = strtotime($row->news_date);
+            
+            $tree->addChild(new TreeItem(
+                $title, 
+                "/".Config::get("newsedit", "newsedit", "admin")."?news_id={$row->news_id}", 
+                "/".Config::get("newsdelete", "newsdelete", "admin")."?news_id={$row->news_id}", 
+                "/news/".date("Y/m", $date)."/".$row->news_titleurl
+                ), 
+                "news/".date("Y/m", $date)
+            );
+        }
     }
 }

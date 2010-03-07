@@ -324,7 +324,7 @@ class Controller
                 {
                     $component = $check['component'];
                     $action = $check['action'];
-                    $request['urlmapmatch'] = $matches[1];
+                    $request['urlmapmatch'] = $matches;
                     break;
                 }
             }

@@ -182,6 +182,12 @@ class Component
      */
     public function registerMenuItems($menu) { }
     /**
+     * Register tree items for this component
+     * 
+     * @param Tree $menu
+     */
+    public function registerTreeItems($tree) { }
+    /**
      * Execute a task for the cron. This called in the interval secified in the config files.
      */
     public function execCron() { }
