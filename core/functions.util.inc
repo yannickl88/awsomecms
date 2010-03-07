@@ -296,6 +296,12 @@ function addSlashesConfig($string)
     
     return $string;
 }
+/**
+ * Get the actions of a give component
+ * 
+ * @param string $component
+ * @return array
+ */
 function getActions($component)
 {
     $actions = array();
@@ -318,6 +324,12 @@ function getActions($component)
     
     return $actions;
 }
+/**
+ * Clean up a string so it can be validly passed in the url
+ * 
+ * @param string $string
+ * @return string
+ */
 function urlEscape($string)
 {
     return rawurlencode(strtolower(str_replace(".", "", $string)));
