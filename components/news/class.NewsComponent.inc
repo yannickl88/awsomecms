@@ -75,7 +75,7 @@ class NewsComponent extends Component
                     {
                         if($newsitem->news_id == $news->news_id)
                         {
-                            if($key < count($news2))
+                            if($key < count($news2)-1)
                             {
                                 $previtem = $news2[$key + 1];
                             }
