@@ -332,5 +332,7 @@ function getActions($component)
  */
 function urlEscape($string)
 {
-    return rawurlencode(strtolower(str_replace(".", "", $string)));
+    $matches = array();
+    preg_match_all('/([\w ])/', $string, $matches);
+    return rawurlencode(strtolower(str_replace(" ", "-", implode("", $matches[1]))));
 }
