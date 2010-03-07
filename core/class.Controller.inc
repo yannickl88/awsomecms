@@ -320,7 +320,7 @@ class Controller
             foreach($urls as $check)
             {
                 $matches = array();
-                if(preg_match("/^".$check['pattern']."$/", "/".$url, $matches) === 1)
+                if(preg_match("/^".$check['pattern']."$/", "/".$url, $matches) === 1 && Config::getInstance()->isComponentInstalled($check['component']))
                 {
                     $component = $check['component'];
                     $action = $check['action'];
