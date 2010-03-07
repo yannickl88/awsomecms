@@ -101,6 +101,19 @@ class Config
                 $this->data['layoutmap'][] = explode(" ", trim($line));
             }
         }
+        //parse the url map
+        if(file_exists($frameworkroot.'/core/urlmap.conf'))
+        {
+            $data = file($frameworkroot.'/core/urlmap.conf');
+            $this->data['urlmap'] = array();
+            
+            foreach($data as $line)
+            {
+                $map = explode(" ", trim($line));
+                $action = explode(".", $map[1]);
+                $this->data['urlmap'][] = array("pattern" => $map[0], "action" => $action[1], "component" => $action[0]);
+            }
+        }
         //parse the layout map
         if(file_exists($frameworkroot.'/core/robots.conf'))
         {

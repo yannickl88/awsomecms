@@ -68,6 +68,7 @@ class NewsTable extends Table
             {
                 $query->limit($data->max);
             }
+            $query->whereWhenSet("news_title", $data->news_title);
             $query->whereWhenSet("news_tag", $data->news_tag);
         }
     }

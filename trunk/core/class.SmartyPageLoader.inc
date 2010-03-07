@@ -86,16 +86,33 @@ class SmartyPageLoader
         }
         catch(PageNotFoundExeption $e)
         {
+            $page = null;
+        }
+        
+        return $this->getRenderedPage($page, $url, $smarty_obj);
+    }
+    /**
+     * Get the page with the rendered page with the layout wraped around it
+     * 
+     * @param string $content
+     * @param string $url
+     * @param Smarty $smarty_obj
+     * @return string
+     */
+    public function getRenderedPage($content, $url, &$smarty_obj)
+    {
+        if($content == null)
+        {
             //set header
             header("HTTP/1.0 404 Not Found");
             
             try
             {
-                $page = $smarty_obj->fetch("404.tpl");
+                $content = $smarty_obj->fetch("404.tpl");
             }
             catch(PageNotFoundExeption $e)
             {
-                $page = "404 - PAGE NOT FOUND";
+                $content = "404 - PAGE NOT FOUND";
             }
         }
         
@@ -106,7 +123,7 @@ class SmartyPageLoader
             if($template == "json")
             {
                 header('Content-type: application/json');
-                return $page;
+                return $content;
             }
             else
             {
@@ -115,7 +132,7 @@ class SmartyPageLoader
         }
         elseif(file_exists("{$smarty_obj->template_dir}/layout.tpl")) //check for layout file
         {
-            $smarty_obj->assign('content', $page);
+            $smarty_obj->assign('content', $content);
             
             if(file_exists("{$smarty_obj->template_dir}/{$url}.tpl"))
             {
@@ -148,7 +165,7 @@ class SmartyPageLoader
         }
         else
         {
-            return $page;
+            return $content;
         }
     }
     /**

@@ -30,6 +30,38 @@ class NewsComponent extends Component
         parent::__construct('news');
     }
     /**
+     * Index action, this is used when a page is shown by the cms
+     *
+     * @param Smarty $smarty
+     * @param SmartyPageLoader $smartyLoader
+     * @param array $request
+     */
+    public function action_index($smarty, $smartyLoader, $request)
+    {
+        $smarty->register_resource("scf", array(
+            array($smartyLoader, "getTemplate"),
+            array($smartyLoader, "getTimestamp"),
+            array($smartyLoader, "getSecure"),
+            array($smartyLoader, "getTrusted"),
+        ));
+        
+        $news = (object) array("news_text" => null);
+        if(!empty($request['urlmapmatch']))
+        {
+            $record = Table::init("news.news")
+                ->setRequest((object) array("news_title" => $request['urlmapmatch']))
+                ->doSelect();
+            
+            if($record->count() == 1)
+            {
+                echo $smartyLoader->getRenderedPage($record->getRow()->news_text, $_GET['url'], $smarty);
+                return;
+            }
+        }
+        
+        echo $smartyLoader->getPage($_GET['url'], $smarty);
+    }
+    /**
      * Action for adding a news item
      * 
      * @param Smarty $smarty
