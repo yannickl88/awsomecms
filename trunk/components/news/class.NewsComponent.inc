@@ -45,7 +45,6 @@ class NewsComponent extends Component
             array($smartyLoader, "getTrusted"),
         ));
         
-        $news = (object) array("news_text" => null);
         if(!empty($request['urlmapmatch']))
         {
             $record = Table::init("news.news")
