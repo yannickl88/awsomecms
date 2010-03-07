@@ -32,18 +32,21 @@ function smarty_function_newsitem($params, &$smarty)
 
     $news = $table
         ->setRequest((object) array_merge($params, array('news_id' => $_GET['id'])))
-        ->doSelect();
-    $smarty->assign("news", $news[0]);
+        ->doSelect()
+        ->getRow();
+    $smarty->assign("news", $news);
     
     //fetch the next and previous items
-    $news2 = $table->doSelect();
+    $news2 = $table
+        ->doSelect()
+        ->getRows();
     
     $previtem = -1;
     $nextitem = -1;
     
     foreach($news2 as $key => $newsitem)
     {
-        if($newsitem->news_id == $news[0]->news_id)
+        if($newsitem->news_id == $news->news_id)
         {
             $previtem = $news2[$key + 1];
             $nextitem = $news2[$key - 1];

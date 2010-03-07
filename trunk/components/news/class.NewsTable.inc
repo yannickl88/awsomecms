@@ -36,6 +36,7 @@ class NewsTable extends Table
         
         $this->addField(new IntField("news_id", Field::INDEX|Field::AUTOKEY));
         $this->addField(new Field("news_title"), 1);
+        $this->addField(new Field("news_titleurl", Field::HIDE|Field::OPTIONAL));
         $this->addField(new UsersField("news_user"), 2);
         $this->addField(new DateField("news_date"), 3);
         $this->addField(new Field("news_tag", Field::OPTIONAL), 4);
@@ -70,6 +71,7 @@ class NewsTable extends Table
                 $query->limit($data->max);
             }
             $query->whereWhenSet("news_title", $data->news_title);
+            $query->whereWhenSet("news_titleurl", rawurlencode($data->news_titleurl));
             $query->whereWhenSet("news_tag", $data->news_tag);
             $query->whereWhenSet("news_external", $data->news_external);
             $query->whereWhenSet("news_extsite", $data->news_extsite);
@@ -79,12 +81,18 @@ class NewsTable extends Table
      * (non-PHPdoc)
      * @see core/Table#update($query, $data)
      */
-    protected function update($query, $data = null) {}
+    protected function update($query, $data = null)
+    {
+        $query->update("news_titleurl", urlEscape($this->record[0]->news_title));
+    }
     /**
      * (non-PHPdoc)
      * @see core/Table#insert($query, $data)
      */
-    protected function insert($query, $data = null) {}
+    protected function insert($query, $data = null)
+    {
+        $query->insert("news_titleurl", urlEscape($this->record[0]->news_title));
+    }
     /**
      * (non-PHPdoc)
      * @see core/Table#delete($query, $data)
