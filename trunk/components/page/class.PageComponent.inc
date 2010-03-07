@@ -115,4 +115,33 @@ class PageComponent extends Component
         $menu->addChild(new MenuItem("page", ""));
         $menu->addChild(new MenuItem("addpage", Config::get('pageadd', 'pageadd', 'admin'), "page"));
     }
+    /**
+     * (non-PHPdoc)
+     * @see core/Component#registerTreeItems($tree)
+     */
+    public function registerTreeItems($tree)
+    {
+        $table = Table::init("page.pages", "admintree");
+
+        if($tree->hideAdmin)
+        {
+            $table->setRequest((object) array("where" => array('page_location', "/admin/%", "NOT LIKE")));
+        }
+
+        $result = $table
+            ->doSelect()
+            ->getRows();
+
+        foreach($result as $row)
+        {
+            $tree->addChild(new TreeItem(
+                $row->page_name, 
+                "/".Config::get("pageedit", "pageedit", "admin")."?page_id={$row->page_id}", 
+                "/".Config::get("pagedelete", "pagedelete", "admin")."?page_id={$row->page_id}", 
+                $row->page_location.$row->page_name
+                ), 
+                $row->page_location
+            );
+        }
+    }
 }

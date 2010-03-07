@@ -9,7 +9,7 @@ function admin_toggleTree(id)
     }
     else
     {
-        admin_createCookie('menu'+id, true);
+        admin_createCookie('menu'+id, 1);
     }
     
     return false;
@@ -53,5 +53,5 @@ function admin_eraseCookie(name) {
 }
 
 function admin_hasCookie(name) {
-    return (admin_readCookie(name) != null);
+    return (admin_readCookie(name));
 }

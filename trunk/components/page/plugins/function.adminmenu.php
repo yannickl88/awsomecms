@@ -22,7 +22,7 @@
  */
 function smarty_function_adminmenu($params, &$smarty)
 {
-    include_once Config::get('websiteroot', '.').'/../components/page/util/class.Menu.inc';
+    import('components/page/util/class.Menu.inc');
 
     $components = Config::getInstance()->getComponenets();
     $menu = Menu::getInstance();
