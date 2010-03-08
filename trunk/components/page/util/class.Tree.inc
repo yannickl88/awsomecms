@@ -269,7 +269,7 @@ class TreeFolder extends TreeItem
         $html .= '<img src="/img/icons/page_folder.png" alt="folder"/>';
         if($this->getRoot()->javascript)
         {
-            $html .= "<a href=\"{$this->getLocation()}\" class=\"clickableTreeItem javascript\" style=\"padding: 0;\">";
+            $html .= "<a href=\"{$this->getLocation()}/\" class=\"clickableTreeItem javascript\" style=\"padding: 0;\">";
         }
         else
         {
