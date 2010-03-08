@@ -31,17 +31,17 @@
             <label for="image_tag">{"field_image_tag"|text}:</label>
         </div>
         <div class="admin_form_field">
-            <input type="text" name="image_tag" id="image_tag""/>
+            <input type="text" name="image_tag" id="image_tag"/>
         </div>
     </div>
     <div class="admin_form_row admin_form_submit">
         <input type="submit" value="{"save"|text|ucfirst}" id="user_submit" class="admin_form_submit" />
+	    <input type="hidden" name="action" value="add" />
+	    <input type="hidden" name="component" value="gallery" />
     </div>
-    <input type="hidden" name="action" value="add" />
-    <input type="hidden" name="component" value="gallery" />
 </form>
 <script type="text/javascript">
-    {literal}
+	//<![CDATA[{literal}
     function toggleDisabled(checkbox, fieldID)
     {
         var field = $('#'+fieldID);
@@ -72,5 +72,5 @@
         //check if it was already set somehow
         $("#image_thumb").attr("disabled", ($("#image_tumb_generate").attr("checked"))? "disabled" : "");
     });
-    {/literal}
+    //]]>{/literal}
 </script>

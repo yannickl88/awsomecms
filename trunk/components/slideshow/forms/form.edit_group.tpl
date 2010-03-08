@@ -17,6 +17,8 @@
             <select id="image_image_select" name="image_image_select" style="width: 125px;">
                 {foreach from=$images item=image}
                 <option value="{$image->image_id}"{if $image->image_id == $record->group_header} selected="selected"{/if}>{$image->image_title}</option>
+                {foreachelse}
+               	<option value="">-Select Image-</option>
                 {/foreach}
             </select>
             {"or"|text} <input type="file" name="image_image" id="group_header" />
@@ -38,6 +40,8 @@
                     <input name="images[]" value="{$image->image_id}" type="hidden" />
                 </li>
                 {/if}
+                {foreachelse}
+                	<li class="empty">No Items</li>
                 {/foreach}
             </ul>
             <div>
@@ -46,6 +50,8 @@
                     {if $image->image_id|notin:$images_ids}
                     <option value="{$image->image_id}">{$image->image_title}</option>
                     {/if}
+                    {foreachelse}
+                	<option value="">-Select Image-</option>
                     {/foreach}
                 </select><br/>
                 <button id="add_image" type="button" onclick="addImage();">{"add"|text|ucfirst}</button><br />
@@ -65,13 +71,13 @@
     </div>
     <div class="admin_form_row admin_form_submit">
         <input type="submit" value="{"save"|text|ucfirst}" id="user_submit" class="admin_form_submit" />
+	    <input type="hidden" name="group_id" value="{$record->group_id}" />
+	    <input type="hidden" name="action" value="edit_group" />
+	    <input type="hidden" name="component" value="slideshow" />
     </div>
-    <input type="hidden" name="group_id" value="{$record->group_id}" />
-    <input type="hidden" name="action" value="edit_group" />
-    <input type="hidden" name="component" value="slideshow" />
 </form>
 <script type='text/javascript'>
-    {literal}
+	//<![CDATA[{literal}
     var upload = new AjaxUpload('#upload_image', 
     {
         action: '/',
@@ -164,6 +170,5 @@
 
         return false;
     }
-    
-    {/literal}
+    //]]>{/literal}
 </script>

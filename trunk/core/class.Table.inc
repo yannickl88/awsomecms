@@ -496,8 +496,8 @@ abstract class Table
         }
         $html .= "<div class=\"admin_form_row admin_form_submit\">\n";
         $html .= "<input type='submit' value='".ucfirst(Language::get("save"))."' />\n";
-        $html .= "</div>\n";
         $html .= $this->getAssignment(Field::ADD);
+        $html .= "</div>\n";
         $html .= "</form>\n";
         $html .= $this->getJavascript();
         
@@ -535,9 +535,9 @@ abstract class Table
         }
         $html .= "<div class=\"admin_form_row admin_form_submit\">\n";
         $html .= "<input type='submit' value='".ucfirst(Language::get("save"))."' />\n";
-        $html .= "</div>\n";
         $html .= $html_post;
         $html .= $this->getAssignment(Field::EDIT);
+        $html .= "</div>\n";
         $html .= "</form>\n";
         $html .= $this->getJavascript();
         
@@ -695,9 +695,9 @@ abstract class Table
         $html .= "    </div>\n";
         $html .= "    <div class=\"admin_form_row admin_form_submit\">\n";
         $html .= "        <input type=\"submit\" value=\"".ucfirst(Language::get("delete"))."\" id=\"page_submit\" class=\"admin_form_submit\" />\n";
-        $html .= "    </div>\n";
         $html .= $post_html;
         $html .= $this->getAssignment(Field::DELETE);
+        $html .= "    </div>\n";
         $html .= "</form>\n";
         
         return $html;

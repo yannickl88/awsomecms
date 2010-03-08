@@ -42,7 +42,7 @@
     <input type="hidden" name="component" value="gallery" />
 </form>
 <script type="text/javascript">
-    {literal}
+	//<![CDATA[{literal}
     function toggleDisabled(checkbox, fieldID)
     {
         var field = $('#'+fieldID);
@@ -66,5 +66,5 @@
         //check if it was already set somehow
         $("#image_thumb").attr("disabled", ($("#image_tumb_generate").attr("checked"))? "disabled" : "");
     });
-    {/literal}
+    //]]>{/literal}
 </script>

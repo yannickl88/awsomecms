@@ -36,7 +36,7 @@
     </div>
     <div class="admin_form_row admin_form_submit">
         <input type="submit" value="{"save"|text|ucfirst}" id="component_submit" class="admin_form_submit" />
+	    <input type="hidden" name="action" value="auth" />
+	    <input type="hidden" name="component" value="core" />
     </div>
-    <input type="hidden" name="action" value="auth" />
-    <input type="hidden" name="component" value="core" />
 </form>
