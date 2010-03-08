@@ -112,6 +112,10 @@ class Tree
             $html .= $child->toHTML();
         }
         $html .= "</div>";
+        if($this->javascript)
+        {
+        	$html .= "<script type=\"text/javascript\"> admin_treeTarget = \"{$this->javascript}\";</script>";
+        }
         return $html;
     }
 }
@@ -172,11 +176,11 @@ class TreeItem
             $html .= "<a href=\"{$this->editURL}\">";
             if($this->name == 'index')
             {
-                $html .= '<img src="/img/icons/page_home.png" />';
+                $html .= '<img src="/img/icons/page_home.png" alt="page"/>';
             }
             else
             {
-                $html .= '<img src="/img/icons/page_page.png" />';
+                $html .= '<img src="/img/icons/page_page.png" alt="page"/>';
             }
             $html .= "{$this->name}</a>";
             $html .= "</div>";
@@ -256,30 +260,30 @@ class TreeFolder extends TreeItem
         $html .= "<div class=\"\">";
         if(!isset($_COOKIE['menu'.$id]))
         {
-            $html .= "<a class=\"folder link{$id}\" href=\"#\" onClick=\"return admin_toggleTree('{$id}');\" onMouseOver=\"$(this).addClass('focus')\"  onMouseOut=\"$(this).removeClass('focus')\"></a>";
+            $html .= "<a class=\"folder link{$id} clickableTreeArrow\" href=\"#\"></a>";
         } 
         else
         {
-            $html .= "<a class=\"folder link{$id} open\" href=\"#\" onClick=\"return admin_toggleTree('{$id}');\" onMouseOver=\"$(this).addClass('focus')\"  onMouseOut=\"$(this).removeClass('focus')\"></a>";
+            $html .= "<a class=\"folder link{$id} open clickableTreeArrow\" href=\"#\"></a>";
         }
-        $html .= '<img src="/img/icons/page_folder.png" />';
+        $html .= '<img src="/img/icons/page_folder.png" alt="folder"/>';
         if($this->getRoot()->javascript)
         {
-            $html .= "<a href=\"#\" onClick=\"$('#{$this->getRoot()->javascript}').val('{$this->getLocation()}'); return false;\" style=\"padding: 0;\">";
+            $html .= "<a href=\"{$this->getLocation()}\" class=\"clickableTreeItem javascript\" style=\"padding: 0;\">";
         }
         else
         {
-            $html .= '<a href="#" onClick="return admin_toggleTree(\''.$id.'\');" style="padding: 0;">';
+            $html .= "<a href=\"#\" class=\"clickableTreeItem\" style=\"padding: 0;\">";
         }
         $html .= $this->name;
         $html .= '</a>';
         if(!isset($_COOKIE['menu'.$id]))
         {
-            $html .= '<div class="treeNode hidden sub'.$id.'">';
+            $html .= '<div class="treeNode hidden">';
         }
         else
         {
-            $html .= '<div class="treeNode sub'.$id.'">';
+            $html .= '<div class="treeNode">';
         }
         
         foreach($this->children as $child)

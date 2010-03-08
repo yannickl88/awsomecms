@@ -1,1 +1,1 @@
- ALTER TABLE `news` CHANGE `news_text` `news_text` TEXT CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL  
+ ALTER TABLE `news` CHANGE `news_text` `news_text` TEXT CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL ;

@@ -33,7 +33,7 @@
     <input type="hidden" name="component" value="slideshow" />
 </form>
 <script type='text/javascript'>
-    {literal}
+	//<![CDATA[{literal}
     $().ready(function(e) {
         $("#image_image").change(function(e) {
             if($("#image_title").val() == "")
@@ -43,5 +43,5 @@
             }
         });
     });
-    {/literal}
+    //]]>{/literal}
 </script>

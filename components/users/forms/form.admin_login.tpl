@@ -17,8 +17,8 @@
         </div>
     </div>
     <div class="admin_form_row admin_form_submit">
-        <input type="submit" value="{"login"|text}" id="user_submit" class="admin_form_submit">
+        <input type="submit" value="{"login"|text}" id="user_submit" class="admin_form_submit" />
+	    <input type="hidden" name="action" value="admin_login" />
+	    <input type="hidden" name="component" value="users" />
     </div>
-    <input type="hidden" name="action" value="admin_login" />
-    <input type="hidden" name="component" value="users" />
 </form>

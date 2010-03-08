@@ -17,6 +17,8 @@
             <select id="image_image_select" name="image_image_select" style="width: 125px;">
                 {foreach from=$images item=image}
                 <option value="{$image->image_id}">{$image->image_title}</option>
+                {foreachelse}
+                <option value="">-Select Image-</option>
                 {/foreach}
             </select>
             {"or"|text} <input type="file" name="image_image" id="group_header" />
@@ -28,11 +30,14 @@
         </div>
         <div class="admin_form_field">
             <ul id="group_images">
+            	<li class="empty">No Items</li>
             </ul>
             <div>
                 <select id="image_groups" style="width: 325px;">
                     {foreach from=$images item=image}
                     <option value="{$image->image_id}">{$image->image_title}</option>
+                    {foreachelse}
+                	<option value="">-Select Image-</option>
                     {/foreach}
                 </select><br/>
                 <button id="add_image" type="button" onclick="addImage();">{"add"|text|ucfirst}</button><br />
@@ -52,12 +57,12 @@
     </div>
     <div class="admin_form_row admin_form_submit">
         <input type="submit" value="{"save"|text|ucfirst}" id="user_submit" class="admin_form_submit" />
+	    <input type="hidden" name="action" value="add_group" />
+	    <input type="hidden" name="component" value="slideshow" />
     </div>
-    <input type="hidden" name="action" value="add_group" />
-    <input type="hidden" name="component" value="slideshow" />
 </form>
 <script type='text/javascript'>
-    {literal}
+	//<![CDATA[{literal}
     var upload = new AjaxUpload('#upload_image', 
     {
         action: '/',
@@ -111,13 +116,13 @@
             $('#image_title').val('');
         }
     });
-    
+    /** TODO: fix this so it removes and addes the "No Item" message */
     function addImage()
     {
         var selected = $('#image_groups').val();
         
         $('#image_groups').find("option").each(function(key, value) {
-            if($(value).val() === selected)
+            if($(value).val() === selected && $(value).val() != "")
             {
                 var html = "";
                 
@@ -150,6 +155,5 @@
 
         return false;
     }
-    
-    {/literal}
+    //]]>{/literal}
 </script>

@@ -11,7 +11,7 @@
         <td style="vertical-align: top;">
         </td>
         <td style="vertical-align: top;" class="updateCell">
-            <img src="/img/admin/{if $frameworkU2D}ok{else}fail{/if}-icon.png" /> 
+            <img src="/img/admin/{if $frameworkU2D}ok{else}fail{/if}-icon.png" alt="status"/> 
             {if $frameworkU2D}Up-to-date{else}<button type="button" onclick="updateFramework()">Update</button>{/if}
         </td>
         <td style="vertical-align: top;">
@@ -36,7 +36,7 @@
                     <i>{$component->component_name|ucfirst}</i>
                 </td>
                 <td style="vertical-align: top;" class="updateCell">
-                    <img src="/img/admin/{if $component->U2D === "???"}unknown{elseif $component->U2D}ok{else}fail{/if}-icon.png" /> 
+                    <img src="/img/admin/{if $component->U2D === "???"}unknown{elseif $component->U2D}ok{else}fail{/if}-icon.png" alt="status"/> 
                     {if $component->U2D === "???"}{"unknown"|text}{elseif $component->U2D}{"uptodate"|text}{else}<button type="button" onclick="updateComponent('{$component->component_name}');">{"update"|text|ucfirst}</button>{/if}
                 </td>
                 <td style="vertical-align: top;">
@@ -44,7 +44,7 @@
                 </td>
                 <td style="vertical-align: top;" class="accessCell">
                     <div style="padding-left: 18px;">
-                        <a href="#" class="s admin_component_access{if !$component->component_auth|hasflag:$auth.auth_select} selected{/if}" onclick="return toggleAccess('auth_{$component->component_name}s', this);" title={"select"|text|ucfirst}></a>
+                        <a href="#" class="s admin_component_access{if !$component->component_auth|hasflag:$auth.auth_select} selected{/if}" onclick="return toggleAccess('auth_{$component->component_name}s', this);" title="{"select"|text|ucfirst}"></a>
                         <a href="#" class="i admin_component_access{if !$component->component_auth|hasflag:$auth.auth_insert} selected{/if}" onclick="return toggleAccess('auth_{$component->component_name}i', this);" title="{"insert"|text|ucfirst}"></a>
                         <a href="#" class="u admin_component_access{if !$component->component_auth|hasflag:$auth.auth_update} selected{/if}" onclick="return toggleAccess('auth_{$component->component_name}u', this);" title="{"update"|text|ucfirst}"></a>
                         <a href="#" class="d admin_component_access{if !$component->component_auth|hasflag:$auth.auth_delete} selected{/if}" onclick="return toggleAccess('auth_{$component->component_name}d', this);" title="{"delete"|text|ucfirst}"></a>
@@ -61,9 +61,9 @@
     </table>
     <div class="admin_form_row admin_form_submit">
         <input type="submit" value="{"save"|text|ucfirst}" id="component_submit" class="admin_form_submit" />
+	    <input type="hidden" name="action" value="components" />
+	    <input type="hidden" name="component" value="core" />
     </div>
-    <input type="hidden" name="action" value="components" />
-    <input type="hidden" name="component" value="core" />
 </form>
 <h3>{"uninstalledcomp"|text}:</h3>
 <table class="admin_table">
@@ -90,7 +90,7 @@
     {/foreach}
 </table>
 <script type="text/javascript">
-    {literal}
+    {literal}//<![CDATA[
     function toggleAccess(id, link)
     {
         if($("#"+id).attr("checked"))
@@ -165,5 +165,5 @@
 
         return false;
     }
-    {/literal}
+    //]]>{/literal}
 </script>

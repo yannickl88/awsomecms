@@ -40,9 +40,9 @@
     </div>
     <div class="form_row form_submit">
         <input type="submit" value="{"send"|text|ucfirst}" id="contact_submit" class="form_submit" />
+	    <input type="hidden" name="form_id" value="{$contactform->form_id}" />
+	    <input type="hidden" name="url" value="{$URL}" />
+	    <input type="hidden" name="action" value="send" />
+	    <input type="hidden" name="component" value="contact" />
     </div>
-    <input type="hidden" name="form_id" value="{$contactform->form_id}" />
-    <input type="hidden" name="url" value="{$URL}" />
-    <input type="hidden" name="action" value="send" />
-    <input type="hidden" name="component" value="contact" />
 </form>

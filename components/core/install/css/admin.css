@@ -143,8 +143,8 @@ h1 {
 }
 /* ADMIN TREE */
 #treeWrapper {
-    margin: 0 0 50px 60px;
-    width: 190px;
+    margin: 0 0 50px 40px;
+    width: 210px;
 }
 .treeNode {
     text-align: left;
