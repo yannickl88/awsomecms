@@ -131,17 +131,21 @@ function postComponent(component, action, data, onsucces)
 
 function openForm(component, action)
 {
-    getComponent("core", "getform", {component: component, form: action}, function(data) {
-        $("#formWrapper").html(decodeURIComponent(data.html));
-        $("#formWrapperBackground").css("display", "block");
-    });
+    getComponent("core", "getform", {component: component, form: action}, openFormPopup);
     return false;
 }
 function openTable(table, action)
 {
-    getComponent("core", "getform", {table: table, form: action}, function(data) {
-        $("#formWrapper").html(decodeURIComponent(data.html));
-        $("#formWrapperBackground").css("display", "block");
-    });
+    getComponent("core", "getform", {table: table, form: action}, openFormPopup);
+    return false;
+}
+function openFormPopup(data)
+{
+    $("#formWrapper").html(decodeURIComponent(data.html));
+    $("#formWrapperBackground").css("display", "block");
+}
+function closeFormPopup()
+{
+    $("#formWrapperBackground").css("display", "none");
     return false;
 }
