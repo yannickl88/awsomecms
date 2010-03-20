@@ -1,5 +1,6 @@
 {
     "comp_news":            "News",
+    "news":                 "News",
     "menu_news":            "News",
     "menu_newsadmin":       "News",
     "menu_newsadd":         "Add News",

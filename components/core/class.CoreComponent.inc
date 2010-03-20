@@ -431,4 +431,12 @@ class CoreComponent extends Component
         $menu->addChild(new MenuItem("components", Config::get('corecomponents', 'corecomponents', 'admin'), "system"));
         $menu->addChild(new MenuItem("auth", Config::get('coreauth', 'coreauth', 'admin'), "system"));
     }
+    /**
+     * (non-PHPdoc)
+     * @see core/Component#registerURLMap($map)
+     */
+    public function registerURLMap($map)
+    {
+        $map->addMap('\/(.*)', 'core.index', 0);
+    }
 }

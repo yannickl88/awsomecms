@@ -19,6 +19,7 @@
     "large":                "groot",
     "deletefrom":           "Verwijder uit",
     "code":                 "code",
+    "cancel":               "Annuleren",
     "welcomeadmin":         "Welkom in het admin gedeelte.",
     "formerror":            "Het formulier is niet correct ingevuld. Gelieve de volgende velden te controleren",
     "error_notfilledin":    "Veld niet ingevuld",

@@ -101,19 +101,6 @@ class Config
                 $this->data['layoutmap'][] = explode(" ", trim($line));
             }
         }
-        //parse the url map
-        if(file_exists($frameworkroot.'/core/urlmap.conf'))
-        {
-            $data = file($frameworkroot.'/core/urlmap.conf');
-            $this->data['urlmap'] = array();
-            
-            foreach($data as $line)
-            {
-                $map = explode(" ", trim($line));
-                $action = explode(".", $map[1]);
-                $this->data['urlmap'][] = array("pattern" => $map[0], "action" => $action[1], "component" => $action[0]);
-            }
-        }
         //parse the layout map
         if(file_exists($frameworkroot.'/core/robots.conf'))
         {
@@ -193,17 +180,17 @@ class Config
      */
     public function reloadComponenets()
     {
-        //clear the cache, seeing as we changed the components
-        $cachefile = getFrameworkRoot()."/cache/components.cache";
-        if(file_exists($cachefile))
+        $files = array(
+            getFrameworkRoot()."/cache/components.cache",
+            getFrameworkRoot()."/cache/hooks.cache",
+            getFrameworkRoot()."/cache/urlmap.cache",
+        );
+        foreach($files as $file)
         {
-            unlink($cachefile);
-        }
-        
-        $cachefile = getFrameworkRoot()."/cache/hooks.cache";
-        if(file_exists($cachefile))
-        {
-            unlink($cachefile);
+            if(file_exists($file))
+            {
+                unlink($file);
+            }
         }
         
         $this->componenets = false;
@@ -326,5 +313,90 @@ class Config
     public static function hasFlag($int, $flag)
     {
         return (($int & $flag) == $flag);
+    }
+    
+    public function getURLMapping()
+    {
+        $data = array();
+        
+        //the url map
+        if(file_exists(getFrameworkRoot().'/cache/urlmap.cache'))
+        {
+            $data = unserialize(file_get_contents(getFrameworkRoot().'/cache/urlmap.cache'));
+        }
+        else
+        {
+            $data = new URLMapping();
+            $components = $this->getComponenets();
+            
+            foreach($components as $component)
+            {
+                $compObj = Component::init($component->component_name);
+                if($compObj)
+                {
+                    $compObj->registerURLMap($data);
+                }
+            }
+            
+            file_put_contents(getFrameworkRoot().'/cache/urlmap.cache',serialize($data));
+        }
+        
+        return $data;
+    }
+}
+
+class URLMapping
+{
+    private $mapping;
+    private $max;
+    
+    public function __construct()
+    {
+        $this->mapping = array();
+        $this->max = -1;
+    }
+    
+    public function addMap($pattern, $action, $sort = -1)
+    {
+        if($sort > $this->max)
+        {
+            $this->max = $sort;
+        }
+        else if($sort == -1)
+        {
+            $sort = $this->max;
+        }
+        
+        $this->mapping[] = array($sort, $pattern, explode(".", $action));
+        
+        usort($this->mapping, array($this, "sort"));
+    }
+    
+    public function getMapping($url, &$request)
+    {
+        foreach($this->mapping as $check)
+        {
+            $matches = array();
+            
+            if(preg_match("/^".$check[1]."$/", "/".$url, $matches) === 1)
+            {
+                $component = $check[2][0];
+                $action = $check[2][1];
+                $request['urlmapmatch'] = $matches;
+                
+                return array($component, $action);
+            }
+        }
+        
+        return array(false, false);
+    }
+    
+    private function sort($a, $b)
+    {
+        if ($a[0] == $b[0])
+        {
+            return 0;
+        }
+        return ($a[0] < $b[0]) ? 1 : -1;
     }
 }
