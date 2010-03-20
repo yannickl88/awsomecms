@@ -25,8 +25,6 @@ class Component
     
     protected $component;
     protected $request;
-    protected $fields;
-    protected $multiTable;
     protected $currentTable;
     
     /**
@@ -184,9 +182,10 @@ class Component
     /**
      * Register tree items for this component
      * 
-     * @param Tree $menu
+     * @param Tree $tree
      */
     public function registerTreeItems($tree) { }
+    public function registerURLMap($map) { }
     /**
      * Execute a task for the cron. This called in the interval secified in the config files.
      */

@@ -13,6 +13,7 @@
  * @version $Revision$
  */
 import('/core/class.Component.inc');
+import('/components/news/util/class.NewsTree.inc');
 
 /**
  * The News component provides a simple news system that allows for new messages. 
@@ -29,6 +30,7 @@ class NewsComponent extends Component
     {
         parent::__construct('news');
     }
+    
     /**
      * Index action, this is used when a page is shown by the cms
      *
@@ -178,16 +180,6 @@ class NewsComponent extends Component
     }
     /**
      * (non-PHPdoc)
-     * @see core/Component#registerMenuItems($menu)
-     */
-    public function registerMenuItems($menu)
-    {
-        $menu->addChild(new MenuItem("news", Config::get('newsadmin', 'newsadmin', 'admin')));
-        $menu->addChild(new MenuItem("newsadmin", Config::get('newsadmin', 'newsadmin', 'admin'), "news"));
-        $menu->addChild(new MenuItem("newsadd", Config::get('newsadd', 'newsadd', 'admin'), "news"));
-    }
-    /**
-     * (non-PHPdoc)
      * @see core/Component#registerTreeItems($tree)
      */
     public function registerTreeItems($tree)
@@ -198,6 +190,10 @@ class NewsComponent extends Component
             ->doSelect()
             ->getRows();
 
+        $newsRoot = Config::get("newsroot", "/", "news");
+        $newsName = strtolower(Language::get("news"));
+        $tree->addChild(new NewsFolder($newsName, ""), $newsRoot);
+            
         foreach($result as $row)
         {
             $title = $row->news_title;
@@ -209,14 +205,25 @@ class NewsComponent extends Component
             
             $date = strtotime($row->news_date);
             
-            $tree->addChild(new TreeItem(
+            $tree->addChild(new NewsItem(
                 $title, 
                 "/".Config::get("newsedit", "newsedit", "admin")."?news_id={$row->news_id}", 
                 "/".Config::get("newsdelete", "newsdelete", "admin")."?news_id={$row->news_id}", 
-                "/news/".date("Y/m", $date)."/".$row->news_titleurl
+                "{$newsRoot}{$newsName}/".date("Y/m", $date)."/".$row->news_titleurl
                 ), 
-                "news/".date("Y/m", $date)
+                "{$newsRoot}{$newsName}/".date("Y/m", $date)
             );
         }
+    }
+    /**
+     * (non-PHPdoc)
+     * @see core/Component#registerURLMap($map)
+     */
+    public function registerURLMap($map)
+    {
+        $newsRoot = Config::get("newsroot", "/", "news");
+        $newsName = strtolower(Language::get("news"));
+        
+        $map->addMap(preg_quote("{$newsRoot}{$newsName}", "/").'\/([0-9]{4}?)\/([0-9]{2}?)\/(.*?)', 'news.index', 10);
     }
 }

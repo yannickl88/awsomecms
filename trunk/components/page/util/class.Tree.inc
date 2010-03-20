@@ -1,7 +1,7 @@
 <?php
 class Tree
 {
-    private $children;
+    protected $children;
     public $onlyShowFolders;
     public $javascript;
     public $hideAdmin;
@@ -41,44 +41,35 @@ class Tree
      */
     public function addChild($child, $location)
     {
-        $locationNodes = explode("/", $location);
-        
-        //remove the empty places
-        foreach($locationNodes as $key => $value)
+        if($location == "/" || empty($location))
         {
-            if(empty($value))
-            {
-                unset($locationNodes[$key]);
-            }
-        }
-        if(count($locationNodes) == 0)
-        {
-            $child->setParent($this);
-            $this->children[] = $child;
+            $locationNodes = array("");
         }
         else
         {
-            $nextNode = array_shift($locationNodes);
-            $childAdded = false;
-            
-            foreach($this->children as $childNode)
+            $locationNodes = explode("/", $location);
+        }
+        
+        $nextNode = array_shift($locationNodes);
+        $childAdded = false;
+        
+        foreach($this->children as $childNode)
+        {
+            if($childNode->getType() == 2 && $childNode->name == $nextNode)
             {
-                if($childNode->getType() == 2 && $childNode->name == $nextNode)
-                {
-                    $childNode->addChild($child, $locationNodes);
-                    $childAdded = true;
-                    break;
-                }
+                $childNode->addChild($child, $locationNodes);
+                $childAdded = true;
+                break;
             }
-            
-            if(!$childAdded) //hmm we need to create a folder for this child
-            {
-                $folder = new TreeFolder($nextNode, "");
-                $folder->addChild($child, $locationNodes);
-                $folder->setParent($this);
-                $this->children[] = $folder;
-                $this->sort();
-            }
+        }
+        
+        if(!$childAdded) //hmm we need to create a folder for this child
+        {
+            $folder = new TreeFolder($nextNode);
+            $folder->addChild($child, $locationNodes);
+            $folder->setParent($this);
+            $this->children[] = $folder;
+            $this->sort();
         }
         
         return $this;
@@ -149,7 +140,7 @@ class TreeItem
     }
     public function getLocation()
     {
-        return $this->parent->getLocation()."/".$this->name;
+        return $this->parent->getLocation().$this->name."/";
     }
     public function toHTML()
     {
@@ -172,7 +163,8 @@ class TreeItem
         if(!$this->getRoot()->onlyShowFolders)
         {
             $html .= "<div class=\"hideIcons\" onmouseout=\"$(this).addClass('hideIcons');\" onmouseover=\"$(this).removeClass('hideIcons');\">";
-            $html .= "<a class=\"deleteIcon\" href=\"{$this->deleteURL}\"></a><a class=\"viewIcon\" href=\"{$this->viewURL}\"></a>";
+            $html .= "<a class=\"deleteIcon treeIcon\" href=\"{$this->deleteURL}\"><img src=\"/img/icons/page_delete.png\" /></a>";
+            $html .= "<a class=\"viewIcon treeIcon\" href=\"{$this->viewURL}\"><img src=\"/img/icons/page_view.png\" /></a>";
             $html .= "<a href=\"{$this->editURL}\">";
             if($this->name == 'index')
             {
@@ -191,7 +183,7 @@ class TreeItem
 
 class TreeFolder extends TreeItem
 {
-    private $children;
+    protected $children;
     
     public function __construct($name)
     {
@@ -269,13 +261,20 @@ class TreeFolder extends TreeItem
         $html .= '<img src="/img/icons/page_folder.png" alt="folder"/>';
         if($this->getRoot()->javascript)
         {
-            $html .= "<a href=\"{$this->getLocation()}/\" class=\"clickableTreeItem javascript\" style=\"padding: 0;\">";
+            $html .= "<a href=\"{$this->getLocation()}\" class=\"clickableTreeItem javascript\" style=\"padding: 0;\">";
         }
         else
         {
             $html .= "<a href=\"#\" class=\"clickableTreeItem\" style=\"padding: 0;\">";
         }
-        $html .= $this->name;
+        if($this->name == "")
+        {
+            $html .= "/";
+        }
+        else
+        {
+            $html .= $this->name;
+        }
         $html .= '</a>';
         if(!isset($_COOKIE['menu'.$id]))
         {

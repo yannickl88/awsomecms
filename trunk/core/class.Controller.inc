@@ -315,19 +315,8 @@ class Controller
         else
         {
             //set the default actions
-            $urls = Config::get("urlmap", array());
-            
-            foreach($urls as $check)
-            {
-                $matches = array();
-                if(preg_match("/^".$check['pattern']."$/", "/".$url, $matches) === 1 && Config::getInstance()->isComponentInstalled($check['component']))
-                {
-                    $component = $check['component'];
-                    $action = $check['action'];
-                    $request['urlmapmatch'] = $matches;
-                    break;
-                }
-            }
+            $urls = Config::getInstance()->getURLMapping();
+            list($component, $action) = $urls->getMapping($url, $request);
         }
         
         $prehook = Config::getInstance()->getHook($component, $action, "pre");
