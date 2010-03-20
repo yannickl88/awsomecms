@@ -55,7 +55,12 @@
     <body>
         <div id="formWrapperBackground">
             <div id="formWrapperBorder">
-                <div id="formWrapper">
+                <div id="formInnerWrapper">
+                    <span id="formHeaderWrapper">
+                        <a href="#" onclick="return closeFormPopup()">{"cancel"|text} <img src="/img/icons/cross.png" /></a>
+                    </span>
+                    <div id="formWrapper">
+                    </div>
                 </div>
             </div>
         </div>

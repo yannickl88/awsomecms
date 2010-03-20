@@ -180,11 +180,10 @@ h1 {
 .hidden {
     display: none;
 }
-.hideIcons .deleteIcon,
-.hideIcons .viewIcon {
+.hideIcons .treeIcon {
     display: none;
 }
-.deleteIcon, .viewIcon {
+.treeIcon {
     float: right;
     display: block;
     height: 16px;
@@ -192,11 +191,8 @@ h1 {
     
     padding: 0 !important;
 }
-.deleteIcon {
-    background-image: url(/img/icons/page_delete.png);
-}
 .viewIcon {
-    background-image: url(/img/icons/page_view.png);
+    background-image: url();
 }
 /* ADMIN TABLES */
 .admin_table {
@@ -351,10 +347,17 @@ h1 {
     -moz-border-radius: 10px;
     -webkit-border-radius: 10px;
 }
-#formWrapper {
+#formInnerWrapper {
     background-color: #ffffff;
     min-height: 300px;
     max-height: 500px;
     overflow: auto;
     padding: 10px;
+}
+#formHeaderWrapper {
+    float: right;
+}
+#formHeaderWrapper a{
+    text-decoration: none;
+    color: #333333;
 }
