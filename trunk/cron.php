@@ -16,16 +16,16 @@ $start = microtime(true);
 $websiteroot = dirname(__FILE__)."/htdocs";
 
 require_once $websiteroot.'/../core/init.inc';
+require_once $websiteroot.'/../core/class.Cache.inc';
 require_once $websiteroot.'/../libs/class.CronParser.inc';
 
 Debugger::getInstance()->setType(Debugger::CLI);
 $components = Config::getInstance()->getComponenets();
 
 $now = $lastrun = time();
-$cacheFile = getFrameworkRoot()."/cache/cron.cache";
-if(file_exists($cacheFile))
+if(Cache::has("cron"))
 {
-    $lastrun = (int) file_get_contents($cacheFile);
+    $lastrun = Cache::get("cron");
 }
 $cronParser = new CronParser();
 
@@ -48,4 +48,4 @@ foreach($components as $component)
     }
 }
 
-file_put_contents($cacheFile, $now);
+Cache::set("cron", $now);

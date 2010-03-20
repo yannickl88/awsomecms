@@ -84,6 +84,7 @@ class NewsTable extends Table
     protected function update($query, $data = null)
     {
         $query->update("news_titleurl", urlEscape($this->record[0]->news_title));
+        Cache::clear("newslist");
     }
     /**
      * (non-PHPdoc)
@@ -92,10 +93,13 @@ class NewsTable extends Table
     protected function insert($query, $data = null)
     {
         $query->insert("news_titleurl", urlEscape($this->record[0]->news_title));
+        Cache::clear("newslist");
     }
     /**
      * (non-PHPdoc)
      * @see core/Table#delete($query, $data)
      */
-    protected function delete($query, $data = null) {}
+    protected function delete($query, $data = null) {
+        Cache::clear("newslist");
+    }
 }

@@ -12,6 +12,7 @@
  *
  * @version $Revision$
  */
+import("core/class.Cache.inc");
 
 /**
  * Configuration class, this is used to retrive all the data from seperate config files
@@ -181,15 +182,15 @@ class Config
     public function reloadComponenets()
     {
         $files = array(
-            getFrameworkRoot()."/cache/components.cache",
-            getFrameworkRoot()."/cache/hooks.cache",
-            getFrameworkRoot()."/cache/urlmap.cache",
+            "components",
+            "hooks",
+            "urlmap",
         );
         foreach($files as $file)
         {
-            if(file_exists($file))
+            if(Cache::has($file))
             {
-                unlink($file);
+                Cache::clear($file);
             }
         }
         
@@ -205,10 +206,9 @@ class Config
         if(!$this->componenets)
         {
             //check if there is cache file.
-            $cachefile = getFrameworkRoot()."/cache/components.cache";
-            if(file_exists($cachefile))
+            if(Cache::has("components"))
             {
-                $cache = unserialize(file_get_contents($cachefile));
+                $cache = Cache::get("components");
                 
                 $this->componenets = $cache[0];
                 $this->requests = $cache[1];
@@ -227,7 +227,7 @@ class Config
                     $this->componenets[$row->component_name] = $row;
                 }
                 
-                file_put_contents($cachefile, serialize(array($this->componenets, $this->requests)));
+                Cache::set("components", array($this->componenets, $this->requests));
             }
         }
         
@@ -258,10 +258,9 @@ class Config
         if(!$this->hooks)
         {
             //check if there is cache file.
-            $cachefile = getFrameworkRoot()."/cache/hooks.cache";
-            if(file_exists($cachefile))
+            if(Cache::has("hooks"))
             {
-                $this->hooks = unserialize(file_get_contents($cachefile));
+                $this->hooks = Cache::get("hooks");
             }
             else
             {
@@ -290,7 +289,7 @@ class Config
                         $this->hooks[$row->hook_target]['post'][$row->hook_action] = array($row->hook_component, $row->hook_function);
                     }
                 }
-                file_put_contents($cachefile, serialize($this->hooks));
+                Cache::set("hooks", $this->hooks);
             }
         }
         
@@ -320,9 +319,9 @@ class Config
         $data = array();
         
         //the url map
-        if(file_exists(getFrameworkRoot().'/cache/urlmap.cache'))
+        if(Cache::has('urlmap'))
         {
-            $data = unserialize(file_get_contents(getFrameworkRoot().'/cache/urlmap.cache'));
+            $data = Cache::get('urlmap');
         }
         else
         {
@@ -338,7 +337,7 @@ class Config
                 }
             }
             
-            file_put_contents(getFrameworkRoot().'/cache/urlmap.cache',serialize($data));
+            Cache::set('urlmap',$data);
         }
         
         return $data;

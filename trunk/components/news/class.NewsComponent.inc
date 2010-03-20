@@ -64,33 +64,41 @@ class NewsComponent extends Component
                     $template = "news/news_item.tpl";
                     $smarty->assign("news", $news);
                     
-                    //fetch the next and previous items
-                    $news2 = Table::init("news.news")
-                        ->setRequest((object) array())
-                        ->doSelect()
-                        ->getRows();
-                    
-                    $previtem = -1;
-                    $nextitem = -1;
-                    
-                    foreach($news2 as $key => $newsitem)
+                    if(Cache::has("newslist"))
                     {
-                        if($newsitem->news_id == $news->news_id)
+                        $newsList = Cache::get("newslist");
+                    }
+                    else
+                    {
+                        $newsList = array();
+                        //fetch the next and previous items
+                        $news2 = Table::init("news.news")
+                            ->setRequest((object) array())
+                            ->doSelect()
+                            ->getRows();
+                        
+                        
+                        foreach($news2 as $key => $newsitem)
                         {
+                            $previtem = -1;
+                            $nextitem = -1;
                             if($key < count($news2)-1)
                             {
-                                $previtem = $news2[$key + 1];
+                                $previtem = $news2[$key + 1]->news_id;
                             }
                             if($key > 0)
                             {
-                                $nextitem = $news2[$key - 1];
+                                $nextitem = $news2[$key - 1]->news_id;
                             }
-                            break;
+                            
+                            $newsList[$newsitem->news_id] = array($previtem, $nextitem);
                         }
+                        
+                        Cache::set("newslist", $newsList);
                     }
                     
-                    $smarty->assign("nextnews", $nextitem);
-                    $smarty->assign("prevnews", $previtem);
+                    $smarty->assign("nextnews", $newsList[$news->news_id][0]);
+                    $smarty->assign("prevnews", $newsList[$news->news_id][1]);
                     
                     echo $smartyLoader->getRenderedPage($smarty->fetch($template), $_GET['url'], $smarty);
                     return;

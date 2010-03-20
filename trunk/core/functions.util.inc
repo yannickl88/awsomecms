@@ -26,7 +26,14 @@ function import($file)
 {
     $frameworkRoot = getFrameworkRoot();
     
-    require_once realpath($frameworkRoot.'/'.$file);
+    if(file_exists($frameworkRoot.'/'.$file))
+    {
+        require_once realpath($frameworkRoot.'/'.$file);
+    }
+    else
+    {
+        echo "cannot find file {$frameworkRoot}/{$file}";
+    }
 }
 /**
  * Import a field.
