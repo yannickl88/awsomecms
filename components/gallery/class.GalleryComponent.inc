@@ -13,6 +13,7 @@
  * @version $Revision$
  */
 import('/core/class.Component.inc');
+import('/components/gallery/util/class.ImageTree.inc');
 
 /**
  * A simple component to manage and show a series of images on a page. Using a tag, images can be grouped together
@@ -418,12 +419,28 @@ class GalleryComponent extends Component
     }
     /**
      * (non-PHPdoc)
-     * @see core/Component#registerMenuItems($menu)
+     * @see core/Component#registerTreeItems($tree)
      */
-    public function registerMenuItems($menu)
+    public function registerTreeItems($tree)
     {
-        $menu->addChild(new MenuItem("gallery", Config::get('galleryadmin', 'galleryadmin', 'admin')));
-        $menu->addChild(new MenuItem("galleryadmin", Config::get('galleryadmin', 'galleryadmin', 'admin'), "gallery"));
-        $menu->addChild(new MenuItem("galleryadd", Config::get('galleryadd', 'galleryadd', 'admin'), "gallery"));
+        $table = Table::init("gallery.images", "admintree");
+        
+        $result = $table
+            ->doSelect()
+            ->getRows();
+
+        $tree->addChild(new ImageFolder("images", ""), "/", Tree::CONTENT);
+        
+        foreach($result as $row)
+        {
+            $tree->addChild(new ImageItem(
+                $row->image_title, 
+                "/".Config::get("galleryedit", "galleryedit", "admin")."?image_id={$row->image_id}", 
+                "/".Config::get("gallerydelete", "gallerydelete", "admin")."?image_id={$row->image_id}", 
+                $row->image_url
+                ), 
+                "/images/", Tree::CONTENT
+            );
+        }
     }
 }

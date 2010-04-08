@@ -1,6 +1,9 @@
 <?php
 class Tree
 {
+    const PAGE          = 1;
+    const CONTENT       = 2;
+    
     protected $children;
     public $onlyShowFolders;
     public $javascript;
@@ -39,9 +42,16 @@ class Tree
      * @param TreeItem $child
      * @return Tree
      */
-    public function addChild($child, $location)
+    public function addChild($child, $location, $type = Tree::PAGE)
     {
-        if($location == "/" || empty($location))
+        $location = substr($location, 0, -1);
+        
+        if(!$this->children[$type])
+        {
+            $this->children[$type] = array();
+        }
+        
+        if(empty($location))
         {
             $locationNodes = array("");
         }
@@ -52,8 +62,9 @@ class Tree
         
         $nextNode = array_shift($locationNodes);
         $childAdded = false;
+        $child->setContentType($type);
         
-        foreach($this->children as $childNode)
+        foreach($this->children[$type] as $childNode)
         {
             if($childNode->getType() == 2 && $childNode->name == $nextNode)
             {
@@ -66,10 +77,11 @@ class Tree
         if(!$childAdded) //hmm we need to create a folder for this child
         {
             $folder = new TreeFolder($nextNode);
+            $folder->setContentType($type);
             $folder->addChild($child, $locationNodes);
             $folder->setParent($this);
-            $this->children[] = $folder;
-            $this->sort();
+            $this->children[$type][] = $folder;
+            $this->sort($type);
         }
         
         return $this;
@@ -82,25 +94,31 @@ class Tree
     {
         return $this;
     }
-    public function sort()
+    public function sort($type)
     {
-        usort($this->children, array($this, "sortCompare"));
+        usort($this->children[$type], array($this, "sortCompare"));
     }
     protected function sortCompare($a, $b)
     {
         return $a->compare($b);
     }
-    public function toHTML()
+    public function toHTML($types = 0)
     {
-        return $this->__toString();
+        return $this->__toString($types);
     }
-    public function __toString()
+    public function __toString($types = 0)
     {
         $html = "";
         $html .= "<div class=\"treeNode\">";
-        foreach($this->children as $child)
+        foreach($this->children as $type => $children)
         {
-            $html .= $child->toHTML();
+            if($types == 0 || ($types > 0 && Config::hasFlag($types, $type)))
+            {
+                foreach($children as $child)
+                {
+                    $html .= $child->toHTML();
+                }
+            }
         }
         $html .= "</div>";
         if($this->javascript)
@@ -117,6 +135,7 @@ class TreeItem
     public $editURL;
     public $deleteURL;
     public $viewURL;
+    private $contentType;
     protected $parent;
     
     public function __construct($name, $editURL, $deleteURL, $viewURL)
@@ -125,10 +144,19 @@ class TreeItem
         $this->editURL = $editURL;
         $this->deleteURL = $deleteURL;
         $this->viewURL = $viewURL;
+        $this->contentType = Tree::PAGE;
     }
     public function getType()
     {
         return 1;
+    }
+    public function getContentType()
+    {
+        return $this->contentType;
+    }
+    public function setContentType($type)
+    {
+        $this->contentType = $type;
     }
     public function setParent($parent)
     {
@@ -269,7 +297,18 @@ class TreeFolder extends TreeItem
         }
         if($this->name == "")
         {
-            $html .= "/";
+            switch($this->getContentType())
+            {
+                case Tree::CONTENT:
+                    $html .= "[contentroot]";
+                    break;
+                case Tree::PAGE:
+                    $html .= "[siteroot]";
+                    break;
+                default:
+                    $html .= "/";
+                    break;
+            }
         }
         else
         {

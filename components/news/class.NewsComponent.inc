@@ -219,7 +219,7 @@ class NewsComponent extends Component
                 "/".Config::get("newsdelete", "newsdelete", "admin")."?news_id={$row->news_id}", 
                 "{$newsRoot}{$newsName}/".date("Y/m", $date)."/".$row->news_titleurl
                 ), 
-                "{$newsRoot}{$newsName}/".date("Y/m", $date)
+                "{$newsRoot}{$newsName}/".date("Y/m", $date)."/"
             );
         }
     }

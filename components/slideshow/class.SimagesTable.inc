@@ -20,7 +20,7 @@ importField("IntField");
  * 
  * @author Yannick <yannick.l.88@gmail.com>
  */
-class ImagesTable extends Table
+class SimagesTable extends Table
 {
     /**
      * Constructor

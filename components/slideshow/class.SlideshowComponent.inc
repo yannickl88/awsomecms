@@ -80,7 +80,7 @@ class SlideshowComponent extends Component
             $request["image_width"] = 0;
             $request["image_height"] = 0;
             
-            $id = Table::init('slideshow.images')
+            $id = Table::init('slideshow.simages')
                 ->setRecord((object) $request)
                 ->doInsert();
             
@@ -88,13 +88,13 @@ class SlideshowComponent extends Component
             
             list($request["image_url"], $request["image_width"], $request["image_height"]) = $this->handleFileUpload($id, 'image_image');
             
-            Table::init('slideshow.images')
+            Table::init('slideshow.simages')
                 ->setRecord((object) $request)
                 ->doUpdate();
             
             if($request['ajax'] === 'true')
             {
-                $this->ajax(Table::init('slideshow.images')->doSelect(array('image_id' => $id))->getRows());
+                $this->ajax(Table::init('slideshow.simages')->doSelect(array('image_id' => $id))->getRows());
             }
             else if($request['internal'] === 'true')
             {
@@ -155,7 +155,7 @@ class SlideshowComponent extends Component
                     }
                 }
                 
-                $image = Table::init('slideshow.images')
+                $image = Table::init('slideshow.simages')
                     ->setRequest((object) $request)
                     ->doSelect()
                     ->getRows();
@@ -169,13 +169,13 @@ class SlideshowComponent extends Component
                 list($request["image_url"], $request["image_width"], $request["image_height"]) = $this->handleFileUpload($request["image_id"], 'image_image');
             }
             
-            Table::init('slideshow.images')
+            Table::init('slideshow.simages')
                 ->setRecord((object) $request)
                 ->doUpdate();
             
             if($request['ajax'] == 'true')
             {
-                $this->ajax(Table::init('slideshow.images')->doSelect(array('image_id' => $id))->getRows());
+                $this->ajax(Table::init('slideshow.simages')->doSelect(array('image_id' => $id))->getRows());
             }
             else if($request['internal'] == 'true')
             {
@@ -190,7 +190,7 @@ class SlideshowComponent extends Component
         {
             if($request['image_id'])
             {
-                $smarty->assign("record", Table::init('slideshow.images')->setRequest((object) $request)->doSelect()->getRow());
+                $smarty->assign("record", Table::init('slideshow.simages')->setRequest((object) $request)->doSelect()->getRow());
             }
             else
             {
@@ -209,7 +209,7 @@ class SlideshowComponent extends Component
     {
         if($request['method'] == 'post')
         {
-            $images = Table::init('slideshow.images')
+            $images = Table::init('slideshow.simages')
                 ->setRequest((object) $request)
                 ->doSelect()
                 ->getRows();
@@ -222,7 +222,7 @@ class SlideshowComponent extends Component
                 }
             }
             
-            Table::init('slideshow.images')
+            Table::init('slideshow.simages')
                 ->setRequest((object) $request)
                 ->doDelete();
             
@@ -232,7 +232,7 @@ class SlideshowComponent extends Component
         {
             if($request['image_id'])
             {
-                Table::init('slideshow.images')
+                Table::init('slideshow.simages')
                     ->setRequest((object) $request);
             }
             else
@@ -266,7 +266,7 @@ class SlideshowComponent extends Component
             }
             
             //add the group
-            $id = Table::init('slideshow.groups')
+            $id = Table::init('slideshow.sgroups')
                 ->setRecord((object) $request)
                 ->doInsert();
             
@@ -282,7 +282,7 @@ class SlideshowComponent extends Component
         }
         else
         {
-            $smarty->assign("images", Table::init('slideshow.images')->doSelect()->getRows());
+            $smarty->assign("images", Table::init('slideshow.simages')->doSelect()->getRows());
         }
     }
     /**
@@ -311,7 +311,7 @@ class SlideshowComponent extends Component
                 $request['group_header'] = (int) $request['image_image_select'];
             }
             //update the group
-            Table::init('slideshow.groups')
+            Table::init('slideshow.sgroups')
                 ->setRequest((object) $request)
                 ->setRecord((object) $request)
                 ->doUpdate();
@@ -334,11 +334,11 @@ class SlideshowComponent extends Component
         {
             if($request['group_id'])
             {
-                $record = Table::init('slideshow.groups')
+                $record = Table::init('slideshow.sgroups')
                     ->setRequest((object) $request)
                     ->doSelect()
                     ->getRow();
-                $images = Table::init('slideshow.images')
+                $images = Table::init('slideshow.simages')
                     ->doSelect()
                     ->getRows();
                 $groupimages = Table::init('slideshow.groupsimages')
@@ -382,7 +382,7 @@ class SlideshowComponent extends Component
                 ->setRequest((object) array("group_id" => $id))
                 ->doDelete();
             
-            Table::init('slideshow.groups')
+            Table::init('slideshow.sgroups')
                 ->setRequest((object) array("group_id" => $id))
                 ->doDelete();
             
@@ -392,7 +392,7 @@ class SlideshowComponent extends Component
         {
             if($request['group_id'])
             {
-                Table::init('slideshow.groups')
+                Table::init('slideshow.sgroups')
                     ->setRequest((object) $request);
             }
             else
