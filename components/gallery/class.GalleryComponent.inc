@@ -439,7 +439,7 @@ class GalleryComponent extends Component
                 "/".Config::get("gallerydelete", "gallerydelete", "admin")."?image_id={$row->image_id}", 
                 $row->image_url
                 ), 
-                "/images/", Tree::CONTENT
+                "/images/".((!empty($row->image_tag))? $row->image_tag."/" : ""), Tree::CONTENT
             );
         }
     }
