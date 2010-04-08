@@ -20,7 +20,7 @@ importField("IntField");
  * 
  * @author Yannick <yannick.l.88@gmail.com>
  */
-class GroupsTable extends Table
+class SgroupsTable extends Table
 {
     /**
      * Constructor

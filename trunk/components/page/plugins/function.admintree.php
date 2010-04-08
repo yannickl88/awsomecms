@@ -25,10 +25,15 @@ function smarty_function_admintree($params, &$smarty)
     import('components/page/util/class.Tree.inc');
     
     $tree = new Tree();
+    $types = 0;
     
     if(isset($params['javascript']))
     {
         $tree->javascript = ''.$params['javascript'];
+    }
+    if(isset($params['types']))
+    {
+        $types = (int) $params['types'];
     }
     $tree->onlyShowFolders = (isset($params['folderonly']) && $params['folderonly'] === true);
     
@@ -38,5 +43,5 @@ function smarty_function_admintree($params, &$smarty)
     }
     
     return $tree->populate()
-        ->toHTML();
+        ->toHTML($types);
 }
