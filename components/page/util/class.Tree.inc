@@ -277,7 +277,6 @@ class TreeFolder extends TreeItem
         $id = md5($this->getLocation());
         
         $html = "";
-        $html .= "<div class=\"\">";
         if(!isset($_COOKIE['menu'.$id]))
         {
             $html .= "<a class=\"folder link{$id} clickableTreeArrow\" href=\"#\"></a>";
@@ -286,7 +285,14 @@ class TreeFolder extends TreeItem
         {
             $html .= "<a class=\"folder link{$id} open clickableTreeArrow\" href=\"#\"></a>";
         }
-        $html .= '<img src="/img/icons/page_folder.png" alt="folder"/>';
+        if($this->name == "" && $this->getContentType() == Tree::PAGE)
+        {
+            $html .= '<img src="/img/icons/folder_page.png" alt="folder"/>';
+        }
+        else
+        {
+            $html .= '<img src="/img/icons/folder.png" alt="folder"/>';
+        }
         if($this->getRoot()->javascript)
         {
             $html .= "<a href=\"{$this->getLocation()}\" class=\"clickableTreeItem javascript\" style=\"padding: 0;\">";
@@ -301,9 +307,11 @@ class TreeFolder extends TreeItem
             {
                 case Tree::CONTENT:
                     $html .= "[contentroot]";
+                    $classes[] = "contentroot";
                     break;
                 case Tree::PAGE:
                     $html .= "[siteroot]";
+                    $classes[] = "siteroot";
                     break;
                 default:
                     $html .= "/";
@@ -314,6 +322,7 @@ class TreeFolder extends TreeItem
         {
             $html .= $this->name;
         }
+        $html = "<div class=\"".implode(" ",$classes)."\">".$html;
         $html .= '</a>';
         if(!isset($_COOKIE['menu'.$id]))
         {

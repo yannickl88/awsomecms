@@ -29,7 +29,7 @@ class NewsFolder extends TreeFolder
         $html = "";
         $html .= "<div class=\"hideIcons\" onmouseout=\"$(this).addClass('hideIcons');\" onmouseover=\"$(this).removeClass('hideIcons');\">";
         $html .= "<a class=\"addIcon treeIcon\" href=\"/".Config::get("newsadd", "newsadd", "admin")."\"><img src=\"/img/icons/add.png\" /></a>";
-        $html .= "<a class=\"viewIcon treeIcon\" href=\"/".Config::get("newsadmin", "newsadmin", "admin")."\"><img src=\"/img/icons/page_view.png\" /></a>";
+        $html .= "<a class=\"viewIcon treeIcon\" href=\"/".Config::get("newsadmin", "newsadmin", "admin")."\"><img src=\"/img/icons/overview.png\" /></a>";
         if(!isset($_COOKIE['menu'.$id]))
         {
             $html .= "<a class=\"folder link{$id} clickableTreeArrow\" href=\"#\"></a>";
