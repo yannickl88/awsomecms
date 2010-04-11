@@ -10,5 +10,6 @@
     "generate":             "Genereer",
     "error_filetolarge":    "Bestandsgrootte is om grote",
     "error_nofileselect":   "Geen bestand geselecteerd",
-    "error_cennotwrite":    "Kan niet schrijven bestand op schijf"
+    "error_cennotwrite":    "Kan niet schrijven bestand op schijf",
+    "images":               "afbeeldingen"
 }

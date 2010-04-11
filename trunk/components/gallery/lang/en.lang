@@ -10,5 +10,6 @@
     "generate":             "Generate",
     "error_filetolarge":    "Filesize is to large",
     "error_nofileselect":   "No file selected",
-    "error_cennotwrite":    "Cannot write file to disk"
+    "error_cennotwrite":    "Cannot write file to disk",
+    "images":               "images"
 }

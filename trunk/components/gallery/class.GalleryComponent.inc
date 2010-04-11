@@ -11,6 +11,7 @@
  * @license http://www.gnu.org/licenses/gpl.txt
  *
  * @version $Revision$
+ * @TODO refactor this component into a more all purpose file component
  */
 import('/core/class.Component.inc');
 import('/components/gallery/util/class.ImageTree.inc');
@@ -429,7 +430,8 @@ class GalleryComponent extends Component
             ->doSelect()
             ->getRows();
 
-        $tree->addChild(new ImageFolder("images", ""), "/", Tree::CONTENT);
+        $imageName = strtolower(Language::get("images"));
+        $tree->addChild(new ImageFolder($imageName, ""), "/", Tree::CONTENT);
         
         foreach($result as $row)
         {
@@ -439,7 +441,7 @@ class GalleryComponent extends Component
                 "/".Config::get("gallerydelete", "gallerydelete", "admin")."?image_id={$row->image_id}", 
                 $row->image_url
                 ), 
-                "/images/".((!empty($row->image_tag))? $row->image_tag."/" : ""), Tree::CONTENT
+                "/{$imageName}/".((!empty($row->image_tag))? $row->image_tag."/" : ""), Tree::CONTENT
             );
         }
     }
