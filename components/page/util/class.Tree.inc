@@ -46,7 +46,7 @@ class Tree
     {
         $location = substr($location, 0, -1);
         
-        if(!$this->children[$type])
+        if(!isset($this->children[$type]))
         {
             $this->children[$type] = array();
         }
@@ -277,6 +277,7 @@ class TreeFolder extends TreeItem
         $id = md5($this->getLocation());
         
         $html = "";
+        $classes = array();
         if(!isset($_COOKIE['menu'.$id]))
         {
             $html .= "<a class=\"folder link{$id} clickableTreeArrow\" href=\"#\"></a>";

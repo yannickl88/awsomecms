@@ -215,7 +215,7 @@ class Controller
         
         if($request->isMadeByProxy())
         {
-            $this->callTable($request->component, $request->translateAction(), $request);
+            echo $this->callTable($request->component, $request->translateAction(), $request);
         }
         else
         {
@@ -329,10 +329,11 @@ class Controller
      */
     public function callTable($component, $action, $request)
     {
+        $config = Config::getInstance();
         $components = $config->getComponenets();
         $needsAuth = true;
         
-        switch(strtoupper($request->action))
+        switch(strtoupper($request->translateAction()))
         {
             case "SELECT":
                 $needsAuth = Config::hasFlag($components[$request->component]->component_auth, (int) $config->get('auth_select', 0, 'core'));
@@ -349,54 +350,46 @@ class Controller
         }
         
         //auth
-        if(
-            $needsAuth && 
-            (
-                !isset($data['username']) || 
-                !is_string($data['username']) || 
-                $data['username'] != $config->get('username', null, 'proxy') || 
-                !isset($data['password']) || 
-                !is_string($data['password']) || 
-                $data['password'] != $config->get('password', null, 'proxy')
-            )
-        )
+        if(!$needsAuth || ($needsAuth && !empty($request->data['username']) && !empty($request->data['password']) && $request->data['username'] == Config::get("username", false, "proxy") && $request->data['password'] == Config::get("password", false, "proxy")))
         {
-            header("HTTP/1.0 403 Forbidden");
-        }
-        
-        //handle request
-        $proxyObject = Table::init($request->table);
-        
-        if($proxyObject)
-        {
+            //handle request
+            $proxyObject = Table::init($request->table);
             
-            unset($data['username']);
-            unset($data['password']);
-            unset($data['url']);
-            
-            try
+            if($proxyObject)
             {
-                $proxyObject->setExternal(true);
-                $proxyObject->setRequest((object) $data);
-                $proxyObject->setRecord((object) $data);
                 
-                $result = call_user_func(array($proxyObject, 'do'.ucfirst(strtolower($request->action))));
-                $result = $result->getRows();
+                unset($data['username']);
+                unset($data['password']);
+                unset($data['url']);
+                
+                try
+                {
+                    $proxyObject->setExternal(true);
+                    $proxyObject->setRequest((object) $data);
+                    $proxyObject->setRecord((object) $data);
+                    
+                    $result = call_user_func(array($proxyObject, 'do'.ucfirst(strtolower($request->translateAction()))));
+                    $result = $result->getRows();
+                }
+                catch(ProxyForbiddenException $e)
+                {
+                    header("HTTP/1.0 403 Forbidden");
+                }
+                
+                if($result)
+                {
+                    header('Content-type: application/json');
+                    return json_encode($result);
+                }
             }
-            catch(ProxyForbiddenException $e)
+            else
             {
-                header("HTTP/1.0 403 Forbidden");
-            }
-            
-            if($result)
-            {
-                header('Content-type: application/json');
-                return json_encode($result);
+                header("HTTP/1.0 404 Not Found");
             }
         }
         else
         {
-            header("HTTP/1.0 404 Not Found");
+            header("HTTP/1.0 403 Forbidden");
         }
     }
     /**

@@ -43,15 +43,14 @@ function import($file)
  */
 function importField($field)
 {
-    
     $frameworkRoot = getFrameworkRoot();
     
     //check if there is a "." in there
-    if(strpos($field, ".") !== false)
+    if(!empty($field) && strpos($field, ".") !== false)
     {
         $loc = explode(".", $field);
-        
         $components = Config::getInstance()->getComponenets();
+        
         require_once realpath($components[$loc[0]]->component_path.'/fields/class.'.$loc[1].".inc");
     }
     else
