@@ -13,7 +13,7 @@
  * @version $Revision$
  */
 import('/core/class.Component.inc');
-import('/core/class.RequestComponent.inc');
+import('/core/class.Request.inc');
 
 /** 
  * Exception thrown if the given component is not installed or found
@@ -186,139 +186,91 @@ class Controller
 {
     private static $instance;
     
-    /**
-     * @var Smarty
-     */
-    private $smarty;
-    private $smartyLoader;
-    private $instanciated = false;
-    private $redirect = false;
-    
-    private $components;
-    
-    public $lastRecord;
-    
-    /**
-     * singelton
-     *
-     * @return Controller
-     */
     public static function getInstance()
     {
-        if (!self::$instance instanceof self) {
-            self::$instance = new self();
+        if(!self::$instance)
+        {
+            self::$instance = new Controller();
         }
+        
         return self::$instance;
     }
+    
+    private $redirect;
+    private $request = null;
+    private $smarty;
+    private $smartyLoader;
+    
     /**
-     * constructor
-     */
-    private function __construct()
-    {
-        $this->components = array();
-        $this->lastRecord = array();
-    }
-    /**
-     * Set the data for this controller, this should be called before anything else
-     *
+     * Handle a request
+     * 
      * @param Smarty $smarty
      * @param SmartyPageLoader $smartyLoader
      */
-    public function setData($smarty, $smartyLoader)
+    public function dispatch($smarty, $smartyLoader)
     {
+        $request = $this->getRequest();
         $this->smarty = $smarty;
         $this->smartyLoader = $smartyLoader;
-        $this->instanciated = true;
-    }
-    /**
-     * Serve a page to the user
-     *
-     * @param string $action        Action
-     * @param string $component     Component name
-     * @return string
-     */
-    public function dispatch($action = false, $component = false)
-    {
-        if(!$this->instanciated)
-        {
-            throw new NotInstanciatedException();
-        }
         
-        switch(strtoupper($_SERVER['REQUEST_METHOD']))
+        if($request->isMadeByProxy())
         {
-            case 'POST' :
-                $request = $_POST;
-                $request['method'] = 'post';
-                break;
-            default :
-                $request = $_GET;
-                $request['method'] = 'get';
-                break;
-        }
-        
-        
-        if(isset($_SESSION['FORMERROR']))
-        {
-            import('/core/class.InvalidFormException.inc');
-            
-            $e = unserialize($_SESSION['FORMERROR']);
-            $url = "/";
-            if(isset($_GET['url']))
-            {
-                $url = "/".$_GET['url'];
-            }
-            if(is_a($e, 'InvalidFormException') && $url == $e->getRedirect())
-            {
-                $this->smarty->assign("FORMERROR", $e);
-                
-                $table = $e->getTable();
-                
-                if(!empty($table))
-                {
-                    Table::init($e->getTable())
-                        ->setError($e);
-                }
-                
-                unset($_SESSION['FORMERROR']);
-            }
-            else
-            {
-                unset($_SESSION['FORMERROR']);
-            }
-        }
-        
-        $url = "";
-        if(isset($_GET['url']))
-        {
-            $url = $_GET['url'];
-        }
-        $this->smarty->assign("NOTIFICATIONS", Notifications::getInstance()->getNotifications($url));
-        //add extra session related things to smarty
-        try
-        {
-            $this->callComponentAction(Config::get("component", "session", "session"), "action_".Config::get("action", "session", "session"), array($this->smarty, $this->smartyLoader, array()));
-        }
-        catch(Exception $e) { }
-        
-        //do the requests
-        if(isset($request['component']))
-        {
-            $component = $request['component'];
-            unset($request['component']);
-            
-            if(isset($request['action']))
-            {
-                $action = $request['action'];
-                unset($request['action']);
-            }
+            $this->callTable($request->component, $request->translateAction(), $request);
         }
         else
         {
-            //set the default actions
-            $urls = Config::getInstance()->getURLMapping();
-            list($component, $action) = $urls->getMapping($url, $request);
+            if(isset($_SESSION['FORMERROR']))
+            {
+                import('/core/class.InvalidFormException.inc');
+                
+                $e = unserialize($_SESSION['FORMERROR']);
+                $url = "/";
+                if(isset($_GET['url']))
+                {
+                    $url = "/".$_GET['url'];
+                }
+                if(is_a($e, 'InvalidFormException') && $url == $e->getRedirect())
+                {
+                    $this->smarty->assign("FORMERROR", $e);
+                    
+                    $table = $e->getTable();
+                    
+                    if(!empty($table))
+                    {
+                        Table::init($e->getTable())
+                            ->setError($e);
+                    }
+                    
+                    unset($_SESSION['FORMERROR']);
+                }
+                else
+                {
+                    unset($_SESSION['FORMERROR']);
+                }
+            }
+            $this->smarty->assign("NOTIFICATIONS", Notifications::getInstance()->getNotifications($request->url));
+            
+            //add extra session related things to smarty
+            try
+            {
+                $this->callAction(Config::get("component", "session", "session"), "action_".Config::get("action", "session", "session"), $this->getRequest());
+            }
+            catch(Exception $e) { }
+            
+            $this->callAction($request->component, $request->action, $this->getRequest());
+            $this->redirect();
         }
-        
+    }
+    /**
+     * call an action on a component with it's hooks
+     * 
+     * @param Component $component
+     * @param String $action            action with the action prefix
+     * @param Request $request
+     * @return mixed
+     */
+    public function callAction($component, $action, $request)
+    {
         $prehook = Config::getInstance()->getHook($component, $action, "pre");
         $posthook = Config::getInstance()->getHook($component, $action, "post");
         
@@ -334,7 +286,7 @@ class Controller
                 
                 if(method_exists($prehookComponent, $prehookAction))
                 {
-                    call_user_func(array($prehookComponent, $prehookAction), $this->smarty, $request);
+                    call_user_func(array($prehookComponent, $prehookAction), $this->smarty, $this->smartyLoader, $request->data);
                 }
             }
             catch(Exception $e) 
@@ -343,7 +295,7 @@ class Controller
             }
         }
         
-        $this->handleRequest($action, $component, $request);
+        $result = call_user_func(array(Component::init($component), $action), $this->smarty, $this->smartyLoader, $request->data);
         
         //post action
         if($posthook)
@@ -357,7 +309,7 @@ class Controller
                 
                 if(method_exists($posthookComponent, $posthookAction))
                 {
-                    call_user_func(array($posthookComponent, $posthookAction), $this->smarty, $request);
+                    call_user_func(array($posthookComponent, $posthookAction), $this->smarty, $this->smartyLoader, $request->data);
                 }
             }
             catch(Exception $e)
@@ -366,197 +318,121 @@ class Controller
             }
         }
         
-        //redirect if set
-        $this->redirect();
+        return $result;
     }
     /**
-     * Handel a request for a component
-     *
-     * @param string $action
-     * @param string $component
-     * @param array $request
-     * @param string $functionPrefix    String of the prefix for the function to be called
-     * @return string
+     * Handel the request made by the proxy
+     * 
+     * @param Component $component
+     * @param String $action            SELECT|INSERT|UPDATE|DELETE
+     * @param Request $request
      */
-    private function handleRequest($action, $component, &$request, $functionPrefix = "action")
+    public function callTable($component, $action, $request)
     {
-        $actionHandler = $functionPrefix."_".$action;
-        $exceptions = $this->getActionAuthExceptions();
-        
-        if(!in_array($component.".".$actionHandler, $exceptions))
-        {
-            //check the authentication
-            $auth = SQLQuery::doSelect()
-                ->table("auth")
-                ->where("auth_component", $component)
-                ->where("auth_action ", $actionHandler)
-                ->exec()
-                ->getRows();
-            
-            if(count($auth) > 0)
-            {
-                $valid = false;
-                
-                foreach($auth as $authRow)
-                {
-                    if($authRow->auth_privilage == "*guest*")
-                    {
-                        $valid = true;
-                        break;
-                    }
-                    elseif($_SESSION['usr']['auth'][$authRow->auth_privilage])
-                    {
-                        $valid = true;
-                        break;
-                    }
-                }
-                
-                if(!$valid)
-                {
-                    throw new ForbiddenException();
-                }
-            }
-        }
-        
-        try
-        {
-            return $this->callComponentAction($component, $actionHandler, array($this->smarty, $this->smartyLoader, $request));
-        }
-        catch(InvalidFormException $e)
-        {
-            $_SESSION['FORMERROR'] = serialize($e);
-            
-            $url = $e->getRedirect();
-            $query = "";
-            $data = $e->getRedirectData();
-            
-            foreach($data as $key => $item)
-            {
-                if($query != "")
-                {
-                    $query .= "&";
-                }
-                else
-                {
-                    $query .= "?";
-                }
-                
-                $query .= $key.'='.$item;
-            }
-            
-            $url .= $query;
-            
-            if(Config::get('debug', 0, 'debug') > 1)
-            {
-                echo "Non debug would have redirected to \" <a href='{$url}'>{$url}</a> \"";
-                echo Debugger::getInstance();
-            }
-            else
-            {
-                header("Location: {$url}");
-            }
-            exit;
-        }
-        catch(ComponentNotFoundException $e)
-        {
-            header("HTTP/1.0 404 Not Found");
-            exit;
-        }
-        catch(ActionNotFoundException $e)
-        {
-            header("HTTP/1.0 404 Not Found");
-            exit;
-        }
-        catch(Exception $e)
-        {
-            header("HTTP/1.0 500 Internal Server Error");
-            
-            echo nl2br($e->getMessage()."\n\n".$e->getTraceAsString());
-            exit;
-        }
-    }
-    /**
-     * Get the user auth data for the session
-     *
-     * @param int $user_id
-     * @return array
-     */
-    public function auth($user_id)
-    {
-        if(!$this->instanciated)
-        {
-            throw new NotInstanciatedException();
-        }
-        
-        $component = Config::get('component', false, 'auth');
-        $actionHandler = "auth";
-        
-        try
-        {
-            return $this->callComponentAction($component, $actionHandler, array($user_id));
-        }
-        catch(Exception $e)
-        {
-            return false;
-        }
-    }
-    /**
-     * Check if the user is a valid one
-     *
-     * @param string $user_name
-     * @param string $user_pass
-     * @return boolean
-     */
-    public function auth_login($user_name, $user_pass)
-    {
-        if(!$this->instanciated)
-        {
-            throw new NotInstanciatedException();
-        }
-        
-        $component = Config::get('component', false, 'auth');
-        $actionHandler = "auth_login";
-        
-        try
-        {
-            return $this->callComponentAction($component, $actionHandler, array($user_name, $user_pass));
-        }
-        catch(Exception $e)
-        {
-            return false;
-        }
-    }
-    /**
-     * Call and action on an component
-     *
-     * @param string $component
-     * @param string $action
-     * @param array $parameters
-     * @return mixed
-     */
-    private function callComponentAction($component, $actionHandler, $parameters)
-    {
-        $config = Config::getInstance();
-        
         $components = $config->getComponenets();
+        $needsAuth = true;
         
-        $componentObject = Component::init($component);
-        
-        if($componentObject)
+        switch(strtoupper($request->action))
         {
-            if(!method_exists($componentObject, $actionHandler))
+            case "SELECT":
+                $needsAuth = Config::hasFlag($components[$request->component]->component_auth, (int) $config->get('auth_select', 0, 'core'));
+                break;
+            case "INSERT":
+                $needsAuth = Config::hasFlag($components[$request->component]->component_auth, (int) $config->get('auth_insert', 0, 'core'));
+                break;
+            case "UPDATE":
+                $needsAuth = Config::hasFlag($components[$request->component]->component_auth, (int) $config->get('auth_update', 0, 'core'));
+                break;
+            case "DELETE":
+                $needsAuth = Config::hasFlag($components[$request->component]->component_auth, (int) $config->get('auth_delete', 0, 'core'));
+                break;
+        }
+        
+        //auth
+        if(
+            $needsAuth && 
+            (
+                !isset($data['username']) || 
+                !is_string($data['username']) || 
+                $data['username'] != $config->get('username', null, 'proxy') || 
+                !isset($data['password']) || 
+                !is_string($data['password']) || 
+                $data['password'] != $config->get('password', null, 'proxy')
+            )
+        )
+        {
+            header("HTTP/1.0 403 Forbidden");
+        }
+        
+        //handle request
+        $proxyObject = Table::init($request->table);
+        
+        if($proxyObject)
+        {
+            
+            unset($data['username']);
+            unset($data['password']);
+            unset($data['url']);
+            
+            try
             {
-                throw new ActionNotFoundException();
+                $proxyObject->setExternal(true);
+                $proxyObject->setRequest((object) $data);
+                $proxyObject->setRecord((object) $data);
+                
+                $result = call_user_func(array($proxyObject, 'do'.ucfirst(strtolower($request->action))));
+                $result = $result->getRows();
+            }
+            catch(ProxyForbiddenException $e)
+            {
+                header("HTTP/1.0 403 Forbidden");
             }
             
-            $this->components[$component] = $componentObject;
-            
-            return call_user_func_array(array($componentObject, $actionHandler), $parameters);
+            if($result)
+            {
+                header('Content-type: application/json');
+                return json_encode($result);
+            }
         }
         else
         {
-            throw new ComponentNotFoundException();
+            header("HTTP/1.0 404 Not Found");
         }
+    }
+    /**
+     * @return Request
+     */
+    private function getRequest()
+    {
+        if(!$this->request)
+        {
+            $this->request = new Request();
+        }
+        
+        return $this->request;
+    }
+    /**
+     * Get the smarty object that is used for the page rendering
+     * @return Smarty
+     */
+    public function getSmarty()
+    {
+        return $this->smarty;
+    }
+    /**
+     * List of action that do not need auth checking
+     * 
+     * @return array
+     */
+    public function getActionAuthExceptions()
+    {
+        $exceptions = array(
+            "core.action_index"
+        );
+        
+        $exceptions[] = Config::get("component", "", "session").".action_".Config::get("action", "", "session");
+        
+        return $exceptions;
     }
     /**
      * Do an redirect, based on what is set.
@@ -566,7 +442,7 @@ class Controller
      */
     public function redirect()
     {
-        if($this->redirect)
+        if(!empty($this->redirect))
         {
             if(Config::get('debug', 0, 'debug') > 1)
             {
@@ -588,29 +464,5 @@ class Controller
     public function setRedirect($url)
     {
         $this->redirect = $url;
-    }
-    /**
-     * Get the smarty object
-     * 
-     * @return Smarty
-     */
-    public function getSmarty()
-    {
-        return $this->smarty;
-    }
-    /**
-     * List of action that do not need auth checking
-     * 
-     * @return array
-     */
-    public function getActionAuthExceptions()
-    {
-        $exceptions = array(
-            "core.action_index"
-        );
-        
-        $exceptions[] = Config::get("component", "", "session").".action_".Config::get("action", "", "session");
-        
-        return $exceptions;
     }
 }

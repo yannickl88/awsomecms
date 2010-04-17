@@ -28,5 +28,6 @@ import('/core/class.SQL.inc');
 import('/core/class.Config.inc');
 import('/core/class.SmartyPageLoader.inc');
 import('/core/class.Controller.inc');
+import('/core/class.Authentication.inc');
 import('/core/class.Table.inc');
 import('/core/class.Language.inc');
