@@ -22,7 +22,7 @@ import('/core/class.Component.inc');
  * 
  * @author Yannick <yannick.l.88@gmail.com>
  */
-class UsersComponent extends Component
+class UsersComponent extends Component implements AuthComponent
 {
     public function __construct()
     {
@@ -54,7 +54,7 @@ class UsersComponent extends Component
         
         if($valid)
         {
-            $loggedin = Controller::getInstance()->auth_login($request['user_name'], $request['user_pass']);
+            $loggedin = Authentication::login($request['user_name'], $request['user_pass']);
             
             if(!$loggedin || ($loggedin && $_SESSION['usr']['auth']['admin'] !== true))
             {
@@ -279,17 +279,17 @@ class UsersComponent extends Component
     /**
      * Get the privileges the user has
      * 
-     * @param Object $userRow
+     * @param int $privileges       Privlige field from the user record
      * @return array
      */
-    public function auth($userRow)
+    public function getPrivilageMapping($privileges)
     {
         $privilages = Table::init('users.privileges')->doSelect()->getRows();
         $rights = array();
         
         foreach($privilages as $privilage)
         {
-            $rights[$privilage->privilege_name] = Config::hasFlag($userRow->user_privileges, $privilage->privilege_int);
+            $rights[$privilage->privilege_name] = Config::hasFlag($privileges, $privilage->privilege_int);
         }
         
         return $rights;
@@ -312,7 +312,7 @@ class UsersComponent extends Component
         
         if(!empty($record))
         {
-            $privilages = $this->auth($record);
+            $privilages = $this->getPrivilageMapping($record->user_privilages);
             
             if(count($record) == 1)
             {
@@ -334,6 +334,8 @@ class UsersComponent extends Component
     {
         $_SESSION['usr'] = null;
         session_destroy();
+        
+        return true;
     }
     /**
      * (non-PHPdoc)

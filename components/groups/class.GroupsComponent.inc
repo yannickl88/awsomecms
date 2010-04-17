@@ -19,7 +19,7 @@ import('/core/class.Component.inc');
  * 
  * @author Yannick <yannick.l.88@gmail.com>
  */
-class GroupsComponent extends Component
+class GroupsComponent extends Component implements AuthComponent
 {
     /**
      * Constructor
@@ -143,10 +143,10 @@ class GroupsComponent extends Component
     /**
      * Request a list of privilages a given groups has
      * 
-     * @param object $groupRecord
+     * @param int $privileges
      * @return array
      */
-    public function auth($groupRecord)
+    public function getPrivilageMapping($privileges)
     {
         $privilages = Table::init('users.privileges')
             ->doSelect()
@@ -155,7 +155,7 @@ class GroupsComponent extends Component
         
         foreach($privilages as $privilage)
         {
-            $rights[$privilage->privilege_name] = Config::hasFlag((int) $groupRecord->group_privileges, $privilage->privilege_int);
+            $rights[$privilage->privilege_name] = Config::hasFlag((int) $privileges, $privilage->privilege_int);
         }
         
         return $rights;
@@ -178,7 +178,7 @@ class GroupsComponent extends Component
         
         foreach($records as $record)
         {
-            $privilages = $this->auth($record);
+            $privilages = $this->getPrivilageMapping($record->group_privileges);
             
             if(count($record) == 1)
             {
@@ -201,6 +201,8 @@ class GroupsComponent extends Component
     {
         $_SESSION['usr'] = null;
         session_destroy();
+        
+        return true;
     }
     /**
      * Hook to add a reference of a user when it is deleted in the user component

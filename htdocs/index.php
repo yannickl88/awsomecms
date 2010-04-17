@@ -23,14 +23,6 @@ try
 
     $config = Config::getInstance();
     
-    //check if incomming request if directed at the proxy
-    if($config->get("enabled", false, 'proxy') == "1" && strpos('http://' . $_SERVER['SERVER_NAME'] . $_SERVER['REQUEST_URI'], $config->get("proxy", 'www.google.com', 'proxy')) === 0)
-    {
-        import('/core/class.RequestComponent.inc');
-        
-        RequestComponent::handelRequest();
-    }
-    
     $smarty = new Smarty();
     $smarty->assign("SCRIPT_START", $start);
 
@@ -45,10 +37,8 @@ try
     $smartyLoader = new SmartyPageLoader();
     $smartyLoader->registerModulePlugins($smarty);
 
-    $controller = Controller::getInstance();
-
-    $controller->setData($smarty, $smartyLoader);
-    $controller->dispatch();
+    Controller::getInstance()
+        ->dispatch($smarty, $smartyLoader);
 }
 catch(NotInstalledException $e)
 {

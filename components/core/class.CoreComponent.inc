@@ -39,8 +39,7 @@ class CoreComponent extends Component
         //check for logout
         if(isset($_GET['logout']) && $_GET['logout'] === 'true')
         {
-            $authComponent = Component::init(Config::get("component", "core", "auth"));
-            $authComponent->auth_logout();
+            Authentication::logout();
             $this->redirect("/");
             Controller::getInstance()->redirect();
         }

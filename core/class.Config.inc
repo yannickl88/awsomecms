@@ -313,11 +313,13 @@ class Config
     {
         return (($int & $flag) == $flag);
     }
-    
+    /**
+     * Get the mapping object for the urls
+     * 
+     * @return URLMapping
+     */
     public function getURLMapping()
     {
-        $data = array();
-        
         //the url map
         if(Cache::has('urlmap'))
         {
@@ -343,18 +345,31 @@ class Config
         return $data;
     }
 }
-
+/**
+ * Object for url mapping, this means an component and it's action can be mapped to an url
+ * 
+ * @author Yannick <yannick.l.88@gmail.com>
+ */
 class URLMapping
 {
     private $mapping;
     private $max;
     
+    /**
+     * Construcor
+     */
     public function __construct()
     {
         $this->mapping = array();
         $this->max = -1;
     }
-    
+    /**
+     * Add a map to the object
+     * 
+     * @param string $pattern
+     * @param string $action
+     * @param int $sort
+     */
     public function addMap($pattern, $action, $sort = -1)
     {
         if($sort > $this->max)
@@ -370,7 +385,12 @@ class URLMapping
         
         usort($this->mapping, array($this, "sort"));
     }
-    
+    /**
+     * Get the mapping for an URL
+     * 
+     * @param string $url
+     * @param Array $request
+     */
     public function getMapping($url, &$request)
     {
         foreach($this->mapping as $check)
@@ -383,13 +403,18 @@ class URLMapping
                 $action = $check[2][1];
                 $request['urlmapmatch'] = $matches;
                 
-                return array($component, $action);
+                return array($component, "action_".$action);
             }
         }
         
         return array(false, false);
     }
-    
+    /**
+     * Sorting the mapping, this makes sure the highest sort is on top
+     * 
+     * @param array $a
+     * @param array $b
+     */
     private function sort($a, $b)
     {
         if ($a[0] == $b[0])
