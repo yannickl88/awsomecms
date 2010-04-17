@@ -394,7 +394,7 @@ class URLMapping
         {
             $matches = array();
             
-            if(preg_match("/^".$check[1]."$/", "/".$url, $matches) === 1)
+            if(preg_match("/^".$check[1]."$/", $url, $matches) === 1)
             {
                 $component = $check[2][0];
                 $action = $check[2][1];
