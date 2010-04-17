@@ -34,6 +34,7 @@ class Request
     public $method;
     public $action;
     public $data;
+    public $fullUrl;
     public $url;
     private $isProxyRequest;
     
@@ -62,10 +63,11 @@ class Request
         }
         $this->data['method'] = strtolower($this->method);
         
-        $this->url = 'http://' . $_SERVER['SERVER_NAME'] . $_SERVER['REQUEST_URI'];
+        $this->fullUrl = 'http://' . $_SERVER['SERVER_NAME'] . $_SERVER['REQUEST_URI'];
+        $this->url = $_SERVER['REQUEST_URI'];
         if($this->isProxyRequest)
         {
-            $this->table = substr($this->url, strlen($config->get("proxy", 'www.google.com', 'proxy'))+1);
+            $this->table = substr($this->fullUrl, strlen($config->get("proxy", 'www.google.com', 'proxy'))+1);
             if(strrpos($this->table, "?") > 0)
             {
                 $this->table = substr($this->table, 0, strrpos($this->table, "?"));
