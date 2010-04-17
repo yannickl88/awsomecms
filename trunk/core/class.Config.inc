@@ -208,10 +208,7 @@ class Config
             //check if there is cache file.
             if(Cache::has("components"))
             {
-                $cache = Cache::get("components");
-                
-                $this->componenets = $cache[0];
-                $this->requests = $cache[1];
+                $this->componenets = Cache::get("components");
             }
             else
             {
@@ -227,7 +224,7 @@ class Config
                     $this->componenets[$row->component_name] = $row;
                 }
                 
-                Cache::set("components", array($this->componenets, $this->requests));
+                Cache::set("components", $this->componenets);
             }
         }
         
@@ -272,9 +269,9 @@ class Config
                 
                 while($row = $result->getRow())
                 {
-                    if(!isset($this->hooks[$row->component_target]))
+                    if(!isset($this->hooks[$row->hook_target]))
                     {
-                        $this->hooks[$row->component_target] = array(
+                        $this->hooks[$row->hook_target] = array(
                             "pre" => array(),
                             "post" => array()
                         );
