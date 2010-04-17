@@ -286,7 +286,7 @@ class Controller
                 
                 if(method_exists($prehookComponent, $prehookAction))
                 {
-                    call_user_func(array($prehookComponent, $prehookAction), $this->smarty, $this->smartyLoader, $request->data);
+                    call_user_func(array($prehookComponent, $prehookAction), $this->smarty, $request->data);
                 }
             }
             catch(Exception $e) 
@@ -309,7 +309,7 @@ class Controller
                 
                 if(method_exists($posthookComponent, $posthookAction))
                 {
-                    call_user_func(array($posthookComponent, $posthookAction), $this->smarty, $this->smartyLoader, $request->data);
+                    call_user_func(array($posthookComponent, $posthookAction), $this->smarty, $request->data);
                 }
             }
             catch(Exception $e)
