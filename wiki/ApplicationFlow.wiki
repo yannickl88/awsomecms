@@ -1,5 +1,3 @@
-#Flow of the application from request to response
-
 = Application Flow =
 
 To get an understanding of how the component handels each request I made this little diagram. It shows 2 requests, one to the proxy and one to a normal component.
