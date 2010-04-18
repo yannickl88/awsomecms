@@ -103,7 +103,6 @@ class InstallHelper
                     `components` 
                 (
                     `component_name`, 
-                    `component_requests`, 
                     `component_path`, 
                     `component_auth`,
                     `component_patchlevel`,
@@ -112,7 +111,6 @@ class InstallHelper
                 VALUES
                 (
                     '{$component}',
-                    '{$requests}',
                     '{$dir}',
                     15,
                     {$patchlevel},

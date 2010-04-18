@@ -14,7 +14,6 @@
  * @TODO refactor this component into a more all purpose file component
  */
 import('/core/class.Component.inc');
-import('/components/gallery/util/class.ImageTree.inc');
 
 /**
  * A simple component to manage and show a series of images on a page. Using a tag, images can be grouped together
@@ -416,33 +415,6 @@ class GalleryComponent extends Component
                 $exception->addInvalidField('image_thumb', "Tumb image was to large");
                 throw $exception;
             }
-        }
-    }
-    /**
-     * (non-PHPdoc)
-     * @see core/Component#registerTreeItems($tree)
-     */
-    public function registerTreeItems($tree)
-    {
-        $table = Table::init("gallery.images", "admintree");
-        
-        $result = $table
-            ->doSelect()
-            ->getRows();
-
-        $imageName = strtolower(Language::get("images"));
-        $tree->addChild(new ImageFolder($imageName, ""), "/", Tree::CONTENT);
-        
-        foreach($result as $row)
-        {
-            $tree->addChild(new ImageItem(
-                $row->image_title, 
-                "/".Config::get("galleryedit", "galleryedit", "admin")."?image_id={$row->image_id}", 
-                "/".Config::get("gallerydelete", "gallerydelete", "admin")."?image_id={$row->image_id}", 
-                $row->image_url
-                ), 
-                "/{$imageName}/".((!empty($row->image_tag))? $row->image_tag."/" : ""), Tree::CONTENT
-            );
         }
     }
 }

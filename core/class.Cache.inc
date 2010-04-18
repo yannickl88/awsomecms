@@ -29,12 +29,18 @@ class Cache
             
             foreach($files as $file)
             {
-                unlink(self::getCacheDir()."/{$files}");
+                if(file_exists(self::getCacheDir()."/{$files}"))
+                {
+                    unlink(self::getCacheDir()."/{$files}");
+                }
             }
         }
         else
         {
-            unlink(self::getCacheDir()."/{$key}.cache");
+            if(file_exists(self::getCacheDir()."/{$files}"))
+            {
+                unlink(self::getCacheDir()."/{$key}.cache");
+            }
         }
     }
 }

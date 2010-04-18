@@ -257,7 +257,34 @@ class Controller
             }
             catch(Exception $e) { }
             
-            $this->callAction($request->component, $request->action, $this->getRequest());
+            try
+            {
+                $this->callAction($request->component, $request->action, $this->getRequest());
+            }
+            catch(InvalidFormException $e)
+            {
+                $_SESSION['FORMERROR'] = serialize($e);
+                
+                $url = $e->getRedirect();
+                $data = "";
+                
+                foreach($e->getRedirectData() as $key => $value)
+                {
+                    if($data != "")
+                    {
+                        $data .= "&";
+                    }
+                    
+                    $data .= $key."=".$value;
+                }
+                
+                if(!empty($data))
+                {
+                    $url = $url."?".$data;
+                }
+                
+                $this->setRedirect($url);
+            }
             $this->redirect();
         }
     }
