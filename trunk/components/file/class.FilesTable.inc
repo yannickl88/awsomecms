@@ -15,38 +15,38 @@
 importField("Field");
 importField("IntField");
 importField("TagField");
+importField("DateField");
+importField("TextField");
+importField("file.UploadField");
 
 /**
  * Core table, this handels all interaction with the core table in the database
  * 
  * @author Yannick <yannick.l.88@gmail.com>
  */
-class ImagesTable extends Table
+class FilesTable extends Table
 {
     /**
      * Constructor
      */
     public function __construct()
     {
-        parent::__construct("images");
-        $this->assign("gallery");
+        parent::__construct("files");
+        $this->assign("file");
         
-        $this->addField(new IntField("image_id", Field::INDEX|Field::AUTOKEY));
-        $this->addField(new Field("image_title"), 1);
-        $this->addField(new Field("image_url", Field::OPTIONAL|Field::HIDE));
-        $this->addField(new Field("image_urlthumb", Field::OPTIONAL|Field::HIDE));
-        $this->addField(new IntField("image_width", Field::OPTIONAL|Field::HIDE));
-        $this->addField(new IntField("image_height", Field::OPTIONAL|Field::HIDE));
-        $this->addField(new IntField("image_thumbwidth", Field::OPTIONAL|Field::HIDE));
-        $this->addField(new IntField("image_thumbheight", Field::OPTIONAL|Field::HIDE));
-        $this->addField(new TagField("image_tag", Field::OPTIONAL|Field::FORCEUPDATE), 2);
+        $this->addField(new IntField("file_id", Field::INDEX|Field::AUTOKEY));
+        $this->addField(new Field("file_name"), 1);
+        $this->addField(new DateField("file_date"), 2);
+        $this->addField(new UploadField("file_data"), 3);
+        $this->addField(new TagField("file_tag", Field::OPTIONAL|Field::FORCEUPDATE), 4);
+        $this->addField(new TextField("file_description", Field::HIDE_VIEW), 5);
         $this->setTitle("[image_title]");
         
         $this->setURLs(
-            Config::get('galleryadmin', 'galleryadmin', 'admin'),
-            Config::get('galleryadd', 'galleryadd', 'admin'),
-            Config::get('galleryedit', 'galleryedit', 'admin'),
-            Config::get('gallerydelete', 'gallerydelete', 'admin')
+            Config::get('fileadmin', 'fileadmin', 'admin'),
+            Config::get('fileadd', 'fileadd', 'admin'),
+            Config::get('fileedit', 'fileedit', 'admin'),
+            Config::get('filedelete', 'filedelete', 'admin')
         );
     }
     /**
@@ -55,7 +55,7 @@ class ImagesTable extends Table
      */
     protected function select($query, $data = null)
     {
-        $query->orderBy("image_id", "desc");
+        $query->orderBy("file_id", "desc");
         
         if($data)
         {
@@ -63,7 +63,7 @@ class ImagesTable extends Table
             {
                 $query->limit($data->max);
             }
-            $query->whereWhenSet("image_tag", $data->image_tag);
+            $query->whereWhenSet("file_tag", $data->image_tag);
         }
     }
     /**

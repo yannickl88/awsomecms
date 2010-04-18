@@ -237,6 +237,7 @@ abstract class Table
     public function addField($field, $sort = 0)
     {
         $field->sort = $sort;
+        $field->setParent($this);
         $this->fields[] = $field;
         
         $class = get_class($field);
@@ -305,6 +306,15 @@ abstract class Table
     public function getFields()
     {
         return $this->fields;
+    }
+    /**
+     * Get the name of this tabel.
+     * 
+     * @return String
+     */
+    public function getName()
+    {
+        return $this->name;
     }
     /**
      * Get the title of this tabel record. This is a pre-parsed string with the values from the record
@@ -733,7 +743,7 @@ abstract class Table
         $this->validate(Field::VIEW);
         
         $query = SQLQuery::doSelect();
-        $query->table($this->name);
+        $query->table($this);
         
         foreach($this->fields as $field)
         {
@@ -760,7 +770,7 @@ abstract class Table
         $this->validate(Field::ADD);
         
         $query = SQLQuery::doInsert();
-        $query->table($this->name);
+        $query->table($this);
         
         foreach($this->fields as $field)
         {
@@ -788,7 +798,7 @@ abstract class Table
         $this->validate(Field::EDIT);
         
         $query = SQLQuery::doUpdate();
-        $query->table($this->name);
+        $query->table($this);
         
         foreach($this->fields as $field)
         {
@@ -815,7 +825,7 @@ abstract class Table
         $this->validate(Field::DELETE);
         
         $query = SQLQuery::doDelete();
-        $query->table($this->name);
+        $query->table($this);
         
         foreach($this->fields as $field)
         {
@@ -1040,5 +1050,25 @@ abstract class Table
     public function getInsertedID()
     {
         return $this->lastInsertedID;
+    }
+    /**
+     * Parse the record, this allows for data conversions or deserialization
+     */
+    public function db2value($record)
+    {
+        if(!empty($record))
+        {
+            foreach($record as $key => &$value)
+            {
+                $field = $this->getField($key);
+                
+                if($field)
+                {
+                    $value = $field->db2value($value);
+                }
+            }
+        }
+        
+        return $record;
     }
 }

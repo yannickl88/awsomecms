@@ -42,6 +42,7 @@ class Field
     const FORCEUPDATE   = 512;
     const DUMMY         = 1024; //does not get's added to the selection list
     
+    protected $parent;
     protected $name;
     protected $table;
     protected $displayName;
@@ -141,6 +142,17 @@ class Field
     public function setValue($value)
     {
         $this->value = $value;
+        return $this;
+    }
+    /**
+     * Set the Parent table of this field
+     *
+     * @param Table $value
+     * @return Field
+     */
+    public function setParent($parent)
+    {
+        $this->parent = $parent;
         return $this;
     }
     /**
@@ -647,6 +659,16 @@ class Field
      * @return String
      */
     public function value2db($value)
+    {
+        return $value;
+    }
+    /**
+     * Convert the dbvalue of the param to what the field expects
+     * 
+     * @param $value String
+     * @return String
+     */
+    public function db2value($value)
     {
         return $value;
     }

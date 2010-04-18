@@ -1,0 +1,4 @@
+INSERT INTO `pages` (`page_name`, `page_location`, `page_template`, `page_timestamp`) VALUES('add', '/admin/file/', '{form table=''file.files'' form=''add''}', NOW());
+INSERT INTO `pages` (`page_name`, `page_location`, `page_template`, `page_timestamp`) VALUES('edit', '/admin/file/', '{form table=''file.files'' form=''edit''}', NOW());
+INSERT INTO `pages` (`page_name`, `page_location`, `page_template`, `page_timestamp`) VALUES('delete', '/admin/file/', '{form table=''file.files'' form=''delete''}', NOW());
+INSERT INTO `pages` (`page_name`, `page_location`, `page_template`, `page_timestamp`) VALUES('admin', '/admin/file/', '{form table=''file.files'' form=''admin''}', NOW());

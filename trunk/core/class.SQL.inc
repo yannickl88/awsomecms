@@ -71,21 +71,21 @@ class SQLQuery
         $this->action = $action;
     }
     /**
-    * return the action for this query
-    * 
-    * @return string    select, update, insert or delete
-    */
+     * return the action for this query
+     *
+     * @return string    select, update, insert or delete
+     */
     public function getAction()
     {
         return $this->action;
     }
     /**
-    * Create a select query object
-    * 
-    * @param string $field
-    * @param string $distrinct
-    * @return SQLQuery
-    */
+     * Create a select query object
+     *
+     * @param string $field
+     * @param string $distrinct
+     * @return SQLQuery
+     */
     public static function doSelect($field = '', $distrinct = false)
     {
         $query = new SQLQuery('select');
@@ -94,12 +94,12 @@ class SQLQuery
         return $query;
     }
     /**
-    * Create a insert query object
-    * 
-    * @param string $field
-    * @param string $value
-    * @return SQLQuery
-    */
+     * Create a insert query object
+     *
+     * @param string $field
+     * @param string $value
+     * @return SQLQuery
+     */
     public static function doInsert($field = '', $value = '')
     {
         $query = new SQLQuery('insert');
@@ -108,12 +108,12 @@ class SQLQuery
         return $query;
     }
     /**
-    * Create a update query object
-    * 
-    * @param string $field
-    * @param string $value
-    * @return SQLQuery
-    */
+     * Create a update query object
+     *
+     * @param string $field
+     * @param string $value
+     * @return SQLQuery
+     */
     public static function doUpdate($field = '', $value = '')
     {
         $query = new SQLQuery('update');
@@ -122,22 +122,22 @@ class SQLQuery
         return $query;
     }
     /**
-    * Create a delete query object
-    * 
-    * @return SQLQuery
-    */
+     * Create a delete query object
+     *
+     * @return SQLQuery
+     */
     public static function doDelete()
     {
         $query = new SQLQuery('delete');
         return $query;
     }
     /**
-    * add select statement
-    * 
-    * @param string $field
-    * @param boolean $distrinct
-    * @return SQLQuery
-    */
+     * add select statement
+     *
+     * @param string $field
+     * @param boolean $distrinct
+     * @return SQLQuery
+     */
     public function select($field, $distrinct = false)
     {
         if($field != '')
@@ -153,12 +153,12 @@ class SQLQuery
         return $this;
     }
     /**
-    * add insert statement
-    * 
-    * @param string $field
-    * @param mixed $value
-    * @return SQLQuery
-    */
+     * add insert statement
+     *
+     * @param string $field
+     * @param mixed $value
+     * @return SQLQuery
+     */
     public function insert($field, $value)
     {
         if($field != '')
@@ -170,12 +170,12 @@ class SQLQuery
         return $this;
     }
     /**
-    * add insert statement, only when the value is set
-    * 
-    * @param string $field
-    * @param mixed $value
-    * @return SQLQuery
-    */
+     * add insert statement, only when the value is set
+     *
+     * @param string $field
+     * @param mixed $value
+     * @return SQLQuery
+     */
     public function insertWhenSet($field, $value)
     {
         if(!self::isEmpty($value))
@@ -186,12 +186,12 @@ class SQLQuery
         return $this;
     }
     /**
-    * add update statement
-    * 
-    * @param string $field
-    * @param mixed $value
-    * @return SQLQuery
-    */
+     * add update statement
+     *
+     * @param string $field
+     * @param mixed $value
+     * @return SQLQuery
+     */
     public function update($field, $value)
     {
         if($field != '')
@@ -203,12 +203,12 @@ class SQLQuery
         return $this;
     }
     /**
-    * add update statement, only when the value is set
-    * 
-    * @param string $field
-    * @param mixed $value
-    * @return SQLQuery
-    */
+     * add update statement, only when the value is set
+     *
+     * @param string $field
+     * @param mixed $value
+     * @return SQLQuery
+     */
     public function updateWhenSet($field, $value)
     {
         if(!self::isEmpty($value))
@@ -219,11 +219,11 @@ class SQLQuery
         return $this;
     }
     /**
-    * add tabel
-    * 
-    * @param string $table
-    * @return SQLQuery
-    */
+     * add tabel
+     *
+     * @param string $table
+     * @return SQLQuery
+     */
     public function table($table)
     {
         $this->table[] = $table;
@@ -231,14 +231,14 @@ class SQLQuery
         return $this;
     }
     /**
-    * add where statement
-    * 
-    * @param string $field
-    * @param mixed $value
-    * @param string $comparison
-    * @param string $orAnd  AND or OR
-    * @return SQLQuery
-    */
+     * add where statement
+     *
+     * @param string $field
+     * @param mixed $value
+     * @param string $comparison
+     * @param string $orAnd  AND or OR
+     * @return SQLQuery
+     */
     public function where($field, $value, $comparison = "=", $orAnd = 'AND')
     {
         if(self::isEmpty($value))
@@ -287,14 +287,14 @@ class SQLQuery
         return $this;
     }
     /**
-    * add where statement, only when the value is set
-    * 
-    * @param string $field
-    * @param mixed $value
-    * @param string $comparison
-    * @param string $orAnd  AND or OR
-    * @return SQLQuery
-    */
+     * add where statement, only when the value is set
+     *
+     * @param string $field
+     * @param mixed $value
+     * @param string $comparison
+     * @param string $orAnd  AND or OR
+     * @return SQLQuery
+     */
     public function whereWhenSet($field, $value, $comparison = "=", $orAnd = 'AND')
     {
         if(!self::isEmpty($value))
@@ -305,11 +305,11 @@ class SQLQuery
         return $this;
     }
     /**
-    * add group statement
-    * 
-    * @param string $field
-    * @return SQLQuery
-    */
+     * add group statement
+     *
+     * @param string $field
+     * @return SQLQuery
+     */
     public function groupBy($field)
     {
         $this->group[] = $field;
@@ -317,12 +317,12 @@ class SQLQuery
         return $this;
     }
     /**
-    * add order statement
-    * 
-    * @param string $field
-    * @param string $sort   ASc or DESC
-    * @return SQLQuery
-    */
+     * add order statement
+     *
+     * @param string $field
+     * @param string $sort   ASc or DESC
+     * @return SQLQuery
+     */
     public function orderBy($field, $sort = "ASC")
     {
         if($sort != 'ASC')
@@ -335,12 +335,12 @@ class SQLQuery
         return $this;
     }
     /**
-    * add limit statement
-    * 
-    * @param int $amount
-    * @param in $start
-    * @return SQLQuery
-    */
+     * add limit statement
+     *
+     * @param int $amount
+     * @param in $start
+     * @return SQLQuery
+     */
     public function limit($amount, $start = 0)
     {
         $this->limit = "LIMIT {$start}, {$amount}";
@@ -348,14 +348,14 @@ class SQLQuery
         return $this;
     }
     /**
-    * add join statement
-    * 
-    * @param string $table
-    * @param string $local
-    * @param string $forign
-    * @param string $type   left, right or inner
-    * @return SQLQuery
-    */
+     * add join statement
+     *
+     * @param string $table
+     * @param string $local
+     * @param string $forign
+     * @param string $type   left, right or inner
+     * @return SQLQuery
+     */
     public function join($table, $local, $forign, $type = 'left')
     {
         $this->join[] = strtoupper($type)." JOIN {$table} ON {$local} = {$forign}";
@@ -393,34 +393,90 @@ class SQLQuery
         return true;
     }
     /**
-    * execute the statement
-    * 
-    * @return SQLRecord
-    */
+     * execute the statement
+     *
+     * @return SQLRecord
+     */
     public function exec()
+    {
+        return SQL::getInstance()->query($this);
+    }
+    /**
+     * Get the SQL statement as a string formed by this query
+     * 
+     * @return String
+     */
+    public function getSQL()
     {
         switch($this->action)
         {
             case 'select' :
-                return $this->execSelect();
+                return $this->getSelectSQL();
             break;
             case 'insert' :
-                return $this->execInsert();
+                return $this->getInsertSQL();
             break;
             case 'delete' :
-                return $this->execDelete();
+                return $this->getDeleteSQL();
             break;
             case 'update' :
-                return $this->execUpdate();
+                return $this->getUpdateSQL();
             break;
         }
     }
     /**
-    * execute the statement as an select
-    * 
-    * @return SQLRecord
-    */
-    private function execSelect()
+     * Get a list of all table objects
+     * 
+     * @return array
+     */
+    public function getTables()
+    {
+        $tables = array();
+        
+        foreach($this->table as $table)
+        {
+            if(is_a($table, "Table"))
+            {
+                $tables[] = $table;
+            }
+        }
+        
+        return $tables;
+    }
+    /**
+     * Get a string containing the table names
+     * 
+     * @return String
+     */
+    private function getTablesString()
+    {
+        $tables = "";
+        
+        foreach($this->table as $table)
+        {
+            if($tables != "")
+            {
+                $tables .= ", ";
+            }
+            
+            if(is_a($table, "Table"))
+            {
+                $tables .= $table->getName();
+            }
+            else
+            {
+                $tables .= $table;
+            }
+        }
+        
+        return $tables;
+    }
+    /**
+     * Get the SQL statement for an select
+     *
+     * @return String
+     */
+    private function getSelectSQL()
     {
         $query = '';
         
@@ -433,7 +489,7 @@ class SQLQuery
             $query .= 'SELECT * ';
         }
         
-        $query .= ' FROM '.implode(', ', $this->table).' ';
+        $query .= ' FROM '.$this->getTablesString().' ';
         $query .= implode(' ', $this->join).' ';
         
         if(count($this->where) > 0)
@@ -468,18 +524,18 @@ class SQLQuery
             $query .= $this->limit;
         }
         
-        return SQL::getInstance()->query($query);
+        return $query;
     }
     /**
-    * execute the statement as an insert
-    * 
-    * @return SQLRecord
-    */
-    private function execInsert()
+     * Get the SQL statement for an insert
+     *
+     * @return String
+     */
+    private function getInsertSQL()
     {
         $query = '';
         
-        $query .= 'INSERT INTO '.$this->table[0].' ';
+        $query .= 'INSERT INTO '.$this->getTablesString().' ';
         $query .= '('.implode(', ', $this->insert).') ';
         
         $totalValues = '';
@@ -503,18 +559,18 @@ class SQLQuery
         
         $query .= ' VALUES ('.$totalValues.');';
         
-        return SQL::getInstance()->query($query);
+        return $query;
     }
     /**
-    * execute the statment as an update
-    * 
-    * @return SQLRecord
-    */
-    private function execUpdate()
+     * Get the SQL statement for an update
+     *
+     * @return String
+     */
+    private function getUpdateSQL()
     {
         $query = '';
         
-        $query .= 'UPDATE '.$this->table[0].' ';
+        $query .= 'UPDATE '.$this->getTablesString().' ';
         
         $totalValues = '';
         
@@ -556,18 +612,18 @@ class SQLQuery
             $query .= ' WHERE '.$totalWhere.' ';
         }
         
-        return SQL::getInstance()->query($query);
+        return $query;
     }
     /**
-    * execute statment as an Delete
-    * 
-    * @return SQLRecord
-    */
-    private function execDelete()
+     * Get the SQL statement for an Delete
+     *
+     * @return String
+     */
+    private function getDeleteSQL()
     {
         $query = '';
         
-        $query .= 'DELETE FROM '.$this->table[0].' ';
+        $query .= 'DELETE FROM '.$this->getTablesString().' ';
         
         if(count($this->where) > 0)
         {
@@ -586,7 +642,7 @@ class SQLQuery
             $query .= ' WHERE '.$totalWhere.' ';
         }
         
-        return SQL::getInstance()->query($query);
+        return $query;
     }
 }
 /**
@@ -603,7 +659,7 @@ class SQLRecord
     
     private $index = 0;
     
-    public function __construct($record = null)
+    public function __construct($record = null, $tables = null)
     {
         $this->records = array();
         $this->record = null;
@@ -611,7 +667,14 @@ class SQLRecord
         
         if($record != null)
         {
-            $this->records = $record->fetchAll(PDO::FETCH_OBJ);
+            while($row = $record->fetch(PDO::FETCH_OBJ))
+            {
+                foreach($tables as $table)
+                {
+                    $row = $table->db2value($row);
+                }
+                $this->records[] = $row;
+            }
             $this->count = $record->rowCount();
             
             if($this->count > 0 && isset($this->records[0]))
@@ -747,31 +810,40 @@ class SQL
     /**
      * Execute a query
      * 
-     * @param string $query
+     * @param SQLQuery $query      String|SQLQuery
      * @return SQLRecord
      */
     public function query($query)
     {
-        if(!empty($query))
+        $query_str = "";
+        $query_obj = null;
+        
+        if(is_a($query, "SQLQuery"))
         {
-            $this->query = $query;
+            $query_str = $query->getSQL();
+            $query_obj = $query->getTables();
+        }
+        
+        if(!empty($query_str))
+        {
+            $this->query = $query_str;
             
-            $result = $this->PDOconnection->query($query);
+            $result = $this->PDOconnection->query($query_str);
             
             if($this->PDOconnection->errorCode() != '00000')
             {
                 $error = $this->PDOconnection->errorInfo();
-                Debugger::getInstance()->log("SQL ERROR: '{$query}' {$error}");
+                Debugger::getInstance()->log("SQL ERROR: '{$query_str}' {$error}");
                 $this->triggerSQLError("{$error[1]} - {$error[2]}");
             }
-            $result = new SQLRecord($result);
+            $result = new SQLRecord($result, $query_obj);
         }
         else
         {
-            $result = new SQLRecord(null);
+            $result = new SQLRecord(null, $query_obj);
         }
         
-        Debugger::getInstance()->log("Query: '{$query}' [{$result->count()} rows returned]");
+        Debugger::getInstance()->log("Query: '{$query_str}' [{$result->count()} rows returned]");
         
         return $result;
     }

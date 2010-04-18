@@ -212,6 +212,7 @@ class TreeItem
 class TreeFolder extends TreeItem
 {
     protected $children;
+    protected $icon = "/img/icons/folder.png";
     
     public function __construct($name)
     {
@@ -292,7 +293,7 @@ class TreeFolder extends TreeItem
         }
         else
         {
-            $html .= '<img src="/img/icons/folder.png" alt="folder"/>';
+            $html .= '<img src="'.$this->icon.'" alt="folder"/>';
         }
         if($this->getRoot()->javascript)
         {

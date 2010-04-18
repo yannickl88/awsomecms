@@ -17,6 +17,7 @@ importField("IntField");
 importField("DateField");
 importField("TextField");
 importField("BooleanField");
+importField("TagField");
 importField("users.UsersField");
 
 /**
@@ -39,7 +40,7 @@ class NewsTable extends Table
         $this->addField(new Field("news_titleurl", Field::HIDE|Field::OPTIONAL));
         $this->addField(new UsersField("news_user"), 2);
         $this->addField(new DateField("news_date"), 3);
-        $this->addField(new Field("news_tag", Field::OPTIONAL), 4);
+        $this->addField(new TagField("news_tag", Field::OPTIONAL), 4);
         $this->addField(new TextField("news_text"), 5);
         $this->setTitle("[news_title]");
         
