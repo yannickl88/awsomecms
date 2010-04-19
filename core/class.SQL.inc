@@ -823,6 +823,10 @@ class SQL
             $query_str = $query->getSQL();
             $query_obj = $query->getTables();
         }
+        else
+        {
+            $query_str = "".$query;
+        }
         
         if(!empty($query_str))
         {

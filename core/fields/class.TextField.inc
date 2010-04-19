@@ -83,7 +83,12 @@ class TextField extends Field
                     xhtml: true
                 };
                 
-                new nicEditor(data).panelInstance($("#{$this->getName()}")[0]);
+                var element = $("#{$this->getName()}")[0];
+                
+                if(element)
+                {
+                    new nicEditor(data).panelInstance(element);
+                }
             });
 JS;
     }

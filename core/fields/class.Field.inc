@@ -665,8 +665,8 @@ class Field
     /**
      * Convert the dbvalue of the param to what the field expects
      * 
-     * @param $value String
-     * @return String
+     * @param $value mixed
+     * @return mixed
      */
     public function db2value($value)
     {

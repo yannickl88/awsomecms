@@ -35,10 +35,11 @@ class PagesTable extends Table
         
         $this->addField(new IntField("page_id", Field::INDEX|Field::AUTOKEY));
         $this->addField(new Field("page_name"), 1);
-        $this->addField(new LocationField("page_location"), 2);
-        $this->addField(new TextField("page_template"), 3);
+        $this->addField(new Field("page_title"), 2);
+        $this->addField(new LocationField("page_location"), 3);
+        $this->addField(new TextField("page_template"), 4);
         $this->addField(new DateField("page_timestamp", Field::HIDE));
-        $this->setTitle("[page_name]");
+        $this->setTitle("[page_title]");
         
         $this->setURLs(
             Config::get('pageadmin', 'pageadmin', 'admin'),
