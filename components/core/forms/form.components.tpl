@@ -90,7 +90,7 @@
     {/foreach}
 </table>
 <script type="text/javascript">
-    //<![CDATA[{literal}
+    //<![CDATA[
     function toggleAccess(id, link)
     {
         if($("#"+id).attr("checked"))
@@ -117,7 +117,7 @@
             updateComponent: name
         };
         
-        $.post("/{/literal}{$smarty.get.url}{literal}", data, function(data) {
+        $.post("/{$smarty.get.url}", data, function(data) {
             $("#row_"+name+" .updateCell").html("<img src='/img/admin/ok-icon.png' /> Up-to-date");
         }, "json");
 
@@ -135,7 +135,7 @@
             installAdmin: confirm("Would you like to install the admin pages too?")
         };
         
-        $.post("/{/literal}{$smarty.get.url}{literal}", data, function(data) {
+        $.post("/{$smarty.get.url}", data, function(data) {
             $("#row_"+name+" .updateCell").html("<img src='/img/admin/ok-icon.png' /> Installed");
         }, "json");
 
@@ -152,7 +152,7 @@
             framework: 1
         };
         
-        $.post("/{/literal}{$smarty.get.url}{literal}", data, function(data) {
+        $.post("/{$smarty.get.url}", data, function(data) {
           if(data[0])
           {
             $("#row_framework .updateCell").html("<img src='/img/admin/ok-icon.png' /> Up-to-date");
