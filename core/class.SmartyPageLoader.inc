@@ -318,47 +318,42 @@ class SmartyPageLoader
                     if(preg_match('/^function\.(.*)\.php$/', $plugin, $matches))
                     {
                         require_once $pluginDir.'/'.$plugin;
-                        $smarty_obj->register_function($matches[1], "smarty_function_".$matches[1]);
+                        $smarty_obj->register->templateFunction($matches[1], "smarty_function_".$matches[1]);
                     }
                     else if(preg_match('/^modifier\.(.*)\.php$/', $plugin, $matches))
                     {
                         require_once $pluginDir.'/'.$plugin;
-                        $smarty_obj->register_modifier($matches[1], "smarty_modifier_".$matches[1]);
+                        $smarty_obj->register->modifier($matches[1], "smarty_modifier_".$matches[1]);
                     }
                     else if(preg_match('/^block\.(.*)\.php$/', $plugin, $matches))
                     {
                         require_once $pluginDir.'/'.$plugin;
-                        $smarty_obj->register_function($matches[1], "smarty_block_".$matches[1]);
+                        $smarty_obj->register->block($matches[1], "smarty_block_".$matches[1]);
                     }
                     else if(preg_match('/^compiler\.(.*)\.php$/', $plugin, $matches))
                     {
                         require_once $pluginDir.'/'.$plugin;
-                        $smarty_obj->register_function($matches[1], "smarty_compiler_".$matches[1]);
+                        $smarty_obj->register->compilerFunction($matches[1], "smarty_compiler_".$matches[1]);
                     }
                     else if(preg_match('/^prefilter\.(.*)\.php$/', $plugin, $matches))
                     {
                         require_once $pluginDir.'/'.$plugin;
-                        $smarty_obj->register_function($matches[1], "smarty_prefilter_".$matches[1]);
+                        $smarty_obj->register->preFilter($matches[1], "smarty_prefilter_".$matches[1]);
                     }
                     else if(preg_match('/^postfilter\.(.*)\.php$/', $plugin, $matches))
                     {
                         require_once $pluginDir.'/'.$plugin;
-                        $smarty_obj->register_function($matches[1], "smarty_postfilter_".$matches[1]);
+                        $smarty_obj->register->postFilter($matches[1], "smarty_postfilter_".$matches[1]);
                     }
                     else if(preg_match('/^outputfilter\.(.*)\.php$/', $plugin, $matches))
                     {
                         require_once $pluginDir.'/'.$plugin;
-                        $smarty_obj->register_function($matches[1], "smarty_outputfilter_".$matches[1]);
+                        $smarty_obj->register->outputFilter($matches[1], "smarty_outputfilter_".$matches[1]);
                     }
                     else if(preg_match('/^resource\.(.*)\.php$/', $plugin, $matches))
                     {
                         require_once $pluginDir.'/'.$plugin;
-                        $smarty_obj->register_function($matches[1], "smarty_resource_".$matches[1]);
-                    }
-                    else if(preg_match('/^insert\.(.*)\.php$/', $plugin, $matches))
-                    {
-                        require_once $pluginDir.'/'.$plugin;
-                        $smarty_obj->register_function($matches[1], "smarty_insert_".$matches[1]);
+                        $smarty_obj->register->resource($matches[1], "smarty_resource_".$matches[1]);
                     }
                 }
             }

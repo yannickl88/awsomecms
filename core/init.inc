@@ -23,7 +23,7 @@ import('/core/class.Debugger.inc');
 error_reporting(E_ALL);
 set_error_handler("handleError");
 
-import('/libs/Smarty.class.php');
+import('/libs/smarty/Smarty.class.php');
 import('/core/class.SQL.inc');
 import('/core/class.Config.inc');
 import('/core/class.SmartyPageLoader.inc');
