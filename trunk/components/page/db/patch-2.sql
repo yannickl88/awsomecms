@@ -1,0 +1,1 @@
+ALTER TABLE `pages` ADD `page_title` VARCHAR( 100 ) NOT NULL AFTER `page_name` ;

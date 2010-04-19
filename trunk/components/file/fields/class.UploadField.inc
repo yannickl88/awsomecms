@@ -48,4 +48,24 @@ class UploadField extends Field
     {
         return $this->toHTML_add();
     }
+    /**
+     * Convert the dbvalue of the param to what the field expects
+     * 
+     * @param $value mixed
+     * @return mixed
+     */
+    public function db2value($value)
+    {
+        return unserialize($value);
+    }
+    /**
+     * Convert the value of the param to that what the DB expects
+     * 
+     * @param $value String
+     * @return String
+     */
+    public function value2db($value)
+    {
+        return serialize($value);
+    }
 }

@@ -18,7 +18,7 @@
     "uptodate":             "Up-to-date",
     "install":              "Install",
     "uninstalledcomp":      "Uninstalled Components",
-    "select":               "update",
+    "select":               "select",
     "insert":               "insert",
     "update":               "update",
     "delete":               "delete",

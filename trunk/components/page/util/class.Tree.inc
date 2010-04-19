@@ -275,6 +275,23 @@ class TreeFolder extends TreeItem
     }
     public function __toString()
     {
+        if($this->name == "")
+        {
+            switch($this->getContentType())
+            {
+                case Tree::CONTENT:
+                    $this->name = "[contentroot]";
+                    $classes[] = "contentroot";
+                    break;
+                case Tree::PAGE:
+                    $this->name = "[siteroot]";
+                    $classes[] = "siteroot";
+                    break;
+                default:
+                    $this->name = "/";
+                    break;
+            }
+        }
         $id = md5($this->getLocation());
         
         $html = "";
@@ -303,27 +320,7 @@ class TreeFolder extends TreeItem
         {
             $html .= "<a href=\"#\" class=\"clickableTreeItem\" style=\"padding: 0;\">";
         }
-        if($this->name == "")
-        {
-            switch($this->getContentType())
-            {
-                case Tree::CONTENT:
-                    $html .= "[contentroot]";
-                    $classes[] = "contentroot";
-                    break;
-                case Tree::PAGE:
-                    $html .= "[siteroot]";
-                    $classes[] = "siteroot";
-                    break;
-                default:
-                    $html .= "/";
-                    break;
-            }
-        }
-        else
-        {
-            $html .= $this->name;
-        }
+        $html .= $this->name;
         $html = "<div class=\"".implode(" ",$classes)."\">".$html;
         $html .= '</a>';
         if(!isset($_COOKIE['menu'.$id]))

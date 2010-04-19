@@ -90,7 +90,7 @@
     {/foreach}
 </table>
 <script type="text/javascript">
-    {literal}//<![CDATA[
+    //<![CDATA[{literal}
     function toggleAccess(id, link)
     {
         if($("#"+id).attr("checked"))
@@ -165,5 +165,5 @@
 
         return false;
     }
-    //]]>{/literal}
+    //]]>
 </script>
