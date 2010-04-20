@@ -37,10 +37,10 @@ class FilesTable extends Table
         $this->addField(new IntField("file_id", Field::INDEX|Field::AUTOKEY));
         $this->addField(new Field("file_name"), 1);
         $this->addField(new DateField("file_date"), 2);
-        $this->addField(new UploadField("file_data"), 3);
+        $this->addField(new UploadField("file_data", Config::get("uploaddir", Config::get("frameworkroot", "/"), "file")), 3);
         $this->addField(new TagField("file_tag", Field::OPTIONAL|Field::FORCEUPDATE), 4);
         $this->addField(new TextField("file_description", Field::HIDE_VIEW), 5);
-        $this->setTitle("[image_title]");
+        $this->setTitle("[file_name]");
         
         $this->setURLs(
             Config::get('fileadmin', 'fileadmin', 'admin'),
@@ -55,7 +55,7 @@ class FilesTable extends Table
      */
     protected function select($query, $data = null)
     {
-        $query->orderBy("file_id", "desc");
+        $query->orderBy("file_name", "desc");
         
         if($data)
         {

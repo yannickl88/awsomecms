@@ -31,7 +31,40 @@ class FileComponent extends Component
     {
         parent::__construct('file');
     }
-    
+    public function action_add($smarty, $smartyLoader, $request)
+    {
+        if($request['method'] == 'post')
+        {
+            Table::init("file.files")
+                ->setRecord((object) $request)
+                ->doInsert();
+            
+            $this->redirect("/".Config::get('fileadmin', 'fileadmin', 'admin'));
+        }
+    }
+    public function action_edit($smarty, $smartyLoader, $request)
+    {
+        if($request['method'] == 'post')
+        {
+            Table::init("file.files")
+                ->setRecord((object) $request)
+                ->doUpdate();
+            
+            $this->redirect("/".Config::get('fileadmin', 'fileadmin', 'admin'));
+        }
+        else
+        {
+            if($request['file_id'])
+            {
+                Table::init('file.files')
+                    ->setRecord((object) $request);
+            }
+            else
+            {
+                $this->redirect("/".Config::get('fileadd', 'fileadd', 'admin'));
+            }
+        }
+    }
     /**
      * (non-PHPdoc)
      * @see core/Component#registerTreeItems($tree)
@@ -55,7 +88,7 @@ class FileComponent extends Component
                 $row->file_name, 
                 "/".Config::get("fileedit", "fileedit", "admin")."?file_id={$row->file_id}", 
                 "/".Config::get("filedelete", "filedelete", "admin")."?file_id={$row->file_id}", 
-                $row->file_data->url
+                "/".$row->file_data->url
                 ), 
                 "/{$filesName}/{$imageName}/".((!empty($row->file_tag))? $row->file_tag."/" : ""), Tree::CONTENT
             );

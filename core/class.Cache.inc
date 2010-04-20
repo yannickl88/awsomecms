@@ -37,7 +37,7 @@ class Cache
         }
         else
         {
-            if(file_exists(self::getCacheDir()."/{$files}"))
+            if(file_exists(self::getCacheDir()."/{$key}.cache"))
             {
                 unlink(self::getCacheDir()."/{$key}.cache");
             }

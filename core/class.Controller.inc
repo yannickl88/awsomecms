@@ -186,6 +186,11 @@ class Controller
 {
     private static $instance;
     
+    /**
+     * Singelton
+     * 
+     * @return Controller
+     */
     public static function getInstance()
     {
         if(!self::$instance)
@@ -420,9 +425,11 @@ class Controller
         }
     }
     /**
+     * Get the request
+     * 
      * @return Request
      */
-    private function getRequest()
+    public function getRequest()
     {
         if(!$this->request)
         {
@@ -433,6 +440,7 @@ class Controller
     }
     /**
      * Get the smarty object that is used for the page rendering
+     * 
      * @return Smarty
      */
     public function getSmarty()

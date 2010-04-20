@@ -688,4 +688,25 @@ class Field
             return $this->getName();
         }
     }
+    /**
+     * preform this action prior to the SQL execution that uses this field
+     * 
+     * @param Array record that was used
+     * @param SQLQuery $query
+     */
+    public function preSQL(&$record, $query)
+    {
+        
+    }
+    /**
+     * preform this action prior to the SQL execution that uses this field
+     * 
+     * @param SQLRecord $sqlrecord
+     * @param Array $record
+     * @param SQLQuery $query
+     */
+    public function postSQL(&$record, $query)
+    {
+        
+    }
 }
