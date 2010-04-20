@@ -106,6 +106,7 @@ abstract class Table
     protected $action;
     protected $lastInsertedID;
     protected $fromExternal;
+    protected $multipart;
     
     protected $adminURL;
     protected $addURL;
@@ -214,6 +215,17 @@ abstract class Table
         return $this->fromExternal;
     }
     /**
+     * Set the multipart so the forms are send with that field
+     * 
+     * @param Boolean $multipart
+     * @return Table
+     */
+    public function setMultipart($multipart = true)
+    {
+        $this->multipart = $multipart;
+        return $this;
+    }
+    /**
     * Assign the table to a component with an action. 
     * 
     * @param string $component
@@ -243,7 +255,7 @@ abstract class Table
         $class = get_class($field);
         if(!isset($this->fieldTypes[$class]))
         {
-            $this->fieldTypes[$class] = $field->getJavascript();
+            $this->fieldTypes[$class] = $field;
         }
         
         if($field->isIndex())
@@ -391,6 +403,14 @@ abstract class Table
         
         return $this;
     }
+    public function getRecord()
+    {
+        return $this->record;
+    }
+    public function getRequest()
+    {
+        return $this->request;
+    }
     /**
     * Set the current error record of the table, this has priority over the current one
     * 
@@ -490,20 +510,28 @@ abstract class Table
      */
     protected function toHTML_add()
     {
-        $html = $this->getErrors();
-        $html .= "<h2>".ucfirst(Language::get("addto"))." ".Language::get("comp_".$this->component)."</h2>\n";
-        $html .= "<form method=\"post\" action=\"/\" class=\"admin_form admin_add\">\n";
-        
+        $fields = "";
         foreach($this->fields as $field)
         {
             if($field->visible(Field::ADD))
             {
-                $html .= "<div class=\"admin_form_row\">\n";
-                $html .= "<div class=\"admin_form_label\"><label for=\"".$field->getName()."\">".$field->getDisplayName().":</label></div>\n";
-                $html .= "<div class=\"admin_form_field\">".$field->toHTML(Field::ADD)."</div>\n";
-                $html .= "</div>\n";
+                $fields .= "<div class=\"admin_form_row\">\n";
+                $fields .= "<div class=\"admin_form_label\"><label for=\"".$field->getName()."\">".$field->getDisplayName().":</label></div>\n";
+                $fields .= "<div class=\"admin_form_field\">".$field->toHTML(Field::ADD)."</div>\n";
+                $fields .= "</div>\n";
             }
         }
+        
+        $html = $this->getErrors();
+        $html .= "<h2>".ucfirst(Language::get("addto"))." ".Language::get("comp_".$this->component)."</h2>\n";
+        $multipart = "";
+        if($this->multipart)
+        {
+            $multipart = ' enctype="multipart/form-data"';
+        }
+        
+        $html .= "<form method=\"post\" action=\"/\" class=\"admin_form admin_add\"{$multipart}>\n";
+        $html .= $fields;
         $html .= "<div class=\"admin_form_row admin_form_submit\">\n";
         $html .= "<input type='submit' value='".ucfirst(Language::get("save"))."' />\n";
         $html .= $this->getAssignment(Field::ADD);
@@ -521,28 +549,34 @@ abstract class Table
     protected function toHTML_edit()
     {
         $data = $this->doSelect($this->request[0])->getRow();
-        
         $html_post = "";
-        $html = $this->getErrors();
-        $html .= "<h2>".ucfirst(Language::get("edit"))." ".$this->parseTitle($this->title, $data)."</h2>\n";
-        $html .= "<form method=\"post\" action=\"/\" class=\"admin_form admin_edit\">\n";
-        
+        $fields = "";
         foreach($this->fields as $field) //@var $field Field
         {
             $field->setData($data);
             
             if($field->visible(Field::EDIT))
             {
-                $html .= "<div class=\"admin_form_row\">\n";
-                $html .= "<div class=\"admin_form_label\"><label for=\"".$field->getName()."\">".$field->getDisplayName().":</label></div>\n";
-                $html .= "<div class=\"admin_form_field\">".$field->toHTML(Field::EDIT)."</div>\n";
-                $html .= "</div>\n";
+                $fields .= "<div class=\"admin_form_row\">\n";
+                $fields .= "<div class=\"admin_form_label\"><label for=\"".$field->getName()."\">".$field->getDisplayName().":</label></div>\n";
+                $fields .= "<div class=\"admin_form_field\">".$field->toHTML(Field::EDIT)."</div>\n";
+                $fields .= "</div>\n";
             }
             elseif($field->isIndex())
             {
                 $html_post .= $field->toHTML(Field::EDIT)."\n";
             }
         }
+        
+        $html = $this->getErrors();
+        $html .= "<h2>".ucfirst(Language::get("edit"))." ".$this->parseTitle($this->title, $data)."</h2>\n";
+        $multipart = "";
+        if($this->multipart)
+        {
+            $multipart = ' enctype="multipart/form-data"';
+        }
+        $html .= "<form method=\"post\" action=\"/\" class=\"admin_form admin_edit\"{$multipart}>\n";
+        $html .= $fields;
         $html .= "<div class=\"admin_form_row admin_form_submit\">\n";
         $html .= "<input type='submit' value='".ucfirst(Language::get("save"))."' />\n";
         $html .= $html_post;
@@ -726,7 +760,11 @@ abstract class Table
         
         foreach($matches[1] as $match)
         {
-            $title = str_replace("[{$match}]", $this->getField($match)->getValue($data), $title);
+            $field =  $this->getField($match);
+            if($field)
+            {
+                $title = str_replace("[{$match}]", $field->getValue($data), $title);
+            }
         }
         
         return $title;
@@ -745,19 +783,18 @@ abstract class Table
         $query = SQLQuery::doSelect();
         $query->table($this);
         
+        $this->callPreFields($data, $query);
         foreach($this->fields as $field)
         {
             $field->select($query, $data);
         }
         
-        $return = $this->select($query, $data);
+        $this->select($query, $data);
         
-        if(isset($return))
-        {
-            return $return;
-        }
+        $result = $query->exec();
+        $this->callPostFields($data, $query);
         
-        return $query->exec();
+        return $result;
     }
     /**
     * Preform an insert on the table
@@ -772,19 +809,19 @@ abstract class Table
         $query = SQLQuery::doInsert();
         $query->table($this);
         
+        $this->callPreFields($data, $query);
         foreach($this->fields as $field)
         {
             $field->insert($query, $data);
         }
         
-        $return = $this->insert($query, $data);
+        $this->insert($query, $data);
         
-        if(isset($return))
-        {
-            return $return;
-        }
+        $result = $query->exec();
+        $this->callPostFields($data, $query);
         
-        $this->lastInsertedID = $query->exec()->insertID();
+        $this->lastInsertedID = $result->insertID();
+        
         return $this->getInsertedID();
     }
     /**
@@ -800,19 +837,18 @@ abstract class Table
         $query = SQLQuery::doUpdate();
         $query->table($this);
         
+        $this->callPreFields($data, $query);
         foreach($this->fields as $field)
         {
             $field->update($query, $data);
         }
         
-        $return = $this->update($query, $data);
+        $this->update($query, $data);
         
-        if(isset($return))
-        {
-            return $return;
-        }
+        $result = $query->exec();
+        $this->callPostFields($data, $query);
         
-        return $query->exec();
+        return $result;
     }
     /**
     * Preform a delete on the table
@@ -824,21 +860,21 @@ abstract class Table
         $data = $this->request[0];
         $this->validate(Field::DELETE);
         
+        
         $query = SQLQuery::doDelete();
         $query->table($this);
         
+        $this->callPreFields($data, $query);
         foreach($this->fields as $field)
         {
             $field->delete($query, $data);
         }
-        $return = $this->delete($query, $data);
+        $this->delete($query, $data);
         
-        if(isset($return))
-        {
-            return $return;
-        }
+        $result = $query->exec();
+        $this->callPostFields($data, $query);
         
-        return $query->exec();
+        return $result;
     }
     /**
      * Get the JavaScript for this table
@@ -848,7 +884,10 @@ abstract class Table
     protected function getJavascript()
     {
         $html = "<script type='text/javascript'>\n";
-        $html .= implode("\n", $this->fieldTypes);
+        foreach($this->fieldTypes as $field)
+        {
+            $html .= "\n".$field->getJavascript();
+        }
         $html .= "</script>\n";
         
         return $html;
@@ -1053,6 +1092,9 @@ abstract class Table
     }
     /**
      * Parse the record, this allows for data conversions or deserialization
+     * 
+     * @param Array $record
+     * @return Array
      */
     public function db2value($record)
     {
@@ -1070,5 +1112,19 @@ abstract class Table
         }
         
         return $record;
+    }
+    private function callPreFields(&$record, $query)
+    {
+        foreach($this->fields as $field)
+        {
+            $field->preSQL($record, $query);
+        }
+    }
+    private function callPostFields(&$record, $query)
+    {
+        foreach($this->fields as $field)
+        {
+            $field->postSQL($record, $query);
+        }
     }
 }
