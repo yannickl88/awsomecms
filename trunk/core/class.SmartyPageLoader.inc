@@ -77,7 +77,7 @@ class SmartyPageLoader
         
         try
         {
-            if(Config::get('needslogin', false, 'admin') && $smarty_obj->get_template_vars('isADMIN') === true && !(isset($_SESSION['usr']) && $_SESSION['usr']['auth']['admin'] === true))
+            if(Config::get('needslogin', false, 'admin') && $smarty_obj->getTemplateVars('isADMIN') === true && !(isset($_SESSION['usr']) && $_SESSION['usr']['auth']['admin'] === true))
             {
                 $url = Config::get('login', '', 'admin');
                 $smarty_obj->assign("URL", $url); //reassign the URL var
@@ -116,9 +116,9 @@ class SmartyPageLoader
             }
         }
         
-        if($smarty_obj->get_template_vars('LAYOUT')) //check if layout was set from withing a page
+        if($smarty_obj->getTemplateVars('LAYOUT') != null) //check if layout was set from withing a page
         {
-            $template = $smarty_obj->get_template_vars('LAYOUT');
+            $template = $smarty_obj->getTemplateVars('LAYOUT');
             
             if($template == "json")
             {

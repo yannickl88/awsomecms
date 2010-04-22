@@ -117,8 +117,19 @@ class UploadField extends Field
                 $this->setValue("");
             }
         }
+        else if($query->getAction() == "delete")
+        {
+            $data = $this->parent->doSelect()->getRows();
+            
+            foreach($data as $row)
+            {
+                if($row && file_exists(Config::get("websiteroot", "/")."/".$row->{$this->getDBName()}->url))
+                {
+                    unlink(Config::get("websiteroot", "/")."/".$row->{$this->getDBName()}->url);
+                }
+            }
+        }
     }
-    
     private function handleFileUpload($filename, $tmpUrl)
     {
         $newUrl = $this->uploadDir.$this->parent->getName()."/".$filename;
