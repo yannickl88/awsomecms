@@ -44,7 +44,7 @@ class CoreComponent extends Component
             Controller::getInstance()->redirect();
         }
         
-        $smarty->register_resource("scf", array(
+        $smarty->register->resource("scf", array(
             array($smartyLoader, "getTemplate"),
             array($smartyLoader, "getTimestamp"),
             array($smartyLoader, "getSecure"),

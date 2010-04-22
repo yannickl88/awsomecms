@@ -65,6 +65,29 @@ class FileComponent extends Component
             }
         }
     }
+    public function action_delete($smarty, $smartyLoader, $request)
+    {
+        if($request['method'] == 'post')
+        {
+            Table::init("file.files")
+                ->setRequest((object) $request)
+                ->doDelete();
+            
+            $this->redirect("/".Config::get('fileadmin', 'fileadmin', 'admin'));
+        }
+        else
+        {
+            if($request['file_id'])
+            {
+                $record = Table::init("file.files")
+                    ->setRequest((object) $request);
+            }
+            else
+            {
+                $this->redirect("/".Config::get('fileadmin', 'fileadmin', 'admin'));
+            }
+        }
+    }
     /**
      * (non-PHPdoc)
      * @see core/Component#registerTreeItems($tree)

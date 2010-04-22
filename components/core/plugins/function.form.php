@@ -156,7 +156,7 @@ function smarty_function_form($params, &$smarty)
                 return $tableObject->toHTML(Field::ADD);
                 break;
             case "edit":
-                $tableObject->setRecord($smarty->get_template_vars("record"));
+                $tableObject->setRecord($smarty->getTemplateVars("record"));
                 return $tableObject->toHTML(Field::EDIT);
                 break;
             case "delete":
