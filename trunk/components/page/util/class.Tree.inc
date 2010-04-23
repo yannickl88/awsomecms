@@ -1,27 +1,52 @@
 <?php
+/**
+ * This file is part of the A.W.S.O.M.E.cms distribution.
+ * Detailed copyright and licensing information can be found
+ * in the doc/COPYRIGHT and doc/LICENSE files which should be
+ * included in the distribution.
+ *
+ * @package components.page.util
+ *
+ * @copyright (c) 2009-2010 Yannick de Lange
+ * @license http://www.gnu.org/licenses/gpl.txt
+ *
+ * @version $Revision$
+ */
+
+/**
+ * Tree class for the page admin tree
+ * 
+ * @author Yannick
+ */
 class Tree
 {
-    const PAGE          = 1;
-    const CONTENT       = 2;
-    
-    protected $children;
-    public $onlyShowFolders;
-    public $javascript;
+    private $children;
+    private $name;
+    private $element;
     public $hideAdmin;
+    private $icons;
+    private $calledTypes;
     
-    public function __construct()
+    /**
+     * Constructor
+     * 
+     * @param String $name
+     * @param String $element
+     */
+    public function __construct($name, $element = null)
     {
         $this->children = array();
-        $this->onlyShowFolders = false;
-        $this->hideAdmin = Config::get("hideadmintree", true, "admin") === "1";
-        $this->javascript = "";
-    }
-    /**
-     * Populate the tree from the components
-     * @return Tree
-     */
-    public function populate()
-    {
+        $this->calledTypes = array();
+        $this->icons = array(
+            array("page_delete",    "/img/icons/page_delete.png"),
+            array("view",           "/img/icons/page_view.png"),
+            array("page",           "/img/icons/page_page.png"),
+            array("index",          "/img/icons/page_home.png"),
+            array("folder",         "/img/icons/folder.png"),
+        );
+        $this->name = $name;
+        $this->element = $element;
+        
         $components = Config::getInstance()->getComponenets();
         
         foreach($components as $component)
@@ -33,312 +58,119 @@ class Tree
                 $componentObj->registerTreeItems($this);
             }
         }
-        
-        return $this;
     }
     /**
      * Add a child to the tree
      * 
-     * @param TreeItem $child
-     * @return Tree
+     * @param TreeNode $child
      */
-    public function addChild($child, $location, $type = Tree::PAGE)
+    public function addChild($child)
     {
-        $location = substr($location, 0, -1);
-        
-        if(!isset($this->children[$type]))
-        {
-            $this->children[$type] = array();
-        }
-        
-        if(empty($location))
-        {
-            $locationNodes = array("");
-        }
-        else
-        {
-            $locationNodes = explode("/", $location);
-        }
-        
-        $nextNode = array_shift($locationNodes);
-        $childAdded = false;
-        $child->setContentType($type);
-        
-        foreach($this->children[$type] as $childNode)
-        {
-            if($childNode->getType() == 2 && $childNode->name == $nextNode)
-            {
-                $childNode->addChild($child, $locationNodes);
-                $childAdded = true;
-                break;
-            }
-        }
-        
-        if(!$childAdded) //hmm we need to create a folder for this child
-        {
-            $folder = new TreeFolder($nextNode);
-            $folder->setContentType($type);
-            $folder->addChild($child, $locationNodes);
-            $folder->setParent($this);
-            $this->children[$type][] = $folder;
-            $this->sort($type);
-        }
-        
-        return $this;
-    }
-    public function getLocation()
-    {
-        return "";
-    }
-    public function getRoot()
-    {
-        return $this;
-    }
-    public function sort($type)
-    {
-        usort($this->children[$type], array($this, "sortCompare"));
-    }
-    protected function sortCompare($a, $b)
-    {
-        return $a->compare($b);
-    }
-    public function toHTML($types = 0)
-    {
-        return $this->__toString($types);
-    }
-    public function __toString($types = 0)
-    {
-        $html = "";
-        $html .= "<div class=\"treeNode\">";
-        foreach($this->children as $type => $children)
-        {
-            if($types == 0 || ($types > 0 && Config::hasFlag($types, $type)))
-            {
-                foreach($children as $child)
-                {
-                    $html .= $child->toHTML();
-                }
-            }
-        }
-        $html .= "</div>";
-        if($this->javascript)
-        {
-        	$html .= "<script type=\"text/javascript\"> admin_treeTarget = \"{$this->javascript}\";</script>";
-        }
-        return $html;
-    }
-}
-
-class TreeItem
-{
-    public $name;
-    public $editURL;
-    public $deleteURL;
-    public $viewURL;
-    private $contentType;
-    protected $parent;
-    
-    public function __construct($name, $editURL, $deleteURL, $viewURL)
-    {
-        $this->name = $name;
-        $this->editURL = $editURL;
-        $this->deleteURL = $deleteURL;
-        $this->viewURL = $viewURL;
-        $this->contentType = Tree::PAGE;
-    }
-    public function getType()
-    {
-        return 1;
-    }
-    public function getContentType()
-    {
-        return $this->contentType;
-    }
-    public function setContentType($type)
-    {
-        $this->contentType = $type;
-    }
-    public function setParent($parent)
-    {
-        $this->parent = $parent;
-    }
-    public function getRoot()
-    {
-        return $this->parent->getRoot();
-    }
-    public function getLocation()
-    {
-        return $this->parent->getLocation().$this->name."/";
-    }
-    public function toHTML()
-    {
-        return $this->__toString();
-    }
-    public function compare($a)
-    {
-        if($this->getType() == $a->getType())
-        {
-            return strnatcasecmp($this->name, $a->name);
-        }
-        else
-        {
-            return ($this->getType() < $a->getType())? 1 : -1;
-        }
-    }
-    public function __toString()
-    {
-        $html = "";
-        if(!$this->getRoot()->onlyShowFolders)
-        {
-            $html .= "<div class=\"hideIcons\" onmouseout=\"$(this).addClass('hideIcons');\" onmouseover=\"$(this).removeClass('hideIcons');\">";
-            $html .= "<a class=\"deleteIcon treeIcon\" href=\"{$this->deleteURL}\"><img src=\"/img/icons/page_delete.png\" /></a>";
-            $html .= "<a class=\"viewIcon treeIcon\" href=\"{$this->viewURL}\"><img src=\"/img/icons/page_view.png\" /></a>";
-            $html .= "<a href=\"{$this->editURL}\">";
-            if($this->name == 'index')
-            {
-                $html .= '<img src="/img/icons/page_home.png" alt="page"/>';
-            }
-            else
-            {
-                $html .= '<img src="/img/icons/page_page.png" alt="page"/>';
-            }
-            $html .= "{$this->name}</a>";
-            $html .= "</div>";
-        }
-        return $html;
-    }
-}
-
-class TreeFolder extends TreeItem
-{
-    protected $children;
-    protected $icon = "/img/icons/folder.png";
-    
-    public function __construct($name)
-    {
-        parent::__construct($name, "", "", "");
-        
-        $this->children = array();
+        $child->setParent($this);
+        $this->children[] = $child;
     }
     /**
-     * Add a child to the tree
+     * get the name of the javascript element
      * 
-     * @param TreeItem $child
-     * @return TreeItem
+     * @return String
      */
-    public function addChild($child, $locationNodes)
+    public function getName()
     {
-        if(count($locationNodes) == 0)
-        {
-            $child->setParent($this);
-            $this->children[] = $child;
-            $this->sort();
-        }
-        else
-        {
-            $nextNode = array_shift($locationNodes);
-            $childAdded = false;
-            
-            foreach($this->children as $childNode)
-            {
-                if($childNode->getType() == 2 && $childNode->name == $nextNode)
-                {
-                    $childNode->addChild($child, $locationNodes);
-                    $childAdded = true;
-                    break;
-                }
-            }
-            
-            if(!$childAdded) //hmm we need to create a folder for this child
-            {
-                $folder = new TreeFolder($nextNode, "");
-                $folder->addChild($child, $locationNodes);
-                $folder->setParent($this);
-                $this->children[] = $folder;
-                $this->sort();
-            }
-        }
-        
-        return $this;
+        return $this->name;
     }
-    public function getType()
+    /**
+     * Create the javascript code for the tree
+     * 
+     * @return String
+     */
+    public function toJavascript()
     {
-        return 2;
-    }
-    public function sort()
-    {
-        usort($this->children, array($this, "sortCompare"));
-    }
-    protected function sortCompare($a, $b)
-    {
-        return $a->compare($b);
-    }
-    public function __toString()
-    {
-        if($this->name == "")
+        $html = "<script type=\"text/javascript\">\n";
+        $html .= "var {$this->name} = new Tree(\"#{$this->element}\");\n";
+        foreach($this->icons as $icon)
         {
-            switch($this->getContentType())
-            {
-                case Tree::CONTENT:
-                    $this->name = "[contentroot]";
-                    $classes[] = "contentroot";
-                    break;
-                case Tree::PAGE:
-                    $this->name = "[siteroot]";
-                    $classes[] = "siteroot";
-                    break;
-                default:
-                    $this->name = "/";
-                    break;
-            }
-        }
-        $id = md5($this->getLocation());
-        
-        $html = "";
-        $classes = array();
-        if(!isset($_COOKIE['menu'.$id]))
-        {
-            $html .= "<a class=\"folder link{$id} clickableTreeArrow\" href=\"#\"></a>";
-        } 
-        else
-        {
-            $html .= "<a class=\"folder link{$id} open clickableTreeArrow\" href=\"#\"></a>";
-        }
-        if($this->name == "" && $this->getContentType() == Tree::PAGE)
-        {
-            $html .= '<img src="/img/icons/folder_page.png" alt="folder"/>';
-        }
-        else
-        {
-            $html .= '<img src="'.$this->icon.'" alt="folder"/>';
-        }
-        if($this->getRoot()->javascript)
-        {
-            $html .= "<a href=\"{$this->getLocation()}\" class=\"clickableTreeItem javascript\" style=\"padding: 0;\">";
-        }
-        else
-        {
-            $html .= "<a href=\"#\" class=\"clickableTreeItem\" style=\"padding: 0;\">";
-        }
-        $html .= $this->name;
-        $html = "<div class=\"".implode(" ",$classes)."\">".$html;
-        $html .= '</a>';
-        if(!isset($_COOKIE['menu'.$id]))
-        {
-            $html .= '<div class="treeNode hidden">';
-        }
-        else
-        {
-            $html .= '<div class="treeNode">';
+            $html .= "{$this->name}.assignIcon(\"{$icon[0]}\",  \"{$icon[1]}\");\n";
         }
         
         foreach($this->children as $child)
         {
-            $html .= $child->toHTML();
+            $html .= $child->toJavascript();
         }
+        $html .= "</script>\n";
         
-        $html .= '</div>';
-        $html .= "</div>";
+        return $html;
+    }
+}
+/**
+ * Abstract class for the nodes of the tree
+ * 
+ * @author Yannick
+ */
+abstract class TreeNode
+{
+    protected $parent;
+    
+    /**
+     * Set the parent, which is the tree
+     * 
+     * @param $parent
+     */
+    public function setParent($parent)
+    {
+        $this->parent = $parent;
+    }
+    /**
+     * Create the javascript code for the node
+     * 
+     * @return String
+     */
+    abstract function toJavascript();
+    /**
+     * function that is called once on each type of node, you can add icons to the tree here
+     * 
+     * @return String
+     */
+    public function registerIcons()
+    {
+        
+    }
+}
+/**
+ * The node for the page items
+ * 
+ * @author Yannick
+ */
+class TreePage extends TreeNode
+{
+    private $pageName;
+    private $pageID;
+    private $pageLocation;
+    
+    /**
+     * Constructor
+     * 
+     * @param Object $page
+     */
+    public function __construct($page)
+    {
+        $this->pageName = $page->page_name;
+        $this->pageID = $page->page_id;
+        $this->pageLocation = "/[contentroot]".$page->page_location;
+        $this->pageURL = $page->page_location.$page->page_name;
+    }
+    /**
+     * Create the javascript code for the tree
+     * 
+     * @return String
+     */
+    public function toJavascript()
+    {
+        $linkEdit = "/".Config::get("pageedit", "pageedit", "admin")."?page_id={$this->pageID}";
+        $linkDelete = "/".Config::get("pagedelete", "pagedelete", "admin")."?page_id={$this->pageID}";
+        $icon = ($this->pageName == "index")? "index" : "page";
+        
+        $html = "tree.addChild(new TreeItem(\"{$this->pageName}\", \"{$this->pageLocation}\", \"{$linkEdit}\", {$this->parent->getName()}, \"{$icon}\", [new TreeAction(\"view\", \"{$this->pageURL}\", tree), new TreeAction(\"page_delete\", \"{$linkDelete}\", tree)]));\n";
+        
         return $html;
     }
 }

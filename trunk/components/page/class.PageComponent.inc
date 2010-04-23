@@ -134,14 +134,7 @@ class PageComponent extends Component
 
         foreach($result as $row)
         {
-            $tree->addChild(new TreeItem(
-                $row->page_name, 
-                "/".Config::get("pageedit", "pageedit", "admin")."?page_id={$row->page_id}", 
-                "/".Config::get("pagedelete", "pagedelete", "admin")."?page_id={$row->page_id}", 
-                $row->page_location.$row->page_name
-                ), 
-                $row->page_location
-            );
+            $tree->addChild(new TreePage($row));
         }
     }
 }

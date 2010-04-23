@@ -24,7 +24,7 @@ function smarty_function_admintree($params, &$smarty)
 {
     import('components/page/util/class.Tree.inc');
     
-    $tree = new Tree();
+    $tree = new Tree("tree");
     $types = 0;
     
     if(isset($params['javascript']))
@@ -42,6 +42,5 @@ function smarty_function_admintree($params, &$smarty)
         $tree->hideAdmin = ($params['hideadmin'] === true);
     }
     
-    return $tree->populate()
-        ->toHTML($types);
+    return $tree->toJavascript();
 }
