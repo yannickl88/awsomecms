@@ -1,21 +1,49 @@
 <?php
 import('/components/page/util/class.Tree.inc');
 
-class NewsItem extends TreeItem
+/**
+ * The node for the page items
+ * 
+ * @author Yannick
+ */
+class TreeNews extends TreeNode
 {
-    public function __toString()
+    private $pageName;
+    private $pageID;
+    private $pageLocation;
+    
+    /**
+     * Constructor
+     * 
+     * @param Object $page
+     */
+    public function __construct($page)
     {
-        $html = "";
-        if(!$this->getRoot()->onlyShowFolders)
-        {
-            $html .= "<div class=\"hideIcons\" onmouseout=\"$(this).addClass('hideIcons');\" onmouseover=\"$(this).removeClass('hideIcons');\">";
-            $html .= "<a class=\"deleteIcon treeIcon\" href=\"{$this->deleteURL}\"><img src=\"/img/icons/page_delete.png\" /></a>";
-            $html .= "<a class=\"viewIcon treeIcon\" href=\"{$this->viewURL}\"><img src=\"/img/icons/page_view.png\" /></a>";
-            $html .= "<a href=\"{$this->editURL}\">";
-            $html .= '<img src="/img/icons/news.png" />';
-            $html .= "{$this->name}</a>";
-            $html .= "</div>";
-        }
+        $this->pageName = $page->page_name;
+        $this->pageID = $page->page_id;
+        $this->pageLocation = "/[contentroot]".$page->page_location;
+        $this->pageURL = $page->page_location.$page->page_name;
+    }
+    /**
+     * See parent
+     */
+    public function registerIcons()
+    {
+        
+    }
+    /**
+     * Create the javascript code for the tree
+     * 
+     * @return String
+     */
+    public function toJavascript()
+    {
+        $linkEdit = "/".Config::get("pageedit", "pageedit", "admin")."?page_id={$this->pageID}";
+        $linkDelete = "/".Config::get("pagedelete", "pagedelete", "admin")."?page_id={$this->pageID}";
+        $icon = ($this->pageName == "index")? "index" : "page";
+        
+        $html = "tree.addChild(new TreeItem(\"{$this->pageName}\", \"{$this->pageLocation}\", \"{$linkEdit}\", {$this->parent->getName()}, \"{$icon}\", [new TreeAction(\"view\", \"{$this->pageURL}\", tree), new TreeAction(\"page_delete\", \"{$linkDelete}\", tree)]));\n";
+        
         return $html;
     }
 }

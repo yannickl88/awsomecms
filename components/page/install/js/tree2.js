@@ -15,10 +15,12 @@
 /**
  * Admin tree with nodes
  */
-var Tree = function(element)
+var Tree = function(element, javascript)
 {
     this.children = new Array();
+    this.iconMap = {};
     this.html = null;
+    this.javascript = (javascript)? javascript : false;
 
     /**
      * Constructor
@@ -26,12 +28,10 @@ var Tree = function(element)
     this.init = function(element)
     {
         this.html = $("<div class='treeNode'></div>");
-        var ref = this;
+        var id = "treePlaceholder_"+Math.floor(Math.random()*1000);
+        document.write("<div id='"+id+"'/>");
         
-        $(element).ready(function(e)
-        {
-            $(element).append(ref.html);
-        });
+        $("#"+id).replaceWith(this.html);
     };
     /**
      * Add a child to the folder
@@ -41,8 +41,6 @@ var Tree = function(element)
      */
     this.addChild = function(child)
     {
-        child.root = this;
-        
         if (child.location == "/")
         {
             var x = 0;
@@ -85,7 +83,7 @@ var Tree = function(element)
 
             if (!inserted)
             {
-                var folder = new TreeFolder(loc, "/");
+                var folder = new TreeFolder(loc, "/", this);
                 var x = 0;
                 while(x < this.children.length)
                 {
@@ -106,11 +104,30 @@ var Tree = function(element)
                     this.children.splice(x, 0, folder);
                 }
                 folder.parent = this;
-                folder.root = this;
                 folder.addChild(child, locArray);
                 this.html.append(folder.html);
             }
         }
+    };
+    /**
+     * Add an icon to the collection
+     * 
+     * @param String key
+     * @param String icon   URL to the icon
+     */
+    this.assignIcon = function(key, icon) 
+    {
+        this.iconMap[key] = icon;
+    };
+    /**
+     * Get an icon with a certain key
+     * 
+     * @param String key
+     * @return String URL to the icon
+     */
+    this.getIcon = function(key) 
+    {
+        return this.iconMap[key];
     };
 
     this.init(element);
@@ -124,7 +141,7 @@ Tree.CONTENT_FOLDER = 4;
 /**
  * Folder page item
  */
-var TreeItem = function(name, location, link)
+var TreeItem = function(name, location, link, root, icon, actions)
 {
     this.name = name;
     this.location = location;
@@ -132,7 +149,9 @@ var TreeItem = function(name, location, link)
     this.link = link;
     this.type = Tree.PAGE;
     this.html = null;
-    this.root = null;
+    this.root = root;
+    this.actions = actions;
+    this.icon = icon;
     
     /**
      * Constructor
@@ -141,16 +160,16 @@ var TreeItem = function(name, location, link)
     {
         this.html = $("<div class='hideIcons'></div>");
         this.html[0].object = this;
-        this.html.append("<a class='deleteIcon treeIcon' href='#'><img src='/img/icons/page_delete.png' alt='delete'/></a>");
-        this.html.append("<a class='viewIcon treeIcon' href='#'><img src='/img/icons/page_view.png' alt='view'/></a>");
-        this.html.append("<a href='#'><img alt='page' src='/img/icons/page_page.png' />"+this.name+"</a>");
+        for(key in this.actions)
+        {
+            this.html.append(this.actions[key].html);
+        }
+        this.html.append("<a href='"+this.link+"'><img alt='page' src='"+this.root.getIcon(this.icon)+"' />"+this.name+"</a>");
         this.html.mouseover(function(e){
             $(this).removeClass("hideIcons");
-            e.preventDefault();
         });
         this.html.mouseout(function(e){
             $(this).addClass("hideIcons");
-            e.preventDefault();
         });
     };
     
@@ -159,7 +178,7 @@ var TreeItem = function(name, location, link)
 /**
  * Folder item for a tree
  */
-var TreeFolder = function(name, location)
+var TreeFolder = function(name, location, root, actions)
 {
     this.name = name;
     this.location = location;
@@ -168,7 +187,8 @@ var TreeFolder = function(name, location)
     this.type = Tree.PAGE_FOLDER;
     this.html = null;
     this.openFolder = false;
-    this.root = null;
+    this.root = root;
+    this.actions = actions;
 
     /**
      * Constructor
@@ -176,11 +196,14 @@ var TreeFolder = function(name, location)
     this.init = function()
     {
         var ref = this;
-        
-        this.html = $("<div></div>");
+        this.html = $("<div class='hideIcons'></div>");
         this.html[0].object = ref;
+        for(key in this.actions)
+        {
+            this.html.append(this.actions[key].html);
+        }
         this.html.append("<a class='folder clickableTreeArrow' href='#'></a>");
-        this.html.append("<img src='/img/icons/folder.png' alt='folder'/>");
+        this.html.append("<img src='"+this.root.getIcon("folder")+"' alt='folder'/>");
         this.html.append("<a class='clickableTreeItem' style='padding: 0pt;' href='#'>"+this.name+"</a>");
         this.html.append("<div class='treeNode hidden'></div>");
         this.html.children(".clickableTreeArrow").bind({
@@ -202,6 +225,12 @@ var TreeFolder = function(name, location)
             }
             e.preventDefault();
             return false;
+        });
+        this.html.mouseover(function(e){
+            $(this).removeClass("hideIcons");
+        });
+        this.html.mouseout(function(e){
+            $(this).addClass("hideIcons");
         });
         
         //open when we have a cookie
@@ -261,7 +290,7 @@ var TreeFolder = function(name, location)
         
         if (!inserted)
         {
-            var folder = new TreeFolder(loc, this.getPath());
+            var folder = new TreeFolder(loc, this.getPath(), this.root);
             var x = 0;
             while(x < this.children.length)
             {
@@ -282,7 +311,6 @@ var TreeFolder = function(name, location)
                 this.children.splice(x, 0, folder);
             }
             folder.parent = this;
-            folder.root = this.root;
             return folder.addChild(child, locArray);
         }
         
@@ -388,11 +416,23 @@ var TreeFolder = function(name, location)
     
     this.init();
 }
-
-var tree = new Tree("#treeWrapper");
-tree.addChild(new TreeItem("hey", "/blaat/basdf/zafdhg/asdf/"));
-tree.addChild(new TreeItem("hoi", "/blaat/basdf/"));
-tree.addChild(new TreeItem("13", "/"));
-tree.addChild(new TreeItem("12", "/"));
-tree.addChild(new TreeItem("bb", "/"));
-tree.addChild(new TreeItem("aa", "/"));
+/**
+ * Actions for a tree node, these are icons displayed to the right when hovered over the node
+ * 
+ * @param String icon
+ * @param String url
+ */
+var TreeAction = function(icon, url, root)
+{
+    this.icon = icon;
+    this.url = url;
+    this.html = null;
+    this.root = root;
+    
+    this.init = function()
+    {
+        this.html = $("<a class='treeIcon' href='"+this.url+"'><img src='"+this.root.getIcon(this.icon)+"' alt='tree action'/></a>");
+    }
+    
+    this.init();
+}
