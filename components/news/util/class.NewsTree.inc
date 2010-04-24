@@ -6,30 +6,32 @@ import('/components/page/util/class.Tree.inc');
  * 
  * @author Yannick
  */
-class TreeNews extends TreeNode
+class NewsItem extends TreeNode
 {
-    private $pageName;
-    private $pageID;
-    private $pageLocation;
+    private $name;
+    private $id;
+    private $location;
+    private $viewURL;
     
     /**
      * Constructor
      * 
-     * @param Object $page
+     * @param Object $record
      */
-    public function __construct($page)
+    public function __construct($record)
     {
-        $this->pageName = $page->page_name;
-        $this->pageID = $page->page_id;
-        $this->pageLocation = "/[contentroot]".$page->page_location;
-        $this->pageURL = $page->page_location.$page->page_name;
+        $this->name = $record->news_title;
+        $this->id = $record->news_id;
+        $this->location = "/[siteroot]/".$record->news_location;
+        $this->viewURL = date("/Y/m/", strtotime($record->news_date)).$record->news_titleurl;
+        $this->setType(Tree::PAGE);
     }
     /**
      * See parent
      */
     public function registerIcons()
     {
-        
+        $this->parent->addIcon("news", "/img/icons/news.png");
     }
     /**
      * Create the javascript code for the tree
@@ -38,68 +40,53 @@ class TreeNews extends TreeNode
      */
     public function toJavascript()
     {
-        $linkEdit = "/".Config::get("pageedit", "pageedit", "admin")."?page_id={$this->pageID}";
-        $linkDelete = "/".Config::get("pagedelete", "pagedelete", "admin")."?page_id={$this->pageID}";
-        $icon = ($this->pageName == "index")? "index" : "page";
+        $linkEdit = "/".Config::get("newsedit", "newsedit", "admin")."?page_id={$this->id}";
+        $linkDelete = "/".Config::get("newsdelete", "newsdelete", "admin")."?page_id={$this->id}";
+        $icon = "news";
         
-        $html = "tree.addChild(new TreeItem(\"{$this->pageName}\", \"{$this->pageLocation}\", \"{$linkEdit}\", {$this->parent->getName()}, \"{$icon}\", [new TreeAction(\"view\", \"{$this->pageURL}\", tree), new TreeAction(\"page_delete\", \"{$linkDelete}\", tree)]));\n";
+        $html = "{$this->parent->getName()}.addChild(new TreeItem(\"{$this->name}\", \"{$this->location}\", \"{$linkEdit}\", {$this->parent->getName()}, \"{$icon}\", [new TreeAction(\"view\", \"{$this->viewURL}\", {$this->parent->getName()}), new TreeAction(\"delete\", \"{$linkDelete}\", {$this->parent->getName()})], {$this->getType()}));\n";
         
         return $html;
     }
 }
 
-class NewsFolder extends TreeFolder
+class NewsFolder extends TreeNode
 {
-    public function __toString()
+    private $name;
+    private $location;
+    private $realLocation;
+    
+    /**
+     * Constructor
+     * 
+     * @param Object $record
+     */
+    public function __construct($name, $location)
     {
-        $id = md5($this->getLocation());
+        $this->name = $name;
+        $this->location = "/[siteroot]".$location;
+        $this->realLocation = $location;
+        $this->setType(Tree::PAGE);
+    }
+    /**
+     * See parent
+     */
+    public function registerIcons()
+    {
+        $this->parent->addIcon("news_folder", "/img/icons/news_folder.png");
+    }
+    /**
+     * Create the javascript code for the tree
+     * 
+     * @return String
+     */
+    public function toJavascript()
+    {
+        $linkAdd = "/".Config::get("newsadd", "newsadd", "admin");
+        $linkView = "/".Config::get("newsadmin", "newsadmin", "admin");
         
-        $html = "";
-        $html .= "<div class=\"hideIcons\" onmouseout=\"$(this).addClass('hideIcons');\" onmouseover=\"$(this).removeClass('hideIcons');\">";
-        $html .= "<a class=\"addIcon treeIcon\" href=\"/".Config::get("newsadd", "newsadd", "admin")."\"><img src=\"/img/icons/add.png\" /></a>";
-        $html .= "<a class=\"viewIcon treeIcon\" href=\"/".Config::get("newsadmin", "newsadmin", "admin")."\"><img src=\"/img/icons/overview.png\" /></a>";
-        if(!isset($_COOKIE['menu'.$id]))
-        {
-            $html .= "<a class=\"folder link{$id} clickableTreeArrow\" href=\"#\"></a>";
-        } 
-        else
-        {
-            $html .= "<a class=\"folder link{$id} open clickableTreeArrow\" href=\"#\"></a>";
-        }
-        $html .= '<img src="/img/icons/news_folder.png" alt="folder"/>';
-        if($this->getRoot()->javascript)
-        {
-            $html .= "<a href=\"{$this->getLocation()}\" class=\"clickableTreeItem javascript\" style=\"padding: 0;\">";
-        }
-        else
-        {
-            $html .= "<a href=\"#\" class=\"clickableTreeItem\" style=\"padding: 0;\">";
-        }
-        if($this->name == "")
-        {
-            $html .= "/";
-        }
-        else
-        {
-            $html .= $this->name;
-        }
-        $html .= '</a>';
-        if(!isset($_COOKIE['menu'.$id]))
-        {
-            $html .= '<div class="treeNode hidden">';
-        }
-        else
-        {
-            $html .= '<div class="treeNode">';
-        }
+        $html = "{$this->parent->getName()}.addChild(new TreeFolder(\"{$this->name}\", \"{$this->location}\", {$this->parent->getName()}, \"news_folder\", [new TreeAction(\"overview\", \"{$linkView}\", {$this->parent->getName()}), new TreeAction(\"add\", \"{$linkAdd}\", {$this->parent->getName()})], {$this->getType()}));\n";
         
-        foreach($this->children as $child)
-        {
-            $html .= $child->toHTML();
-        }
-        
-        $html .= '</div>';
-        $html .= "</div>";
         return $html;
     }
 }

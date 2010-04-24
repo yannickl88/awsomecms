@@ -4,5 +4,6 @@
     "menu_addpage":         "Add Page",
     "field_page_name":      "Name",
     "field_page_location":  "Location",
-    "field_page_template":  "Content"
+    "field_page_template":  "Content",
+    "field_page_title":     "Title"
 }

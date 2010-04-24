@@ -123,7 +123,7 @@ class PageComponent extends Component
     {
         $table = Table::init("page.pages", "admintree");
 
-        if($tree->hideAdmin)
+        if($tree->hideAdmin == true)
         {
             $table->setRequest((object) array("where" => array('page_location', "/admin/%", "NOT LIKE")));
         }
@@ -134,7 +134,7 @@ class PageComponent extends Component
 
         foreach($result as $row)
         {
-            $tree->addChild(new TreePage($row));
+            $tree->addChild(new PageItem($row));
         }
     }
 }
