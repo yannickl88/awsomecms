@@ -13,7 +13,7 @@
  * @version $Revision$
  */
 import('/core/class.Component.inc');
-//import('/components/file/util/class.FileTree.inc');
+import('/components/file/util/class.FileTree.inc');
 
 /**
  * 
@@ -100,21 +100,15 @@ class FileComponent extends Component
             ->doSelect()
             ->getRows();
 
-//        $imageName = strtolower(Language::get("images"));
-//        $filesName = strtolower(Language::get("files"));
-//        $tree->addChild(new FileFolder($filesName, ""), "/", Tree::CONTENT);
-//        $tree->addChild(new ImageFolder($imageName, ""), "/{$filesName}/", Tree::CONTENT);
-//        
-//        foreach($result as $row)
-//        {
-//            $tree->addChild(new ImageItem(
-//                $row->file_name, 
-//                "/".Config::get("fileedit", "fileedit", "admin")."?file_id={$row->file_id}", 
-//                "/".Config::get("filedelete", "filedelete", "admin")."?file_id={$row->file_id}", 
-//                "/".$row->file_data->url
-//                ), 
-//                "/{$filesName}/{$imageName}/".((!empty($row->file_tag))? $row->file_tag."/" : ""), Tree::CONTENT
-//            );
-//        }
+        $imageName = strtolower(Language::get("images"));
+        $filesName = strtolower(Language::get("files"));
+        $tree->addChild(new UploadFolder($filesName, "/"));
+        $tree->addChild(new ImageFolder($imageName, "/{$filesName}/"));
+        
+        foreach($result as $row)
+        {
+            $row->file_location = "/{$filesName}/{$imageName}/".(!empty($row->file_tag)? $row->file_tag."/" : "");
+            $tree->addChild(new ImageItem($row));
+        }
     }
 }

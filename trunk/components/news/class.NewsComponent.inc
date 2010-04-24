@@ -13,7 +13,7 @@
  * @version $Revision$
  */
 import('/core/class.Component.inc');
-//import('/components/news/util/class.NewsTree.inc');
+import('/components/news/util/class.NewsTree.inc');
 
 /**
  * The News component provides a simple news system that allows for new messages. 
@@ -145,7 +145,7 @@ class NewsComponent extends Component
         }
         else
         {
-            if($request['news_id'])
+            if(isset($request['news_id']))
             {
                 Table::init('news.news')
                     ->setRecord((object) $request);
@@ -198,30 +198,20 @@ class NewsComponent extends Component
             ->doSelect()
             ->getRows();
 
-//        $newsRoot = Config::get("newsroot", "/", "news");
-//        $newsName = strtolower(Language::get("news"));
-//        $tree->addChild(new NewsFolder($newsName, ""), $newsRoot);
-//            
-//        foreach($result as $row)
-//        {
-//            $title = $row->news_title;
-//            
-//            if(strlen($title) > 17)
-//            {
-//                $title = substr($title, 0, 15)."...";
-//            }
-//            
-//            $date = strtotime($row->news_date);
-//            
-//            $tree->addChild(new NewsItem(
-//                $title, 
-//                "/".Config::get("newsedit", "newsedit", "admin")."?news_id={$row->news_id}", 
-//                "/".Config::get("newsdelete", "newsdelete", "admin")."?news_id={$row->news_id}", 
-//                "{$newsRoot}{$newsName}/".date("Y/m", $date)."/".$row->news_titleurl
-//                ), 
-//                "{$newsRoot}{$newsName}/".date("Y/m", $date)."/"
-//            );
-//        }
+        $newsRoot = Config::get("newsroot", "/", "news");
+        $newsName = strtolower(Language::get("news"));
+        $tree->addChild(new NewsFolder($newsName, $newsRoot));
+            
+        foreach($result as $row)
+        {
+            if(strlen($row->news_title) > 17)
+            {
+                $row->news_title = substr($row->news_title, 0, 15)."...";
+            }
+            $row->news_location = $newsName."/".date("Y/m/", strtotime($row->news_date));
+            
+            $tree->addChild(new NewsItem($row));
+        }
     }
     /**
      * (non-PHPdoc)

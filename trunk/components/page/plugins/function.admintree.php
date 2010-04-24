@@ -24,23 +24,29 @@ function smarty_function_admintree($params, &$smarty)
 {
     import('components/page/util/class.Tree.inc');
     
-    $tree = new Tree("tree");
-    $types = 0;
+    $tree = Tree::getInstance();
+    $types = array();
+    $javascript = false;
     
-    if(isset($params['javascript']))
+    if(!empty($params['javascript']))
     {
-        $tree->javascript = ''.$params['javascript'];
+        $javascript = ''.$params['javascript'];
     }
-    if(isset($params['types']))
+    if(!empty($params['types']))
     {
-        $types = (int) $params['types'];
+        $types = explode(",", $params['types']);
+        
+        foreach($types as $key => $value)
+        {
+            $types[$key] = (int) trim($value);
+        }
     }
-    $tree->onlyShowFolders = (isset($params['folderonly']) && $params['folderonly'] === true);
+    $onlyShowFolders = (isset($params['folderonly']) && $params['folderonly'] === true);
     
-    if(isset($params['hideadmin']))
+    if(!empty($params['hideadmin']))
     {
         $tree->hideAdmin = ($params['hideadmin'] === true);
     }
     
-    return $tree->toJavascript();
+    return $tree->toJavascript("tree", null, $types, $onlyShowFolders, $javascript);
 }

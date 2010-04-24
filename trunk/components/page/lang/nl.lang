@@ -4,5 +4,6 @@
     "menu_addpage":         "Pagina toevoegen",
     "field_page_name":      "Naam",
     "field_page_location":  "Locatie",
-    "field_page_template":  "Inhoud"
+    "field_page_template":  "Inhoud",
+    "field_page_title":     "Titel"
 }

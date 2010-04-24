@@ -1,85 +1,110 @@
 <?php
 import('/components/page/util/class.Tree.inc');
 
-class ImageItem extends TreeItem
+class ImageItem extends TreeNode
 {
-    public function __toString()
+    private $name;
+    private $id;
+    private $location;
+    private $viewURL;
+    
+    /**
+     * Constructor
+     * 
+     * @param Object $record
+     */
+    public function __construct($record)
     {
-        $html = "";
-        if(!$this->getRoot()->onlyShowFolders)
-        {
-            $html .= "<div class=\"hideIcons\" onmouseout=\"$(this).addClass('hideIcons');\" onmouseover=\"$(this).removeClass('hideIcons');\">";
-            $html .= "<a class=\"deleteIcon treeIcon\" href=\"{$this->deleteURL}\"><img src=\"/img/icons/image_delete.png\" /></a>";
-            $html .= "<a class=\"viewIcon treeIcon\" href=\"{$this->viewURL}\"><img src=\"/img/icons/page_view.png\" /></a>";
-            $html .= "<a href=\"{$this->editURL}\">";
-            $html .= '<img src="/img/icons/image.png" />';
-            $html .= "{$this->name}</a>";
-            $html .= "</div>";
-        }
+        $this->name = $record->file_name;
+        $this->id = $record->file_id;
+        $this->location = "/[contentroot]/".$record->file_location;
+        $this->viewURL = $record->file_data->url;
+    }
+    /**
+     * See parent
+     */
+    public function registerIcons()
+    {
+        $this->parent->addIcon("news", "/img/icons/news.png");
+    }
+    /**
+     * Create the javascript code for the tree
+     * 
+     * @return String
+     */
+    public function toJavascript()
+    {
+        $linkEdit = "/".Config::get("newsedit", "newsedit", "admin")."?page_id={$this->id}";
+        $linkDelete = "/".Config::get("newsdelete", "newsdelete", "admin")."?page_id={$this->id}";
+        $icon = "news";
+        
+        $html = "{$this->parent->getName()}.addChild(new TreeItem(\"{$this->name}\", \"{$this->location}\", \"{$linkEdit}\", {$this->parent->getName()}, \"{$icon}\", [new TreeAction(\"view\", \"{$this->viewURL}\", {$this->parent->getName()}), new TreeAction(\"delete\", \"{$linkDelete}\", {$this->parent->getName()})], {$this->getType()}));\n";
+        
         return $html;
     }
 }
-
-class FileFolder extends TreeFolder
+class ImageFolder extends Folder
 {
-    public function __toString()
+    /**
+     * Constructor
+     * 
+     * @param Object $record
+     */
+    public function __construct($name, $location)
     {
-        $id = md5($this->getLocation());
+        parent::__construct($name, $location);
+        $this->location = "/[contentroot]".$location;
+    }
+    /**
+     * See parent
+     */
+    public function registerIcons()
+    {
+        $this->parent->addIcon("image_folder", "/img/icons/images_folder.png");
+    }
+    /**
+     * Create the javascript code for the tree
+     * 
+     * @return String
+     */
+    public function toJavascript()
+    {
+        $html = "{$this->parent->getName()}.addChild(new TreeFolder(\"{$this->name}\", \"{$this->location}\", {$this->parent->getName()}, \"image_folder\", [], {$this->getType()}));\n";
         
-        $html = "";
-        $html .= "<div class=\"hideIcons\" onmouseout=\"$(this).addClass('hideIcons');\" onmouseover=\"$(this).removeClass('hideIcons');\">";
-        $html .= "<a class=\"addIcon treeIcon\" href=\"/".Config::get("fileadd", "fileadd", "admin")."\"><img src=\"/img/icons/add.png\" /></a>";
-        $html .= "<a class=\"viewIcon treeIcon\" href=\"/".Config::get("fileadmin", "fileadmin", "admin")."\"><img src=\"/img/icons/overview.png\" /></a>";
-        if(!isset($_COOKIE['menu'.$id]))
-        {
-            $html .= "<a class=\"folder link{$id} clickableTreeArrow\" href=\"#\"></a>";
-        } 
-        else
-        {
-            $html .= "<a class=\"folder link{$id} open clickableTreeArrow\" href=\"#\"></a>";
-        }
-        $html .= '<img src="/img/icons/images_folder.png" alt="folder"/>';
-        if($this->getRoot()->javascript)
-        {
-            $html .= "<a href=\"{$this->getLocation()}\" class=\"clickableTreeItem javascript\" style=\"padding: 0;\">";
-        }
-        else
-        {
-            $html .= "<a href=\"#\" class=\"clickableTreeItem\" style=\"padding: 0;\">";
-        }
-        if($this->name == "")
-        {
-            $html .= "/";
-        }
-        else
-        {
-            $html .= $this->name;
-        }
-        $html .= '</a>';
-        if(!isset($_COOKIE['menu'.$id]))
-        {
-            $html .= '<div class="treeNode hidden">';
-        }
-        else
-        {
-            $html .= '<div class="treeNode">';
-        }
-        
-        foreach($this->children as $child)
-        {
-            $html .= $child->toHTML();
-        }
-        
-        $html .= '</div>';
-        $html .= "</div>";
         return $html;
     }
 }
-class ImageFolder extends TreeFolder
+class UploadFolder extends Folder
 {
-    public function __construct($name)
+    /**
+     * Constructor
+     * 
+     * @param Object $record
+     */
+    public function __construct($name, $location)
     {
-        parent::__construct($name);
-        $this->icon = "/img/icons/images_folder.png";
+        parent::__construct($name, $location);
+        $this->location = "/[contentroot]".$location;
+    }
+    /**
+     * Create the javascript code for the tree
+     * 
+     * @return String
+     */
+    public function toJavascript()
+    {
+        $linkAdd = "/".Config::get("fileadd", "fileadd", "admin");
+        $linkView = "/".Config::get("fileadmin", "fileadmin", "admin");
+        
+        $html = "var node = new TreeFolder(\"{$this->name}\", \"{$this->location}\", {$this->parent->getName()}, \"folder\", [new TreeAction(\"overview\", \"{$linkView}\", {$this->parent->getName()}), new TreeAction(\"add\", \"{$linkAdd}\", {$this->parent->getName()})], {$this->getType()});\n";
+        $html .= "$(node.html).attr({\n";
+        $html .= "    \"ondrop\":       \"file_upload(event);\",\n";
+        $html .= "    \"ondragenter\":  \"file_dragenter(event);\",\n";
+        $html .= "    \"ondragover\":   \"file_dragover(event);\",\n";
+        $html .= "    \"ondragleave\":  \"file_dragout(event);\"\n";
+        $html .= "});\n";
+        $html .= "{$this->parent->getName()}.addChild(node);\n";
+        
+        return $html;
     }
 }
