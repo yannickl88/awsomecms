@@ -38,7 +38,7 @@ class PagesTable extends Table
         $this->addField(new LocationField("page_location"), 2);
         $this->addField(new TextField("page_template"), 3);
         $this->addField(new DateField("page_timestamp", Field::HIDE));
-        $this->setTitle("[page_title]");
+        $this->setTitle("[page_name]");
         
         $this->setURLs(
             Config::get('pageadmin', 'pageadmin', 'admin'),

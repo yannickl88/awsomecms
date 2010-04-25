@@ -39,7 +39,7 @@ class FilesTable extends Table
         $this->addField(new DateField("file_date"), 2);
         $this->addField(new UploadField("file_data", Config::get("uploaddir", Config::get("frameworkroot", "/"), "file")), 3);
         $this->addField(new TagField("file_tag", Field::OPTIONAL|Field::FORCEUPDATE), 4);
-        $this->addField(new TextField("file_description", Field::HIDE_VIEW), 5);
+        $this->addField(new TextField("file_description", Field::HIDE_VIEW|Field::OPTIONAL), 5);
         $this->setTitle("[file_name]");
         
         $this->setURLs(

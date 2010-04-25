@@ -59,6 +59,7 @@ class Tree
             array("folder",         "/img/icons/folder.png"),
             array("add",            "/img/icons/add.png"),
             array("overview",       "/img/icons/overview.png"),
+            array("loader",         "/img/admin/loader.gif"),
         );
         $this->hideAdmin = Config::get("hideadmintree", true, "admin");
         
@@ -257,10 +258,11 @@ class Folder extends TreeNode
      * 
      * @param Object $record
      */
-    public function __construct($name, $location)
+    public function __construct($name, $location, $type = Tree::PAGE)
     {
         $this->name = $name;
         $this->location = $location;
+        $this->type = $type;
     }
     /**
      * Create the javascript code for the tree

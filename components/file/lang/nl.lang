@@ -6,5 +6,8 @@
     "field_file_tag":       "Tag",
     "field_file_description": "Beschrijving",
     "images":               "afbeeldingen",
-    "files":                "bestanden"
+    "files":                "bestanden",
+    "documents":            "documenten",
+    "videos":               "video's",
+    "other":                "overig"
 }
