@@ -87,7 +87,7 @@ function file_upload(event) {
 }
 function file_getType(fileType)
 {
-    if(fileType.match(/^image\/*$/i))
+    if(fileType.match(/^image\/.*$/i))
     {
         return "image";
     }
