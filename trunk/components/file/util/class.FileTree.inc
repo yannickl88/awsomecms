@@ -17,7 +17,7 @@ class ImageItem extends TreeNode
     {
         $this->name = $record->file_name;
         $this->id = $record->file_id;
-        $this->location = "/[contentroot]/".$record->file_location;
+        $this->location = $record->file_location;
         $this->viewURL = $record->file_data->url;
     }
     /**
@@ -25,7 +25,7 @@ class ImageItem extends TreeNode
      */
     public function registerIcons()
     {
-        $this->parent->addIcon("news", "/img/icons/news.png");
+        $this->parent->addIcon("image", "/img/icons/image.png");
     }
     /**
      * Create the javascript code for the tree
@@ -36,7 +36,7 @@ class ImageItem extends TreeNode
     {
         $linkEdit = "/".Config::get("newsedit", "newsedit", "admin")."?page_id={$this->id}";
         $linkDelete = "/".Config::get("newsdelete", "newsdelete", "admin")."?page_id={$this->id}";
-        $icon = "news";
+        $icon = "image";
         
         $html = "{$this->parent->getName()}.addChild(new TreeItem(\"{$this->name}\", \"{$this->location}\", \"{$linkEdit}\", {$this->parent->getName()}, \"{$icon}\", [new TreeAction(\"view\", \"{$this->viewURL}\", {$this->parent->getName()}), new TreeAction(\"delete\", \"{$linkDelete}\", {$this->parent->getName()})], {$this->getType()}));\n";
         
@@ -76,15 +76,17 @@ class ImageFolder extends Folder
 }
 class UploadFolder extends Folder
 {
+    private $nodeMap;
     /**
      * Constructor
      * 
      * @param Object $record
      */
-    public function __construct($name, $location)
+    public function __construct($name, $location, $nodeMap)
     {
         parent::__construct($name, $location);
         $this->location = "/[contentroot]".$location;
+        $this->nodeMap = $nodeMap;
     }
     /**
      * Create the javascript code for the tree
@@ -96,14 +98,15 @@ class UploadFolder extends Folder
         $linkAdd = "/".Config::get("fileadd", "fileadd", "admin");
         $linkView = "/".Config::get("fileadmin", "fileadmin", "admin");
         
-        $html = "var node = new TreeFolder(\"{$this->name}\", \"{$this->location}\", {$this->parent->getName()}, \"folder\", [new TreeAction(\"overview\", \"{$linkView}\", {$this->parent->getName()}), new TreeAction(\"add\", \"{$linkAdd}\", {$this->parent->getName()})], {$this->getType()});\n";
-        $html .= "$(node.html).attr({\n";
-        $html .= "    \"ondrop\":       \"file_upload(event);\",\n";
+        $html = "uploadFolder = new TreeFolder(\"{$this->name}\", \"{$this->location}\", {$this->parent->getName()}, \"folder\", [new TreeAction(\"overview\", \"{$linkView}\", {$this->parent->getName()}), new TreeAction(\"add\", \"{$linkAdd}\", {$this->parent->getName()})], {$this->getType()});\n";
+        $html .= "$(uploadFolder.html).attr({\n";
+        $html .= "    \"ondrop\":       \"file_upload(event); return false;\",\n";
         $html .= "    \"ondragenter\":  \"file_dragenter(event);\",\n";
         $html .= "    \"ondragover\":   \"file_dragover(event);\",\n";
         $html .= "    \"ondragleave\":  \"file_dragout(event);\"\n";
         $html .= "});\n";
-        $html .= "{$this->parent->getName()}.addChild(node);\n";
+        $html .= "uploadFolder.nodes = ".stripslashes(json_encode($this->nodeMap))."\n";
+        $html .= "{$this->parent->getName()}.addChild(uploadFolder);\n";
         
         return $html;
     }

@@ -146,7 +146,7 @@ class UploadField extends Field
     
     public function validate($mode)
     {
-        parent::validate($mode);
+        ;
     }
     
     public function isRequired($mode)

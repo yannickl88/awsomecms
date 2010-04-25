@@ -42,6 +42,24 @@ class FileComponent extends Component
             $this->redirect("/".Config::get('fileadmin', 'fileadmin', 'admin'));
         }
     }
+    public function action_upload($smarty, $smartyLoader, $request)
+    {
+        $request["file_name"] = basename($_FILES['file_data']['name']);
+        $request["file_date"] = "now";
+        
+        try
+        {
+            $return = Table::init("file.files")
+                ->setRecord((object) $request)
+                ->doInsert();
+            
+            $this->ajax(array("succes" => true, "id" => $return));
+        }
+        catch(Exception $e)
+        {
+            $this->ajax(array("error" => true, "exception" => $e->getMessage()));
+        }
+    }
     public function action_edit($smarty, $smartyLoader, $request)
     {
         if($request['method'] == 'post')
@@ -100,15 +118,41 @@ class FileComponent extends Component
             ->doSelect()
             ->getRows();
 
-        $imageName = strtolower(Language::get("images"));
         $filesName = strtolower(Language::get("files"));
-        $tree->addChild(new UploadFolder($filesName, "/"));
+        $imageName = strtolower(Language::get("images"));
+        $docName = strtolower(Language::get("documents"));
+        $vidName = strtolower(Language::get("videos"));
+        $otherName = strtolower(Language::get("other"));
+        
+        $mapping = array(
+            "images"    => "/[contentroot]/{$filesName}/{$imageName}/",
+            "docs"      => "/[contentroot]/{$filesName}/{$docName}/",
+            "vid"       => "/[contentroot]/{$filesName}/{$vidName}/",
+            "other"     => "/[contentroot]/{$filesName}/{$otherName}/",
+        );
+        
+        $tree->addChild(new UploadFolder($filesName, "/", $mapping));
         $tree->addChild(new ImageFolder($imageName, "/{$filesName}/"));
+        $tree->addChild(new Folder($docName, "/[contentroot]/{$filesName}/"));
+        $tree->addChild(new Folder($vidName, "/[contentroot]/{$filesName}/"));
+        $tree->addChild(new Folder($otherName, "/[contentroot]/{$filesName}/"));
         
         foreach($result as $row)
         {
-            $row->file_location = "/{$filesName}/{$imageName}/".(!empty($row->file_tag)? $row->file_tag."/" : "");
+            $row->file_location = $mapping[$this->getType($row->file_data->type)].(!empty($row->file_tag)? $row->file_tag."/" : "");
             $tree->addChild(new ImageItem($row));
+        }
+    }
+    
+    private function getType($fileType)
+    {
+        if(preg_match('/^image\/.*$/i', $fileType))
+        {
+            return "images";
+        }
+        else 
+        {
+            return "other";
         }
     }
 }
