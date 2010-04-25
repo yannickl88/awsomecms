@@ -140,11 +140,11 @@ class FileComponent extends Component
         foreach($result as $row)
         {
             $row->file_location = $mapping[$this->getType($row->file_data->type)].(!empty($row->file_tag)? $row->file_tag."/" : "");
-            $tree->addChild(new ImageItem($row));
+            $tree->addChild(new FileItem($row));
         }
     }
     
-    private function getType($fileType)
+    public function getType($fileType)
     {
         if(preg_match('/^image\/.*$/i', $fileType))
         {

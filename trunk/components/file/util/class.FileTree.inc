@@ -1,12 +1,13 @@
 <?php
 import('/components/page/util/class.Tree.inc');
 
-class ImageItem extends TreeNode
+class FileItem extends TreeNode
 {
     private $name;
     private $id;
     private $location;
     private $viewURL;
+    private $fileType;
     
     /**
      * Constructor
@@ -19,13 +20,17 @@ class ImageItem extends TreeNode
         $this->id = $record->file_id;
         $this->location = $record->file_location;
         $this->viewURL = $record->file_data->url;
+        $this->fileType = $record->file_data->type;
     }
     /**
      * See parent
      */
     public function registerIcons()
     {
-        $this->parent->addIcon("image", "/img/icons/image.png");
+        $this->parent->addIcon("images", "/img/icons/image.png");
+        $this->parent->addIcon("docs", "/img/icons/doc.png");
+        $this->parent->addIcon("vid", "/img/icons/video.png");
+        $this->parent->addIcon("other", "/img/icons/other.png");
     }
     /**
      * Create the javascript code for the tree
@@ -36,7 +41,7 @@ class ImageItem extends TreeNode
     {
         $linkEdit = "/".Config::get("newsedit", "newsedit", "admin")."?page_id={$this->id}";
         $linkDelete = "/".Config::get("newsdelete", "newsdelete", "admin")."?page_id={$this->id}";
-        $icon = "image";
+        $icon = Component::init("file")->getType($this->fileType);
         
         $html = "{$this->parent->getName()}.addChild(new TreeItem(\"{$this->name}\", \"{$this->location}\", \"{$linkEdit}\", {$this->parent->getName()}, \"{$icon}\", [new TreeAction(\"view\", \"{$this->viewURL}\", {$this->parent->getName()}), new TreeAction(\"delete\", \"{$linkDelete}\", {$this->parent->getName()})], {$this->getType()}));\n";
         
