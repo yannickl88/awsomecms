@@ -1,6 +1,8 @@
 function file_upload(event) {
     var data = event.dataTransfer;
     
+    console.log(data.files);
+    
     if(data && data.files.length > 0)
     {
         var boundary = '------multipartformboundary' + (new Date).getTime();
@@ -12,11 +14,7 @@ function file_upload(event) {
         {
             /* Build RFC2388 string. */
             var builder = '';
-        
-            
             var file = data.files[i];
-            
-            console.log(file);
             
             //form data
             builder += dashdash+boundary+crlf;
@@ -67,8 +65,9 @@ function file_upload(event) {
         
             var xhr = new XMLHttpRequest();
             xhr.open("POST", "/", true);
-            xhr.setRequestHeader('content-type', 'multipart/form-data; boundary=' 
-                + boundary);
+            xhr.setRequestHeader('Content-Type', 'multipart/form-data; boundary=' + boundary);
+            xhr.setRequestHeader('X-File-Name', file.fileName);
+            xhr.setRequestHeader('X-File-Size', file.fileSize);
             xhr.sendAsBinary(builder);
             
             //add Loader to the tree
@@ -78,18 +77,29 @@ function file_upload(event) {
             node.parent.open();
             
             xhr.onload = function(event) { 
-                
+                /* If we got an error display it. */
+                if (xhr.responseText)
+                {
+                    var data = $.parseJSON(xhr.responseText);
+                    node.icon.attr("src", node.root.getIcon(file_getType(data.type)));
+                    node.link.attr("href", data.editLink)
+                    node.addAction(new TreeAction("view", data.viewLink, node.root));
+                    node.addAction(new TreeAction("delete", data.deleteLink, node.root));
+                }
             };
         }
     }
     
+    file_dragout(event);
+    
     event.stopPropagation();
+    event.preventDefault();
 }
 function file_getType(fileType)
 {
-    if(fileType.match(/^image\/.*$/i))
+    if(fileType.match(/^image\/.*$/i) != null)
     {
-        return "image";
+        return "images";
     }
     else
     {
@@ -99,16 +109,22 @@ function file_getType(fileType)
 function file_dragenter(event)
 {
     $(event.currentTarget).addClass("fileFocus");
-    event.stopPropagation();
-    event.preventDefault();
-}
-function file_dragover(event)
-{
-    $(event.currentTarget).addClass("fileFocus");
+    
     event.stopPropagation();
     event.preventDefault();
 }
 function file_dragout(event)
 {
     $(event.currentTarget).removeClass("fileFocus");
+    
+    event.stopPropagation();
+    event.preventDefault();
+}
+function file_bindListeners(element)
+{
+    element.addEventListener('drop', file_upload, false);
+    element.addEventListener('dragenter', file_dragenter, false);
+    element.addEventListener('dragover', file_dragenter, false);
+    element.addEventListener('dragout', file_dragout, false);
+    element.addEventListener('dragleave', file_dragout, false);
 }

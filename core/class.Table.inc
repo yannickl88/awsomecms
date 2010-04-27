@@ -799,7 +799,7 @@ abstract class Table
     /**
     * Preform an insert on the table
     * 
-    * @return int, last inserted ID
+    * @return SQLRecord
     */
     public function doInsert()
     {
@@ -822,7 +822,7 @@ abstract class Table
         
         $this->lastInsertedID = $result->insertID();
         
-        return $this->getInsertedID();
+        return $result;
     }
     /**
     * Preform an update on the table

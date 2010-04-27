@@ -644,6 +644,11 @@ class SQLQuery
         
         return $query;
     }
+    
+    public function getRequest()
+    {
+        return $this->values;
+    }
 }
 /**
  * SQLRecord that is a wrapper for all data generated from the queries
@@ -667,15 +672,27 @@ class SQLRecord
         
         if($record != null)
         {
-            while($row = $record->fetch(PDO::FETCH_OBJ))
+            if(is_a($record, "PDOStatement"))
+            {
+                while($row = $record->fetch(PDO::FETCH_OBJ))
+                {
+                    foreach($tables as $table)
+                    {
+                        $row = $table->db2value($row);
+                    }
+                    $this->records[] = $row;
+                }
+                $this->count = $record->rowCount();
+            }
+            elseif(is_object($record))
             {
                 foreach($tables as $table)
                 {
-                    $row = $table->db2value($row);
+                    $record = $table->db2value($record);
                 }
-                $this->records[] = $row;
+                $this->records[] = $record;
+                $this->count = 1;
             }
-            $this->count = $record->rowCount();
             
             if($this->count > 0 && isset($this->records[0]))
             {
@@ -817,11 +834,15 @@ class SQL
     {
         $query_str = "";
         $query_obj = null;
+        $request = null;
+        $insert = false;
         
         if(is_a($query, "SQLQuery"))
         {
             $query_str = $query->getSQL();
             $query_obj = $query->getTables();
+            $request = (object) $query->getRequest();
+            $insert = ($query->getAction() == "insert" || $query->getAction() == "update" || $query->getAction() == "delete");
         }
         else
         {
@@ -839,6 +860,10 @@ class SQL
                 $error = $this->PDOconnection->errorInfo();
                 Debugger::getInstance()->log("SQL ERROR: '{$query_str}' {$error}");
                 $this->triggerSQLError("{$error[1]} - {$error[2]}");
+            }
+            if($insert)
+            {
+                $result = $request;
             }
             $result = new SQLRecord($result, $query_obj);
         }
