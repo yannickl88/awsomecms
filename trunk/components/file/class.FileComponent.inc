@@ -44,7 +44,7 @@ class FileComponent extends Component
     }
     public function action_upload($smarty, $smartyLoader, $request)
     {
-        $request["file_name"] = basename($_FILES['file_data']['name']);
+        $request["file_name"] = basename($_FILES['file_data']['name'], substr($_FILES['file_data']['name'], strrpos($_FILES['file_data']['name'], ".")));
         $request["file_date"] = "now";
         
         try
@@ -53,7 +53,11 @@ class FileComponent extends Component
                 ->setRecord((object) $request)
                 ->doInsert();
             
-            $this->ajax(array("succes" => true, "id" => $return));
+            $linkEdit = "/".Config::get("fileedit", "fileedit", "admin")."?file_id={$return->insertID()}";
+            $linkDelete = "/".Config::get("filedelete", "filedelete", "admin")."?file_id={$return->insertID()}";
+            $row = $return->getRow();
+            
+            $this->ajax(array("succes" => true, "id" => $return->insertID(), "editLink" => $linkEdit, "deleteLink" => $linkDelete, "viewLink" => $row->file_data->url, "type" => $row->file_data->type));
         }
         catch(Exception $e)
         {

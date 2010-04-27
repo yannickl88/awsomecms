@@ -162,18 +162,19 @@ Tree.PAGE_FOLDER = 2;
 /**
  * Folder page item
  */
-var TreeItem = function(name, location, link, root, icon, actions, contentType)
+var TreeItem = function(name, location, url, root, icon, actions, contentType)
 {
     this.name = name;
     this.location = location;
     this.parent = null;
-    this.link = link;
+    this.url = url;
     this.type = Tree.PAGE;
     this.contentType = contentType;
     this.html = null;
     this.root = root;
     this.actions = actions;
-    this.icon = icon;
+    this.icon = $("<img alt='page' src='"+this.root.getIcon(icon)+"' />");
+    this.link = null;
     
     /**
      * Constructor
@@ -182,16 +183,16 @@ var TreeItem = function(name, location, link, root, icon, actions, contentType)
     {
         this.html = $("<div class='hideIcons'></div>");
         this.html[0].object = this;
+        this.link = $("<a href='"+this.url+"'>"+this.name+"</a>");
+        this.link.prepend(this.icon);
+        this.html.append(this.link);
         if(this.actions)
         {
-            var x = this.actions.length - 1;
-            while(x >= 0)
+            for(var x in this.actions)
             {
-                this.html.append(this.actions[x].html);
-                x--;
+                this.addAction(this.actions[x]);
             }
         }
-        this.html.append("<a href='"+this.link+"'><img alt='page' src='"+this.root.getIcon(this.icon)+"' />"+this.name+"</a>");
         this.html.mouseover(function(e){
             $(this).removeClass("hideIcons");
         });
@@ -199,6 +200,10 @@ var TreeItem = function(name, location, link, root, icon, actions, contentType)
             $(this).addClass("hideIcons");
         });
     };
+    this.addAction = function(action)
+    {
+        this.html.prepend(action.html);
+    }
     this.setParent = function(parent)
     {
         this.parent = parent;
