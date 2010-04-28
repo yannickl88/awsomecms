@@ -1,0 +1,19 @@
+{
+    "comp_file":            "Files",
+    "field_file_name":      "Name",
+    "field_file_date":      "Date",
+    "field_file_data":      "File",
+    "field_file_tag":       "Tag",
+    "field_file_description": "Description",
+    "images":               "images",
+    "files":                "files",
+    "documents":            "documents",
+    "videos":               "videos",
+    "other":                "other",
+    "fileerror_1":          "The uploaded file is to large",
+    "fileerror_2":          "The uploaded file was only partially uploaded",
+    "fileerror_3":          "No file was uploaded",
+    "fileerror_4":          "Missing a temporary folder",
+    "fileerror_5":          "Failed to write file to disk",
+    "fileerror_6":          "There went something wrong while uploading the file"
+}

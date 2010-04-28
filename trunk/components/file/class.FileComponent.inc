@@ -59,9 +59,10 @@ class FileComponent extends Component
             
             $this->ajax(array("succes" => true, "id" => $return->insertID(), "editLink" => $linkEdit, "deleteLink" => $linkDelete, "viewLink" => $row->file_data->url, "type" => $row->file_data->type));
         }
-        catch(Exception $e)
+        catch(InvalidFormException $e)
         {
-            $this->ajax(array("error" => true, "exception" => $e->getMessage()));
+            $fields = $e->getInvalidFields();
+            $this->ajax(array("error" => true, "exception" => $fields["file_data"]));
         }
     }
     public function action_edit($smarty, $smartyLoader, $request)
@@ -153,6 +154,34 @@ class FileComponent extends Component
         if(preg_match('/^image\/.*$/i', $fileType))
         {
             return "images";
+        }
+        elseif(preg_match('/^audio\/.*$/i', $fileType))
+        {
+            return "vid";
+        }
+        elseif(preg_match('/^video\/.*$/i', $fileType))
+        {
+            return "vid";
+        }
+        elseif(preg_match('/^application\/vnd\.openxmlformats\-officedocument\.spreadsheetml\.sheet$/i', $fileType))
+        {
+            return "docs";
+        }
+        elseif(preg_match('/^application\/vnd\.openxmlformats\-officedocument\.wordprocessingml\.document$/i', $fileType))
+        {
+            return "docs";
+        }
+        elseif(preg_match('/^application\/vnd\.ms-powerpoint$/i', $fileType))
+        {
+            return "docs";
+        }
+        elseif(preg_match('/^application\/msword$/i', $fileType))
+        {
+            return "docs";
+        }
+        elseif(preg_match('/^application\/vnd\.oasis\..*$/i', $fileType))
+        {
+            return "docs";
         }
         else 
         {

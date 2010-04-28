@@ -41,7 +41,8 @@ class PageComponent extends Component
         {
             $id = Table::init('page.pages')
                 ->setRecord((object) $request)
-                ->doInsert();
+                ->doInsert()
+                ->insertID();
 
             $this->redirect("/".Config::get('pageedit', 'pageedit', 'admin'), array("page_id" => $id));
         }

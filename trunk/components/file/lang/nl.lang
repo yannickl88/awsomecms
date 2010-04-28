@@ -4,10 +4,16 @@
     "field_file_date":      "Datum",
     "field_file_data":      "Bestand",
     "field_file_tag":       "Tag",
-    "field_file_description": "Beschrijving",
+    "field_file_description":"Beschrijving",
     "images":               "afbeeldingen",
     "files":                "bestanden",
     "documents":            "documenten",
     "videos":               "video's",
-    "other":                "overig"
+    "other":                "overig",
+    "fileerror_1":          "Het geüploade bestand is te groot",
+    "fileerror_2":          "Het geüploade bestand is slechts gedeeltelijk geupload",
+    "fileerror_3":          "Er is geen bestand geupload",
+    "fileerror_4":          "Er ontbreekt een tijdelijke map",
+    "fileerror_5":          "Mislukt bestand weg te schrijven naar de schijf",
+    "fileerror_6":          "Er ging iets mis tijdens het uploaden van het bestand"
 }

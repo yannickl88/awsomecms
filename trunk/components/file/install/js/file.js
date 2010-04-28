@@ -1,8 +1,6 @@
 function file_upload(event) {
     var data = event.dataTransfer;
     
-    console.log(data.files);
-    
     if(data && data.files.length > 0)
     {
         var boundary = '------multipartformboundary' + (new Date).getTime();
@@ -68,25 +66,36 @@ function file_upload(event) {
             xhr.setRequestHeader('Content-Type', 'multipart/form-data; boundary=' + boundary);
             xhr.setRequestHeader('X-File-Name', file.fileName);
             xhr.setRequestHeader('X-File-Size', file.fileSize);
-            xhr.sendAsBinary(builder);
             
             //add Loader to the tree
             var parent = uploadFolder.nodes[file_getType(file.type)];
-            var node = new TreeItem(file.name.substr(0, file.name.lastIndexOf(".")), parent, null, uploadFolder.root, "loader");
-            uploadFolder.root.addChild(node);
-            node.parent.open();
+            var nodes = new TreeItem(file.name.substr(0, file.name.lastIndexOf(".")), parent, null, uploadFolder.root, "loader");
+            uploadFolder.root.addChild(nodes);
+            nodes.parent.open();
+            
+            //add the node to the loader
+            xhr.node = nodes;
             
             xhr.onload = function(event) { 
                 /* If we got an error display it. */
-                if (xhr.responseText)
+                if (event.currentTarget.responseText)
                 {
-                    var data = $.parseJSON(xhr.responseText);
-                    node.icon.attr("src", node.root.getIcon(file_getType(data.type)));
-                    node.link.attr("href", data.editLink)
-                    node.addAction(new TreeAction("view", data.viewLink, node.root));
-                    node.addAction(new TreeAction("delete", data.deleteLink, node.root));
+                    var data = $.parseJSON(event.currentTarget.responseText);
+                    if(data.error)
+                    {
+                        event.currentTarget.node.parent.removeChild(event.currentTarget.node);
+                    }
+                    else
+                    {
+                        event.currentTarget.node.icon.attr("src", event.currentTarget.node.root.getIcon(file_getType(data.type)));
+                        event.currentTarget.node.link.attr("href", data.editLink)
+                        event.currentTarget.node.addAction(new TreeAction("view", data.viewLink, event.currentTarget.node.root));
+                        event.currentTarget.node.addAction(new TreeAction("delete", data.deleteLink, event.currentTarget.node.root));
+                    }
                 }
             };
+            
+            xhr.sendAsBinary(builder); //TODO This needs to be fixed when there is an update to the firefox File API
         }
     }
     
@@ -97,11 +106,39 @@ function file_upload(event) {
 }
 function file_getType(fileType)
 {
-    if(fileType.match(/^image\/.*$/i) != null)
+    if(fileType.match(/^image\/.*$/i))
     {
         return "images";
     }
-    else
+    else if(fileType.match(/^audio\/.*$/i))
+    {
+        return "vid";
+    }
+    else if(fileType.match(/^video\/.*$/i))
+    {
+        return "vid";
+    }
+    else if(fileType.match(/^application\/vnd\.openxmlformats\-officedocument\.spreadsheetml\.sheet$/i))
+    {
+        return "docs";
+    }
+    else if(fileType.match(/^application\/vnd\.openxmlformats\-officedocument\.wordprocessingml\.document$/i))
+    {
+        return "docs";
+    }
+    else if(fileType.match(/^application\/vnd\.ms-powerpoint$/i))
+    {
+        return "docs";
+    }
+    else if(fileType.match(/^application\/msword$/i))
+    {
+        return "docs";
+    }
+    else if(fileType.match(/^application\/vnd\.oasis\..*$/i))
+    {
+        return "docs";
+    }
+    else 
     {
         return "other";
     }
@@ -122,9 +159,12 @@ function file_dragout(event)
 }
 function file_bindListeners(element)
 {
-    element.addEventListener('drop', file_upload, false);
-    element.addEventListener('dragenter', file_dragenter, false);
-    element.addEventListener('dragover', file_dragenter, false);
-    element.addEventListener('dragout', file_dragout, false);
-    element.addEventListener('dragleave', file_dragout, false);
+    if(XMLHttpRequest.prototype.sendAsBinary) //check if we can actully upload (Firefox 3.6+ only)
+    {
+        element.addEventListener('drop', file_upload, false);
+        element.addEventListener('dragenter', file_dragenter, false);
+        element.addEventListener('dragover', file_dragenter, false);
+        element.addEventListener('dragout', file_dragout, false);
+        element.addEventListener('dragleave', file_dragout, false);
+    }
 }
