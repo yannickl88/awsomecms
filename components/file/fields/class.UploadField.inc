@@ -42,7 +42,7 @@ class UploadField extends Field
     protected function toHTML_add()
     {
         $this->parent->setMultipart(true);
-        return "<input type='file' name='{$this->getName()}' id='{$this->getName()}'/><input type='hidden' name='{$this->getName()}_data' id='{$this->getName()}_data' value='".$this->getValue()->url."'/>";
+        return "<input type='file' name='{$this->getName()}' id='{$this->getName()}'/>";
     }
     /**
      * (non-PHPdoc)
@@ -50,7 +50,7 @@ class UploadField extends Field
      */
     protected function toHTML_edit()
     {
-        return $this->toHTML_add();
+        return $this->toHTML_add()."<input type='hidden' name='{$this->getName()}_data' id='{$this->getName()}_data' value='".$this->getValue()->url."'/>";
     }
     /**
      * Convert the dbvalue of the param to what the field expects
@@ -146,7 +146,34 @@ class UploadField extends Field
     
     public function validate($mode)
     {
-        ;
+        if(!empty($_FILES[$this->getName()]['name']) && (int) $_FILES[$this->getName()]['error'] > 0)
+        {
+            $msg = "";
+            switch($_FILES[$this->getName()]['error'])
+            {
+                case 1:
+                case 2:
+                    $msg = Language::get("fileerror_1");
+                    break;
+                case 3:
+                    $msg = Language::get("fileerror_2");
+                    break;
+                case 4:
+                    $msg = Language::get("fileerror_3");
+                    break;
+                case 5:
+                    $msg = Language::get("fileerror_4");
+                    break;
+                case 6:
+                    $msg = Language::get("fileerror_5");
+                    break;
+                default:
+                    $msg = Language::get("fileerror_6");
+                    break;
+            }
+            
+            throw new FormException($this, $msg);
+        }
     }
     
     public function isRequired($mode)

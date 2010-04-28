@@ -152,6 +152,11 @@ var Tree = function(element, javascript)
     {
         return "/";
     };
+    this.open = function()
+    {
+        //this does nothing, but we need it to solve the recursion
+        return;
+    };
 
     this.init(element);
 }
@@ -400,6 +405,11 @@ var TreeFolder = function(name, location, root, icon, actions, contentType, isRo
         
         return inserted;
     };
+    this.removeChild = function(node)
+    {
+        node.html.remove();
+        this.children.splice(this.children.indexOf(node), 1);
+    };
     /**
      * Get the tree path of this folder
      * 
@@ -432,6 +442,11 @@ var TreeFolder = function(name, location, root, icon, actions, contentType, isRo
         this.openFolder = true;
         
         this.createCookie(this.getPath(), 1);
+        
+        if(this.parent)
+        {
+            this.parent.open();
+        }
     };
     /**
      * Collapse the folder
@@ -502,7 +517,7 @@ var TreeFolder = function(name, location, root, icon, actions, contentType, isRo
      */
     this.hasCookie = function(name) {
         return (this.readCookie(name));
-    }
+    };
     
     this.init();
 }
