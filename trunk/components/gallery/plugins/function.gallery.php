@@ -28,12 +28,28 @@ function smarty_function_gallery($params, &$smarty)
     {
         $data['max'] = $params['max'];
     }
-    if(isset($params['tag']))
+    if(isset($params['name']))
     {
-        $data['image_tag'] = $params['tag'];
+        $data['gallery_name'] = $params['name'];
+    }
+    else
+    {
+        return;
     }
 
-    $smarty->assign("gallery", Table::init('gallery.images')->setRequest((object) $data)->doSelect()->getRows());
+    $gallery = Table::init('gallery.gallery')
+        ->setRequest((object) $data)
+        ->doSelect()
+        ->getRow();
+    
+    $images = Table::init("file.files")
+        ->setRequest((object) array_merge($data, array("file_id" => $gallery->gallery_images)))
+        ->doSelect()
+        ->getRows();
+    
+    $gallery->images = $images;
+        
+    $smarty->assign("gallery", $gallery);
 
     return $smarty->fetch("gallery/gallery.tpl");
 }

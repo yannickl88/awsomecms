@@ -109,7 +109,7 @@ class UploadField extends Field
                 $newData->name = $fileData['name'];
                 $newData->type = $fileData['type'];
                 $newData->size = $fileData['size'];
-                $newData->url = $this->handleFileUpload($filename, $fileData['tmp_name']);
+                list($newData->url, $newData->thumb) = $this->handleFileUpload($filename, $fileData['tmp_name']);
                 $this->setValue($newData);
             }
             else
@@ -127,6 +127,10 @@ class UploadField extends Field
                 {
                     unlink(Config::get("websiteroot", "/")."/".$row->{$this->getDBName()}->url);
                 }
+                if($row && file_exists(Config::get("websiteroot", "/")."/".$row->{$this->getDBName()}->thumb))
+                {
+                    unlink(Config::get("websiteroot", "/")."/".$row->{$this->getDBName()}->thumb);
+                }
             }
         }
     }
@@ -139,9 +143,71 @@ class UploadField extends Field
             mkdir(Config::get("websiteroot", "/")."/".$this->uploadDir.$this->parent->getName(), 0777, true);
         }
         
-        move_uploaded_file($tmpUrl, Config::get("websiteroot", "/")."/".$newUrl);
+        $newLoc = Config::get("websiteroot", "/")."/".$newUrl;
         
-        return $newUrl;
+        move_uploaded_file($tmpUrl, $newLoc);
+        
+        //create thumb file
+        $thumb = $this->createThumb($filename, $newLoc);
+        
+        return array($newUrl, $thumb);
+    }
+    private function createThumb($filename, $fileLoc)
+    {
+        $info = getimagesize($fileLoc);
+
+        if(in_array($info[2], array(1,2,3,6)))
+        {
+            $src = null;
+            $newUrl = $this->uploadDir.$this->parent->getName()."/".substr($filename, 0, strrpos($filename, "."))."_thumb".substr($filename, strrpos($filename, "."));
+            $maxDimentions = array(100, 100);
+            
+            switch($info[2])
+            {
+                case 1 :
+                    $src = imagecreatefromgif($fileLoc);
+                    break;
+                case 2 :
+                    $src = imagecreatefromjpeg($fileLoc);
+                    break;
+                case 3 :
+                    $src = imagecreatefrompng($fileLoc);
+                    imagesavealpha($src, true);
+                    break;
+                default :
+                case 6 :
+                    $src = imagecreatefromwbmp($fileLoc);
+                    break;
+                default :
+                    return false;
+                    break;
+            }
+            
+            $ratio = $info[0]/$info[1];
+            
+            //make a resize version to crop from
+            if($info[0] > 400)
+            {
+                $tmpSrc = imagecreatetruecolor(400, 400*$ratio);
+                $newSrc = imagecreatetruecolor($maxDimentions[0], $maxDimentions[1]);
+                imagecopyresampled($tmpSrc, $src, 0, 0, 0, 0, 400, 400*$ratio, $info[0], $info[1]);
+                imagecopy($newSrc, $tmpSrc, 0, 0, (200 - ($maxDimentions[0]/2)), (200 - ($maxDimentions[1]/2)), 400, 400);
+            }
+            else
+            {
+                imagecopy($newSrc, $src, 0, 0, (($info[0]/2) - ($maxDimentions[0]/2)), ($info[1]/2 - ($maxDimentions[1]/2)), $info[0], $info[1]);
+            }
+            
+            imagepng($newSrc, Config::get("websiteroot", "/").$newUrl);
+            
+            imagedestroy($src);
+            imagedestroy($tmpSrc);
+            imagedestroy($newSrc);
+            
+            return $newUrl;
+        }
+        
+        return false;
     }
     
     public function validate($mode)
