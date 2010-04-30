@@ -1,4 +1,4 @@
-INSERT INTO `pages` (`page_name`, `page_location`, `page_template`, `page_timestamp`) VALUES('add', '/admin/gallery/', '{form component=''gallery'' form=''add''}', NOW());
-INSERT INTO `pages` (`page_name`, `page_location`, `page_template`, `page_timestamp`) VALUES('edit', '/admin/gallery/', '{form component=''gallery'' form=''edit''}', NOW());
-INSERT INTO `pages` (`page_name`, `page_location`, `page_template`, `page_timestamp`) VALUES('delete', '/admin/gallery/', '{form table=''gallery.images'' form=''delete''}', NOW());
-INSERT INTO `pages` (`page_name`, `page_location`, `page_template`, `page_timestamp`) VALUES('admin', '/admin/gallery/', '{form table=''gallery.images'' form=''admin''}', NOW());
+INSERT INTO `pages` (`page_name`, `page_location`, `page_template`, `page_timestamp`) VALUES('add', '/admin/gallery/', '{form table=''gallery.gallery'' form=''add''}', NOW());
+INSERT INTO `pages` (`page_name`, `page_location`, `page_template`, `page_timestamp`) VALUES('edit', '/admin/gallery/', '{form table=''gallery.gallery'' form=''edit''}', NOW());
+INSERT INTO `pages` (`page_name`, `page_location`, `page_template`, `page_timestamp`) VALUES('delete', '/admin/gallery/', '{form table=''gallery.gallery'' form=''delete''}', NOW());
+INSERT INTO `pages` (`page_name`, `page_location`, `page_template`, `page_timestamp`) VALUES('admin', '/admin/gallery/', '{form table=''gallery.gallery'' form=''admin''}', NOW());
