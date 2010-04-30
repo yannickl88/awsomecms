@@ -1,15 +1,7 @@
 {
-    "comp_gallery":         "Gallery",
-    "menu_gallery":         "Gallery",
-    "menu_galleryadmin":    "Afbeeldingen",
-    "menu_galleryadd":      "Afbeelding toevoegen",
-    "field_image_title":    "Titel",
-    "field_image_tag":      "Tag",
-    "field_image_image":    "Afbeelding",
-    "field_image_thumb":    "Thumb",
-    "generate":             "Genereer",
-    "error_filetolarge":    "Bestandsgrootte is om grote",
-    "error_nofileselect":   "Geen bestand geselecteerd",
-    "error_cennotwrite":    "Kan niet schrijven bestand op schijf",
-    "images":               "afbeeldingen"
+    "comp_gallery":         "Galerij",
+    "menu_gallery":         "Galerij",
+    "menu_galleries":       "Galerijen",
+    "field_gallery_name":   "Naam",
+    "field_gallery_images": "Afbeeldingen"
 }

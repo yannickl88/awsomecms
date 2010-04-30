@@ -14,33 +14,27 @@
  */
 importField("Field");
 importField("IntField");
-importField("TagField");
+importField("file.FileSelectField");
 
 /**
  * Core table, this handels all interaction with the core table in the database
  * 
  * @author Yannick <yannick.l.88@gmail.com>
  */
-class ImagesTable extends Table
+class GalleryTable extends Table
 {
     /**
      * Constructor
      */
     public function __construct()
     {
-        parent::__construct("images");
+        parent::__construct("gallery");
         $this->assign("gallery");
         
-        $this->addField(new IntField("image_id", Field::INDEX|Field::AUTOKEY));
-        $this->addField(new Field("image_title"), 1);
-        $this->addField(new Field("image_url", Field::OPTIONAL|Field::HIDE));
-        $this->addField(new Field("image_urlthumb", Field::OPTIONAL|Field::HIDE));
-        $this->addField(new IntField("image_width", Field::OPTIONAL|Field::HIDE));
-        $this->addField(new IntField("image_height", Field::OPTIONAL|Field::HIDE));
-        $this->addField(new IntField("image_thumbwidth", Field::OPTIONAL|Field::HIDE));
-        $this->addField(new IntField("image_thumbheight", Field::OPTIONAL|Field::HIDE));
-        $this->addField(new TagField("image_tag", Field::OPTIONAL|Field::FORCEUPDATE), 2);
-        $this->setTitle("[image_title]");
+        $this->addField(new IntField("gallery_id", Field::INDEX|Field::AUTOKEY));
+        $this->addField(new Field("gallery_name"), 1);
+        $this->addField(new FileSelectField("gallery_images", array("gif", "jpg", "png", "bmp")), 2);
+        $this->setTitle("[gallery_name]");
         
         $this->setURLs(
             Config::get('galleryadmin', 'galleryadmin', 'admin'),
@@ -55,15 +49,11 @@ class ImagesTable extends Table
      */
     protected function select($query, $data = null)
     {
-        $query->orderBy("image_id", "desc");
+        $query->orderBy("gallery_name");
         
-        if($data)
+        if(isset($data->gallery_name))
         {
-            if($data->max)
-            {
-                $query->limit($data->max);
-            }
-            $query->whereWhenSet("image_tag", $data->image_tag);
+            $query->where("gallery_name", $data->gallery_name);
         }
     }
     /**

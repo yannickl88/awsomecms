@@ -199,6 +199,9 @@ h1 {
 .viewIcon {
     background-image: url();
 }
+.fileFocus {
+    background-color: #313e46;
+}
 /* ADMIN TABLES */
 .admin_table {
     border-collapse: collapse;
@@ -251,6 +254,10 @@ h1 {
 }
 .admin_form_field textarea {
     width: 500px;
+}
+.admin_form_field select {
+    width: 306px;
+    height: 100px;
 }
 .admin_form_row.admin_form_submit
 {

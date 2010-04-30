@@ -1,1 +1,1 @@
-<a href="{$item->image_url}" class="lightbox" rel="gallery{if $item->image_tag}_{$item->image_tag}{/if}" title="{$item->image_title}"><img src="{$item->image_urlthumb}" alt="" /></a>
+<a href="{$item->file_data->url}" class="lightbox" rel="gallery{$gallery->gallery_name}" title="{$item->file_name}"><img src="{$item->file_data->thumb}" alt="" /></a>

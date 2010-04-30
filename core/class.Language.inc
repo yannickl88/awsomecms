@@ -77,9 +77,13 @@ class Language
             {
                 $langArr = json_decode(file_get_contents($component->component_path."/lang/{$lang}.lang"));
                 
-                if($langArr)
+                if($langArr != null)
                 {
                     $this->lang[$lang] = array_merge($this->lang[$lang], (array) $langArr);
+                }
+                else
+                {
+                    Debugger::getInstance()->warning("could not parse lang file '{$component->component_path}/lang/{$lang}.lang'");
                 }
             }
             else
