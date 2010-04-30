@@ -40,7 +40,7 @@ class NewsComponent extends Component
      */
     public function action_index($smarty, $smartyLoader, $request)
     {
-        $smarty->register_resource("scf", array(
+        $smarty->register->resource("scf", array(
             array($smartyLoader, "getTemplate"),
             array($smartyLoader, "getTimestamp"),
             array($smartyLoader, "getSecure"),
