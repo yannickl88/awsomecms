@@ -5,7 +5,7 @@
 @version:1
 
 GALLERY:
-A simple component to manage and show a series of images on a page. Using a tag, images can be grouped together
+Create a collection of images that can be displayed in a fancy gallery.
 
 TAGS:
 gallery
