@@ -1,7 +1,7 @@
 {if $FORMERROR}{$FORMERROR}{/if}
 <form method="post" action="/" class="form contact_send">
     {foreach from=$contactform->fields item=row}
-        <div class="form_row">
+        <div class="form_row fieldtype{$row->field_type}">
             <div class="form_label">
                 <label for="{$row->field_code}">{$row->field_name}{if $row->field_required == 1}<span class="required">*</span>{/if}:</label>
             </div>
@@ -22,20 +22,20 @@
             </div>
         </div>
     {/foreach}
-    <div class="form_row">
+    <div class="form_row fieldtypecaptcha">
+        <div class="form_field">
+            <img src="/securimage_show.php?sid=d28544701be50bc66afb925278e38059" alt="captcha"/>
+            <span onclick="$(this).siblings('img').attr('src', '/securimage_show.php?sid=' + Math.random()); return false" class="captcha">
+                <img onclick="this.blur()" alt="Reload Image" src="/img/refresh.gif" />
+            </span>
+         </div>
+    </div>
+    <div class="form_row fieldtype1">
         <div class="form_label">
-            <label for="captcha">{"captcha"|text}<span class="required">*</span>:</label>
+            <label for="captcha">Code<span class="required">*</span>:</label>
         </div>
         <div class="form_field">
-            <div style="height: 80px;">
-                <img style="float: left;" src="/securimage_show.php?sid=d28544701be50bc66afb925278e38059" id="siimage">
-                <a onclick="$('#siimage').attr('src', '/securimage_show.php?sid=' + Math.random()); return false" title="Refresh Image" href="#" style="border-style: none;" tabindex="-1">
-                    <img border="0" align="bottom" onclick="this.blur()" alt="Reload Image" src="/img/refresh.gif">
-                </a>
-                <br />
-             </div>
-             Code:<br />
-             <input type="text" class="empty" id="captcha" name="captcha">
+            <input type="text" class="empty" id="captcha" name="captcha" />
          </div>
     </div>
     <div class="form_row form_submit">

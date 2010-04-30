@@ -131,10 +131,12 @@ class InvalidFormException extends Exception
         $html .= "<div class=\"form_error\">\n";
         $html .= "    ".Language::get("formerror").":\n";
         $html .= "    <ul id=\"errorlist\">\n";
+        $html .= "    <li></li>\n";
         $html .= "    </ul>\n";
         $html .= "</div>\n";
-        $html .= "<script>\n";
+        $html .= "<script type=\"text/javascript\">\n";
         $html .= "        $().ready(function(e) {\n";
+        $html .= "            $(\"#errorlist\").empty();\n";
         foreach($this->fields as $field => $error)
         {
             $html .= "            addFieldError('{$field}', '{$error}');\n";
