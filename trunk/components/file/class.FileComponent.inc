@@ -138,9 +138,9 @@ class FileComponent extends Component
         
         $tree->addChild(new UploadFolder($filesName, "/", $mapping));
         $tree->addChild(new ImageFolder($imageName, "/{$filesName}/"));
-        $tree->addChild(new Folder($docName, "/[contentroot]/{$filesName}/"));
-        $tree->addChild(new Folder($vidName, "/[contentroot]/{$filesName}/"));
-        $tree->addChild(new Folder($otherName, "/[contentroot]/{$filesName}/"));
+        $tree->addChild(new Folder($docName, "/[contentroot]/{$filesName}/", Tree::CONTENT));
+        $tree->addChild(new Folder($vidName, "/[contentroot]/{$filesName}/", Tree::CONTENT));
+        $tree->addChild(new Folder($otherName, "/[contentroot]/{$filesName}/", Tree::CONTENT));
         
         foreach($result as $row)
         {

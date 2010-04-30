@@ -113,33 +113,40 @@ class TagField extends Field
                 
                 var index = false;
                 
-                for(var i in dropdown[0].options)
+                if(dropdown[0].options.length > 0)
                 {
-                    if(dropdown[0].options[i].selected == true)
+                    for(var i in dropdown[0].options)
                     {
-                        index = dropdown[0].options[i].value;
-                        break;
+                        if(dropdown[0].options[i].selected == true)
+                        {
+                            index = dropdown[0].options[i].value;
+                            break;
+                        }
                     }
                 }
                 
                 dropdown.empty();
                 var showtags = 0;
                 
-                for each(var tag in tags)
+                if(tags.lenght > 0)
                 {
-                    if(tag.indexOf(value) >= 0)
+                    for(var key in tags)
                     {
-                        var option = $("<option>"+tag+"</option>");
-                        option.mouseover(function(e){ this.selected = true});
-                        option.mouseout(function(e){ this.selected = false});
-                        dropdown.append(option);
-                        
-                        if(index == tag)
+                        var tag = tags[key];
+                        if(tag.indexOf(value) >= 0)
                         {
-                            option[0].selected = true;
+                            var option = $("<option>"+tag+"</option>");
+                            option.mouseover(function(e){ this.selected = true});
+                            option.mouseout(function(e){ this.selected = false});
+                            dropdown.append(option);
+                            
+                            if(index == tag)
+                            {
+                                option[0].selected = true;
+                            }
+                            
+                            showtags++;
                         }
-                        
-                        showtags++;
                     }
                 }
                 
