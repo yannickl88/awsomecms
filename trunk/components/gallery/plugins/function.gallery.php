@@ -42,14 +42,17 @@ function smarty_function_gallery($params, &$smarty)
         ->doSelect()
         ->getRow();
     
-    $images = Table::init("file.files")
-        ->setRequest((object) array_merge($data, array("file_id" => $gallery->gallery_images)))
-        ->doSelect()
-        ->getRows();
-    
-    $gallery->images = $images;
+    if($gallery)
+    {
+        $images = Table::init("file.files")
+            ->setRequest((object) array_merge($data, array("file_id" => $gallery->gallery_images)))
+            ->doSelect()
+            ->getRows();
         
-    $smarty->assign("gallery", $gallery);
-
-    return $smarty->fetch("gallery/gallery.tpl");
+        $gallery->images = $images;
+            
+        $smarty->assign("gallery", $gallery);
+        
+        return $smarty->fetch("gallery/gallery.tpl");
+    }
 }
