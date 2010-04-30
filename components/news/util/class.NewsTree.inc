@@ -23,7 +23,8 @@ class NewsItem extends TreeNode
         $this->name = $record->news_title;
         $this->id = $record->news_id;
         $this->location = "/[siteroot]/".$record->news_location;
-        $this->viewURL = date("/Y/m/", strtotime($record->news_date)).$record->news_titleurl;
+        $newsName = strtolower(Language::get("news"));
+        $this->viewURL = "/".$newsName.date("/Y/m/", strtotime($record->news_date)).$record->news_titleurl;
         $this->setType(Tree::PAGE);
     }
     /**
