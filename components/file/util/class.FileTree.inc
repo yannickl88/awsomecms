@@ -21,6 +21,7 @@ class FileItem extends TreeNode
         $this->location = $record->file_location;
         $this->viewURL = $record->file_data->url;
         $this->fileType = $record->file_data->type;
+        $this->type = Tree::CONTENT;
     }
     /**
      * Create the javascript code for the tree
@@ -49,6 +50,7 @@ class ImageFolder extends Folder
     {
         parent::__construct($name, $location);
         $this->location = "/[contentroot]".$location;
+        $this->type = Tree::CONTENT;
     }
     /**
      * See parent
@@ -82,6 +84,7 @@ class UploadFolder extends Folder
         parent::__construct($name, $location);
         $this->location = "/[contentroot]".$location;
         $this->nodeMap = $nodeMap;
+        $this->type = Tree::CONTENT;
     }
     /**
      * See parent
