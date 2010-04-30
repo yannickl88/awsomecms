@@ -312,7 +312,7 @@ class UsersComponent extends Component implements AuthComponent
         
         if(!empty($record))
         {
-            $privilages = $this->getPrivilageMapping($record->user_privilages);
+            $privilages = $this->getPrivilageMapping($record->user_privileges);
             
             if(count($record) == 1)
             {
