@@ -48,7 +48,7 @@ class SmartyPageLoader
      * @param Smarty $smarty_obj    Smarty object
      * @return string
      */
-    public function getPage($url, &$smarty_obj)
+    public function getPage($url, $smarty_obj)
     {
         $forceDefaultLayout = false;
         
@@ -82,6 +82,7 @@ class SmartyPageLoader
                 $url = Config::get('login', '', 'admin');
                 $smarty_obj->assign("URL", $url); //reassign the URL var
             }
+            
             $page = $smarty_obj->fetch("scf:{$url}");
         }
         catch(PageNotFoundExeption $e)
@@ -99,7 +100,7 @@ class SmartyPageLoader
      * @param Smarty $smarty_obj
      * @return string
      */
-    public function getRenderedPage($content, $url, &$smarty_obj)
+    public function getRenderedPage($content, $url, $smarty_obj)
     {
         if($content == null)
         {
@@ -176,7 +177,7 @@ class SmartyPageLoader
      * @param Smarty $smarty_obj    Smarty object
      * @return boolean
      */
-    public function getTemplate($tpl_name, &$tpl_source, &$smarty_obj)
+    public function getTemplate($tpl_name, $tpl_source, $smarty_obj)
     {
         $pageArray = explode('/', $tpl_name);
         $pageName = array_pop($pageArray);
@@ -217,7 +218,7 @@ class SmartyPageLoader
      * @param Smarty $smarty_obj    Smarty object
      * @return Boolean
      */
-    public function getTimestamp($tpl_name, &$tpl_timestamp, &$smarty_obj)
+    public function getTimestamp($tpl_name, $tpl_timestamp, $smarty_obj)
     {
         //check cache
         if(array_key_exists($tpl_name, $this->timestamps))
@@ -265,7 +266,7 @@ class SmartyPageLoader
      * @param $smarty_obj    Smarty object
      * @return               Boolean
      */
-    public function getSecure($tpl_name, &$smarty_obj)
+    public function getSecure($tpl_name, $smarty_obj)
     {
         return true;
     }
@@ -276,7 +277,7 @@ class SmartyPageLoader
      * @param Smarty $smarty_obj    Smarty object
      * @return Boolean
      */
-    public function getTrusted($tpl_name, &$smarty_obj)
+    public function getTrusted($tpl_name, $smarty_obj)
     {
         return true;
     }
@@ -286,7 +287,7 @@ class SmartyPageLoader
      *
      * @param Smarty $smarty_obj    Smarty object
      */
-    public function registerModulePlugins(&$smarty_obj)
+    public function registerModulePlugins($smarty_obj)
     {
         try
         {
