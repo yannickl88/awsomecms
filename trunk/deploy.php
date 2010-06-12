@@ -319,7 +319,40 @@ if(!file_exists($location."RELEASES{$ds}tmp"))
     mkdir($location."RELEASES{$ds}tmp", 0777, true);
 }
 
-if($env != 'update')
+if($env != 'pack')
+{
+    $dirname = strtolower(basename(rtrim(dirname(__FILE__), '/')));
+    
+    output("Creating archive");
+    mkdir($location."RELEASES{$ds}tmp{$ds}cache{$ds}", 0777, true);
+    output(".", true);
+    rcopy($location.'components', $location."RELEASES{$ds}tmp{$ds}components");
+    output(".", true);
+    rcopy($location.'core', $location."RELEASES{$ds}tmp{$ds}core");
+    output(".", true);
+    rcopy($location.'docs', $location."RELEASES{$ds}tmp{$ds}docs");
+    output(".", true);
+    rcopy($location."htdocs{$ds}", $location."RELEASES{$ds}tmp{$ds}htdocs");
+    clearDir($location."RELEASES{$ds}tmp{$ds}htdocs{$ds}templates_c");
+    output(".", true);
+    rcopy($location.'libs', $location."RELEASES{$ds}tmp{$ds}libs");
+    output(".", true);
+    rcopy($location.'.htaccess', $location."RELEASES{$ds}tmp{$ds}.htaccess");
+    output(".", true);
+    rcopy($location.'index.php', $location."RELEASES{$ds}tmp{$ds}index.php");
+    output(".", true);
+    rcopy($location.'version.info', $location."RELEASES{$ds}tmp{$ds}version.info");
+    output(".", true);
+    rcopy($location.'cron.php', $location."RELEASES{$ds}tmp{$ds}cron.php");
+    output(".", true);
+    
+    dir2zip($location."RELEASES{$ds}tmp", $location."{$dirname}.zip");
+
+    output(".");
+    //done
+    output("Archive '".$location."{$dirname}.zip' created");
+}
+else if($env != 'update')
 {
     $version = prompt("Version:", '/^[0-9]+(\.[0-9]+)*$/');
     
