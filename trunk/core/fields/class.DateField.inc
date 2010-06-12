@@ -51,7 +51,7 @@ class DateField extends Field
      */
     protected function toHTML_add()
     {
-        return "<input type='text' class='dateField' name='{$this->getName()}' id='{$this->getName()}' value='{$this->getDefaultValue()}'/>";
+        return "<input type='text' class='cmsfield dateField' name='{$this->getName()}' id='{$this->getName()}' value='{$this->getDefaultValue()}'/>";
     }
     /**
      * (non-PHPdoc)
@@ -59,7 +59,7 @@ class DateField extends Field
      */
     protected function toHTML_edit()
     {
-        return "<input type='text' class='dateField' name='{$this->getName()}' id='{$this->getName()}' value='{$this->getValue()}'/>";
+        return "<input type='text' class='cmsfield dateField' name='{$this->getName()}' id='{$this->getName()}' value='{$this->getValue()}'/>";
     }
     /**
      * (non-PHPdoc)

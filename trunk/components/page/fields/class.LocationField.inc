@@ -47,7 +47,7 @@ class LocationField extends Field
         
         $html = "";
         $html .= smarty_function_admintree(array("javascript" => $this->getName(), "folderonly" => !$this->displayPages, "types" => 1), $smarty);
-        $html .= "<input type='text' name='{$this->name}' id='{$this->name}' value='{$this->defaultValue}'/>";
+        $html .= "<input class='cmsfield' type='text' name='{$this->name}' id='{$this->name}' value='{$this->defaultValue}'/>";
         return $html;
     }
     /**
@@ -60,7 +60,7 @@ class LocationField extends Field
         
         $html = "";
         $html .= smarty_function_admintree(array("javascript" => $this->getName(), "folderonly" => !$this->displayPages, "types" => 1), $smarty);
-        $html .= "<input type='text' name='{$this->name}' id='{$this->name}' value='{$this->value}'/>";
+        $html .= "<input class='cmsfield' type='text' name='{$this->name}' id='{$this->name}' value='{$this->value}'/>";
         
         return $html;
     }

@@ -248,14 +248,14 @@ h1 {
 .admin_form_field {
     margin-left: 120px;
 }
-.admin_form_field input[type="text"],
-.admin_form_field input[type="password"] {
+.admin_form_field input[type="text"].cmsfield,
+.admin_form_field input[type="password"].cmsfield {
     width: 300px;
 }
-.admin_form_field textarea {
+.admin_form_field textarea.cmsfield {
     width: 500px;
 }
-.admin_form_field select {
+.admin_form_field select.cmsfield {
     width: 306px;
     height: 100px;
 }

@@ -47,7 +47,7 @@ class CaptchaField extends Field
         $html .= "</div>";
         
         $html .= ucfirst(Language::get("code")).":<br/>";
-        $html .= "<input type='text' name='{$this->getName()}' id='{$this->getName()}' class='empty'/>";
+        $html .= "<input type='text' class='cmsfield' name='{$this->getName()}' id='{$this->getName()}' class='empty'/>";
         
         return $html;
     }

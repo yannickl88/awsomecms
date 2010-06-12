@@ -481,7 +481,7 @@ class Field
             $value = $this->getValue();
         }
         
-        return "<input type='text' name='{$this->getName()}' id='{$this->getName()}' value='".htmlentities($value, ENT_QUOTES)."'/>";
+        return "<input type='text' class='cmsfield' name='{$this->getName()}' id='{$this->getName()}' value='".htmlentities($value, ENT_QUOTES)."'/>";
     }
     /**
      * Create a HTML representation of edit field
@@ -490,7 +490,7 @@ class Field
      */
     protected function toHTML_edit()
     {
-        return "<input type='text' name='{$this->getName()}' id='{$this->getName()}' value='".htmlentities($this->getValue(), ENT_QUOTES)."'/>";
+        return "<input type='text' class='cmsfield' name='{$this->getName()}' id='{$this->getName()}' value='".htmlentities($this->getValue(), ENT_QUOTES)."'/>";
     }
     /**
      * Create a HTML representation of hidden field
@@ -499,7 +499,7 @@ class Field
      */
     protected function toHTML_edit_hidden()
     {
-        return "<input type='hidden' name='{$this->getName()}' id='{$this->getName()}' value='".htmlentities($this->getValue(), ENT_QUOTES)."'/>";
+        return "<input type='hidden' class='cmsfield' name='{$this->getName()}' id='{$this->getName()}' value='".htmlentities($this->getValue(), ENT_QUOTES)."'/>";
     }
     /**
      * Create a HTML representation of view field

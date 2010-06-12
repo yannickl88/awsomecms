@@ -59,7 +59,7 @@ class UsersField extends Field
             ->getRows();
         
         $html = "";
-        $html .= "<select name=\"{$this->getName()}\" id=\"{$this->getName()}\" >";
+        $html .= "<select class='cmsfield' name=\"{$this->getName()}\" id=\"{$this->getName()}\" >";
         foreach($users as $user)
         {
             $html .= "    <option value=\"{$user->user_id}\">{$user->user_name}</option>";
@@ -78,7 +78,7 @@ class UsersField extends Field
             ->getRows();
         
         $html = "";
-        $html .= "<select name=\"{$this->getName()}\" id=\"{$this->getName()}\" >";
+        $html .= "<select class='cmsfield' name=\"{$this->getName()}\" id=\"{$this->getName()}\" >";
         foreach($users as $user)
         {
             $checked = "";
