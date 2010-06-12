@@ -11,6 +11,7 @@
         <link type="text/css" rel="stylesheet" href="/css/admin.css" media="screen" />
         <link type="text/css" rel="stylesheet" href="/css/lightbox.css" media="screen" />
         <link type="text/css" rel="stylesheet" href="/css/datePicker.css" media="screen" />
+        <link type="text/css" rel="stylesheet" href="/css/style.css" media="screen" />
         <script type="text/javascript" src="http://www.google.com/jsapi"></script>
         <script type="text/javascript">
             {literal}
@@ -25,7 +26,7 @@
         <script type="text/javascript" src="/js/tree.js"></script>
         <script type="text/javascript" src="/js/file.js"></script>
         <script type="text/javascript" src="/js/jquery.lightbox.js"></script>
-        <script type="text/javascript" src="http://js.nicedit.com/nicEdit-latest.js"></script>
+        <script type="text/javascript" src="/js/tinyeditor.js"></script>
         <script type="text/javascript">
             {literal}
             $(document).ready(function(){

@@ -36,7 +36,7 @@ class UsersselectField extends Field
         $html = "";
         $html .= "<div style=\"float: left; width: 150px;\">";
         $html .= "    Selected Users<br />";
-        $html .= "    <select id=\"{$this->getName()}_activeusers\" multiple=\"multiple\" style=\"width: 140px; height: 120px;\">";
+        $html .= "    <select class='cmsfield' id=\"{$this->getName()}_activeusers\" multiple=\"multiple\" style=\"width: 140px; height: 120px;\">";
         $html .= "    </select>";
         $html .= "</div>";
         $html .= "<div style=\"width: 50px; float: left; text-align: center; padding-top: 30px;\">";
@@ -45,7 +45,7 @@ class UsersselectField extends Field
         $html .= "</div>";
         $html .= "<div style=\"margin-left: 200px; width: 150px;\">";
         $html .= "    Avalible Users<br />";
-        $html .= "    <select id=\"{$this->getName()}_nonusers\" multiple=\"multiple\" style=\"width: 140px; height: 120px;\">";
+        $html .= "    <select class='cmsfield' id=\"{$this->getName()}_nonusers\" multiple=\"multiple\" style=\"width: 140px; height: 120px;\">";
         foreach($users as $user)
         {
             $html .= "        <option value=\"{$user->user_id}\">{$user->user_name}</option>";
