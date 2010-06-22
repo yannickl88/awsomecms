@@ -55,7 +55,7 @@ class GroupsTable extends Table
     {
         $query->orderby('group_name');
         
-        if(isset($data->user_id) || isset($data->user_name) || isset($data->user_pass) || isset($data->showusers))
+        if(isset($data->user_id) || isset($data->showusers))
         {
             $query->join('usersgroups', 'groups.group_id', 'usersgroups.group_id', 'inner');
             $query->join('users', 'users.user_id', 'usersgroups.user_id', 'inner');
@@ -63,8 +63,6 @@ class GroupsTable extends Table
             $query->select("users.user_name");
             
             $query->whereWhenSet('users.user_id', $data->user_id);
-            $query->whereWhenSet('user_name', $data->user_name);
-            $query->whereWhenSet('user_pass', $data->user_pass);
         }
     }
     /**

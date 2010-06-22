@@ -56,7 +56,7 @@ class UsersComponent extends Component implements AuthComponent
         {
             $loggedin = Authentication::login($request['user_name'], $request['user_pass']);
             
-            if(!$loggedin || ($loggedin && $_SESSION['usr']['auth']['admin'] !== true))
+            if(!$loggedin || ($loggedin && isset($_SESSION['usr']['auth']['admin']) && $_SESSION['usr']['auth']['admin'] !== true))
             {
                 $e->addInvalidField('user_name', Language::get("error_nomatch"));
                 $e->addInvalidField('user_pass', "");
@@ -303,27 +303,20 @@ class UsersComponent extends Component implements AuthComponent
      */
     public function auth_login($user_name, $user_pass)
     {
-        $user_pass = md5($user_pass);
-        
         $record = Table::init('users.users')
-            ->setRequest((object) array("user_name" => $user_name, "user_pass" => $user_pass))
+            ->setRequest((object) array("user_name" => $user_name))
             ->doSelect()
             ->getRow();
         
-        if(!empty($record))
+        if(!empty($record) && $record->user_pass['password'] == sha1($record->user_pass['salt'].$user_pass))
         {
-            $privilages = $this->getPrivilageMapping($record->user_privileges);
+            //set the session
+            $_SESSION['usr'] = array();
+            $_SESSION['usr']['user_name'] = $user_name;
+            $_SESSION['usr']['user_pass'] = $user_pass;
+            $_SESSION['usr']['auth'] = $this->getPrivilageMapping($record->user_privileges);
             
-            if(count($record) == 1)
-            {
-                //set the session
-                $_SESSION['usr'] = array();
-                $_SESSION['usr']['user_name'] = $user_name;
-                $_SESSION['usr']['user_pass'] = $user_pass;
-                $_SESSION['usr']['auth'] = $privilages;
-                
-                return true;
-            }
+            return true;
         }
         return false;
     }

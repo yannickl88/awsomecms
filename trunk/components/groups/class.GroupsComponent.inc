@@ -144,18 +144,22 @@ class GroupsComponent extends Component implements AuthComponent
      * Request a list of privilages a given groups has
      * 
      * @param int $privileges
+     * @param array $preset     Set of privilages already assigned
      * @return array
      */
-    public function getPrivilageMapping($privileges)
+    public function getPrivilageMapping($privileges, $preset = array())
     {
         $privilages = Table::init('users.privileges')
             ->doSelect()
             ->getRows();
-        $rights = array();
+        $rights = $preset;
         
         foreach($privilages as $privilage)
         {
-            $rights[$privilage->privilege_name] = Config::hasFlag((int) $privileges, $privilage->privilege_int);
+            if(!isset($preset[$privilage->privilege_name]) || !$preset[$privilage->privilege_name])
+            {
+                $rights[$privilage->privilege_name] = Config::hasFlag((int) $privileges, $privilage->privilege_int);
+            }
         }
         
         return $rights;
@@ -169,27 +173,29 @@ class GroupsComponent extends Component implements AuthComponent
      */
     public function auth_login($user_name, $user_pass)
     {
-        $user_pass = md5($user_pass);
-        
-        $records = Table::init('groups.groups')
-            ->setRequest(array((object) array("user_name" => $user_name, "user_pass" => $user_pass)))
+        $record = Table::init('users.users')
+            ->setRequest((object) array("user_name" => $user_name))
             ->doSelect()
-            ->getRows();
+            ->getRow();
         
-        foreach($records as $record)
+        if(!empty($record) && $record->user_pass['password'] == sha1($record->user_pass['salt'].$user_pass))
         {
-            $privilages = $this->getPrivilageMapping($record->group_privileges);
+            //set the session
+            $_SESSION['usr'] = array();
+            $_SESSION['usr']['user_name'] = $user_name;
+            $_SESSION['usr']['user_pass'] = $user_pass;
+            $_SESSION['usr']['auth'] = array();
             
-            if(count($record) == 1)
+            $records = Table::init('groups.groups')
+                ->setRequest((object) array("user_id" => $record->user_id))
+                ->doSelect()
+                ->getRows();
+        
+            foreach($records as $record)
             {
-                //set the session
-                $_SESSION['usr'] = array();
-                $_SESSION['usr']['user_name'] = $user_name;
-                $_SESSION['usr']['user_pass'] = $user_pass;
-                $_SESSION['usr']['auth'] = $privilages;
-                
-                return true;
+                $_SESSION['usr']['auth'] = $this->getPrivilageMapping($record->group_privileges, $_SESSION['usr']['auth']);
             }
+            return true;
         }
         
         return false;

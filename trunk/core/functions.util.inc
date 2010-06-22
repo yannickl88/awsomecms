@@ -342,3 +342,23 @@ function urlEscape($string)
     preg_match_all('/([\w ])/', $string, $matches);
     return rawurlencode(strtolower(str_replace(" ", "-", implode("", $matches[1]))));
 }
+/**
+ * Generate a random string
+ * 
+ * @param int $p amount of characters
+ */
+function str_rand($chars)
+{
+    $str ='';
+    $int = range('0','9');
+    $alph = range('a','z');
+    $calph = range('A','Z');
+    $chrs = explode(',',implode($int,',') . "," . implode($alph,',') . "," . implode($calph,','));
+    
+    for($i = 0; $i < $chars; $i++)
+    {
+        $str.= $chrs[rand(0,count($chrs)-1)];
+    }
+    
+    return $str;
+}
