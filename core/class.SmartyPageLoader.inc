@@ -12,6 +12,7 @@
  *
  * @version $Revision$
  */
+import("libs/class.BBCodeParser.inc");
 
 /** 
  * Exception thrown when a page could not be found 
@@ -201,7 +202,7 @@ class SmartyPageLoader
             
             $smarty_obj->assign('PAGE', $result->record);
             
-            $tpl_source = $result->record->page_template;
+            $tpl_source = BBCodeParser::parse($result->record->page_template);
             return true;
         } 
         else 

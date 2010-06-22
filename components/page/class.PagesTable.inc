@@ -57,6 +57,7 @@ class PagesTable extends Table
         
         if($data)
         {
+            $query->whereWhenSet('page_name', $data->page_name);
             $query->whereWhenSet('page_location', $data->page_location);
             $query->whereWhenSet($data->where[0], $data->where[1], $data->where[2]);
         }
