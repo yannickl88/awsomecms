@@ -51,6 +51,13 @@ class PasswordField extends Field
     
     public function value2db($value)
     {
-        return md5($value);
+        $salt = str_rand(9);
+        
+        return serialize(array("password" => sha1($salt.$value), "salt" => $salt));
+    }
+    
+    public function db2value($value)
+    {
+        return unserialize($value);
     }
 }

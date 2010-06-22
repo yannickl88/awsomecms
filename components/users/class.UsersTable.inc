@@ -64,7 +64,6 @@ class UsersTable extends Table
         if($data)
         {
             $query->whereWhenSet('user_name', $data->user_name);
-            $query->whereWhenSet('user_pass', $data->user_pass);
         }
     }
     /**
