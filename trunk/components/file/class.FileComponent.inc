@@ -144,7 +144,7 @@ class FileComponent extends Component
         
         foreach($result as $row)
         {
-            $row->file_location = $mapping[$this->getType($row->file_data->type)].(!empty($row->file_tag)? $row->file_tag."/" : "");
+            $row->file_location = $mapping[$this->getType($row->file_data->type)];
             $tree->addChild(new FileItem($row));
         }
     }
