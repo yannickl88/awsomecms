@@ -186,12 +186,13 @@ class UploadField extends Field
             $ratio = $info[0]/$info[1];
             
             //make a resize version to crop from
+            $newSrc = imagecreatetruecolor($maxDimentions[0], $maxDimentions[1]);
             if($info[0] > 400)
             {
                 $tmpSrc = imagecreatetruecolor(400, 400*$ratio);
-                $newSrc = imagecreatetruecolor($maxDimentions[0], $maxDimentions[1]);
                 imagecopyresampled($tmpSrc, $src, 0, 0, 0, 0, 400, 400*$ratio, $info[0], $info[1]);
                 imagecopy($newSrc, $tmpSrc, 0, 0, (200 - ($maxDimentions[0]/2)), (200 - ($maxDimentions[1]/2)), 400, 400);
+                imagedestroy($tmpSrc);
             }
             else
             {
@@ -201,7 +202,6 @@ class UploadField extends Field
             imagepng($newSrc, Config::get("websiteroot", "/").$newUrl);
             
             imagedestroy($src);
-            imagedestroy($tmpSrc);
             imagedestroy($newSrc);
             
             return $newUrl;

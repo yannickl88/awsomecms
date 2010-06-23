@@ -320,6 +320,15 @@ abstract class Table
         return $this->fields;
     }
     /**
+     * Get all the fields in this table which are keys
+     * 
+     * @return array
+     */
+    public function getKeys()
+    {
+        return $this->keys;
+    }
+    /**
      * Get the name of this tabel.
      * 
      * @return String
