@@ -1,8 +1,0 @@
-@author:Yannick <yannick.l.88@gmail.com>
-@package:components.slideshow
-@copyright:(c) 2009-2010 Yannick de Lange
-@licence:http://www.gnu.org/licenses/gpl.txt
-@version:1
-
-SLIDESHOW:
-A fancy way if creating a flash slideshow, in this slideshow groups can be created which contain images and a header image.
