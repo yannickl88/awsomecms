@@ -41,8 +41,8 @@ class NewsItem extends TreeNode
      */
     public function toJavascript()
     {
-        $linkEdit = "/".Config::get("newsedit", "newsedit", "admin")."?page_id={$this->id}";
-        $linkDelete = "/".Config::get("newsdelete", "newsdelete", "admin")."?page_id={$this->id}";
+        $linkEdit = "/".Config::get("newsedit", "newsedit", "admin")."?news_id={$this->id}";
+        $linkDelete = "/".Config::get("newsdelete", "newsdelete", "admin")."?news_id={$this->id}";
         $icon = "news";
         
         $html = "{$this->parent->getName()}.addChild(new TreeItem(\"{$this->name}\", \"{$this->location}\", \"{$linkEdit}\", {$this->parent->getName()}, \"{$icon}\", [new TreeAction(\"view\", \"{$this->viewURL}\", {$this->parent->getName()}), new TreeAction(\"delete\", \"{$linkDelete}\", {$this->parent->getName()})], {$this->getType()}));\n";

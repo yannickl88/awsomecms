@@ -52,7 +52,7 @@ class CoreComponent extends Component
         ));
 
         //Handle URL
-        echo $smartyLoader->getPage($_GET['url'], $smarty);
+        Controller::getInstance()->setOutput($smartyLoader->getPage($_GET['url'], $smarty));
     }
     /**
      * Session action, this is used to set some data for the templates, like if a user is logged in or if the page is part of the admin section.

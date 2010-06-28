@@ -205,6 +205,7 @@ class Controller
     private $request = null;
     private $smarty;
     private $smartyLoader;
+    private $output;
     
     /**
      * Handle a request
@@ -214,13 +215,14 @@ class Controller
      */
     public function dispatch($smarty, $smartyLoader)
     {
+        $this->output = "";
         $request = $this->getRequest();
         $this->smarty = $smarty;
         $this->smartyLoader = $smartyLoader;
         
         if($request->isMadeByProxy())
         {
-            echo $this->callTable($request->component, $request->translateAction(), $request);
+            $this->setOutput($this->callTable($request->component, $request->translateAction(), $request));
         }
         else
         {
@@ -291,7 +293,20 @@ class Controller
                 $this->setRedirect($url);
             }
             $this->redirect();
+            
+            if(!$this->isRedirecting())
+            {
+                echo $this->output; //show the output
+            }
         }
+    }
+    public function setOutput($string)
+    {
+        $this->output = $string;
+    }
+    public function appendOutput($string)
+    {
+        $this->output .= $string;
     }
     /**
      * call an action on a component with it's hooks
@@ -470,11 +485,11 @@ class Controller
      */
     public function redirect()
     {
-        if(!empty($this->redirect))
+        if($this->isRedirecting())
         {
             if(Config::get('debug', 0, 'debug') > 1)
             {
-                echo "Non debug would have redirected to \" <a href='{$this->redirect}'>{$this->redirect}</a> \"";
+                echo "Non debug would have redirected from \"{$_SERVER['SCRIPT_NAME']}{$_SERVER['REQUEST_URI']}\" to \" <a href='{$this->redirect}'>{$this->redirect}</a> \"";
                 echo Debugger::getInstance();
             }
             else
@@ -483,6 +498,10 @@ class Controller
             }
             exit;
         }
+    }
+    public function isRedirecting()
+    {
+        return !empty($this->redirect);
     }
     /**
      * Set the redirect, this can be used to prospone the redirect till everything is done executing
