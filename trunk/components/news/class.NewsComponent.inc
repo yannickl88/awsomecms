@@ -106,7 +106,7 @@ class NewsComponent extends Component
             }
         }
         
-        echo $smartyLoader->getPage($_GET['url'], $smarty);
+        Controller::getInstance()->setOutput($smartyLoader->getPage($_GET['url'], $smarty));
     }
     /**
      * Action for adding a news item
@@ -145,7 +145,8 @@ class NewsComponent extends Component
         }
         else
         {
-            if(isset($request['news_id']))
+            
+            if(!empty($request['news_id']))
             {
                 Table::init('news.news')
                     ->setRecord((object) $request);
