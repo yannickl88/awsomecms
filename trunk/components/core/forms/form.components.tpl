@@ -1,4 +1,7 @@
 <h2>{"compoverview"|text}</h2>
+{if $framework->SVN}
+    {"svnfoundexp"|text}
+{/if}
 <h3>{"installedcomp"|text}:</h3>
 <table class="admin_table">
     <tr class="header">
@@ -11,8 +14,16 @@
         <td style="vertical-align: top;">
         </td>
         <td style="vertical-align: top;" class="updateCell">
-            <img src="/img/admin/{if $frameworkU2D}ok{else}fail{/if}-icon.png" alt="status"/> 
-            {if $frameworkU2D}Up-to-date{else}<button type="button" onclick="updateFramework()">Update</button>{/if}
+            {if $framework->disable}
+                {if $framework->SVN}
+                    <button type="button" disabled="disabled">{"svnfound"|text|ucfirst}</button>
+                {else}
+                    <button type="button" disabled="disabled">{"update"|text|ucfirst}</button>
+                {/if}
+            {else}
+                <img src="/img/admin/{if $framework->U2D}ok{else}fail{/if}-icon.png" alt="status"/> 
+                {if $framework->U2D}Up-to-date{else}<button type="button" onclick="updateFramework()">Update</button>{/if}
+            {/if}
         </td>
         <td style="vertical-align: top;">
             This is the framework that makes everything come together. It is what handels the actions and calls the components when needed.
@@ -36,8 +47,16 @@
                     <i>{$component->component_name|ucfirst}</i>
                 </td>
                 <td style="vertical-align: top;" class="updateCell">
-                    <img src="/img/admin/{if $component->U2D === "???"}unknown{elseif $component->U2D}ok{else}fail{/if}-icon.png" alt="status"/> 
-                    {if $component->U2D === "???"}{"unknown"|text}{elseif $component->U2D}{"uptodate"|text}{else}<button type="button" onclick="updateComponent('{$component->component_name}');">{"update"|text|ucfirst}</button>{/if}
+                    {if $component->disable}
+                        {if $component->SVN}
+                            <button type="button" disabled="disabled">{"svnfound"|text|ucfirst}</button>
+                        {else}
+                            <button type="button" disabled="disabled">{"update"|text|ucfirst}</button>
+                        {/if}
+                    {else}
+                        <img src="/img/admin/{if $component->U2D === "???"}unknown{elseif $component->U2D}ok{else}fail{/if}-icon.png" alt="status"/> 
+                        {if $component->U2D === "???"}{"unknown"|text}{elseif $component->U2D}{"uptodate"|text}{else}<button type="button" onclick="updateComponent('{$component->component_name}');">{"update"|text|ucfirst}</button>{/if}
+                    {/if}
                 </td>
                 <td style="vertical-align: top;">
                     {$component->info.desc}

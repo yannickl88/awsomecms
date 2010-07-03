@@ -274,12 +274,28 @@ class CoreComponent extends Component
                 $versions = json_decode(file_get_contents("{$updateURL}/version.json"));
             }
             //check if the framework is up to date
-            $smarty->assign("frameworkU2D", (file_exists(getFrameworkRoot()."/version.info") && isset($versions->framework) && trim(file_get_contents(getFrameworkRoot()."/version.info")) == trim($versions->framework)));
+            $framework = (object) array(
+                "SVN" => file_exists(getFrameworkRoot()."/.svn/"),
+                "disable" => true,
+                "U2D" => (file_exists(getFrameworkRoot()."/version.info") && isset($versions->framework) && trim(file_get_contents(getFrameworkRoot()."/version.info")) == trim($versions->framework)),
+            );
+            
+            //check if the framework is up to the newest revision
+            
+            
+            $smarty->assign("framework", $framework);
             
             $components = Config::getInstance()->getComponenets();
             
             foreach($components as $component)
             {
+                $version = $component->component_version;
+                
+                $components[$component->component_name]->SVN = file_exists($component->component_path."/.svn/");
+                $components[$component->component_name]->disable = $components[$component->component_name]->SVN;
+                $components[$component->component_name]->U2D = "???";
+                $components[$component->component_name]->info = array();
+                
                 $component_name = $component->component_name;
                 
                 //is there an update URL set?
@@ -293,12 +309,12 @@ class CoreComponent extends Component
                     }
                     else
                     {
-                        $components[$component->component_name]->U2D = (isset($versions->components->$component_name) && trim($extVersions->$component_name) == $component->component_version);
+                        $components[$component->component_name]->U2D = (isset($versions->components->$component_name) && trim($extVersions->$component_name) == $version);
                     }
                 }
                 else
                 {
-                    $components[$component->component_name]->U2D = (isset($versions->components->$component_name) && trim($versions->components->$component_name) == $component->component_version);
+                    $components[$component->component_name]->U2D = (isset($versions->components->$component_name) && trim($versions->components->$component_name) == $version);
                 }
                 
                 $components[$component->component_name]->info = parseInfoFile($component->component_path."/{$component_name}.info", $component_name);

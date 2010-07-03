@@ -1,4 +1,29 @@
 <?php
+/**
+ * This file is part of the A.W.S.O.M.E.cms distribution.
+ * Detailed copyright and licensing information can be found
+ * in the doc/COPYRIGHT and doc/LICENSE files which should be
+ * included in the distribution.
+ *
+ * @copyright (c) 2009-2010 Yannick de Lange
+ * @license http://www.gnu.org/licenses/gpl.txt
+ *
+ * @version $Revision$
+ */
+
+/**
+ * Usage:
+ * 
+ * To create a package of the current version
+ * php -f deploy.php [alpha|beta|realase|stable]
+ * 
+ * To create the update packages use:
+ * php -f deploy.php update [u]
+ * 
+ * To create a package of the current site for transport
+ * php -f deploy.php pack
+ */
+
 //cli functions
 function prompt($question, $pattern = false)
 {
@@ -298,6 +323,9 @@ switch($argv[1])
     case 'update': 
         $env = 'update';
         break;
+    case 'pack': 
+        $env = 'pack';
+        break;
     default: 
         $env = 'alpha';
         break;
@@ -319,7 +347,7 @@ if(!file_exists($location."RELEASES{$ds}tmp"))
     mkdir($location."RELEASES{$ds}tmp", 0777, true);
 }
 
-if($env != 'pack')
+if($env == 'pack')
 {
     $dirname = strtolower(basename(rtrim(dirname(__FILE__), '/')));
     

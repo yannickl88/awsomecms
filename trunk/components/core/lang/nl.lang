@@ -23,5 +23,7 @@
     "delete":               "verwijderen",
     "layoutmapping":        "Layout mappings",
     "url":                  "URL",
-    "layout":               "Layout"
+    "layout":               "Layout",
+    "svnfound":             "SVN gevonden",
+    "svnfoundexp":          "SVN mappen is aangetroffen in uw distributie. Daarom is updaten uitgeschakeld en het is aanbevolen SVN te gebruiken voor het up-to-date houden van uw components. OPMERKING: vergeet niet om eventuele patches bij updaten draaien."
 }
