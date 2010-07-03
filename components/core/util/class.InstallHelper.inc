@@ -111,7 +111,7 @@ class InstallHelper
                 VALUES
                 (
                     '{$component}',
-                    '{$dir}',
+                    '',
                     15,
                     {$patchlevel},
                     {$version}
@@ -399,5 +399,60 @@ class InstallHelper
         {
             unlink($source);
         }
+    }
+    /**
+     * Check if SVN is avalible through the commandline
+     * 
+     * @return Boolean
+     */
+    public static function hasSVN()
+    {
+        $root = getFrameworkRoot();
+        $return = array();
+        $status;
+        
+        exec("svn help", $return, $status);
+        
+        return ($status === 0);
+    }
+    /**
+     * Check if a folder is up-to-date
+     * 
+     * NOTE: this is a very slow because it needs to access the server over 
+     * HTTP. it is not recommended to do often in one call because the running
+     * time will be quite a lot.
+     * 
+     * @param String $folder
+     * @return Boolean
+     */
+    public function svn_up2date($folder)
+    {
+        $root = getFrameworkRoot();
+        $return_loc = array();
+        $return_rep = array();
+        
+        exec("svn info {$root}", $return_loc);
+        exec("svn info {$root} -r HEAD", $return_rep);
+        
+        $locRev = 0;
+        $repRev = 0;
+        
+        foreach($return_loca as $line)
+        {
+            if(strpos($line, "Last Changed Rev:") === 0)
+            {
+                $locRev = (int) trim(substr($line, strpos($line, "Last Changed Rev:")));
+            }
+        }
+        
+        foreach($return_rep as $line)
+        {
+            if(strpos($line, "Last Changed Rev:") === 0)
+            {
+                $repRev = (int) trim(substr($line, strpos($line, "Last Changed Rev:")));
+            }
+        }
+        
+        return ($locRev >= $repRev);
     }
 }
