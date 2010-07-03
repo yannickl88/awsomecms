@@ -1,5 +1,6 @@
 var currentstep = 1;
 var dependancies = {};
+var development = {};
 var dependanciesChecked = new Array();
 var disabled = false;
 var stepsexec = new Array();
@@ -84,6 +85,8 @@ function gotoStep(number)
             if(!indexOf(1, stepsexec)) {action_step1(), stepsexec.push(1)};
             break;
     }
+    
+    window.location = "#step_"+number;
 }
 function nextStep()
 {
@@ -124,13 +127,31 @@ function prevStep()
         gotoStep(currentstep-1);
     }
 }
-function checkDependecies(component)
+function check(component)
 {
-    dependanciesChecked = new Array();
-    checkDependeciesFrom(component);
-    
-    dependanciesChecked = new Array();
-    checkDependeciesTo(component);
+    if($('#component_'+component).attr("checked"))
+    {
+        var install = true;
+        
+        //check if under development
+        if(development[component] == true)
+        {
+            install = confirm("This component is under development, are you sure you want to install it?");
+        }
+        
+        if(install)
+        {
+            dependanciesChecked = new Array();
+            checkDependeciesFrom(component);
+            
+            dependanciesChecked = new Array();
+            checkDependeciesTo(component);
+        }
+        else
+        {
+            $('#component_'+component).removeAttr("checked");
+        }
+    }
 }
 function checkDependeciesFrom(component)
 {
@@ -175,6 +196,10 @@ function markDependecies(component, dependson)
     }
     
     dependancies[component].push(dependson);
+}
+function markUnderDev(component)
+{
+    development[component] = true;
 }
 function indexOf(value, array)
 {
@@ -282,26 +307,26 @@ function action_step5()
         dbpassword:         $('#setting_dbpass').val()
     };
     
-    $('#appliedsettings').append("<li><label>Database Host:</label>"+finalData.dbhost+"</li>");
-    $('#appliedsettings').append("<li><label>Database:</label>"+finalData.dbdatabase+"</li>");
-    $('#appliedsettings').append("<li><label>Database Username:</label>"+finalData.dbusername+"</li>");
-    $('#appliedsettings').append("<li><label>Database Password:</label>"+finalData.dbpassword+"</li>");
+    $('#appliedsettings').append("<li><label>Database Host:</label><span>"+finalData.dbhost+"</span></li>");
+    $('#appliedsettings').append("<li><label>Database:</label><span>"+finalData.dbdatabase+"</span></li>");
+    $('#appliedsettings').append("<li><label>Database Username:</label><span>"+finalData.dbusername+"</span></li>");
+    $('#appliedsettings').append("<li><label>Database Password:</label><span>"+finalData.dbpassword+"</span></li>");
     
-    $('#appliedsettings').append("<li><label>Debug:</label>"+((finalData.debug == 1)? 'on': 'off')+"</li>");
-    $('#appliedsettings').append("<li><label>Authentication Component:</label>"+finalData.authcomponent+"</li>");
-    $('#appliedsettings').append("<li><label>Proxy:</label>"+((finalData.proxy == 1)? 'on': 'off')+"</li>");
+    $('#appliedsettings').append("<li><label>Debug:</label><span>"+((finalData.debug == 1)? 'on': 'off')+"</span></li>");
+    $('#appliedsettings').append("<li><label>Authentication Component:</label><span>"+finalData.authcomponent+"</span></li>");
+    $('#appliedsettings').append("<li><label>Proxy:</label><span>"+((finalData.proxy == 1)? 'on': 'off')+"</span></li>");
     
     if(finalData.proxy)
     {
-        $('#appliedsettings').append("<li><label>Proxy URL:</label>"+finalData.proxy_url+"</li>");
-        $('#appliedsettings').append("<li><label>Proxy User:</label>"+finalData.proxy_user+"</li>");
-        $('#appliedsettings').append("<li><label>Proxy Password:</label>"+finalData.proxy_pass+"</li>");
+        $('#appliedsettings').append("<li><label>Proxy URL:</label><span>"+finalData.proxy_url+"</span></li>");
+        $('#appliedsettings').append("<li><label>Proxy User:</label><span>"+finalData.proxy_user+"</span></li>");
+        $('#appliedsettings').append("<li><label>Proxy Password:</label><span>"+finalData.proxy_pass+"</span></li>");
     }
     
-    $('#appliedsettings').append("<li><label>Admin Location:</label>"+finalData.admin_location+"</li>");
-    $('#appliedsettings').append("<li><label>Admin Login:</label>"+finalData.admin_login+"</li>");
-    $('#appliedsettings').append("<li><label>Need login for Admin:</label>"+((finalData.admin_needslogin == 1)? 'yes': 'no')+"</li>");
-    $('#appliedsettings').append("<li><label>Default Admin pages:</label>"+((finalData.admin_default == 1)? 'yes': 'no')+"</li>");
+    $('#appliedsettings').append("<li><label>Admin Location:</label><span>"+finalData.admin_location+"</span></li>");
+    $('#appliedsettings').append("<li><label>Admin Login:</label><span>"+finalData.admin_login+"</span></li>");
+    $('#appliedsettings').append("<li><label>Need login for Admin:</label><span>"+((finalData.admin_needslogin == 1)? 'yes': 'no')+"</span></li>");
+    $('#appliedsettings').append("<li><label>Default Admin pages:</label><span>"+((finalData.admin_default == 1)? 'yes': 'no')+"</span></li>");
 }
 
 function toggelProxyFields(checkbox) 

@@ -1,15 +1,4 @@
 <?php
-/**
- * This file is part of the A.W.S.O.M.E.cms distribution.
- * Detailed copyright and licensing information can be found
- * in the doc/COPYRIGHT and doc/LICENSE files which should be
- * included in the distribution.
- *
- * @copyright (c) 2009-2010 Yannick de Lange
- * @license http://www.gnu.org/licenses/gpl.txt
- *
- * @version $Revision$
- */
 session_start();
 
 global $websiteroot, $start;
@@ -68,9 +57,9 @@ $components = Config::getInstance()->getComponenets();
         </div>
         <div style="margin-left: 150px; height: 100%; overflow: auto;">
             <h1>Documentation</h1>
-            The following content is targeted mainly for the web designers that will be using the CMS. The content here describes each component and what functionality they offer in the form of tags and modifiers.<br />
+            The following content is targeted mainly for the web designers that will be using the CMS. The content here describes each component and what functionalty they offer in the form of tags and modifiers.<br />
             <br />
-            The framework uses the <a href="http://smarty.net/" target="_blank">Smarty template engine</a> as core, so if you are not familiar with that. It is recommended to read the documentation of Smarty first. <a href="http://smarty.net/manual/en/" target="_blank">It can be found here</a>.
+            The framework uses the <a href="http://smarty.net/" target="_blank">Smarty template engine</a> as core, so if you are not fammiliar with that. It is recommended to read the docummentation of Smarty first. <a href="http://smarty.net/manual/en/" target="_blank">It can be found here</a>.
 <?php
     foreach($components as $component)
     {
