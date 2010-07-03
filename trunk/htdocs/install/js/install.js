@@ -30,6 +30,8 @@ function gotoStep(number)
 {
     if(disabled) return;
     
+    $('#progressInfo').text("");
+    
     //unselected
     $('.selected').removeClass('selected');
     
@@ -47,7 +49,9 @@ function gotoStep(number)
     if(currentstep == 5)
     {
         //change button to finish
-        $('#next').text('Finish');
+        $('#next').text("Finish");
+        $('#progressInfo').html("<img src='/install/img/loader.gif'/> Checking DB");
+        $('#next').attr("disabled", "disabled");
     }
     else
     {
@@ -236,12 +240,37 @@ function checkItem(id, check, total)
         if(valid == total)
         {
             $('#next').removeAttr("disabled");
+            $('#progressInfo').text("");
         }
         else
         {
             $('#next').attr("disabled", "disabled");
+            $('#progressInfo').html("<img src='/install/img/loader.gif'/> Checking Requirements");
         }
     });
+}
+
+function checkDB()
+{
+    if(finalData.dbdatabase == "")
+    {
+        $('#progressInfo').html("<span class='error'><img src='/install/img/fail-icon.png' alt='fail' /> No Database filled in</span>");
+    }
+    else
+    {
+        //check requirements
+        jQuery.getJSON('/install.php', {action: "checkdbconnection", host: finalData.dbhost, db: finalData.dbdatabase, user: finalData.dbusername, pass: finalData.dbpassword}, function(data) {
+            if(data.success)
+            {
+                $('#next').removeAttr("disabled");
+                $('#progressInfo').text("");
+            }
+            else
+            {
+                $('#progressInfo').html("<span class='error'><img src='/install/img/fail-icon.png' alt='fail' /> "+data.error+"</span>");
+            }
+        });
+    }
 }
 
 function action_step2()
@@ -327,6 +356,8 @@ function action_step5()
     $('#appliedsettings').append("<li><label>Admin Login:</label><span>"+finalData.admin_login+"</span></li>");
     $('#appliedsettings').append("<li><label>Need login for Admin:</label><span>"+((finalData.admin_needslogin == 1)? 'yes': 'no')+"</span></li>");
     $('#appliedsettings').append("<li><label>Default Admin pages:</label><span>"+((finalData.admin_default == 1)? 'yes': 'no')+"</span></li>");
+    
+    checkDB();
 }
 
 function toggelProxyFields(checkbox) 

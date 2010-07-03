@@ -440,6 +440,39 @@ if(!empty($_REQUEST['action']))
         case 'checkapache' :
             $data = (preg_match('/^Apache\/2\.[0-9]{1}/', $_SERVER['SERVER_SOFTWARE']) === 1);
             break;
+        case 'checkdbconnection' :
+            $connection = @mysql_connect($_REQUEST['host'], $_REQUEST['user'], $_REQUEST['pass']);
+            $error = "";
+            
+            if($connection == false)
+            {
+                $error = "Could not connect to Database Host";
+            }
+            else
+            {
+                //check privilages
+                $result = @mysql_query("SELECT Select_priv, Insert_priv, Update_priv, Delete_priv, Create_priv, Drop_priv, Alter_priv FROM mysql.user WHERE User = '{$_REQUEST['user']}' AND Host = '{$_REQUEST['host']}';", $connection);
+                $privs = @mysql_fetch_assoc($result);
+                
+                if(implode("", $privs) != "YYYYYYY")
+                {
+                    $error = "Not enough privilages";
+                }
+                else
+                {
+                    //is the tabel empty if we have it? (if it empty we get an error)
+                    $result = @mysql_query("SHOW TABLES FROM {$_REQUEST['db']}", $connection);
+                    
+                    if($result !== false && mysql_num_rows($result) > 0)
+                    {
+                        $error = "Database is not empty";
+                    }
+                }
+            }
+            
+            $data = array("success" => ($error == ""), "error" => $error);
+            @mysql_close($connection);
+            break;
         case 'save' :
             $check1 = false;
             $check2 = false;
