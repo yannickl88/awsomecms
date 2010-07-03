@@ -105,7 +105,7 @@
             </div>
             <div id="copyright">
                 <hr /><br />
-                <a href="http://yannickl88.nl/cms">A.W.S.O.M.E. cms</a> &copy; 2009 - 2010
+                <a href="http://code.google.com/p/awsomecms/">A.W.S.O.M.E. cms</a> &copy; 2009 - 2010
             </div>
             {renderdebug}
         </div>

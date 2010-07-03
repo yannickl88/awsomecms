@@ -29,26 +29,39 @@
             </div>
             <div id="contentWrapper">
                 <div id="step1">
-                    Welcome to the CMS install wizard, this will guide you through the installation of the database and components you like.
+                    <p>
+                        Welcome to the A.W.S.O.M.E. CMS install wizard, this will guide you through the installation of the database and components. When competed, you have a working site and are ready to start filling it with conent.
+                    </p>
+                    <p>
+                        For more information and support for the A.W.S.O.M.E. CMS, visit the project page at <a href="http://code.google.com/p/awsomecms/" target="_blank">http://code.google.com/p/awsomecms/</a>
+                    </p>
                 </div>
                 <div id="step2" style="display: none;">
-                    In order to use the SlyFox Component Framework you system needs to support to following items:<br />
-                    <br />
-                    <img src='/install/img/loader.gif' id="check4"/> Apache 2.0 <br />
-                    <img src='/install/img/loader.gif' id="check1"/> PHP 5 or higher <br />
-                    <img src='/install/img/loader.gif' id="check2"/> MySQL 5.0 or higher <br />
-                    <img src='/install/img/loader.gif' id="check3"/> GDMod <br />
-                    <br />
-                    <a href="#" onclick="action_step2(); return false;">Re-check</a>
+                    <p>
+                        In order to use the A.W.S.O.M.E. CMS you system needs to support at least the following items:<br />
+                    </p>
+                    <p>
+                        <img src='/install/img/loader.gif' id="check4"/> Apache 2.0 or higher <br />
+                        <img src='/install/img/loader.gif' id="check1"/> PHP 5 or higher <br />
+                        <img src='/install/img/loader.gif' id="check2"/> MySQL 5.0 or higher <br />
+                        <img src='/install/img/loader.gif' id="check3"/> GDMod <br />
+                    </p>
+                    <p>
+                        <a href="#" onclick="action_step2(); return false;">Re-check</a>
+                    </p>
+                    <p>
+                        NOTE: Some components require more but are not listed here. Please check the description of the components for additional requirements.
+                    </p>
                 </div>
                 <div id="step3" style="display: none;">
-                    Selected the components you want to install: <br />
-                    <br />
+                    <p>
+                        Selected the components you want to install:
+                    </p>
                     <div id="componentsWrapper">
                         {foreach from=$components item=component key=key}
                             <div class="componentSelectWrapper">
                                 <div class="checkboxWrapper">
-                                    <input type="checkbox" id="component_{$key}" onclick="checkDependecies('{$key}');" class="input_components" value="{$key}" {if $component.required}checked="checked" disabled="disabled"{/if} />
+                                    <input type="checkbox" id="component_{$key}" onclick="check('{$key}');" class="input_components" value="{$key}" {if $component.required}checked="checked" disabled="disabled"{/if} />
                                 </div>
                                 <div class="descWrapper">
                                     <label id="label_{$key}" for="component_{$key}">{$component.name}</label>
@@ -58,6 +71,12 @@
                                             {foreach from=$component.dependson item=dependson}
                                                 markDependecies('{$key}', '{$dependson}');
                                             {/foreach}
+                                        </script>
+                                    {/if}
+                                    {if $component.development}
+                                        <span class="development">(Under Development)</span>
+                                        <script type="text/javascript">
+                                            markUnderDev('{$key}');
                                         </script>
                                     {/if}
                                     <div class="desc">{$component.info.desc|nl2br}</div>
@@ -72,60 +91,77 @@
                     </div>
                 </div>
                 <div id="step4" style="display: none;">
-                    Database: <br/>
-                    <label for="setting_dbhost">Database Host</label><input type="text" id="setting_dbhost" value="localhost"/><br/>
-                    <label for="setting_dbdatabase">Database</label><input type="text" id="setting_dbdatabase" /><br/>
-                    <label for="setting_dbuser">Database Username</label><input type="text" id="setting_dbuser" /><br/>
-                    <label for="setting_dbpass">Database Password</label><input type="text" id="setting_dbpass" /><br/>
-                    <br />
-                    Debug: <br/>
-                    <input type="checkbox" id="settings_debug" /> Enable debug <br/>
-                    <br />
-                    Authentication: <br/>
-                    <label for="setting_auth">Authentication Component</label><select id="setting_auth"></select><br/>
-                    <br />
-                    Proxy: (Site options will be accessable external)<br/>
-                    <input type="checkbox" id="settings_proxy" onchange="toggelProxyFields(this);"/> Enable proxy <br/>
-                    <label for="setting_proxyurl">URL</label><input type="text" id="setting_proxyurl" disabled="disabled" value="http://"/><br/>
-                    <label for="setting_proxyuser">Username</label><input type="text" id="setting_proxyuser" disabled="disabled"/><br/>
-                    <label for="setting_proxypass">Password</label><input type="password" id="setting_proxypass" disabled="disabled"/><br/>
-                    <br />
-                    Administation:<br/>
-                    <label for="setting_adminlocation">Admin Location</label><input type="text" id="setting_adminlocation" value="{$setting_adminlocation}"/><br/>
-                    <label for="setting_adminlogin">Admin Login Page</label><input type="text" id="setting_adminlogin" value="{$setting_adminlogin}"/><br/>
-                    <input type="checkbox" id="setting_needslogin" checked="checked"/> Need login to access Admin area <br/>
-                    <input type="checkbox" id="setting_default" checked="checked"/> Install default admin pages <br/>
+                    <p>
+                        Database: <br/>
+                        <label for="setting_dbhost">Database Host</label><input type="text" id="setting_dbhost" value="localhost"/><br/>
+                        <label for="setting_dbdatabase">Database</label><input type="text" id="setting_dbdatabase" /><br/>
+                        <label for="setting_dbuser">Database Username</label><input type="text" id="setting_dbuser" /><br/>
+                        <label for="setting_dbpass">Database Password</label><input type="text" id="setting_dbpass" /><br/>
+                    </p>
+                    <p>
+                        Debug: <br/>
+                        <input type="checkbox" id="settings_debug" /> Enable debug <br/>
+                    </p>
+                    <p>
+                        Authentication: <br/>
+                        <label for="setting_auth">Authentication Component</label><select id="setting_auth"></select><br/>
+                    </p>
+                    <p>
+                        Proxy: (Site options will be accessable external)<br/>
+                        <input type="checkbox" id="settings_proxy" onchange="toggelProxyFields(this);"/> Enable proxy <br/>
+                        <label for="setting_proxyurl">URL</label><input type="text" id="setting_proxyurl" disabled="disabled" value="http://"/><br/>
+                        <label for="setting_proxyuser">Username</label><input type="text" id="setting_proxyuser" disabled="disabled"/><br/>
+                        <label for="setting_proxypass">Password</label><input type="password" id="setting_proxypass" disabled="disabled"/><br/>
+                    </p>
+                    <p>
+                        Administation:<br/>
+                        <label for="setting_adminlocation">Admin Location</label><input type="text" id="setting_adminlocation" value="{$setting_adminlocation}"/><br/>
+                        <label for="setting_adminlogin">Admin Login Page</label><input type="text" id="setting_adminlogin" value="{$setting_adminlogin}"/><br/>
+                        <input type="checkbox" id="setting_needslogin" checked="checked"/> Need login to access Admin area <br/>
+                        <input type="checkbox" id="setting_default" checked="checked"/> Install default admin pages <br/>
+                    </p>
                 </div>
                 <div id="step5" style="display: none;">
-                    The following components will be installed:
+                    <p>
+                        The following components will be installed:
+                    </p>
                     <ul id="tobeinstalledcomponents"></ul>
-                    The following components will <b>not</b> be installed:
+                    <p>
+                        The following components will <b>not</b> be installed:
+                    </p>
                     <ul id="nottobeinstalledcomponents"></ul>
-                    <input type="checkbox" id="deletenotinstalled" onchange="confirmDeletion(this);"/> Delete not installed components <br />
-                    <br />
-                    The following settings will be applied:
+                    <p>
+                        The following settings will be applied:
+                    </p>
                     <ul id="appliedsettings"></ul>
                 </div>
                 <div id="finalstep" style="display: none;">
-                    The installation went succesfull, you can now browse to your site.<br />
-                    <br />
-                    Please make sure you remove the install directory and the install.php. This will ensure an more secure website.<br />
+                    <p>
+                        The installation went succesfull, you can now browse to your site.<br />
+                    </p>
+                    <p>
+                        Please make sure you remove the install directory and the install.php. This will ensure an more secure website.<br />
+                    </p>
                     <br />
                     <br />
                     <br />
                     <a href="/">Site home</a>
                 </div>
                 <div id="errorstep" style="display: none;">
-                    The installation encountered a problem.<br />
-                    <br />
-                    The following error was retured:
+                    <p>
+                        The installation encountered a problem.
+                    </p>
+                    <p>
+                        The following error was retured:
+                    </p>
                     <div id="errorWrapper"></div>
-                    <br />
-                    Please check your settings and try again.
+                    <p>
+                        Please check your settings and try again.
+                    </p>
                 </div>
             </div>
             <div id="buttonWrapper">
-                <span id="copyright">&copy; 2009 - 2010 <a href="http://www.yannickl88.nl/cms" target="_blank">A.W.S.O.M.E. cms</a></span>
+                <span id="copyright">&copy; 2009 - 2010 <a href="http://code.google.com/p/awsomecms/" target="_blank">A.W.S.O.M.E. cms</a></span>
                 <button type="button" id="prev" disabled="disabled" onclick="prevStep();">Back</button>
                 <button type="button" id="next" onclick="nextStep();">Next</button>
             </div>

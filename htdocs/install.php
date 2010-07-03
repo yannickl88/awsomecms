@@ -265,7 +265,7 @@ function installComponents()
                 VALUES
                 (
                     '{$component}',
-                    '{$dir}',
+                    '',
                     15,
                     {$patchlevel},
                     {$version}
@@ -366,6 +366,24 @@ function saveConfig()
 {
     global $websiteroot;
     
+    $header = <<<HEADER
+; This file is part of the A.W.S.O.M.E.cms distribution.
+; Detailed copyright and licensing information can be found
+; in the doc/COPYRIGHT and doc/LICENSE files which should be
+; included in the distribution.
+;
+; @package configs
+;
+; @copyright (c) 2009-2010 Yannick de Lange
+; @license http://www.gnu.org/licenses/gpl.txt
+;
+; @version $Revision$
+;
+; NOTE: This file is generated from config-default.ini unpon instalation
+;
+
+HEADER;
+    
     copy($websiteroot.'/config-default.ini', $websiteroot.'/config.ini');
     
     $ini = parse_ini_file($websiteroot.'/config.ini', true);
@@ -385,7 +403,7 @@ function saveConfig()
     $ini['admin']['login'] = $_POST['admin_login'];
     $ini['debug']['debug'] = $_POST['debug'];
     
-    $result = (file_put_contents($websiteroot.'/config.ini', arrayToIni($ini)) !== false);
+    $result = (file_put_contents($websiteroot.'/config.ini', $header.arrayToIni($ini)) !== false);
     
     if($result)
     {
@@ -420,7 +438,7 @@ if(!empty($_REQUEST['action']))
             $data = function_exists('gd_info');
             break;
         case 'checkapache' :
-            $data = (strpos($_SERVER['SERVER_SOFTWARE'], 'Apache/2.0') === 0);
+            $data = (preg_match('/^Apache\/2\.[0-9]{1}/', $_SERVER['SERVER_SOFTWARE']) === 1);
             break;
         case 'save' :
             $check1 = false;
@@ -495,6 +513,7 @@ foreach($componentsDirs as $component)
             }
             
             $components[$component]['canauth'] = ($inidata['canauth'] === "1");
+            $components[$component]['development'] = $inidata['development'];
             
             if($inidata['required'])
             {

@@ -221,6 +221,12 @@ class Config
                 
                 while($row = $result->getRow())
                 {
+                    //set the path if empty
+                    if(empty($row->component_path))
+                    {
+                        $row->component_path = realpath(getFrameworkRoot() . "/components/" . $row->component_name).DIRECTORY_SEPARATOR;
+                    }
+                    
                     $this->componenets[$row->component_name] = $row;
                 }
                 
