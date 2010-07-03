@@ -162,6 +162,7 @@
             </div>
             <div id="buttonWrapper">
                 <span id="copyright">&copy; 2009 - 2010 <a href="http://code.google.com/p/awsomecms/" target="_blank">A.W.S.O.M.E. cms</a></span>
+                <span id="progressInfo"></span>
                 <button type="button" id="prev" disabled="disabled" onclick="prevStep();">Back</button>
                 <button type="button" id="next" onclick="nextStep();">Next</button>
             </div>
