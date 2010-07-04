@@ -1,6 +1,32 @@
 <?php
+/**
+ * This file is part of the A.W.S.O.M.E.cms distribution.
+ * Detailed copyright and licensing information can be found
+ * in the doc/COPYRIGHT and doc/LICENSE files which should be
+ * included in the distribution.
+ *
+ * @package lib
+ *
+ * @copyright (c) 2009-2010 Yannick de Lange
+ * @license http://www.gnu.org/licenses/gpl.txt
+ *
+ * @version $Revision$
+ */
+
+/**
+ * Parser for cron time string
+ * 
+ * @author Yannick <yannick.l.88@gmail.com>
+ */
 class CronParser
 {
+    /**
+     * Check if a string must run now
+     * 
+     * @param String $cronTime
+     * @param int $now          UNIX timestamp
+     * @return Array
+     */
     public function mustRunNow($cronTime, $now = null)
     {
         if($now === null)
@@ -25,7 +51,13 @@ class CronParser
             $this->check($cronValues[4], $curYear)
         );
     }
-    
+    /**
+     * Check if the time value is in the list of items
+     * 
+     * @param String $cronValue
+     * @param String $timeValue
+     * @return Boolean
+     */
     private function check($cronValue, $timeValue)
     {
         if(is_array($cronValue))
@@ -45,7 +77,12 @@ class CronParser
             return false;
         }
     }
-    
+    /**
+     * Parse a cron time string
+     * 
+     * @param String $cronTime
+     * @return Array
+     */
     private function parseTimeString($cronTime)
     {
         $cronParts = explode(" ", $cronTime);
@@ -58,7 +95,12 @@ class CronParser
         
         return array($min, $hour, $day, $month, $year);
     }
-    
+    /**
+     * Parse a set of numbers
+     * 
+     * @param String $timeString
+     * @return Array
+     */
     private function parseNumberString($timeString)
     {
         $times = array();
