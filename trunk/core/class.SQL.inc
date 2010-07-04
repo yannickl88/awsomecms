@@ -40,6 +40,7 @@ class SQLQuery
     private $limit;
     
     private $insert;
+    private $minsert;
     
     private $update;
     
@@ -108,6 +109,19 @@ class SQLQuery
         return $query;
     }
     /**
+     * Create a multiple insert query object
+     *
+     * @param Array $values     associative array with key value pairs
+     * @return SQLQuery
+     */
+    public static function doMInsert($fields)
+    {
+        $query = new SQLQuery('minsert');
+        $query->insert = $fields;
+        
+        return $query;
+    }
+    /**
      * Create a update query object
      *
      * @param string $field
@@ -165,6 +179,21 @@ class SQLQuery
         {
             $this->insert[$field] = $field;
             $this->values[$field] = $value;
+        }
+        
+        return $this;
+    }
+    /**
+     * add insert statement
+     *
+     * @param Array $values 
+     * @return SQLQuery
+     */
+    public function mInsert($values)
+    {
+        if(count($values) > 0)
+        {
+            $this->values[] = $values;
         }
         
         return $this;
@@ -412,16 +441,19 @@ class SQLQuery
         {
             case 'select' :
                 return $this->getSelectSQL();
-            break;
+                break;
             case 'insert' :
                 return $this->getInsertSQL();
-            break;
+                break;
+            case 'minsert' :
+                return $this->getMInsertSQL();
+                break;
             case 'delete' :
                 return $this->getDeleteSQL();
-            break;
+                break;
             case 'update' :
                 return $this->getUpdateSQL();
-            break;
+                break;
         }
     }
     /**
@@ -558,6 +590,48 @@ class SQLQuery
         }
         
         $query .= ' VALUES ('.$totalValues.');';
+        
+        return $query;
+    }
+    /**
+     * Get the SQL statement for an multiple insert
+     *
+     * @return String
+     */
+    private function getMInsertSQL()
+    {
+        $query = '';
+        
+        $query .= 'INSERT INTO '.$this->getTablesString().' ';
+        $query .= '('.implode(', ', $this->insert).') ';
+        $query .= ' VALUES';
+        
+        $insertValues = '';
+        
+        foreach($this->values as $values)
+        {
+            $totalValues = '';
+            
+            foreach($this->insert as $field)
+            {
+                if($totalValues != '')
+                {
+                    $totalValues .= ', ';
+                }
+                
+                if(is_numeric($values[$field]))
+                {
+                    $totalValues .= addSlashesConfig($values[$field]);
+                }
+                else
+                {
+                    $totalValues .= "'".addSlashesConfig($values[$field])."'";
+                }
+            }
+            $insertValues .= (($insertValues != '')? ", " : "" ). "\n({$totalValues})";
+        }
+        
+        $query .= $insertValues.';';
         
         return $query;
     }
