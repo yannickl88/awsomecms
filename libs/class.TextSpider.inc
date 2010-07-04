@@ -163,7 +163,7 @@ class TextSpider
         $searchResults = array();
         $query = SQLQuery::doSelect()
             ->table("search_words")
-            ->join("search_refs", "word_id", "ref_word");
+            ->join("search_refs", "word_id", "ref_word", "LEFT");
         
         foreach($words as $word)
         {
