@@ -27,7 +27,7 @@ try
     $indexer->index(file_get_contents("../docs/LICENSE.txt"), 1, "news");
     $indexer->index(file_get_contents("../docs/COPYRIGHT.txt"), 2, "news");
     
-    var_dump($indexer->search(array("html", "week")));
+    var_dump($indexer->search(array("copyright")));
 }
 catch(NotInstalledException $e)
 {
