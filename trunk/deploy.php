@@ -50,7 +50,7 @@ function confirm($question)
     
     return ($awnser == "y");
 }
-function output($message, $sameline = false)
+function output($message, $sameline, $verbose = false)
 {
     $lb = '';
     
@@ -59,7 +59,8 @@ function output($message, $sameline = false)
         $lb = "\n";
     }
     
-    fwrite(STDOUT, $message.$lb);
+    if(!$verbose)
+        fwrite(STDOUT, $message.$lb);
 }
 
 //some util function
@@ -86,7 +87,7 @@ function rcopy($source, $dest)
     {
         if(!@copy($source, $dest))
         {
-            output("FAILED to copy '{$source}' => '{$dest}'");
+            output("FAILED to copy '{$source}' => '{$dest}'", false, $verbose);
         }
     }
 }
@@ -238,8 +239,8 @@ class FTP
         // check connection
         if ((!$this->connection) || (!$login_result))
         { 
-            output("FTP connection has failed!");
-            output("Attempted to connect to {$ftp_server} for user {$ftp_user_name}");
+            output("FTP connection has failed!", false, $verbose);
+            output("Attempted to connect to {$ftp_server} for user {$ftp_user_name}", false, $verbose);
         }
     }
     
@@ -262,11 +263,11 @@ class FTP
         
         if (!$upload)
         { 
-            output("FTP upload has failed! {$source} -> {$dest}");
+            output("FTP upload has failed! {$source} -> {$dest}", false, $verbose);
         }
         else
         {
-            output("Uploaded {$source} -> {$dest}");
+            output("Uploaded {$source} -> {$dest}", false, $verbose);
         }
     }
     
@@ -294,51 +295,46 @@ class FTP
         return ftp_nlist($this->connection, $dest);
     }
 }
+$verbose = in_array('v', $argv);
 
-output("==============================");
-output("A.W.S.O.M.E. cms deploy script");
-output("© 2009 yannickl88.nl");
-output("==============================");
-output("");
+output("==============================", false, $verbose);
+output("A.W.S.O.M.E. cms deploy script", false, $verbose);
+output("© 2009 yannickl88.nl", false, $verbose);
+output("==============================", false, $verbose);
+output("", false, $verbose);
 
 if(!class_exists('ZipArchive'))
 {
-    output("ZipArchive not found, please check your PHP distribution");
-    die();
+    output("ZipArchive not found, please check your PHP distribution", false, $verbose);
+    die(1);
 }
 
 $ds = DIRECTORY_SEPARATOR;
 
-switch($argv[1])
-{
-    case 'release': 
-        $env = 'release';
-        break;
-    case 'stable': 
-        $env = 'stable';
-        break;
-    case 'beta': 
-        $env = 'beta';
-        break;
-    case 'update': 
-        $env = 'update';
-        break;
-    case 'pack': 
-        $env = 'pack';
-        break;
-    default: 
-        $env = 'alpha';
-        break;
-}
+if(in_array('release', $argv))
+    $env = 'release';
+elseif(in_array('stable', $argv))
+    $env = 'stable';
+elseif(in_array('beta', $argv))
+    $env = 'beta';
+elseif(in_array('update', $argv))
+    $env = 'update';
+elseif(in_array('pack', $argv))
+    $env = 'pack';
+else
+    $env = 'alpha';
 
 $upload = in_array("u", $argv);
 
 $location = dirname(__FILE__).$ds;
 
-output("'{$location}'");
-if(!confirm("Is this location correct?"))
+output("'{$location}'", false, $verbose);
+if(!$verbose)
 {
-    $location = prompt("Path to framework root:");
+    if(!confirm("Is this location correct?"))
+    {
+        $location = prompt("Path to framework root:");
+    }
 }
 
 //check for tmp dir
@@ -351,70 +347,77 @@ if($env == 'pack')
 {
     $dirname = strtolower(basename(rtrim(dirname(__FILE__), '/')));
     
-    output("Creating archive");
+    output("Creating archive", false, $verbose);
     mkdir($location."RELEASES{$ds}tmp{$ds}cache{$ds}", 0777, true);
-    output(".", true);
+    output(".", true, $verbose);
     rcopy($location.'components', $location."RELEASES{$ds}tmp{$ds}components");
-    output(".", true);
+    output(".", true, $verbose);
     rcopy($location.'core', $location."RELEASES{$ds}tmp{$ds}core");
-    output(".", true);
+    output(".", true, $verbose);
     rcopy($location.'docs', $location."RELEASES{$ds}tmp{$ds}docs");
-    output(".", true);
+    output(".", true, $verbose);
     rcopy($location."htdocs{$ds}", $location."RELEASES{$ds}tmp{$ds}htdocs");
     clearDir($location."RELEASES{$ds}tmp{$ds}htdocs{$ds}templates_c");
-    output(".", true);
+    output(".", true, $verbose);
     rcopy($location.'libs', $location."RELEASES{$ds}tmp{$ds}libs");
-    output(".", true);
+    output(".", true, $verbose);
     rcopy($location.'.htaccess', $location."RELEASES{$ds}tmp{$ds}.htaccess");
-    output(".", true);
+    output(".", true, $verbose);
     rcopy($location.'index.php', $location."RELEASES{$ds}tmp{$ds}index.php");
-    output(".", true);
+    output(".", true, $verbose);
     rcopy($location.'version.info', $location."RELEASES{$ds}tmp{$ds}version.info");
-    output(".", true);
+    output(".", true, $verbose);
     rcopy($location.'cron.php', $location."RELEASES{$ds}tmp{$ds}cron.php");
-    output(".", true);
+    output(".", true, $verbose);
     
     dir2zip($location."RELEASES{$ds}tmp", $location."{$dirname}.zip");
 
-    output(".");
+    output(".", false, $verbose);
     //done
-    output("Archive '".$location."{$dirname}.zip' created");
+    output("Archive '".$location."{$dirname}.zip' created", false, $verbose);
 }
 else if($env != 'update')
 {
-    $version = prompt("Version:", '/^[0-9]+(\.[0-9]+)*$/');
+    if(!$verbose)
+    {
+        $version = prompt("Version:", '/^[0-9]+(\.[0-9]+)*$/');
+    }
+    else
+    {
+        $version = 0;
+    }
     
-    output("Creating archive");
+    output("Creating archive", false, $verbose);
     
     //copy all the required stuff
     mkdir($location."RELEASES{$ds}tmp{$ds}cache", 0777, true);
     mkdir($location."RELEASES{$ds}tmp{$ds}htdocs{$ds}install", 0777, true);
-    output(".", true);
+    output(".", true, $verbose);
     rcopy($location.'components', $location."RELEASES{$ds}tmp{$ds}components");
-    output(".", true);
+    output(".", true, $verbose);
     rcopy($location.'core', $location."RELEASES{$ds}tmp{$ds}core");
-    output(".", true);
+    output(".", true, $verbose);
     rcopy($location.'docs', $location."RELEASES{$ds}tmp{$ds}docs");
-    output(".", true);
+    output(".", true, $verbose);
     rcopy($location."htdocs{$ds}install", $location."RELEASES{$ds}tmp{$ds}htdocs{$ds}install");
     rcopy($location."htdocs{$ds}install.php", $location."RELEASES{$ds}tmp{$ds}htdocs{$ds}install.php");
     rcopy($location."htdocs{$ds}index.php", $location."RELEASES{$ds}tmp{$ds}htdocs{$ds}index.php");
     rcopy($location."htdocs{$ds}config-default.ini", $location."RELEASES{$ds}tmp{$ds}htdocs{$ds}config-default.ini");
-    output(".", true);
+    output(".", true, $verbose);
     rcopy($location.'libs', $location."RELEASES{$ds}tmp{$ds}libs");
-    output(".", true);
+    output(".", true, $verbose);
     rcopy($location.'.htaccess', $location."RELEASES{$ds}tmp{$ds}.htaccess");
-    output(".", true);
+    output(".", true, $verbose);
     rcopy($location.'index.php', $location."RELEASES{$ds}tmp{$ds}index.php");
-    output(".", true);
-    output(".", true);
+    output(".", true, $verbose);
+    output(".", true, $verbose);
     rcopy($location.'index.php', $location."RELEASES{$ds}tmp{$ds}cron.php");
-    output(".", true);
+    output(".", true, $verbose);
 
     if($env != 'release' && $env != 'stable')
     {
         rcopy($location.'deploy.php', $location."RELEASES{$ds}tmp{$ds}deploy.php");
-        output(".", true);
+        output(".", true, $verbose);
     }
     
     //fetch the version numbers
@@ -444,28 +447,28 @@ else if($env != 'update')
     
     dir2zip($location."RELEASES{$ds}tmp", $location."RELEASES{$ds}AWSOMEcms_v{$version}{$suffix}.zip");
 
-    output(".");
+    output(".", false, $verbose);
     //done
-    output("Archive '".$location."RELEASES{$ds}AWSOMEcms_v{$version}{$suffix}.zip' created");
+    output("Archive '".$location."RELEASES{$ds}AWSOMEcms_v{$version}{$suffix}.zip' created", false, $verbose);
 }
 else
 {
     $versions = array();
-    output("Creating core archive");
+    output("Creating core archive", false, $verbose);
     
     $versions["framework"] = getHightestRevNumber(array($location."core", $location."docs", $location."libs"));
     
     //copy the core files
     rcopy($location."core", $location."RELEASES{$ds}tmp{$ds}core");
-    output(".", true);
+    output(".", true, $verbose);
     rcopy($location.'docs', $location."RELEASES{$ds}tmp{$ds}docs");
-    output(".", true);
+    output(".", true, $verbose);
     rcopy($location."libs", $location."RELEASES{$ds}tmp{$ds}libs");
-    output(".", true);
+    output(".", true, $verbose);
     rcopy($location."index.php", $location."RELEASES{$ds}tmp{$ds}index.php");
-    output(".", true);
+    output(".", true, $verbose);
     rcopy($location."cron.php", $location."RELEASES{$ds}tmp{$ds}cron.php");
-    output(".", true);
+    output(".", true, $verbose);
     
     dir2zip($location."RELEASES{$ds}tmp", $location."RELEASES{$ds}framework.zip");
     $versions["components"] = array();
@@ -495,12 +498,12 @@ else
             file_put_contents($location."RELEASES{$ds}tmp{$ds}{$component}{$ds}{$component}.info", $infoContent);
             
             dir2zip($location."RELEASES{$ds}tmp{$ds}{$component}", $location."RELEASES{$ds}components{$ds}{$component}.zip");
-            output(".", true);
+            output(".", true, $verbose);
             
             //cleanup
             clearDir($location."RELEASES{$ds}tmp{$ds}{$component}");
             rmdir($location."RELEASES{$ds}tmp{$ds}{$component}");
-            output(".", true);
+            output(".", true, $verbose);
             
             $componentsList[$component] = array("name" => $component, "version" => $versions["components"][$component]);
             
@@ -524,9 +527,9 @@ else
         $ftp->upload($location."RELEASES{$ds}components{$ds}components.json", "/public_html_update/components/components.json");
     }
     
-    output(".");
+    output(".", false, $verbose);
     //done
-    output("Archives created");
+    output("Archives created", false, $verbose);
 }
 
 //cleanup
