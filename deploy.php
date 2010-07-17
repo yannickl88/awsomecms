@@ -399,7 +399,7 @@ else if($env != 'update')
     rcopy($location."htdocs{$ds}install", $location."RELEASES{$ds}tmp{$ds}htdocs{$ds}install");
     rcopy($location."htdocs{$ds}install.php", $location."RELEASES{$ds}tmp{$ds}htdocs{$ds}install.php");
     rcopy($location."htdocs{$ds}index.php", $location."RELEASES{$ds}tmp{$ds}htdocs{$ds}index.php");
-    rcopy($location."htdocs{$ds}index.php", $location."RELEASES{$ds}tmp{$ds}htdocs{$ds}config-default.ini");
+    rcopy($location."htdocs{$ds}config-default.ini", $location."RELEASES{$ds}tmp{$ds}htdocs{$ds}config-default.ini");
     output(".", true);
     rcopy($location.'libs', $location."RELEASES{$ds}tmp{$ds}libs");
     output(".", true);
