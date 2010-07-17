@@ -80,7 +80,7 @@ class Component
             }
             else
             {
-                Debugger::getInstance()->log("Cannot find Component '{$className}'");
+                Debugger::getInstance()->log("Cannot find Component file for '{$className}'");
                 Component::$components[$component] = false;
                 return false;
             }
