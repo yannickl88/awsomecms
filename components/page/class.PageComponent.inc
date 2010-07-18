@@ -12,6 +12,7 @@
  *
  * @version $Revision$
  */
+import('/libs/class.TextSpider.inc');
 import('/core/class.Component.inc');
 
 /**
@@ -43,7 +44,10 @@ class PageComponent extends Component
                 ->setRecord((object) $request)
                 ->doInsert()
                 ->insertID();
-
+            
+            $indexer = new TextSpider();
+            $indexer->index($request['page_template'], $request['page_location'].$request['page_name'], $request['page_name'], "page.{$id}");
+            
             $this->redirect("/".Config::get('pageedit', 'pageedit', 'admin'), array("page_id" => $id));
         }
     }
@@ -61,7 +65,10 @@ class PageComponent extends Component
             Table::init('page.pages')
                 ->setRecord((object) $request)
                 ->doUpdate();
-
+            
+            $indexer = new TextSpider();
+            $indexer->index($request['page_template'], $request['page_location'].$request['page_name'], $request['page_name'], "page.{$request['page_id']}");
+            
             $this->redirect("/".Config::get('pageedit', 'pageedit', 'admin'), array("page_id" => $request['page_id']));
         }
         else
@@ -91,6 +98,9 @@ class PageComponent extends Component
             Table::init('page.pages')
                 ->setRecord((object) $request)
                 ->doDelete();
+            
+            $indexer = new TextSpider();
+            $indexer->clearByHook("page.{$request['page_id']}");
 
             $this->redirect("/admin/");
         }

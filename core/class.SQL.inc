@@ -600,6 +600,11 @@ class SQLQuery
      */
     private function getMInsertSQL()
     {
+        if(count($this->values) == 0)
+        {
+            return null;
+        }
+        
         $query = '';
         
         $query .= 'INSERT INTO '.$this->getTablesString().' ';

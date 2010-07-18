@@ -4,9 +4,9 @@ session_start();
 global $websiteroot, $start;
 
 $start = microtime(true);
-$websiteroot = dirname(__FILE__);
+$websiteroot = dirname(__FILE__).DIRECTORY_SEPARATOR."htdocs";
 
-require_once '../core/init.inc';
+require_once 'core/init.inc';
 
 function generateTranslateable($file)
 {
