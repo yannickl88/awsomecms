@@ -119,9 +119,13 @@ class NewsComponent extends Component
     {
         if($request['method'] == 'post')
         {
-            Table::init("news.news")
+            $id = Table::init("news.news")
                 ->setRecord((object) $request)
-                ->doInsert();
+                ->doInsert()
+                ->insertID;
+            
+            $indexer = new TextSpider();
+            $indexer->index($request['news_text'], $request['news_titleurl']."/".date("Y/m/", strtotime($request['news_date'])), $request['news_title'], "news.{$id}");
             
             $this->redirect("/".Config::get('newsadmin', 'newsadmin', 'admin'));
         }
@@ -140,6 +144,9 @@ class NewsComponent extends Component
             Table::init("news.news")
                 ->setRecord((object) $request)
                 ->doUpdate();
+            
+            $indexer = new TextSpider();
+            $indexer->index($request['news_text'], $request['news_titleurl']."/".date("Y/m/", strtotime($request['news_date'])), $request['news_title'], "news.{$request['news_id']}");
             
             $this->redirect("/".Config::get('newsadmin', 'newsadmin', 'admin'));
         }
@@ -171,6 +178,9 @@ class NewsComponent extends Component
             Table::init("news.news")
                 ->setRecord((object) $request)
                 ->doDelete();
+            
+            $indexer = new TextSpider();
+            $indexer->clearByHook("news.{$request['news_id']}");
             
             $this->redirect("/".Config::get('newsadmin', 'newsadmin', 'admin'));
         }

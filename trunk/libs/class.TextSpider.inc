@@ -34,6 +34,16 @@ class TextSpider
         $this->newWords = array();
         $this->id = 0;
         
+    }
+    /**
+     * Index a text block, the found words and matches are stored in the database
+     * 
+     * @param String $string
+     * @param int $link
+     * @param String $hook
+     */
+    public function index($string, $link, $title, $hook)
+    {
         //fetch already existing words
         $results = SQLQuery::doSelect("word_id")
             ->select("word_word")
@@ -51,42 +61,87 @@ class TextSpider
         }
         
         $this->words2id = array_flip($this->id2words);
-    }
-    /**
-     * Index a text block, the found words and matches are stored in the database
-     * 
-     * @param String $string
-     * @param int $link
-     * @param String $hook
-     */
-    public function index($string, $link, $hook)
-    {
-        //clear the table of the current indexes
-        SQLQuery::doDelete()
-            ->table("search_refs")
-            ->where("ref_link", $link)
-            ->where("ref_hook", $hook)
+        
+        //create a new item for this if not already there
+        $check = md5($link);
+        $item = -1;
+        
+        $result = SQLQuery::doSelect()
+            ->table("search_items")
+            ->where("item_checksum", $check)
             ->exec();
         
-        $string = preg_replace("(\s+)", " ", str_replace(array(".", ",", "'", "\"", "\n", "\r", "“"), " ", strtolower($string)));
-        $textArr = explode(" ", $string);
-        $words = array_count_values($textArr);
+        if($result->count() > 0)
+        {
+            $item = $result->getRow()->item_id;
+            $this->clearByID($item);
+        }
+        else
+        {
+            $item = SQLQuery::doInsert()
+                ->table("search_items")
+                ->insert("item_link", $link)
+                ->insert("item_title", $title)
+                ->insert("item_checksum", $check)
+                ->insert("item_hook", $hook)
+                ->exec()
+                ->insertID();
+        }
+            
+        $string = trim(preg_replace(array('/(\s+)/', '/(<.*?>)/', '/({.*?})/'), " ", str_replace(array(".", ",", "'", "\"", "\n", "\r", "“"), " ", strtolower($string))));
+        $words = array();
+        $offset = 0;
+        $break = false;
         
-        $query = SQLQuery::doMInsert(array("ref_word", "ref_link", "ref_hook", "ref_count"))->table("search_refs");
+        while(!$break)
+        {
+            $nextSpace = strpos($string, " ", $offset);
+            
+            if($nextSpace !== false)
+            {
+                $word = substr($string, $offset, $nextSpace - $offset);
+                
+                $from = $offset - 20;
+                
+                if($from < 0)
+                {
+                    $from = 0;
+                }
+                
+                $text = substr($string, $from, 50);
+                $text = str_replace($word, "<b>{$word}</b>", $text);
+                $offset = $nextSpace + 1;
+            }
+            else
+            {
+                $word = substr($string, $offset);
+                $text = substr($string, strlen($string) - 51);
+                $text = str_replace($word, "<b>{$word}</b>", $text);
+                $string = "";
+                $break = true;
+            }
+            
+            if(strlen($word) > 3 && preg_match('/^[a-zA-Z]*$/', $word) !== 0)
+            {
+                if(!isset($words[$word]))
+                {
+                    $words[$word] = array(0, $text);
+                }
+                $words[$word][0]++;
+            }
+        }
+        $query = SQLQuery::doMInsert(array("ref_word", "ref_item", "ref_count", "ref_text"))->table("search_refs");
         
-        foreach($words as $word => $count)
+        foreach($words as $word => $data)
         {
             $word = $this->procesWord($word);
             
-            if(strlen($word) > 3)
-            {
-                $query->mInsert(array(
-                    "ref_word" => $this->getID($word), 
-                    "ref_link" => $link, 
-                    "ref_hook" => $hook, 
-                    "ref_count" => $count
-                ));
-            }
+            $query->mInsert(array(
+                "ref_word" => $this->getID($word), 
+                "ref_item" => $item, 
+                "ref_count" => $data[0],
+                "ref_text" => $data[1]
+            ));
         }
         
         //add missing words to the db
@@ -95,6 +150,38 @@ class TextSpider
         //add refs
         $query->exec();
     }
+    public function clearByID($id)
+    {
+        SQLQuery::doDelete()
+            ->table("search_refs")
+            ->where("ref_item", $id)
+            ->exec();
+    }
+    public function clearByHook($hook)
+    {
+        $result = SQLQuery::doSelect()
+            ->table("search_items")
+            ->where("item_hook", $hook)
+            ->exec();
+        
+        if($result->count() > 0)
+        {
+            $this->clearByID($result->getRow()->item_id);
+        }
+    }
+    public function clearByLink($link)
+    {
+        $result = SQLQuery::doSelect()
+            ->table("search_items")
+            ->where("item_checksum", md5($link))
+            ->exec();
+        
+        if($result->count() > 0)
+        {
+            $this->clearByID($result->getRow()->item_id);
+        }
+    }
+    
     /**
      * Get the ID that comes with a word
      * 
@@ -163,7 +250,8 @@ class TextSpider
         $searchResults = array();
         $query = SQLQuery::doSelect()
             ->table("search_words")
-            ->join("search_refs", "word_id", "ref_word", "LEFT");
+            ->join("search_refs", "word_id", "ref_word", "LEFT")
+            ->join("search_items", "ref_item", "item_id", "LEFT");
         
         foreach($words as $word)
         {
@@ -174,7 +262,7 @@ class TextSpider
         
         while($result = $results->getRow())
         {
-            $id = $result->ref_hook."-".$result->ref_link;
+            $id = $result->item_checksum;
             
             if(isset($searchResults[$id]))
             {
