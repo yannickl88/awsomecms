@@ -19,6 +19,7 @@ interface BBCodeItem
     function getType();
     function text();
     function isInline();
+    function valueOf($level);
 }
 interface BBCodeContainer
 {
@@ -31,10 +32,10 @@ class BBCodeContentBlock implements BBCodeItem
     
     public function __construct($text, $inline = true)
     {
-        $this->text = nl2br(trim($text), true);
+        $this->text = nl2br($text, true);
         $this->inline = $inline;
     }
-    public static function add($element, $text)
+    public static function add($element, $text, $inline)
     {
         $hadEnter = false;
         $block = "";
@@ -43,28 +44,22 @@ class BBCodeContentBlock implements BBCodeItem
         
         foreach($lines as $line)
         {
-            $line = trim($line);
-            if(!empty($line) && $hadEnter)
-            {
-                $element->addChild(new BBCodeContentBlock($block, $element->isInline()));
-                $block = "";
-                $hadEnter = false;
-            }
+            $tLine = trim($line);
             
-            if(empty($line))
+            if(empty($tLine))
             {
                 $hadEnter = true;
             }
             else
             {
-                if($count < count($lines))
-                {
-                    $block .= $line."\n";
-                }
-                else
-                {
-                    $block .= $line;
-                }
+                $block .= $line;
+                $hadEnter = false;
+            }
+            
+            if(!empty($block) && $hadEnter)
+            {
+                $element->addChild(new BBCodeContentBlock($block, $inline));
+                $block = "";
                 $hadEnter = false;
             }
             $count++;
@@ -72,7 +67,7 @@ class BBCodeContentBlock implements BBCodeItem
         
         if(!empty($block))
         {
-            $element->addChild(new BBCodeContentBlock($block, $element->isInline()));
+            $element->addChild(new BBCodeContentBlock($block, $inline));
         }
     }
     public function getType()
@@ -90,6 +85,17 @@ class BBCodeContentBlock implements BBCodeItem
     {
         return true;
     }
+    public function valueOf($level)
+    {
+        if($this->inline)
+        {
+            return $level."  {I} '{$this->text}'";
+        }
+        else
+        {
+            return $level."  {B} '{$this->text}'";
+        }
+    }
     public function text()
     {
         if($this->inline)
@@ -102,6 +108,31 @@ class BBCodeContentBlock implements BBCodeItem
         }
     }
 }
+class BBCodeDummy implements BBCodeItem, BBCodeContainer
+{
+    public $inline = true;
+    
+    public function getType()
+    {
+        return false;
+    }
+    public function text()
+    {
+        return "";
+    }
+    public function isInline()
+    {
+        return $this->inline;
+    }
+    public function valueOf($level)
+    {
+        return "";
+    }
+    public function addChild($child)
+    {
+        return;
+    }
+}
 class BBCodeTag implements BBCodeItem, BBCodeContainer
 {
     private $type;
@@ -109,16 +140,30 @@ class BBCodeTag implements BBCodeItem, BBCodeContainer
     private $params;
     private $end;
     
+    public $id;
+    
     public function __construct($tag)
     {
         $this->children = array();
         $this->params = array();
         $this->end = false;
         $this->parseTag($tag);
+        $this->id = md5(rand(0, 9999)."blaat".microtime());
     }
     public function addChild($child)
     {
         array_push($this->children, $child);
+    }
+    public function getLastChild()
+    {
+        if(count($this->children) > 0)
+        {
+            return $this->children[count($this->children) - 1];
+        }
+        else
+        {
+            return new BBCodeDummy();
+        }
     }
     public function getType()
     {
@@ -188,16 +233,16 @@ class BBCodeTag implements BBCodeItem, BBCodeContainer
                     $html .= "<h2>".$child->text()."</h2>\n";
                     break;
                 case "img":
-                    $html .= "<img src='{$child->text()}' />\n";
+                    $html .= "<img src='{$child->text()}' />";
                     break;
                 case "url":
                     if($child->hasParam("url"))
                     {
-                        $html .= "<a href='{$child->getParam("url")}'>".$child->text()."</a>\n";
+                        $html .= "<a href='{$child->getParam("url")}'>".$child->text()."</a>";
                     }
                     else
                     {
-                        $html .= "<a href='{$child->text()}'>".$child->text()."</a>\n";
+                        $html .= "<a href='{$child->text()}'>".$child->text()."</a>";
                     }
                     break;
                 case "left":
@@ -221,26 +266,50 @@ class BBCodeTag implements BBCodeItem, BBCodeContainer
     {
         switch($this->getType())
         {
+            case "left":
+            case "center":
+            case "right":
+                return false;
+                break;
             case "b":
-            case "TEXT":
             case "i":
             case "u":
             case "h1":
             case "h2":
             case "url":
             case "img":
-                return true;
-                break;
-            case "left":
-            case "center":
-            case "right":
             default:
-                return false;
+                return true;
                 break;
         }
     }
+    public function valueOf($level)
+    {
+        $return = $level."  {$this->getType()}";
+        foreach($this->children as $child)
+        {
+            $return .= "\n".$child->valueOf($level."  ");
+        }
+        
+        return $return;
+    }
 }
-class ContentRoot extends BBCodeTag { }
+class ContentRoot extends BBCodeTag {
+    public function isInline()
+    {
+        return false;
+    }
+    public function valueOf($level)
+    {
+        $return = "ROOT";
+        foreach($this->children as $child)
+        {
+            $return .= "\n".$child->valueOf("  ");
+        }
+        
+        return $return;
+    }
+}
 /**
  * BBCode parser, which generates XHTML valid HTML code
  * 
@@ -270,6 +339,7 @@ class BBCodeParser
     private function process()
     {
         $queue = array(new ContentRoot());
+        
         $offset = 0;
         $lastEnd = -1;
         
@@ -286,7 +356,6 @@ class BBCodeParser
             }
             $tag = new BBCodeTag(substr($this->text, $s, $end - $s + 1));
             
-            
             if($tag->isEnd())
             {
                 if($queue[0]->getType() != $tag->getType())
@@ -297,7 +366,7 @@ class BBCodeParser
                 //add the gathered text
                 if(!empty($text))
                 {
-                    BBCodeContentBlock::add($openTag, $text);
+                    BBCodeContentBlock::add($openTag, $text, $queue[0]->getLastChild()->isInline());
                 }
             }
             else
@@ -315,7 +384,7 @@ class BBCodeParser
         if($lastEnd >= 0)
         {
             $text = substr($this->text, $lastEnd + 1);
-            BBCodeContentBlock::add($queue[0], $text);
+            BBCodeContentBlock::add($queue[0], $text, $queue[0]->getLastChild()->isInline());
         }
         
         return $queue[0]->text();

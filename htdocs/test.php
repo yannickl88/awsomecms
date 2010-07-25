@@ -20,13 +20,24 @@ $websiteroot = dirname(__FILE__);
 try
 {
     require_once '../core/init.inc';
-    import("libs/class.TextSpider.inc");
-    
-    $indexer = new TextSpider();
-    $indexer->index(file_get_contents("../docs/LICENSE.txt"), 8, "LICENSE.txt", "news");
-    $indexer->index(file_get_contents("../docs/COPYRIGHT.txt"), 6, "COPYRIGHT.txt", "news");
-    
-    var_dump($indexer->search(array("copyright")));
+    import("libs/class.BBCodeParser.inc");
+    $string = <<<STR
+[h1 asdf=asdfasdf vlaat=s]Welcome[/h1]asdfasdf
+Installation was a success[center]basdf[/center]aaaa
+asdf
+
+asdf
+
+
+
+
+asdfasd[url]http://www.google.nl/[/url] en [url=http://www.google.nl/]Zoekmachine[/url]
+[img]http://www.oizopower.nl/ss/Illidan/blaat_warglaives.jpg[/img]
+asdf
+{gallery name="asdf"}
+STR;
+    $result = BBCodeParser::parse($string);
+    echo $result;
 }
 catch(NotInstalledException $e)
 {
