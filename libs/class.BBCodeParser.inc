@@ -12,227 +12,235 @@
  *
  * @version $Revision$
  */
+class BBCodeException extends Exception { }
 
-/**
- * A paragraph within a text
- * 
- * @author Yannick <yannick.l.88@gmail.com>
- */
-class BBCodeParagraph
+interface BBCodeItem
 {
-    private $blocks;
-    private $end;
-    /**
-     * Constructor
-     */
-    public function __construct()
+    function getType();
+    function text();
+    function isInline();
+}
+interface BBCodeContainer
+{
+    function addChild($child);
+}
+class BBCodeContentBlock implements BBCodeItem
+{
+    private $text;
+    private $inline;
+    
+    public function __construct($text, $inline = true)
     {
-        $this->blocks = array();
-        $this->end = false;
+        $this->text = nl2br(trim($text), true);
+        $this->inline = $inline;
     }
-    /**
-     * Add a text block to the paragraph
-     * 
-     * @param String $block
-     */
-    public function addBlock($block)
+    public static function add($element, $text)
     {
+        $hadEnter = false;
+        $block = "";
+        $lines = explode("\n", $text);
+        $count = 1;
+        
+        foreach($lines as $line)
+        {
+            $line = trim($line);
+            if(!empty($line) && $hadEnter)
+            {
+                $element->addChild(new BBCodeContentBlock($block, $element->isInline()));
+                $block = "";
+                $hadEnter = false;
+            }
+            
+            if(empty($line))
+            {
+                $hadEnter = true;
+            }
+            else
+            {
+                if($count < count($lines))
+                {
+                    $block .= $line."\n";
+                }
+                else
+                {
+                    $block .= $line;
+                }
+                $hadEnter = false;
+            }
+            $count++;
+        }
+        
         if(!empty($block))
         {
-            $blockObj = new BBCodeText($block);
-            $this->blocks[] = $blockObj;
-            
-            if(!$blockObj->inline())
-            {
-                $this->end = true;
-            }
+            $element->addChild(new BBCodeContentBlock($block, $element->isInline()));
+        }
+    }
+    public function getType()
+    {
+        if($this->inline)
+        {
+            return false;
         }
         else
         {
-            $this->end = true;
+            return "TEXT";
         }
     }
-    /**
-     * Is the text inputed at the end of the paragraph
-     * 
-     * @return Boolean
-     */
-    public function end()
+    public function isInline()
+    {
+        return true;
+    }
+    public function text()
+    {
+        if($this->inline)
+        {
+            return $this->text;
+        }
+        else
+        {
+            return "<p>{$this->text}</p>\n";
+        }
+    }
+}
+class BBCodeTag implements BBCodeItem, BBCodeContainer
+{
+    private $type;
+    protected $children;
+    private $params;
+    private $end;
+    
+    public function __construct($tag)
+    {
+        $this->children = array();
+        $this->params = array();
+        $this->end = false;
+        $this->parseTag($tag);
+    }
+    public function addChild($child)
+    {
+        array_push($this->children, $child);
+    }
+    public function getType()
+    {
+        return $this->type;
+    }
+    public function isEnd()
     {
         return $this->end;
     }
-    /**
-     * Is the paragraph empty
-     * 
-     * @return Boolean
-     */
-    public function isEmpty()
+    public function hasParam($key)
     {
-        return count($this->blocks) == 0;
+        return isset($this->params[$key]);
     }
-    /**
-     * Get the text generated from the paragraph.
-     * 
-     * @return String
-     */
-    public function text()
+    public function getParam($key)
     {
-        $text = "";
-        
-        if(count($this->blocks) == 1 && !$this->blocks[0]->inline())
-        {
-            $text = $this->blocks[0]->text()."\n";
-        }
-        else
-        {
-            $text .= "<p>";
-            
-            foreach($this->blocks as $block)
-            {
-                $text .= $block->text();
-            }
-            
-            $text .= "</p>\n";
-        }
-        
-        return $text;
+        return $this->params[$key];
     }
-}
-/**
- * Text block within a paragraph
- * 
- * @author Yannick <yannick.l.88@gmail.com>
- */
-class BBCodeText
-{
-    const DUAL      = 1;
-    const SINGLE    = 2;
-    const WRAP      = 3;
-    // Block tags
-    public static $blockTags = array(
-        "h1"            => array(BBCodeText::DUAL, 'h1'),
-        "h2"            => array(BBCodeText::DUAL, 'h2'),
-        "left"          => array(BBCodeText::DUAL, 'div style="text-align: left;"', 'div'),
-        "center"        => array(BBCodeText::DUAL, 'div style="text-align: center;"', 'div'),
-        "right"         => array(BBCodeText::DUAL, 'div style="text-align: right;"', 'div'),
-    );
-    // Inline tags
-    public static $inlineTags = array(
-        "img"           => array(BBCodeText::WRAP, 'img alt="" src='),
-        "url"           => array(BBCodeText::DUAL, 'a href=', 'a' ),
-        "b"             => array(BBCodeText::DUAL, 'b'),
-        "i"             => array(BBCodeText::DUAL, 'i'),
-        "u"             => array(BBCodeText::DUAL, 'u'),
-    );
-    
-    private $inline;
-    private $text;
-    /**
-     * Constructor
-     * 
-     * @param String $text
-     */
-    public function __construct($text)
+    private function parseTag($tag)
     {
-        $this->text = $text;
-        $this->inline = true;
+        $tag = substr($tag, 1, -1);
         
-        $this->parse();
-    }
-    /**
-     * Is the Textblock inline (is not starting and ending with the same blocktag)
-     * 
-     * @return Boolean
-     */
-    public function inline()
-    {
-        return $this->inline;
-    }
-    /**
-     * Parse the text from BBCode to HTML
-     */
-    private function parse()
-    {
-        //check if it starts with a block tag
-        $matches = array();
-        if(preg_match('/^\[(.*?)\].*\[\/(.*?)\]$/', $this->text, $matches) > 0)
-        {
-            if($matches[1] == $matches[2] && isset(BBCodeText::$blockTags[$matches[1]]))
-            {
-                $this->inline = false;
-            }
-        }
-        
-        $this->text = preg_replace_callback('/(\[(.*?)\])/', array($this, "processTag"), $this->text);
-    }
-    /**
-     * Helper function to proccess the found tags
-     * 
-     * @param Array $matches
-     * @return String
-     */
-    private function processTag($matches)
-    {
-        $tags = array_merge(BBCodeText::$blockTags, BBCodeText::$inlineTags);
-        $end = false;
-        $hasParams = false;
-        $param = '';
-        
-        //is ending tag?
-        $tag = $matches[2];
         if($tag[0] == "/")
         {
-            $end = true;
+            $this->end = true;
             $tag = substr($tag, 1);
         }
+        $tagArr = explode(" ", $tag);
+        if(strpos($tagArr[0], "=") === false)
+            $this->type = array_shift($tagArr);
+        else
+            $this->type = substr($tagArr[0], 0, strpos($tagArr[0], "="));
         
-        if(strpos($tag, " ") !== false)
+        foreach($tagArr as $param)
         {
-            $tag = substr($tag, 0, strpos($tag, " "));
-            $hasParams = true;
-        }
-        if(strpos($tag, "=") !== false)
-        {
-            $param = '"'.substr($tag, strpos($tag, "=")+1).'"';
-            $tag = substr($tag, 0, strpos($tag, "="));
-            $hasParams = true;
-        }
-        
-        if(isset($tags[$tag]))
-        {
-            $HTMLTag = $tags[$tag];
-            
-            switch($HTMLTag[0])
+            if(strpos($param, "=") !== false)
             {
-                case BBCodeText::WRAP:
-                    if($end && count($HTMLTag) == 3)
-                    {
-                        return "</".$HTMLTag[2].">";
-                    }
-                    return ($end? "\" />": "<".$HTMLTag[1].$param."\"");
+                $paramArr = explode("=", $param);
+                $this->params[$paramArr[0]] = $paramArr[1];
+            }
+            else
+            {
+                $this->params[$param] = true;
+            }
+        }
+    }
+    public function text()
+    {
+        $html = "";
+        
+        foreach($this->children as $child)
+        {
+            switch($child->getType())
+            {
+                case "b":
+                    $html .= "<b>".$child->text()."</b>";
                     break;
-                case BBCodeText::DUAL:
-                    if($end && count($HTMLTag) == 3)
+                case "i":
+                    $html .= "<i>".$child->text()."</i>";
+                    break;
+                case "u":
+                    $html .= "<u>".$child->text()."</u>";
+                    break;
+                case "h1":
+                    $html .= "<h1>".$child->text()."</h1>\n";
+                    break;
+                case "h2":
+                    $html .= "<h2>".$child->text()."</h2>\n";
+                    break;
+                case "img":
+                    $html .= "<img src='{$child->text()}' />\n";
+                    break;
+                case "url":
+                    if($child->hasParam("url"))
                     {
-                        return "</".$HTMLTag[2].">";
+                        $html .= "<a href='{$child->getParam("url")}'>".$child->text()."</a>\n";
                     }
-                    return "<".($end? "/": "").$HTMLTag[1].$param.">";
+                    else
+                    {
+                        $html .= "<a href='{$child->text()}'>".$child->text()."</a>\n";
+                    }
+                    break;
+                case "left":
+                    $html .= "<div style='text-align: left;'>\n".$child->text()."</div>\n";
+                    break;
+                case "center":
+                    $html .= "<div style='text-align: center;'>\n".$child->text()."</div>\n";
+                    break;
+                case "right":
+                    $html .= "<div style='text-align: right;'>\n".$child->text()."</div>\n";
+                    break;
+                default:
+                    $html .= $child->text();
                     break;
             }
         }
         
-        return $matches[0];
+        return $html;
     }
-    /**
-     * Get the text generated from this block
-     * 
-     * @return String
-     */
-    public function text()
+    public function isInline()
     {
-        return $this->text;
+        switch($this->getType())
+        {
+            case "b":
+            case "TEXT":
+            case "i":
+            case "u":
+            case "h1":
+            case "h2":
+            case "url":
+            case "img":
+                return true;
+                break;
+            case "left":
+            case "center":
+            case "right":
+            default:
+                return false;
+                break;
+        }
     }
 }
+class ContentRoot extends BBCodeTag { }
 /**
  * BBCode parser, which generates XHTML valid HTML code
  * 
@@ -240,6 +248,7 @@ class BBCodeText
  */
 class BBCodeParser
 {
+    private $text;
     private $blocks;
     private $paragraphs;
     /**
@@ -249,33 +258,9 @@ class BBCodeParser
      */
     private function __construct($string)
     {
+        $this->text = $string;
         $this->blocks = explode("\n", trim($string));
         $this->paragraphs = array();
-    }
-    /**
-     * Devide the input string into paragraphs of text
-     */
-    private function makeParagraphs()
-    {
-        $par = new BBCodeParagraph();
-        
-        foreach($this->blocks as $block)
-        {
-            $block = trim($block);
-            
-            $par->addBlock($block);
-            
-            if($par->end())
-            {
-                $this->paragraphs[] = $par;
-                $par = new BBCodeParagraph();
-            }
-        }
-        
-        if(!$par->isEmpty())
-        {
-            $this->paragraphs[] = $par;
-        }
     }
     /**
      * Process the given text input and return the HTML string
@@ -284,16 +269,60 @@ class BBCodeParser
      */
     private function process()
     {
-        $this->makeParagraphs();
+        $queue = array(new ContentRoot());
+        $offset = 0;
+        $lastEnd = -1;
         
-        $text = "";
-        
-        foreach($this->paragraphs as $par)
+        while(($s = strpos($this->text, "[", $offset)) !== false)
         {
-            $text .= $par->text();
+            $end = strpos($this->text, "]", $s);
+            
+            if($end === false)
+                throw new BBCodeException("No ending ] found at {$s}");
+            
+            if($lastEnd >= 0)
+            {
+                $text = substr($this->text, $lastEnd + 1, $s - $lastEnd - 1);
+            }
+            $tag = new BBCodeTag(substr($this->text, $s, $end - $s + 1));
+            
+            
+            if($tag->isEnd())
+            {
+                if($queue[0]->getType() != $tag->getType())
+                    throw new BBCodeException("Cannot close {$tag->getType()}");
+                
+                $openTag = array_shift($queue);
+                $queue[0]->addChild($openTag);
+                //add the gathered text
+                if(!empty($text))
+                {
+                    BBCodeContentBlock::add($openTag, $text);
+                }
+            }
+            else
+            {
+                //add the gathered text
+                if(!empty($text))
+                {
+                    BBCodeContentBlock::add($queue[0], $text);
+                }
+                array_unshift($queue, $tag);
+            }
+            $offset = $s + 1;
+            $lastEnd = $end;
+        }
+        if($lastEnd >= 0)
+        {
+            $text = substr($this->text, $lastEnd + 1);
+            BBCodeContentBlock::add($queue[0], $text);
         }
         
-        return $text;
+        return $queue[0]->text();
+    }
+    
+    private function parseTag($tag)
+    {
     }
     /**
      * Parse a string from BBCode to HTML
