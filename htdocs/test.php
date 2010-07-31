@@ -22,22 +22,19 @@ try
     require_once '../core/init.inc';
     import("libs/class.BBCodeParser.inc");
     $string = <<<STR
-[h1 asdf=asdfasdf vlaat=s]Welcome[/h1]asdfasdf
-Installation was a success[b]basdf[/b]1
-2
-
-3
-
-
-
-
-4[url]http://www.google.nl/[/url] en [url=http://www.google.nl/]Zoekmachine[/url]
-[img]http://www.oizopower.nl/ss/Illidan/blaat_warglaives.jpg[/img]
+hello
 asdf
-{gallery name="asdf"}
+asdf
+
+
+asdf
+asdf
+
+asdf
 STR;
-    $result = BBCodeParser::parse($string);
-    echo $result;
+    $parser = new BBCodeParser($string);
+    
+    echo $parser->process();
 }
 catch(NotInstalledException $e)
 {
