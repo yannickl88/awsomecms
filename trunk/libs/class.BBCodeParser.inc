@@ -403,7 +403,7 @@ class BBCodeParser
     {
         if(Config::get("type", "wysiwig", "input") == "bbcode")
         {
-            $parser = new BBCodeParser($value);
+            $parser = new TextParser($value);
             return $parser->process();
         }
         else
@@ -411,4 +411,354 @@ class BBCodeParser
             return $value;
         }
     }
+}
+class Element
+{
+    protected $type;
+    protected $children;
+    protected $attributes;
+    
+    public function __construct($type)
+    {
+        $this->children = array();
+        $this->attributes = array();
+        
+        $this->type = $this->parseTag($type);
+    }
+    protected function parseTag($tag)
+    {
+        $tagArr = explode(" ", $tag);
+        if(strpos($tagArr[0], "=") === false)
+            $type = array_shift($tagArr);
+        else
+            $type = substr($tagArr[0], 0, strpos($tagArr[0], "="));
+        
+        foreach($tagArr as $param)
+        {
+            if(strpos($param, "=") !== false)
+            {
+                $paramArr = explode("=", $param);
+                $this->attributes[$paramArr[0]] = $paramArr[1];
+            }
+            else
+            {
+                $this->attributes[$param] = true;
+            }
+        }
+        
+        return $type;
+    }
+    public function addChild($child)
+    {
+        array_push($this->children, $child);
+    }
+    public function getLastChild()
+    {
+        if(count($this->children) > 0)
+            return $this->children[count($this->children) - 1];
+        else
+            return new DummyElement();
+    }
+    public function setAttr($key, $value)
+    {
+        $this->attributes[$key] = $value;
+    }
+    public function hasAttr($key)
+    {
+        return isset($this->attributes[$key]);
+    }
+    public function getAttr($key)
+    {
+        return $this->attributes[$key];
+    }
+    public function type()
+    {
+        return $this->type;
+    }
+    public function isBlock()
+    {
+        switch($this->type())
+        {
+            case "h1":
+            case "h2":
+            case "left":
+            case "center":
+            case "right":
+            case "DOCROOT":
+                return true;
+                break;
+            default:
+                return false;
+                break;
+        }
+    }
+    public function isPar()
+    {
+        switch($this->type())
+        {
+            case "left":
+            case "center":
+            case "right":
+            case "DOCROOT":
+                return true;
+                break;
+            default:
+                return false;
+                break;
+        }
+    }
+    public function text2par()
+    {
+        $curPar = null;
+        
+        foreach($this->children as $key => $child)
+        {
+            if($child instanceof Text && $this->isBlock())
+            {
+                if($curPar == null)
+                {
+                    $curPar = new Paragraph();
+                    $curPar->addChild($child);
+                    $this->children[$key] = $curPar;
+                }
+                else
+                {
+                    if($child->isEnter() && $curPar->hadEndingEnter())
+                    {
+                        $curPar = new Paragraph();
+                        $curPar->addChild($child);
+                        $this->children[$key] = $curPar;
+                    }
+                    else
+                    {
+                        $curPar->addChild($child);
+                        unset($this->children[$key]);
+                    }
+                }
+            }
+            else if(!($child instanceof Paragraph))
+            {
+                $child->text2par();
+                
+                if($child->isBlock())
+                {
+                    $curPar = null;
+                }
+                else
+                {
+                    if($curPar == null)
+                    {
+                        $curPar = new Paragraph();
+                        $curPar->addChild($child);
+                        $this->children[$key] = $curPar;
+                    }
+                    else
+                    {
+                        $curPar->addChild($child);
+                        unset($this->children[$key]);
+                    }
+                }
+            }
+        }
+    }
+    public function text()
+    {
+        $html = "";
+        
+        foreach($this->children as $child)
+        {
+            $html .= $child->text();
+        }
+        
+        return $html;
+    }
+}
+class Document extends Element
+{
+    public function __construct()
+    {
+        parent::__construct("DOCROOT");
+    }
+}
+class DummyElement extends Element
+{
+    public function __construct()
+    {
+        parent::__construct("DUMMY");
+    }
+    
+    public function text() { return ""; }
+}
+class Text extends Element
+{
+    private $value;
+    
+    public function __construct($text)
+    {
+        parent::__construct("TEXT");
+        $this->value = $text;
+    }
+    public function text() { return nl2br($this->value, true); }
+    public function value() { return $this->value; }
+    public function isEnter() { return ($this->value == "\n" || $this->value == "\r"); }
+}
+class Paragraph extends Element
+{
+    private $hadEnter = false;
+    public function __construct($text)
+    {
+        parent::__construct("PAR");
+        $this->value = $text;
+    }
+    
+    public function addChild($child)
+    {
+        if($child instanceof Text && $child->isEnter())
+        {
+            $this->hadEnter = true;
+        }
+        else
+        {
+            $this->hadEnter = false;
+            parent::addChild($child);
+        }
+    }
+    public function hadEndingEnter()
+    {
+        return $this->hadEnter;
+    }
+    public function isEmpty()
+    {
+        return (count($this->children) == 0);
+    }
+    public function text()
+    {
+        $html = "";
+        
+        if(!$this->isEmpty())
+        {
+            $html .= "<p>";
+            foreach($this->children as $child)
+            {
+                $html .= $child->text();
+            }
+            $html .= "</p>";
+        }
+        return $html;
+    }
+}
+class TextParser 
+{
+    const READING       = 0;
+    const READINGPAR    = 3;
+    const TAGREAD       = 1;
+    const TAGENDREAD    = 2;
+    
+    private $text;
+    private $blockTags;
+    
+    public function __construct($text)
+    {
+        $this->text = $text;
+        $this->blockTags = array("center");
+    }
+    public function process()
+    {
+        $state = TextParser::READING;
+        $tag = '';
+        $text = '';
+        $tagStack = array(new Document());
+        $countFromStateChange = 0;
+        
+        for($i = 0; $i < strlen($this->text); $i++)
+        {
+            $char = $this->text[$i];
+            if($state == TextParser::READING)
+            {
+                if($char == "[")
+                {
+                    if($text != "")
+                    {
+                        $tagStack[0]->addChild(new Text($text));
+                        $text = "";
+                    }
+                    
+                    $state = TextParser::TAGREAD;
+                    $countFromStateChange = 0;
+                }
+                else if($char == "\n" || $char == "\r")
+                {
+                    if($text != "")
+                    {
+                        $tagStack[0]->addChild(new Text($text));
+                        $text = "";
+                    }
+                    else if($text == "")
+                    {
+                        $tagStack[0]->addChild(new Text($char));
+                    }
+                }
+                else
+                {
+                    $text .= $char;
+                }
+            }
+            else if($state == TextParser::TAGREAD)
+            {
+                if($char == "/" && $countFromStateChange == 1)
+                {
+                    $state = TextParser::TAGENDREAD;
+                    $countFromStateChange = 0;
+                }
+                else if($char == "]")
+                {
+                    array_unshift($tagStack, new Element($tag));
+                    $tag = '';
+                    $state = TextParser::READING;
+                    $countFromStateChange = 0;
+                }
+                else if($char == "\n" || $char == "\r") { } //Nothin on enter
+                else
+                {
+                    $tag .= $char;
+                }
+            }
+            else if($state == TextParser::TAGENDREAD)
+            {
+                if($char == "]")
+                {
+                    if($tagStack[0]->type() == $tag)
+                    {
+                        $e = array_shift($tagStack);
+                        $tagStack[0]->addChild($e);
+                    }
+                    else
+                    {
+                        throw new Exception("Cannot end '{$tag}' without opening it first");
+                    }
+                    $tag = '';
+                    $state = TextParser::READING;
+                    $countFromStateChange = 0;
+                }
+                else if($char == "\n" || $char == "\r") { } //Nothin on enter
+                else
+                {
+                    $tag .= $char;
+                }
+            }
+            
+            $countFromStateChange++;
+        }
+        
+        if($text != "")
+        {
+            $tagStack[0]->addChild(new Text($text));
+            $text = "";
+        }
+        
+        $tagStack[0]->text2par();
+        
+        return $tagStack[0]->text();
+    }
+    
 }
