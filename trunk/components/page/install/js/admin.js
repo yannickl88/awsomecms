@@ -13,22 +13,63 @@
  */
 
 /**
- * Simple editor class
+ * Simple editor class which turns a textarea into a BBCode Text editor
  * 
  * @author Yannick <yannick.l.88@gmail.com>
  */
-var Editor = function(element)
+var Editor = function(element, options)
 {
     this.element = null;
     this.toolbar = null;
-
-    this.init = function(element)
+    /**
+     * Constructor
+     * 
+     * @param DOMElement element
+     * @param Object options
+     */
+    this.init = function(element, options)
     {
         this.element = element;
-        this.element.get(0).addEventListener('drop', this.handelDrag, false);
         
-        this._addButton("B", "[b]", "[/b]");
+        if(this.element.parent().attr("class") != "toolbar")
+        {
+            this.element.wrap("<div class='toolbar' />");
+            this.toolbar = $("<div class='toolbarButtons' />");
+            this.element.parent().prepend(this.toolbar);
+        }
+        
+        if(options != undefined)
+        {
+            if(options.width != undefined) 
+                this.element.parent().width(options.width);
+                this.element.width(options.width);
+            if(options.height != undefined) 
+                this.element.height(options.height);
+        }
+        //add items to the toolbar
+        this._addButton("Bold", "[b]", "[/b]", 5);
+        this._addButton("Italic", "[i]", "[/i]", 6);
+        this._addButton("Underlined", "[u]", "[/u]", 7);
+        this._addSpacer();
+        this._addButton("Header 1", "[h1]", "[/h1]", 27);
+        this._addButton("Header 2", "[h2]", "[/h2]", 28);
+        this._addSpacer();
+        this._addButton("Align Left", "[left]", "[/left]", 15);
+        this._addButton("Align Center", "[center]", "[/center]", 16);
+        this._addButton("Align Right", "[right]", "[/right]", 17);
+        this._addSpacer();
+        this._addButton("Hyperlink", "[url]", "[/url]", 23);
+        this._addButton("E-mail", "[mail]", "[/mail]", 29);
+        this._addSpacer();
+        this._addButton("Image", "[img]", "[/img]", 21);
+        this._addButton("Youtube", "[youtube]", "[/youtube]", 30);
     };
+    /**
+     * Insert a tag into the textbox
+     * 
+     * @param String start
+     * @param String end
+     */
     this.insert = function(start, end)
     {
         if (!end)
@@ -56,33 +97,92 @@ var Editor = function(element)
         this.element.focus();
         this.element.get(0).setSelectionRange(caret, caret);
     };
-    this._addButton = function(text, start, end)
+    /**
+     * Add a button to the toolbar
+     * 
+     * @param String text
+     * @param String start
+     * @param String end
+     * @param int pixID
+     */
+    this._addButton = function(text, start, end, pixID)
     {
-        var button = $("<button type='button'>"+text+"</button>");
+        var button = $("<a href=\"#\" class=\""+text+"\"></a>");
         button.bind("click", {start: start, end:end, editor:this}, this.handelClick);
+        button.css("background-position", "0 "+((pixID - 1) * -30)+"px");
+        button.bind("mouseover", {editor:this}, this._handelMouseOver);
+        button.bind("mouseout", {editor:this}, this._handelMouseOut);
         this._addToolbarElement(button);
     };
+    /**
+     * Add a spacer to the toolbar
+     */
+    this._addSpacer = function()
+    {
+        var button = $("<span class='spacer'/>");
+        this._addToolbarElement(button);
+    };
+    /**
+     * Handel clicks on a button on the toolbar
+     * 
+     * @param Event e
+     * @returns Boolean
+     */
     this.handelClick = function(e)
     {
-        console.log(e.data.editor);
         e.data.editor.insert(e.data.start, e.data.end);
+        
+        return false;
     };
+    /**
+     * Handel mouse over to display hover animarion
+     * 
+     * @param Event e
+     */
+    this._handelMouseOver = function(e)
+    {
+        var button = $(e.currentTarget);
+        var pos = e.data.editor._parsePos(button.css("background-position"));
+        button.css("background-position", "34px "+pos[1]+"px");
+    };
+    /**
+     * Handel mouse out to hide hover animarion
+     * 
+     * @param Event e
+     */
+    this._handelMouseOut = function(e)
+    {
+        var button = $(e.currentTarget);
+        var pos = e.data.editor._parsePos(button.css("background-position"));
+        button.css("background-position", "0 "+pos[1]+"px");
+    };
+    /**
+     * Parse a string so we get a array with cooridates
+     * 
+     * @param String pos
+     * @returns Array       [int x, int y]
+     */
+    this._parsePos = function(pos)
+    {
+        var posArr = pos.split(" ");
+        posArr[0].replace("px", "");
+        posArr[1].replace("px", "");
+        posArr[0] = parseInt(posArr[0]);
+        posArr[1] = parseInt(posArr[1]);
+        
+        return posArr;
+    };
+    /**
+     * Wrap the toolbar around the element
+     * 
+     * @param DOMElement html
+     */
     this._addToolbarElement = function(html)
     {
-        if(this.element.parent().attr("id") != "toolbar")
-        {
-            this.element.wrap("<div class='toolbar' />");
-            this.toolbar = $("<div class='toolbarButtons' />");
-            this.element.parent().prepend(this.toolbar);
-        }
-        
+        //wrap the toolbar in a div if it didn't happen already
         this.toolbar.append(html);
     };
-    this.handelDrag = function(e) 
-    {
-        console.log(e);
-    };
-    this.init(element);
+    this.init(element, options); //call constructor
 }
 
 /**

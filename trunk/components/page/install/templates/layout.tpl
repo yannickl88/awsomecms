@@ -3,6 +3,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
     <head>
         <title>A.W.S.O.M.E. cms site - {if $URL != ''}{$URL|ucfirst}{else}Index{/if}</title>
+        <meta http-equiv="Content-type" content="text/html;charset=UTF-8" />
         <script type="text/javascript" src="http://www.google.com/jsapi"></script>
         <script type="text/javascript">
             {literal}
