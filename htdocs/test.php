@@ -23,15 +23,15 @@ try
     import("libs/class.BBCodeParser.inc");
     $string = <<<STR
 [h1 asdf=asdfasdf vlaat=s]Welcome[/h1]asdfasdf
-Installation was a success[center]basdf[/center]aaaa
-asdf
+Installation was a success[b]basdf[/b]1
+2
 
-asdf
-
-
+3
 
 
-asdfasd[url]http://www.google.nl/[/url] en [url=http://www.google.nl/]Zoekmachine[/url]
+
+
+4[url]http://www.google.nl/[/url] en [url=http://www.google.nl/]Zoekmachine[/url]
 [img]http://www.oizopower.nl/ss/Illidan/blaat_warglaives.jpg[/img]
 asdf
 {gallery name="asdf"}
