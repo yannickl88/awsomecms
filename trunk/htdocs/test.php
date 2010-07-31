@@ -31,10 +31,9 @@ asdf
 asdf
 
 asdf
+[youtube]http://www.youtube.com/watch?v=2AmrYC56kxg[/youtube]
 STR;
-    $parser = new BBCodeParser($string);
-    
-    echo $parser->process();
+    echo BBCodeParser::parse($string);
 }
 catch(NotInstalledException $e)
 {

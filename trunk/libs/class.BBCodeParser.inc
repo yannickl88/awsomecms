@@ -54,18 +54,18 @@ class BBCodeElement
         if(class_exists($className))
         {
             $obj = new $className($type);
-
-            foreach($attributes as $key => $value)
-            {
-                $obj->setAttr($key, $value);
-            }
-
-            return $obj;
         }
         else
         {
-            throw new BBCodeException("Unknown tag '{$type}'");
+            $obj = new BBCodeUnknownElement($type);
         }
+
+        foreach($attributes as $key => $value)
+        {
+            $obj->setAttr($key, $value);
+        }
+
+        return $obj;
     }
     /**
      * Parse the tag name for type and arguments passed
@@ -126,6 +126,15 @@ class BBCodeElement
      * @return Boolean
      */
     public function singelLine()
+    {
+        return false;
+    }
+    /**
+     * Check if the element doesn't need a closing tag
+     * 
+     * @return Boolean
+     */
+    public function singelTag()
     {
         return false;
     }
@@ -437,7 +446,6 @@ class BBCodeNewLine extends BBCodeElement
  */
 class BBCodeParagraph extends BBCodeElement
 {
-    private $hadEnter = false;
     /**
      * Constructor
      */
@@ -452,6 +460,60 @@ class BBCodeParagraph extends BBCodeElement
     public function wrap($text)
     {
         return "<p>{$text}</p>";
+    }
+}
+/**
+ * Element which is a handler when there is no element to be found
+ */
+class BBCodeUnknownElement extends BBCodeElement
+{
+    /**
+     * (non-PHPdoc)
+     * @see libs/BBCodeElement::wrap()
+     */
+    public function wrap($text)
+    {
+        //check if we have a smarty handler somewhere
+        $smartyFunction = "smarty_function_".$this->type();
+        
+        if(function_exists($smartyFunction))
+        {
+            return "{gallery{$this->serializeAttr()}}";
+        }
+        else 
+        {
+            throw new BBCodeException("Unknown tag '{$this->type}'");
+        }
+    }
+    /**
+     * Create a string which we can use as smarty params
+     * 
+     * @return String
+     */
+    public function serializeAttr()
+    {
+        $str = "";
+        
+        foreach($this->attributes as $key => $value)
+        {
+            $str .= " ";
+            
+            if(!is_numeric($value))
+            {
+                $value = "'{$value}'";
+            }
+            $str .= "{$key}={$value}";
+        }
+        
+        return $str;
+    }
+    /**
+     * (non-PHPdoc)
+     * @see libs/BBCodeElement::singelTag()
+     */
+    public function singelTag()
+    {
+        return true;
     }
 }
 /**
@@ -546,7 +608,15 @@ class BBCodeParser
                     }
                     else
                     {
-                        array_unshift($tagStack, BBCodeElement::init($tag));
+                        $e = BBCodeElement::init($tag);
+                        if($e->singelTag())
+                        {
+                            $tagStack[0]->addChild($e);
+                        }
+                        else
+                        {
+                            array_unshift($tagStack, $e);
+                        }
                         $tag = '';
                         $state = BBCodeParser::READING;
                         $countFromStateChange = 0;
@@ -569,7 +639,6 @@ class BBCodeParser
                     }
                     else
                     {
-
                         throw new BBCodeException("Cannot end '{$tag}' without opening it first");
                     }
                     $tag = '';

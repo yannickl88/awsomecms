@@ -27,6 +27,20 @@ class BElement extends BBCodeElement
         return "<b>{$text}</b>";
     }
 }
+class UElement extends BBCodeElement
+{
+    public function wrap($text)
+    {
+        return "<u>{$text}</u>";
+    }
+}
+class IElement extends BBCodeElement
+{
+    public function wrap($text)
+    {
+        return "<i>{$text}</i>";
+    }
+}
 /** Headers */
 class H1Element extends BBCodeElement
 {
@@ -79,6 +93,23 @@ class ImgElement extends BBCodeElement
     public function wrap($text)
     {
         return "<img src='{$text}' />";
+    }
+}
+class YoutubeElement extends BBCodeElement
+{
+    public function wrap($text)
+    {
+        //http://www.youtube.com/watch?v={key} -> http://www.youtube.com/v/{key}&amp;fs=1
+        $matches = array();
+        if(preg_match('/^http:\/\/(www\.)?youtube\.com\/watch\?v=([a-zA-Z0-9]*)$/', $text, $matches) === 1)
+        {
+            $url = "http://www.youtube.com/v/{$matches[2]}&amp;fs=1";
+            return "<object width=\"480\" height=\"385\"><param name=\"movie\" value=\"{$url}\"></param><param name=\"allowFullScreen\" value=\"true\"></param><param name=\"allowscriptaccess\" value=\"always\"></param><embed src=\"{$url}\" type=\"application/x-shockwave-flash\" allowscriptaccess=\"always\" allowfullscreen=\"true\" width=\"480\" height=\"385\"></embed></object>";
+        }
+        else
+        {
+            return "NO YOUTUBE VIDEO FOUND<br /> Make you use the format [youtube]http://www.youtube.com/watch?v=&lt;key&gt;[/youtube]";
+        }
     }
 }
 /** Linking */
