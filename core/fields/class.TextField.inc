@@ -57,52 +57,55 @@ class TextField extends Field
         if(Config::get("type", "wysiwig", "input") == "bbcode")
         {
             return <<<JS
-                //load the editor
-                $().ready(function(e) {
-                    $(".htmleditor").each(function(key, element) {
-                         new Editor($(element));
+            //load the editor
+            $().ready(function(e) {
+                $(".htmleditor").each(function(key, element) {
+                    new Editor($(element), {
+                        width: 626,
+                        height: 175
                     });
                 });
+            });
 JS;
         }
         else
         {
             return <<<JS
-                function bindEditor(element)
-                {
-                    element.get(0).editor = new TINY.editor.edit('editor_'+element.attr("name"),{
-                        id:element.attr("name"),
-                        width:626,
-                        height:175,
-                        cssclass:'te',
-                        controlclass:'tecontrol',
-                        rowclass:'teheader',
-                        dividerclass:'tedivider',
-                        controls:['bold','italic','underline','strikethrough','|','style','|',
-                                  'orderedlist','unorderedlist','|','outdent','indent','|','leftalign',
-                                  'centeralign','rightalign','blockjustify','|','unformat','|','undo','redo','n',
-                                  'image','hr','link','unlink','|','cut','copy','paste','print'],
-                        footer:true,
-                        fonts:['Verdana','Arial','Georgia','Trebuchet MS'],
-                        xhtml:true,
-                        cssfile:'/css/style.css',
-                        bodyid:'editor',
-                        footerclass:'tefooter',
-                        toggle:{text:'source',activetext:'wysiwyg',cssclass:'toggle'},
-                        resize:{cssclass:'resize'}
-                    });
-                    
-                    element.parents("form").submit(function(e) {
-                        $(e.currentTarget).find(".htmleditor").each(function(key, value) {
-                            value.editor.post()
-                        });
-                    });
-                }
-                $().ready(function(e) {
-                    $(".htmleditor").each(function(key, element) {
-                         bindEditor($(element));
+            function bindEditor(element)
+            {
+                element.get(0).editor = new TINY.editor.edit('editor_'+element.attr("name"),{
+                    id:element.attr("name"),
+                    width:626,
+                    height:175,
+                    cssclass:'te',
+                    controlclass:'tecontrol',
+                    rowclass:'teheader',
+                    dividerclass:'tedivider',
+                    controls:['bold','italic','underline','strikethrough','|','style','|',
+                              'orderedlist','unorderedlist','|','outdent','indent','|','leftalign',
+                              'centeralign','rightalign','blockjustify','|','unformat','|','undo','redo','n',
+                              'image','hr','link','unlink','|','cut','copy','paste','print'],
+                    footer:true,
+                    fonts:['Verdana','Arial','Georgia','Trebuchet MS'],
+                    xhtml:true,
+                    cssfile:'/css/style.css',
+                    bodyid:'editor',
+                    footerclass:'tefooter',
+                    toggle:{text:'source',activetext:'wysiwyg',cssclass:'toggle'},
+                    resize:{cssclass:'resize'}
+                });
+                
+                element.parents("form").submit(function(e) {
+                    $(e.currentTarget).find(".htmleditor").each(function(key, value) {
+                        value.editor.post()
                     });
                 });
+            }
+            $().ready(function(e) {
+                $(".htmleditor").each(function(key, element) {
+                     bindEditor($(element));
+                });
+            });
 JS;
         }
     }

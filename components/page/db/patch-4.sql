@@ -1,0 +1,1 @@
+ALTER TABLE  `pages` ADD  `page_html` TINYINT NOT NULL DEFAULT  '1'

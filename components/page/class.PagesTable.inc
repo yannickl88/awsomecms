@@ -16,6 +16,7 @@ importField("Field");
 importField("IntField");
 importField("TextField");
 importField("DateField");
+importField("BooleanField");
 importField("page.LocationField");
 
 /**
@@ -38,6 +39,7 @@ class PagesTable extends Table
         $this->addField(new LocationField("page_location"), 2);
         $this->addField(new TextField("page_template"), 3);
         $this->addField(new DateField("page_timestamp", Field::HIDE));
+        $this->addField(new BooleanField("page_html", Field::HIDE|Field::OPTIONAL));
         $this->setTitle("[page_name]");
         
         $this->setURLs(
@@ -84,6 +86,7 @@ class PagesTable extends Table
     protected function insert($query, $data = null)
     {
         $query->insert('page_timestamp', date('c'));
+        $query->insert('page_html', false);
     }
     /**
      * (non-PHPdoc)

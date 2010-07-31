@@ -202,7 +202,11 @@ class SmartyPageLoader
             
             $smarty_obj->assign('PAGE', $result->record);
             
-            $tpl_source = BBCodeParser::parse($result->record->page_template);
+            if(!$result->record->page_html)
+                $tpl_source = BBCodeParser::parse($result->record->page_template);
+            else
+                $tpl_source = $result->record->page_template;
+            
             return true;
         } 
         else 
