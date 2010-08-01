@@ -37,7 +37,7 @@ class UsersTable extends Table
         $this->addField(new PasswordField("user_pass", Field::OPTIONAL_EDIT));
         $this->addField(new PasswordField("user_pass2", Field::DUMMY));
         $style = Field::HIDE_VIEW;
-        if(Config::getInstance()->isComponentInstalled("groups"))
+        if(Config::getInstance()->isComponentInstalled("groups") && Config::get("component", "users", "auth") == "groups")
         {
             $style = Field::HIDE;
         }
