@@ -49,7 +49,7 @@ function importField($field)
     if(!empty($field) && strpos($field, ".") !== false)
     {
         $loc = explode(".", $field);
-        $components = Config::getInstance()->getComponenets();
+        $components = RegisterManager::getInstance()->getComponenets();
         
         require_once realpath($components[$loc[0]]->component_path.'/fields/class.'.$loc[1].".inc");
     }

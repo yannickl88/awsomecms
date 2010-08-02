@@ -13,6 +13,11 @@
  * @version $Revision$
  */
 
+/**
+ * Multilanguage class which handels translation
+ * 
+ * @author Yannick <yannick.l.88@gmail.com>
+ */
 class Language
 {
     private static $instance;
@@ -31,12 +36,24 @@ class Language
         }
         return self::$instance;
     }
-    
+    /**
+     * Static way to get a language string from a key
+     * 
+     * @param String $key
+     * @param String $lang
+     * @return String
+     */
     public static function get($key, $lang = false)
     {
         return self::getInstance()->getText($key, $lang);
     }
-    
+    /**
+     * Get a language string from a key
+     * 
+     * @param String $key
+     * @param String $lang
+     * @return String
+     */
     public function getText($key, $lang = false)
     {
         if(!$lang)
@@ -54,7 +71,12 @@ class Language
             return "{{$key}}";
         }
     }
-    
+    /**
+     * Get mapped keys to string for a given language
+     * 
+     * @param String $lang
+     * @return array
+     */
     public function getLangMap($lang)
     {
         if(!isset($this->lang[$lang]))
@@ -64,12 +86,16 @@ class Language
         
         return $this->lang[$lang];
     }
-    
+    /**
+     * Load a language file based on the language key
+     * 
+     * @param String $lang
+     */
     private function loadLang($lang)
     {
         $this->lang[$lang] = (array) json_decode(file_get_contents(getFrameworkRoot()."/core/lang/{$lang}.lang"));
         
-        $components = Config::getInstance()->getComponenets();
+        $components = RegisterManager::getInstance()->getComponenets();
         
         foreach($components as $component)
         {

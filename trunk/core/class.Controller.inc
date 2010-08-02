@@ -300,10 +300,22 @@ class Controller
             }
         }
     }
+    /**
+     * Set the output to be returned on completion, this is used so that on 
+     * redirecting there is no content.
+     * 
+     * @param $string
+     */
     public function setOutput($string)
     {
         $this->output = $string;
     }
+    /**
+     * Append the output to be returned on completion, this is used so that on 
+     * redirecting there is no content.
+     * 
+     * @param $string
+     */
     public function appendOutput($string)
     {
         $this->output .= $string;
@@ -318,8 +330,8 @@ class Controller
      */
     public function callAction($component, $action, $request)
     {
-        $prehook = Config::getInstance()->getHook($component, $action, "pre");
-        $posthook = Config::getInstance()->getHook($component, $action, "post");
+        $prehook = RegisterManager::getInstance()->getHook($component, $action, "pre");
+        $posthook = RegisterManager::getInstance()->getHook($component, $action, "post");
         
         //pre action
         if($prehook)
@@ -377,7 +389,7 @@ class Controller
     public function callTable($component, $action, $request)
     {
         $config = Config::getInstance();
-        $components = $config->getComponenets();
+        $components = RegisterManager::getInstance()->getComponenets();
         $needsAuth = true;
         
         switch(strtoupper($request->translateAction()))
@@ -499,6 +511,11 @@ class Controller
             exit;
         }
     }
+    /**
+     * Check if the page will be redirecting once done
+     * 
+     * @return boolean
+     */
     public function isRedirecting()
     {
         return !empty($this->redirect);

@@ -20,20 +20,18 @@ $websiteroot = dirname(__FILE__);
 try
 {
     require_once '../core/init.inc';
-    import("libs/class.BBCodeParser.inc");
-    $string = <<<STR
-hello
-asdf
-asdf
-
-
-asdf
-asdf
-
-asdf
-[youtube]http://www.youtube.com/watch?v=2AmrYC56kxg[/youtube]
+    import("libs/class.Installhelper.inc");
+    $h = new InstallHelper();
+    
+    $emptyTable = <<<STR
+<?xml version="1.0" encoding="UTF-8"?>
+<sqldata lastVersion="1"> 
+  <table name="pages" />
+  <data />
+</sqldata>
 STR;
-    echo BBCodeParser::parse($string);
+    //var_dump($h->dumpTable("pages", $emptyTable));
+    var_dump($h->dumpTable("pages", file_get_contents(getFrameworkRoot()."/components/page/db/install.xml")));
 }
 catch(NotInstalledException $e)
 {

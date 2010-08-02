@@ -16,14 +16,14 @@ import('/core/class.Component.inc');
 
 /**
  * Component that allowes for group based authentication, rather then user based
- * 
+ *
  * @author Yannick <yannick.l.88@gmail.com>
  */
 class GroupsComponent extends Component implements AuthComponent
 {
     /**
      * Constructor
-     * 
+     *
      * @return unknown_type
      */
     public function __construct()
@@ -31,8 +31,25 @@ class GroupsComponent extends Component implements AuthComponent
         parent::__construct('groups');
     }
     /**
+     * (non-PHPdoc)
+     * @see core/Component::register()
+     *
+     * @param RegisterManager $registerManager
+     */
+    public function register($registerManager)
+    {
+        $registerManager->registerHook($this->component, "users", "post", "add", "useradd");
+        $registerManager->registerHook($this->component, "users", "post", "delete", "userdel");
+        
+        //admin pages
+        $registerManager->registerPage("index", "/admin/", '{"welcomeadmin"|text}');
+        $registerManager->registerPage("index", "/admin/core/", '{form component="core" form="layout"}');
+        $registerManager->registerPage("index", "/admin/core/", '{form component="core" form="components"}');
+        $registerManager->registerPage("index", "/admin/core/", '{form component="core" form="auth"}');
+    }
+    /**
      * Action to add an group
-     * 
+     *
      * @param Smarty $smarty
      * @param SmartyPageLoader $smartyLoader
      * @param array $request
@@ -42,20 +59,20 @@ class GroupsComponent extends Component implements AuthComponent
         if($request['method'] == 'post')
         {
             $id = Table::init('groups.groups')
-                ->setRecord((object) $request)
-                ->doInsert();
-            
+            ->setRecord((object) $request)
+            ->doInsert();
+
             foreach($request['users'] as $user)
             {
                 Table::init('groups.usersgroups')->setRecord((object) array("user_id" => $user, "group_id" => $id))->doInsert();
             }
-            
+
             $this->redirect("/".Config::get('groupsadmin', 'groupsadmin', 'admin'));
         }
     }
     /**
      * Action to edit an group
-     * 
+     *
      * @param Smarty $smarty
      * @param SmartyPageLoader $smartyLoader
      * @param array $request
@@ -65,21 +82,21 @@ class GroupsComponent extends Component implements AuthComponent
         if($request['method'] == 'post')
         {
             Table::init('groups.groups')
-                ->setRecord((object) $request)
-                ->doUpdate();
-            
+            ->setRecord((object) $request)
+            ->doUpdate();
+
             //update the usersgroups references
             Table::init('groups.usersgroups')
-                ->setRequest((object) $request)
-                ->doDelete();
-            
+            ->setRequest((object) $request)
+            ->doDelete();
+
             foreach($request['users'] as $user)
             {
                 Table::init('groups.usersgroups')
-                    ->setRecord((object) array("user_id" => $user, "group_id" => $request['group_id']))
-                    ->doInsert();
+                ->setRecord((object) array("user_id" => $user, "group_id" => $request['group_id']))
+                ->doInsert();
             }
-            
+
             $this->redirect("/".Config::get('groupsadmin', 'groupsadmin', 'admin'));
         }
         else
@@ -87,18 +104,18 @@ class GroupsComponent extends Component implements AuthComponent
             if($request['group_id'])
             {
                 $users = Table::init('groups.groups')
-                    ->setRequest((object) array("showusers" => true, 'group_id' => $request['group_id']))
-                    ->doSelect()
-                    ->getRows();
-                    
+                ->setRequest((object) array("showusers" => true, 'group_id' => $request['group_id']))
+                ->doSelect()
+                ->getRows();
+
                 $request['group_users'] = array();
                 foreach($users as $user)
                 {
                     $request['group_users'][$user->user_id] = $user;
                 }
-                
+
                 Table::init('groups.groups')
-                    ->setRequest((object) $request);
+                ->setRequest((object) $request);
             }
             else
             {
@@ -108,7 +125,7 @@ class GroupsComponent extends Component implements AuthComponent
     }
     /**
      * Action to delete an group
-     * 
+     *
      * @param Smarty $smarty
      * @param SmartyPageLoader $smartyLoader
      * @param array $request
@@ -118,13 +135,13 @@ class GroupsComponent extends Component implements AuthComponent
         if($request['method'] == 'post')
         {
             Table::init('groups.groups')
-                ->setRequest((object) $request)
-                ->doDelete();
-            
+            ->setRequest((object) $request)
+            ->doDelete();
+
             Table::init('groups.usersgroups')
-                ->setRequest((object) (object) array("group_id" => $request["group_id"]))
-                ->doDelete();
-            
+            ->setRequest((object) (object) array("group_id" => $request["group_id"]))
+            ->doDelete();
+
             $this->redirect("/".Config::get('groupsadmin', 'groupsadmin', 'admin'));
         }
         else
@@ -132,7 +149,7 @@ class GroupsComponent extends Component implements AuthComponent
             if($request['group_id'])
             {
                 Table::init('groups.groups')
-                    ->setRequest((object) $request);
+                ->setRequest((object) $request);
             }
             else
             {
@@ -142,7 +159,7 @@ class GroupsComponent extends Component implements AuthComponent
     }
     /**
      * Request a list of privilages a given groups has
-     * 
+     *
      * @param int $privileges
      * @param array $preset     Set of privilages already assigned
      * @return array
@@ -150,10 +167,10 @@ class GroupsComponent extends Component implements AuthComponent
     public function getPrivilageMapping($privileges, $preset = array())
     {
         $privilages = Table::init('users.privileges')
-            ->doSelect()
-            ->getRows();
+        ->doSelect()
+        ->getRows();
         $rights = $preset;
-        
+
         foreach($privilages as $privilage)
         {
             if(!isset($preset[$privilage->privilege_name]) || !$preset[$privilage->privilege_name])
@@ -161,12 +178,12 @@ class GroupsComponent extends Component implements AuthComponent
                 $rights[$privilage->privilege_name] = Config::hasFlag((int) $privileges, $privilage->privilege_int);
             }
         }
-        
+
         return $rights;
     }
     /**
      * Log a user in with crendtials
-     * 
+     *
      * @param string $user_name
      * @param string $user_pass
      * @return boolean
@@ -174,10 +191,10 @@ class GroupsComponent extends Component implements AuthComponent
     public function auth_login($user_name, $user_pass)
     {
         $record = Table::init('users.users')
-            ->setRequest((object) array("user_name" => $user_name))
-            ->doSelect()
-            ->getRow();
-        
+        ->setRequest((object) array("user_name" => $user_name))
+        ->doSelect()
+        ->getRow();
+
         if(!empty($record) && $record->user_pass['password'] == sha1($record->user_pass['salt'].$user_pass))
         {
             //set the session
@@ -185,19 +202,19 @@ class GroupsComponent extends Component implements AuthComponent
             $_SESSION['usr']['user_name'] = $user_name;
             $_SESSION['usr']['user_pass'] = $user_pass;
             $_SESSION['usr']['auth'] = array();
-            
+
             $records = Table::init('groups.groups')
-                ->setRequest((object) array("user_id" => $record->user_id))
-                ->doSelect()
-                ->getRows();
-        
+            ->setRequest((object) array("user_id" => $record->user_id))
+            ->doSelect()
+            ->getRows();
+
             foreach($records as $record)
             {
                 $_SESSION['usr']['auth'] = $this->getPrivilageMapping($record->group_privileges, $_SESSION['usr']['auth']);
             }
             return true;
         }
-        
+
         return false;
     }
     /**
@@ -207,12 +224,12 @@ class GroupsComponent extends Component implements AuthComponent
     {
         $_SESSION['usr'] = null;
         session_destroy();
-        
+
         return true;
     }
     /**
      * Hook to add a reference of a user when it is deleted in the user component
-     * 
+     *
      * @param Smarty $smarty
      * @param array $request
      * @return boolean
@@ -222,17 +239,17 @@ class GroupsComponent extends Component implements AuthComponent
         if($request['method'] == 'post')
         {
             Table::init('groups.usersgroups')
-                ->setRecord((object) array(
+            ->setRecord((object) array(
                     "group_id" => Config::get('defaultgroup', 2, 'groups'), 
                     "user_id" => Table::init('users.users')->getInsertedID()
-                ))
-                ->doInsert();
+            ))
+            ->doInsert();
         }
         return true;
     }
     /**
      * Hook to delete a reference of a user when it is deleted in the user component
-     * 
+     *
      * @param Smarty $smarty
      * @param array $request
      * @return boolean
@@ -242,8 +259,8 @@ class GroupsComponent extends Component implements AuthComponent
         if($request['method'] == 'post')
         {
             Table::init('groups.usersgroups')
-                ->setRequest((object) $request)
-                ->doDelete();
+            ->setRequest((object) $request)
+            ->doDelete();
         }
         return true;
     }

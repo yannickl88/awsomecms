@@ -26,6 +26,7 @@ set_error_handler("handleError");
 import('/libs/smarty/Smarty.class.php');
 import('/core/class.SQL.inc');
 import('/core/class.Config.inc');
+import('/core/class.RegisterManager.inc');
 import('/core/class.SmartyPageLoader.inc');
 import('/core/class.Controller.inc');
 import('/core/class.Authentication.inc');

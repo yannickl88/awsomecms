@@ -21,5 +21,5 @@
 */
 function smarty_modifier_installed($element)
 {
-    return Config::getInstance()->isComponentInstalled($element);
+    return RegisterManager::getInstance()->hasComponent($element);
 }

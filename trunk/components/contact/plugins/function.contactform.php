@@ -25,7 +25,7 @@ function smarty_function_contactform($params, &$smarty)
 {
     $html = '';
 
-    $components = Config::getInstance()->getComponenets();
+    $components = RegisterManager::getInstance()->getComponenets();
     
     $form = Table::init("contact.forms")
         ->setRequest((object) array("form_name" => $params['form']))

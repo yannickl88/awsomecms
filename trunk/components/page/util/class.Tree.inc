@@ -71,7 +71,7 @@ class Tree
         $this->addChild($contentroot);
         $this->addChild($sitetroot);
         
-        $components = Config::getInstance()->getComponenets();
+        $components = RegisterManager::getInstance()->getComponenets();
         
         foreach($components as $component)
         {
