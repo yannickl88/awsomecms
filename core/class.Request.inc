@@ -93,8 +93,8 @@ class Request
             else
             {
                 //set the default actions
-                $urls = Config::getInstance()->getURLMapping();
-                list($this->component, $this->action) = $urls->getMapping($this->url, $this->data);
+                $manager = RegisterManager::getInstance();
+                list($this->component, $this->action) = $manager->getURLMap($this->url, $this->data);
             }
         }
     }

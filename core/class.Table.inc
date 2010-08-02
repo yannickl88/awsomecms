@@ -132,7 +132,7 @@ abstract class Table
                 self::$tables = array();
             }
             
-            $components = Config::getInstance()->getComponenets();
+            $components = RegisterManager::getInstance()->getComponenets();
             
             $tableID = explode(".", $table);
             

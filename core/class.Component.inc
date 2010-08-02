@@ -16,17 +16,17 @@ import('/core/class.InvalidFormException.inc');
 
 /**
  * Superclass for all the components
- * 
+ *
  * @author Yannick <yannick.l.88@gmail.com>
  */
 class Component
 {
     private static $components;
-    
+
     protected $component;
     protected $request;
     protected $currentTable;
-    
+
     /**
      * constructor
      *
@@ -37,7 +37,7 @@ class Component
         $this->component = $component;
         $this->request = $component;
         $this->multiTable = false;
-        
+
         if(!isset($this->fields))
         {
             $this->fields = array();
@@ -61,29 +61,56 @@ class Component
             {
                 Component::$components = array();
             }
-            
-            $components = Config::getInstance()->getComponenets();
-            
-            $className = ucfirst($component)."Component";
-            $loc = $components[$component]->component_path.'/class.'.$className.'.inc';
-            
-            Debugger::getInstance()->log("Creating Component '{$className}'");
-            
-            if(file_exists($loc) && array_key_exists($component, $components))
+
+            $components = RegisterManager::getInstance()->getComponenets();
+            if(array_key_exists($component, $components))
             {
-                include_once $loc;
-                
-                $obj = new $className();
-                Component::$components[$component] = $obj;
-                
-                return $obj;
+                try
+                {
+                    return self::createComponent($component, $components[$component]->component_path);
+                }
+                catch(Exception $e)
+                {
+                    Debugger::getInstance()->log($e->getMessage());
+                }
             }
             else
             {
-                Debugger::getInstance()->log("Cannot find Component file for '{$className}'");
-                Component::$components[$component] = false;
-                return false;
+                Debugger::getInstance()->log("Cannot find Component file for '{$component}'");
             }
+            Component::$components[$component] = false;
+            return false;
+        }
+    }
+    /**
+     * Create a component instance based on the name and the path
+     * 
+     * NOTE: do not use this, use Component::init(). 
+     *       Only use this to resolve ciclur reference from the register manager
+     * @throws Exception
+     * @param String $name
+     * @param String $path
+     * @return Component
+     */
+    public static function createComponent($name, $path)
+    {
+        $className = ucfirst($name)."Component";
+        $loc = $path.'/class.'.$className.'.inc';
+
+        Debugger::getInstance()->log("Creating Component '{$className}'");
+
+        if(file_exists($loc) )
+        {
+            include_once $loc;
+
+            $obj = new $className();
+            Component::$components[$name] = $obj;
+
+            return $obj;
+        }
+        else
+        {
+            throw new Exception("Cannot find Component file for '{$className}'");
         }
     }
     /**
@@ -104,7 +131,7 @@ class Component
     protected function redirect($url, $data = array())
     {
         $query = '';
-        
+
         foreach($data as $key => $item)
         {
             if($query == '')
@@ -115,12 +142,12 @@ class Component
             {
                 $query .= '&';
             }
-            
+
             $query .= $key.'='.$item;
         }
-        
+
         $url .= $query;
-        
+
         Controller::getInstance()->setRedirect($url);
     }
     /**
@@ -137,13 +164,13 @@ class Component
     /**
      * Get the fields for this component
      * @deprecated Use tables
-     * 
+     *
      * @return array
      */
     protected function getFields()
     {
         Debugger::getInstance()->warning('Depricated ::getFields(), use the table to specifie the table layout');
-        
+
         if($this->multiTable)
         {
             if(isset($this->currentTable) && array_key_exists($this->currentTable, $this->fields))
@@ -164,28 +191,33 @@ class Component
     /**
      * Set the current table to be validated against
      * @deprecated Use tables
-     * 
+     *
      * @param string $table
      */
     protected function setCurrentTable($table)
     {
         Debugger::getInstance()->warning('Depricated ::setCurrentTable(), use the table to specifie the table layout');
-        
+
         $this->currentTable = $table;
     }
     /**
      * Register menu items for this component
-     * 
+     *
      * @param Menu $menu
      */
     public function registerMenuItems($menu) { }
     /**
      * Register tree items for this component
-     * 
+     *
      * @param Tree $tree
      */
     public function registerTreeItems($tree) { }
-    public function registerURLMap($map) { }
+    /**
+     * Register actions/hooks/mappings to the framework
+     *
+     * @param RegisterManager $registerManager
+     */
+    public function register($registerManager) { }
     /**
      * Execute a task for the cron. This called in the interval secified in the config files.
      */

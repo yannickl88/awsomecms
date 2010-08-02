@@ -25,7 +25,7 @@ function smarty_function_form($params, &$smarty)
     $html = '';
 
     $config = Config::getInstance();
-    $components = $config->getComponenets();
+    $components = RegisterManager::getInstance()->getComponenets();
     $component;
     $table;
     
@@ -59,8 +59,8 @@ function smarty_function_form($params, &$smarty)
     }
     
     $actionHandler = "action_".$action;
-    $prehook = Config::getInstance()->getHook($component, $params['form'], "pre");
-    $posthook = Config::getInstance()->getHook($component, $params['form'], "post");
+    $prehook = RegisterManager::getInstance()->getHook($component, $params['form'], "pre");
+    $posthook = RegisterManager::getInstance()->getHook($component, $params['form'], "post");
     
     if($componentObject)
     {

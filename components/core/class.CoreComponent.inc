@@ -12,8 +12,8 @@
  *
  * @version $Revision$
  */
-import('/core/class.Component.inc');
-import('/components/core/util/class.InstallHelper.inc');
+import('core/class.Component.inc');
+import('libs/class.InstallHelper.inc');
 
 /**
  * Core component class, this includes all the logic for the core actions
@@ -26,6 +26,22 @@ class CoreComponent extends Component
     public function __construct()
     {
         parent::__construct('core');
+    }
+    /**
+     * (non-PHPdoc)
+     * @see core/Component::register()
+     * 
+     * @param RegisterManager $registerManager
+     */
+    public function register($registerManager)
+    {
+        $registerManager->registerURLMap('\/(.*)', 'core.index', 0);
+        
+        //admin pages
+        $registerManager->registerPage("index", "/admin/", '{"welcomeadmin"|text}');
+        $registerManager->registerPage("index", "/admin/core/", '{form component="core" form="layout"}');
+        $registerManager->registerPage("index", "/admin/core/", '{form component="core" form="components"}');
+        $registerManager->registerPage("index", "/admin/core/", '{form component="core" form="auth"}');
     }
     /**
      * Index action, this is used when a page is shown by the cms
@@ -167,7 +183,7 @@ class CoreComponent extends Component
             if(isset($request['updateComponent']))
             {
                 //components
-                $components = Config::getInstance()->getComponenets();
+                $components = RegisterManager::getInstance()->getComponenets();
                 $component = $components[$request['updateComponent']];
                 $component_name = $component->component_name;
                 
@@ -234,7 +250,7 @@ class CoreComponent extends Component
     {
         if($request['method'] == 'post')
         {
-            $components = Config::getComponenets();
+            $components = RegisterManager::getComponenets();
             
             foreach($components as $component)
             {
@@ -285,7 +301,7 @@ class CoreComponent extends Component
             
             $smarty->assign("framework", $framework);
             
-            $components = Config::getInstance()->getComponenets();
+            $components = RegisterManager::getInstance()->getComponenets();
             
             foreach($components as $component)
             {
@@ -359,7 +375,7 @@ class CoreComponent extends Component
     }
     public function action_auth($smarty, $smartyLoader, $request)
     {
-        $components = Config::getInstance()->getComponenets();
+        $components = RegisterManager::getInstance()->getComponenets();
         
         if($request['method'] == 'post')
         {
@@ -446,13 +462,5 @@ class CoreComponent extends Component
         $menu->addChild(new MenuItem("layoutmaps", Config::get('corelayout', 'corelayout', 'admin'), "system"));
         $menu->addChild(new MenuItem("components", Config::get('corecomponents', 'corecomponents', 'admin'), "system"));
         $menu->addChild(new MenuItem("auth", Config::get('coreauth', 'coreauth', 'admin'), "system"));
-    }
-    /**
-     * (non-PHPdoc)
-     * @see core/Component#registerURLMap($map)
-     */
-    public function registerURLMap($map)
-    {
-        $map->addMap('\/(.*)', 'core.index', 0);
     }
 }

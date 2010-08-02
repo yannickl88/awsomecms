@@ -8,7 +8,7 @@ $websiteroot = dirname(__FILE__);
 
 require_once '../core/init.inc';
 
-$components = Config::getInstance()->getComponenets();
+$components = RegisterManager::getInstance()->getComponenets();
 ?>
 <html>
     <head>

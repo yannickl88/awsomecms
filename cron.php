@@ -20,7 +20,7 @@ require_once $websiteroot.'/../core/class.Cache.inc';
 require_once $websiteroot.'/../libs/class.CronParser.inc';
 
 Debugger::getInstance()->setType(Debugger::CLI);
-$components = Config::getInstance()->getComponenets();
+$components = RegisterManager::getInstance()->getComponenets();
 
 $now = $lastrun = time();
 if(Cache::has("cron"))

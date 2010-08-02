@@ -14,15 +14,15 @@
  */
 import("libs/class.BBCodeParser.inc");
 
-/** 
- * Exception thrown when a page could not be found 
- * 
+/**
+ * Exception thrown when a page could not be found
+ *
  * @author Yannick <yannick.l.88@gmail.com>
- */ 
+ */
 class PageNotFoundExeption extends Exception {}
 /**
  * Exception to be triggered when the framework is not properly installed (No components)
- * 
+ *
  * @author Yannick <yannick.l.88@gmail.com>
  */
 class NotInstalledException extends Exception {}
@@ -34,7 +34,7 @@ class NotInstalledException extends Exception {}
 class SmartyPageLoader
 {
     private $timestamps;
-    
+
     /**
      * constructor
      */
@@ -52,7 +52,7 @@ class SmartyPageLoader
     public function getPage($url, $smarty_obj)
     {
         $forceDefaultLayout = false;
-        
+
         //check if there is an install DIR
         $note = Notifications::getInstance();
         if(file_exists(Config::get("websiteroot", "/")."/install") && Config::get("doNotCheckInstall", true))
@@ -70,12 +70,12 @@ class SmartyPageLoader
         {
             $note->removeNotification("*","installnotremoved");
         }
-        
+
         if(preg_match('/(.*)\/$/i', $url) === 1 || $url == '')
         {
             $url .= 'index';
         }
-        
+
         try
         {
             if(Config::get('needslogin', false, 'admin') && $smarty_obj->getTemplateVars('isADMIN') === true && !(isset($_SESSION['usr']) && $_SESSION['usr']['auth']['admin'] === true))
@@ -83,19 +83,19 @@ class SmartyPageLoader
                 $url = Config::get('login', '', 'admin');
                 $smarty_obj->assign("URL", $url); //reassign the URL var
             }
-            
+
             $page = $smarty_obj->fetch("scf:{$url}");
         }
         catch(PageNotFoundExeption $e)
         {
             $page = null;
         }
-        
+
         return $this->getRenderedPage($page, $url, $smarty_obj);
     }
     /**
      * Get the page with the rendered page with the layout wraped around it
-     * 
+     *
      * @param string $content
      * @param string $url
      * @param Smarty $smarty_obj
@@ -107,7 +107,7 @@ class SmartyPageLoader
         {
             //set header
             header("HTTP/1.0 404 Not Found");
-            
+
             try
             {
                 $content = $smarty_obj->fetch("404.tpl");
@@ -117,11 +117,11 @@ class SmartyPageLoader
                 $content = "404 - PAGE NOT FOUND";
             }
         }
-        
+
         if($smarty_obj->getTemplateVars('LAYOUT') != null) //check if layout was set from withing a page
         {
             $template = $smarty_obj->getTemplateVars('LAYOUT');
-            
+
             if($template == "json")
             {
                 header('Content-type: application/json');
@@ -135,14 +135,14 @@ class SmartyPageLoader
         elseif(file_exists("{$smarty_obj->template_dir}/layout.tpl")) //check for layout file
         {
             $smarty_obj->assign('content', $content);
-            
+
             if(file_exists("{$smarty_obj->template_dir}/{$url}.tpl"))
             {
                 $smarty_obj->assign('content', $smarty_obj->fetch("{$url}.tpl"));
             }
-            
+
             $robotmap = Config::get('robots', array());
-            
+
             foreach($robotmap as $map)
             {
                 if(preg_match("/".$map."/i", $_SERVER['HTTP_USER_AGENT']) > 0)
@@ -153,7 +153,7 @@ class SmartyPageLoader
             }
 
             $layoutmap = Config::get('layoutmap', array());
-            
+
             foreach($layoutmap as $map)
             {
                 if(preg_match("/^".$map[0]."$/", "/".$url) > 0)
@@ -161,7 +161,7 @@ class SmartyPageLoader
                     return $smarty_obj->fetch($map[1]);
                 }
             }
-            
+
             //no layout fond so we fallback to the default
             return $smarty_obj->fetch("layout.tpl");
         }
@@ -183,36 +183,47 @@ class SmartyPageLoader
         $pageArray = explode('/', $tpl_name);
         $pageName = array_pop($pageArray);
         $pageLocation = implode('/', $pageArray);
-        
+
         if($pageLocation != '')
         {
             $pageLocation .= '/';
         }
         
-        $result = SQLQuery::doSelect()
-                    ->table('pages')
-                    ->where('page_name', $pageName)
-                    ->where('page_location', '/'.$pageLocation)
-                    ->exec();
-        
-        if($result->count() > 0) 
+        //check registered pages first
+        if(RegisterManager::getInstance()->hasPage($pageName, '/'.$pageLocation))
         {
-            // cache template timestamp
-            $this->timestamps[$tpl_name] = strtotime($result->record->page_timestamp);
+            $page = RegisterManager::getInstance()->getPage($pageName, '/'.$pageLocation);
             
-            $smarty_obj->assign('PAGE', $result->record);
-            
-            if(!$result->record->page_html)
-                $tpl_source = BBCodeParser::parse($result->record->page_template);
-            else
-                $tpl_source = $result->record->page_template;
-            
+            $tpl_source = $page[0];
             return true;
-        } 
-        else 
+        }
+        else
         {
-            throw new PageNotFoundExeption("Page not found '{$tpl_name}'");
-            return false;
+            $result = SQLQuery::doSelect()
+            ->table('pages')
+            ->where('page_name', $pageName)
+            ->where('page_location', '/'.$pageLocation)
+            ->exec();
+
+            if($result->count() > 0)
+            {
+                // cache template timestamp
+                $this->timestamps[$tpl_name] = strtotime($result->record->page_timestamp);
+
+                $smarty_obj->assign('PAGE', $result->record);
+
+                if(!$result->record->page_html)
+                $tpl_source = BBCodeParser::parse($result->record->page_template);
+                else
+                $tpl_source = $result->record->page_template;
+
+                return true;
+            }
+            else
+            {
+                throw new PageNotFoundExeption("Page not found '{$tpl_name}'");
+                return false;
+            }
         }
     }
     /**
@@ -236,33 +247,44 @@ class SmartyPageLoader
             $pageArray = explode('/', $tpl_name);
             $pageName = array_pop($pageArray);
             $pageLocation = implode('/', $pageArray);
-            
+
             if($pageLocation != '')
             {
                 $pageLocation .= '/';
             }
             
-            $result = SQLQuery::doSelect()
-                    ->table('pages')
-                    ->where('page_name', $pageName)
-                    ->where('page_location', '/'.$pageLocation)
-                    ->exec();
-            
-            if($result->count() > 0)
+            //check registered pages first
+            if(RegisterManager::getInstance()->hasPage($pageName, '/'.$pageLocation))
             {
-                // cache template timestamp
-                $this->timestamps[$tpl_name] = strtotime($result->record->page_timestamp);
-                
-                $tpl_timestamp = $this->timestamps[$tpl_name];
+                $page = RegisterManager::getInstance()->getPage($pageName, '/'.$pageLocation);
+
+                $tpl_timestamp = $page[1];
                 return true;
-            } 
-            else 
+            }
+            else
             {
-                throw new PageNotFoundExeption("Page not found '{$tpl_name}'");
-                return false;
-            } 
+                $result = SQLQuery::doSelect()
+                ->table('pages')
+                ->where('page_name', $pageName)
+                ->where('page_location', '/'.$pageLocation)
+                ->exec();
+
+                if($result->count() > 0)
+                {
+                    // cache template timestamp
+                    $this->timestamps[$tpl_name] = strtotime($result->record->page_timestamp);
+
+                    $tpl_timestamp = $this->timestamps[$tpl_name];
+                    return true;
+                }
+                else
+                {
+                    throw new PageNotFoundExeption("Page not found '{$tpl_name}'");
+                    return false;
+                }
+            }
         }
-        
+
     }
     /**
      * check if the template is secure
@@ -296,31 +318,31 @@ class SmartyPageLoader
     {
         try
         {
-            $modules = Config::getInstance()->getComponenets();
+            $modules = RegisterManager::getInstance()->getComponenets();
         }
         catch(SQLExeption $e)
         {
             // something went wrong getting the components, must not be installed
             throw new NotInstalledException();
         }
-        
+
         if(count($modules) == 0)
         {
             throw new NotInstalledException();
         }
-        
+
         foreach($modules as $module => $component)
         {
             $pluginDir = $component->component_path.'/plugins/';
-            
+
             if(file_exists($pluginDir))
             {
                 $plugins = scandir($pluginDir);
-                
+
                 foreach($plugins as $plugin)
                 {
                     $matches = array();
-                    
+
                     if(preg_match('/^function\.(.*)\.php$/', $plugin, $matches))
                     {
                         require_once $pluginDir.'/'.$plugin;
