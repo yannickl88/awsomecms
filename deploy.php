@@ -87,14 +87,14 @@ class Usage extends CLIAction
         $cli->output("Options:");
         $cli->output("action       help, update, pack, alpha, beta, stable, release");
         $cli->output("  help       This text");
-        $cli->output("  update     Update");
+        $cli->output("  update     Create a set of update packages");
         $cli->output("  pack       Pack the site into an archve which can be send");
         $cli->output("  alpha      Create an alpha release package");
         $cli->output("  beta       Create a beta release package");
         $cli->output("  stable     Create a stable release package");
         $cli->output("  release    Create a release release package");
         $cli->output("  patch      Update the database according to the new install files");
-        $cli->output("u            Upload data, only in Update made");
+        $cli->output("u            Upload data, only in combination with the Update action");
         $cli->output("v            Verbose mode");
         $cli->output("");
         $cli->output("Usage:");
@@ -106,6 +106,8 @@ class Usage extends CLIAction
         $cli->output("             To create the update packages and directly upload them");
         $cli->output("php -f deploy.php pack");
         $cli->output("             To create a package of the current site for transport");
+        $cli->output("php -f deploy.php patch");
+        $cli->output("             Apply any changes that need to be made to the db");
         $cli->output("");
     }
 }
