@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<sqldata>
+  <table name="groups">
+    <field xml:id="group_id" pk="1">
+      <name>group_id</name>
+      <type>int(11)</type>
+      <value null="0"></value>
+      <extra>auto_increment</extra>
+    </field>
+    <field xml:id="group_name">
+      <name>group_name</name>
+      <type>varchar(100)</type>
+      <value null="0"></value>
+      <extra></extra>
+    </field>
+    <field xml:id="group_privileges">
+      <name>group_privileges</name>
+      <type>int(11)</type>
+      <value null="0"></value>
+      <extra></extra>
+    </field>
+    <data>
+      <entry>
+        <group_name>admin</group_name>
+        <group_privileges>1</group_privileges>
+      </entry>
+      <entry>
+        <group_name>users</group_name>
+        <group_privileges>0</group_privileges>
+      </entry>
+    </data>
+  </table>
+  <table name="usersgroups">
+    <field xml:id="group_id" pk="1">
+      <name>group_id</name>
+      <type>int(11)</type>
+      <value null="0"></value>
+      <extra></extra>
+    </field>
+    <field xml:id="user_id" pk="1">
+      <name>user_id</name>
+      <type>int(11)</type>
+      <value null="0"></value>
+      <extra></extra>
+    </field>
+    <data>
+      <entry>
+        <group_id>1</group_id>
+        <user_id>1</user_id>
+      </entry>
+      <entry>
+        <group_id>2</group_id>
+        <user_id>1</user_id>
+      </entry>
+    </data>
+  </table>
+</sqldata>

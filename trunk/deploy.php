@@ -19,6 +19,8 @@ import('core/class.Config.inc');
 import('libs/class.FTP.inc');
 import('libs/class.InstallHelper.inc');
 import('libs/class.CLI.inc');
+import('core/class.SQL.inc');
+
 
 //actions
 abstract class DeployAction extends CLIAction
@@ -165,6 +167,7 @@ class Update extends DeployAction
         $h = $this->helper;
         $location = $this->location;
         $versions = array();
+        $upload = $cli->getArg("u");
 
         $cli->output("Creating core archive");
 
@@ -173,24 +176,29 @@ class Update extends DeployAction
             $cli->os->join($location,"docs"),
             $cli->os->join($location,"libs"))
         );
-
+        $cli->output(".", true);
         //copy the core files
         $h->rcopy($cli->os->join($location,"core"), $cli->os->join($location,"RELEASES","tmp","core"));
         $h->rcopy($cli->os->join($location,'docs'), $cli->os->join($location,"RELEASES","tmp","docs"));
         $h->rcopy($cli->os->join($location,"libs"), $cli->os->join($location,"RELEASES","tmp","libs"));
+        $cli->output(".", true);
         $h->rcopy($cli->os->join($location,"index.php"), $cli->os->join($location,"RELEASES","tmp","index.php"));
         $h->rcopy($cli->os->join($location,"cron.php"), $cli->os->join($location,"RELEASES","tmp","cron.php"));
+        $cli->output(".", true);
 
         $h->dir2zip($cli->os->join($location,"RELEASES","tmp"), $cli->os->join($location,"RELEASES","framework.zip"));
         $versions["components"] = array();
+        $cli->output(".", true);
 
         //cleanup
         $h->clearDir($cli->os->join($location,"RELEASES","tmp"));
+        $cli->output(".", true);
 
         //create zips for all components
         $components = scandir($cli->os->join($location,"components"));
         $componentsList = array();
 
+        $cli->output(".", true);
         foreach($components as $component)
         {
             if($component != '.' && $component != '..' && $component != '.svn')
@@ -213,7 +221,6 @@ class Update extends DeployAction
                 //cleanup
                 $h->clearDir($cli->os->join($location,"RELEASES","tmp",$component));
                 rmdir($cli->os->join($location,"RELEASES","tmp",$component));
-                $cli->output(".", true, $verbose);
 
                 $componentsList[$component] = array("name" => $component, "version" => $versions["components"][$component]);
 
@@ -224,10 +231,12 @@ class Update extends DeployAction
                 }
             }
         }
-
+        $cli->output(".", true);
         //create version file
         file_put_contents($cli->os->join($location,"RELEASES","version.json"), json_encode($versions));
+        $cli->output(".", true);
         file_put_contents($cli->os->join($location,"RELEASES","components","components.json"), json_encode($componentsList));
+        $cli->output(".", true);
 
         if($upload)
         {
@@ -312,11 +321,12 @@ class Release extends DeployAction
         {
             if($component != '.' && $component != '..' && $component != '.svn')
             {
+                $h->generateInstallFiles($cli->os->join($location,"components",$component));
                 $compversion = $h->getHightestRevNumber($cli->os->join($location,"components",$component));
 
                 $infoContent = file_get_contents($cli->os->join($location,"RELEASES","tmp","components",$component, $component.".info"));
                 $infoContent = preg_replace("/@version: ?([1-9]*)/", "@version:".$compversion, $infoContent);
-
+                
                 file_put_contents($cli->os->join($location,"RELEASES","tmp","components",$component,$component.".info"), $infoContent);
             }
         }

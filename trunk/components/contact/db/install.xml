@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<sqldata>
+  <table name="form_fields">
+    <field xml:id="field_id" pk="1">
+      <name>field_id</name>
+      <type>int(11)</type>
+      <value null="0"></value>
+      <extra>auto_increment</extra>
+    </field>
+    <field xml:id="field_form">
+      <name>field_form</name>
+      <type>int(11)</type>
+      <value null="0"></value>
+      <extra></extra>
+    </field>
+    <field xml:id="field_name">
+      <name>field_name</name>
+      <type>varchar(100)</type>
+      <value null="0"></value>
+      <extra></extra>
+    </field>
+    <field xml:id="field_code">
+      <name>field_code</name>
+      <type>varchar(100)</type>
+      <value null="0"></value>
+      <extra></extra>
+    </field>
+    <field xml:id="field_type">
+      <name>field_type</name>
+      <type>tinyint(4)</type>
+      <value null="0"></value>
+      <extra></extra>
+    </field>
+    <field xml:id="field_required">
+      <name>field_required</name>
+      <type>tinyint(4)</type>
+      <value null="0"></value>
+      <extra></extra>
+    </field>
+    <data/>
+  </table>
+  <table name="forms">
+    <field xml:id="form_id" pk="1">
+      <name>form_id</name>
+      <type>int(11)</type>
+      <value null="0"></value>
+      <extra>auto_increment</extra>
+    </field>
+    <field xml:id="form_name">
+      <name>form_name</name>
+      <type>varchar(100)</type>
+      <value null="0"></value>
+      <extra></extra>
+    </field>
+    <field xml:id="form_to">
+      <name>form_to</name>
+      <type>varchar(100)</type>
+      <value null="0"></value>
+      <extra></extra>
+    </field>
+    <field xml:id="form_bcc">
+      <name>form_bcc</name>
+      <type>varchar(100)</type>
+      <value null="0"></value>
+      <extra></extra>
+    </field>
+    <field xml:id="form_subject">
+      <name>form_subject</name>
+      <type>varchar(100)</type>
+      <value null="0"></value>
+      <extra></extra>
+    </field>
+    <field xml:id="form_thanks">
+      <name>form_thanks</name>
+      <type>varchar(100)</type>
+      <value null="0"></value>
+      <extra></extra>
+    </field>
+    <data/>
+  </table>
+</sqldata>

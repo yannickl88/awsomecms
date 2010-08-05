@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<sqldata>
+  <table name="comments">
+    <field xml:id="comment_id" pk="1">
+      <name>comment_id</name>
+      <type>int(11)</type>
+      <value null="0"></value>
+      <extra>auto_increment</extra>
+    </field>
+    <field xml:id="comment_text">
+      <name>comment_text</name>
+      <type>text</type>
+      <value null="0"></value>
+      <extra></extra>
+    </field>
+    <field xml:id="comment_username">
+      <name>comment_username</name>
+      <type>varchar(100)</type>
+      <value null="0"></value>
+      <extra></extra>
+    </field>
+    <field xml:id="comment_hook">
+      <name>comment_hook</name>
+      <type>varchar(255)</type>
+      <value null="0"></value>
+      <extra></extra>
+    </field>
+    <field xml:id="comment_time">
+      <name>comment_time</name>
+      <type>datetime</type>
+      <value null="0"></value>
+      <extra></extra>
+    </field>
+    <data/>
+  </table>
+</sqldata>
