@@ -907,7 +907,7 @@ class InstallHelper
         if(isset($infoFile['tabels']))
         {
             $xmlFile = $location."/db/install.xml";
-            file_put_contents($xmlFile, $this->dumpTable($oldFileContent, $infoFile['tabels']));
+            file_put_contents($xmlFile, $this->dumpTable($infoFile['tabels']));
         }
     }
 }
