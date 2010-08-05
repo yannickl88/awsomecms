@@ -4,20 +4,20 @@
     <field xml:id="gallery_id" pk="1">
       <name>gallery_id</name>
       <type>int(11)</type>
-      <value null="0"></value>
+      <value null="0"/>
       <extra>auto_increment</extra>
     </field>
     <field xml:id="gallery_name">
       <name>gallery_name</name>
       <type>varchar(100)</type>
-      <value null="0"></value>
-      <extra></extra>
+      <value null="0"/>
+      <extra/>
     </field>
     <field xml:id="gallery_images">
       <name>gallery_images</name>
       <type>text</type>
-      <value null="0"></value>
-      <extra></extra>
+      <value null="0"/>
+      <extra/>
     </field>
     <data/>
   </table>

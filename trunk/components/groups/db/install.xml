@@ -4,20 +4,20 @@
     <field xml:id="group_id" pk="1">
       <name>group_id</name>
       <type>int(11)</type>
-      <value null="0"></value>
+      <value null="0"/>
       <extra>auto_increment</extra>
     </field>
     <field xml:id="group_name">
       <name>group_name</name>
       <type>varchar(100)</type>
-      <value null="0"></value>
-      <extra></extra>
+      <value null="0"/>
+      <extra/>
     </field>
     <field xml:id="group_privileges">
       <name>group_privileges</name>
       <type>int(11)</type>
-      <value null="0"></value>
-      <extra></extra>
+      <value null="0"/>
+      <extra/>
     </field>
     <data>
       <entry>
@@ -40,8 +40,8 @@
     <field xml:id="user_id" pk="1">
       <name>user_id</name>
       <type>int(11)</type>
-      <value null="0"></value>
-      <extra></extra>
+      <value null="0"/>
+      <extra/>
     </field>
     <data>
       <entry>

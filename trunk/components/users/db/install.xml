@@ -4,26 +4,26 @@
     <field xml:id="user_id" pk="1">
       <name>user_id</name>
       <type>int(11)</type>
-      <value null="0"></value>
+      <value null="0"/>
       <extra>auto_increment</extra>
     </field>
     <field xml:id="user_name">
       <name>user_name</name>
       <type>varchar(100)</type>
-      <value null="0"></value>
-      <extra></extra>
+      <value null="0"/>
+      <extra/>
     </field>
     <field xml:id="user_pass">
       <name>user_pass</name>
       <type>varchar(150)</type>
-      <value null="0"></value>
-      <extra></extra>
+      <value null="0"/>
+      <extra/>
     </field>
     <field xml:id="user_privileges">
       <name>user_privileges</name>
       <type>bigint(20)</type>
-      <value null="0"></value>
-      <extra></extra>
+      <value null="0"/>
+      <extra/>
     </field>
     <data>
       <entry>
@@ -37,26 +37,26 @@
     <field xml:id="privilege_id" pk="1">
       <name>privilege_id</name>
       <type>int(11)</type>
-      <value null="0"></value>
+      <value null="0"/>
       <extra>auto_increment</extra>
     </field>
     <field xml:id="privilege_name">
       <name>privilege_name</name>
       <type>varchar(100)</type>
-      <value null="0"></value>
-      <extra></extra>
+      <value null="0"/>
+      <extra/>
     </field>
     <field xml:id="privilege_int">
       <name>privilege_int</name>
       <type>bigint(20)</type>
-      <value null="0"></value>
-      <extra></extra>
+      <value null="0"/>
+      <extra/>
     </field>
     <field xml:id="privilege_locked">
       <name>privilege_locked</name>
       <type>tinyint(4)</type>
-      <value null="0">0</value>
-      <extra></extra>
+      <value null="0"/>
+      <extra/>
     </field>
     <data>
       <entry>

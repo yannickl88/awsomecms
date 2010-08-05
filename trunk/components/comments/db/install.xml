@@ -4,32 +4,32 @@
     <field xml:id="comment_id" pk="1">
       <name>comment_id</name>
       <type>int(11)</type>
-      <value null="0"></value>
+      <value null="0"/>
       <extra>auto_increment</extra>
     </field>
     <field xml:id="comment_text">
       <name>comment_text</name>
       <type>text</type>
-      <value null="0"></value>
-      <extra></extra>
+      <value null="0"/>
+      <extra/>
     </field>
     <field xml:id="comment_username">
       <name>comment_username</name>
       <type>varchar(100)</type>
-      <value null="0"></value>
-      <extra></extra>
+      <value null="0"/>
+      <extra/>
     </field>
     <field xml:id="comment_hook">
       <name>comment_hook</name>
       <type>varchar(255)</type>
-      <value null="0"></value>
-      <extra></extra>
+      <value null="0"/>
+      <extra/>
     </field>
     <field xml:id="comment_time">
       <name>comment_time</name>
       <type>datetime</type>
-      <value null="0"></value>
-      <extra></extra>
+      <value null="0"/>
+      <extra/>
     </field>
     <data/>
   </table>

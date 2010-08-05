@@ -12,7 +12,7 @@
  *
  * @version $Revision$
  */
-
+import("core/class.Cache.inc");
 /**
  * Manager for registering components, hooks, mappings and pages dynamicly
  * 

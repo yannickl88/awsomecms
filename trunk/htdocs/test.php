@@ -26,12 +26,10 @@ try
     $emptyTable = <<<STR
 <?xml version="1.0" encoding="UTF-8"?>
 <sqldata lastVersion="1"> 
-  <table name="pages" />
-  <data />
 </sqldata>
 STR;
-    //var_dump($h->dumpTable("pages", $emptyTable));
-    var_dump($h->dumpTable("pages", file_get_contents(getFrameworkRoot()."/components/page/db/install.xml")));
+    var_dump($h->dumpTable($emptyTable, array("pages:nodata")));
+    //var_dump($h->loadTable(file_get_contents(getFrameworkRoot()."/components/core/db/install.xml")));
 }
 catch(NotInstalledException $e)
 {
