@@ -4,38 +4,38 @@
     <field xml:id="page_id" pk="1">
       <name>page_id</name>
       <type>int(11)</type>
-      <value null="0"></value>
+      <value null="0"/>
       <extra>auto_increment</extra>
     </field>
     <field xml:id="page_name">
       <name>page_name</name>
       <type>varchar(100)</type>
-      <value null="0"></value>
-      <extra></extra>
+      <value null="0"/>
+      <extra/>
     </field>
     <field xml:id="page_location">
       <name>page_location</name>
       <type>varchar(255)</type>
-      <value null="0"></value>
-      <extra></extra>
+      <value null="0"/>
+      <extra/>
     </field>
     <field xml:id="page_template">
       <name>page_template</name>
       <type>text</type>
-      <value null="0"></value>
-      <extra></extra>
+      <value null="0"/>
+      <extra/>
     </field>
     <field xml:id="page_timestamp">
       <name>page_timestamp</name>
       <type>datetime</type>
-      <value null="0"></value>
-      <extra></extra>
+      <value null="0"/>
+      <extra/>
     </field>
     <field xml:id="page_html">
       <name>page_html</name>
       <type>tinyint(4)</type>
       <value null="0">1</value>
-      <extra></extra>
+      <extra/>
     </field>
     <data>
       <entry>

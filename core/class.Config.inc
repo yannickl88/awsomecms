@@ -12,7 +12,6 @@
  *
  * @version $Revision$
  */
-import("core/class.Cache.inc");
 
 /**
  * Configuration class, this is used to retrive all the data from seperate config files
@@ -56,6 +55,16 @@ class Config
     private function __construct()
     {
         $this->fillData();
+    }
+    /**
+     * Inject data into the config. This can be used to add data to the 
+     * config while there is no config file to read yet.
+     * 
+     * @param Array $data
+     */
+    public function inject($data)
+    {
+        $this->data = array_merge_recursive($this->data, $data);
     }
     /**
      * Populate the config from the ini files

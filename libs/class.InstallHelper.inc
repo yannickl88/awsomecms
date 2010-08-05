@@ -14,6 +14,62 @@
  */
 
 /**
+ * Wrapper for the table info in the info files, these can contain options
+ * 
+ * @author Yannick <yannick.l.88@gmail.com>
+ */
+class TableInfo
+{
+    private $name;
+    private $options;
+    /**
+     * Constructor
+     * 
+     * @param String $ID
+     */
+    public function __construct($ID)
+    {
+        if(strpos($ID, ":") !== false)
+        {
+            $this->name = substr($ID, 0, strpos($ID, ":"));
+            $this->options = explode("|", substr($ID, strpos($ID, ":") + 1));
+        }
+        else
+        {
+            $this->name = $ID;
+            $this->options = array();
+        }
+    }
+    /**
+     * Check if an option was set
+     * 
+     * @param String $key
+     * @return Boolean
+     */
+    public function hasOption($key)
+    {
+        return in_array($key, $this->options);
+    }
+    /**
+     * Get the name of the table
+     * 
+     * @return String
+     */
+    public function getName()
+    {
+        return $this->__toString();
+    }
+    /**
+     * To String, this is called when cast to string
+     * 
+     * @return String
+     */
+    public function __toString()
+    {
+        return $this->name;
+    }
+}
+/**
  * Helper class for installing and managing components
  * 
  * @author Yannick <yannick.l.88@gmail.com>
@@ -288,7 +344,7 @@ class InstallHelper
                 
                 $body .= "{$section} = {$items}\n";
             }
-            elseif(is_numeric_keys($items))
+            elseif($this->is_numeric_keys($items))
             {
                 foreach($items as $key => $value)
                 {
@@ -462,20 +518,18 @@ class InstallHelper
      * @param String $oldFileContent
      * @param String $tables
      */
-    public function dumpTable($oldFileContent, $tables = array())
+    public function dumpTable($tables = array())
     {
         //Load the old file
-        $domOld = new DOMDocument();
-        $domOld->loadXML($oldFileContent);
-        
         $dom = new DOMDocument('1.0', 'utf-8');
         $dom->formatOutput = true;
         $root = $dom->appendChild($dom->createElement("sqldata"));
         
-        foreach($tables as $table)
+        foreach($tables as $tableID)
         {
+            $table = new TableInfo($tableID);
             $tableRoot = $dom->createElement("table");
-            $tableRoot->setAttribute("name", $table);
+            $tableRoot->setAttribute("name", $table->getName());
             
             $rows = array();
             $idField = '';
@@ -490,62 +544,44 @@ class InstallHelper
                     $idField = $row->Field;
                 }
                 
-                $field = $domOld->getElementById($row->Field);
-                
-                if($field != null && $this->isNotChanged($field, $row))
+
+                $field = $dom->createElement("field");
+                $field->setAttribute("xml:id", $row->Field);
+                $field->appendChild($dom->createElement("name", $row->Field));
+                //pk?
+                if($row->Key == "PRI")
                 {
-                    $tableRoot->appendChild($dom->importNode($field, true));
+                    $field->setAttribute("pk", true);
+                    if($row->Extra == "auto_increment")
+                    {
+                        $idField = $row->Field;
+                    }
+                }
+                //type
+                $type = $dom->createElement("type", $row->Type);
+                $field->appendChild($type);
+                //defaultvalue
+                $value = $dom->createElement("value", $row->Default);
+                if($row->Null == "YES")
+                {
+                    $value->setAttribute("null", 1);
                 }
                 else
                 {
-                    $field = $dom->createElement("field");
-                    $field->setAttribute("xml:id", $row->Field);
-                    $field->appendChild($dom->createElement("name", $row->Field));
-                    //pk?
-                    if($row->Key == "PRI")
-                    {
-                        $field->setAttribute("pk", true);
-                        if($row->Extra == "auto_increment")
-                        {
-                            $idField = $row->Field;
-                        }
-                    }
-                    //type
-                    $type = $dom->createElement("type", $row->Type);
-                    $field->appendChild($type);
-                    //defaultvalue
-                    $value = $dom->createElement("value", $row->Default);
-                    if($row->Null == "YES")
-                    {
-                        $value->setAttribute("null", 1);
-                    }
-                    else
-                    {
-                        $value->setAttribute("null", 0);
-                    }
-                    $field->appendChild($value);
-                    $field->appendChild($dom->createElement("extra", $row->Extra));
-                    
-                    $tableRoot->appendChild($field);
+                    $value->setAttribute("null", 0);
                 }
+                $field->appendChild($value);
+                $field->appendChild($dom->createElement("extra", $row->Extra));
+                
+                $tableRoot->appendChild($field);
             }
             
             $dataRoot = $dom->createElement("data");
-            $values = SQL::getInstance()->query("SELECT * FROM `{$table}`;");
-            
-            while($row = $values->getRow())
+            if(!$table->hasOption("nodata"))
             {
-                $data = false;
-                if(!empty($idField))
-                {
-                    $data = $domOld->getElementById($idField."-".$row->$idField);
-                }
+                $values = SQL::getInstance()->query("SELECT * FROM `{$table}`;");
                 
-                if($data)
-                {
-                    $dataRoot->appendChild($dom->importNode($data, true));
-                }
-                else
+                while($row = $values->getRow())
                 {
                     $data = $dom->createElement("entry");
                     
@@ -588,7 +624,8 @@ class InstallHelper
                 $query = "CREATE TABLE `{$tableName}` (\n";
                 $fieldsSQL = array();
                 $primaryKeys = array();
-                foreach($table->getElementsByTagName("field") as $field)
+                $fields = $table->getElementsByTagName("field");
+                foreach($fields as $count => $field)
                 {
                     $fieldName = $field->getElementsByTagName("name")->item(0)->nodeValue;
                     if($field->hasAttribute("pk") && $field->getAttribute("pk") === "1")
@@ -604,13 +641,17 @@ class InstallHelper
                     if(!$fieldNull) $query .= " NOT NULL";
                     if(!empty($fieldValue)) $query .= " DEFAULT \"{$fieldValue}\"";
                     if(!empty($fieldExtra)) $query .= " {$fieldExtra}";
-                    $query .= ", \n";
+                    if($count < $fields->length - 1)
+                    {
+                        $query .= ", \n";
+                    }
                     
                     $fieldsSQL[] = $fieldName;
                 }
                 if(count($primaryKeys) > 0)
                 {
                     array_walk($primaryKeys, create_function('&$i,$k', '$i = "`{$i}`";'));
+                    $query .= ", \n";
                     $query .= "  PRIMARY KEY (".implode(",", $primaryKeys).")\n";
                 }
                 $query .= ")";
@@ -723,7 +764,7 @@ class InstallHelper
      * @param String $dest
      * @param String $zip
      */
-    function raddFileToZip($source, $dest, $zip)
+    public function raddFileToZip($source, $dest, $zip)
     {
         if(is_dir($source))
         {
@@ -755,7 +796,7 @@ class InstallHelper
      * @param String $source
      * @param array $exlude
      */
-    function clearDir($source, $exlude = array())
+    public function clearDir($source, $exlude = array())
     {
         $files = scandir($source);
         
@@ -788,7 +829,7 @@ class InstallHelper
      * @param String $dest      zip archive, will be created if not exists
      * @return boolean
      */
-    function dir2zip($source, $dest)
+    public function dir2zip($source, $dest)
     {
         $ds = DIRECTORY_SEPARATOR;
         $zip = new ZipArchive();
@@ -824,7 +865,7 @@ class InstallHelper
      * @param String $source
      * @return int
      */
-    function getHightestRevNumber($source)
+    public function getHightestRevNumber($source)
     {
         if(is_array($source))
         {
@@ -859,28 +900,13 @@ class InstallHelper
      * 
      * @param String $components
      */
-    function generateInstallFiles($location)
+    public function generateInstallFiles($location)
     {
         $infoFile = parse_ini_file($location."/info.ini");
         
         if(isset($infoFile['tabels']))
         {
             $xmlFile = $location."/db/install.xml";
-            if(file_exists($xmlFile) && false)
-            {
-                $oldFileContent = file_get_contents($xmlFile);
-            }
-            else
-            {
-                $oldFileContent = <<<STR
-<?xml version="1.0" encoding="UTF-8"?>
-<sqldata lastVersion="1"> 
-  <table name="pages" />
-  <data />
-</sqldata>
-STR;
-            }
-            
             file_put_contents($xmlFile, $this->dumpTable($oldFileContent, $infoFile['tabels']));
         }
     }

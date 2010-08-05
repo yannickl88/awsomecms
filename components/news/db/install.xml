@@ -4,62 +4,62 @@
     <field xml:id="news_id" pk="1">
       <name>news_id</name>
       <type>int(11)</type>
-      <value null="0"></value>
+      <value null="0"/>
       <extra>auto_increment</extra>
     </field>
     <field xml:id="news_title">
       <name>news_title</name>
       <type>varchar(200)</type>
-      <value null="0"></value>
-      <extra></extra>
+      <value null="0"/>
+      <extra/>
     </field>
     <field xml:id="news_titleurl">
       <name>news_titleurl</name>
       <type>varchar(250)</type>
-      <value null="0"></value>
-      <extra></extra>
+      <value null="0"/>
+      <extra/>
     </field>
     <field xml:id="news_user">
       <name>news_user</name>
       <type>int(11)</type>
-      <value null="0"></value>
-      <extra></extra>
+      <value null="0"/>
+      <extra/>
     </field>
     <field xml:id="news_text">
       <name>news_text</name>
       <type>text</type>
-      <value null="0"></value>
-      <extra></extra>
+      <value null="0"/>
+      <extra/>
     </field>
     <field xml:id="news_tag">
       <name>news_tag</name>
       <type>varchar(50)</type>
-      <value null="0"></value>
-      <extra></extra>
+      <value null="0"/>
+      <extra/>
     </field>
     <field xml:id="news_date">
       <name>news_date</name>
       <type>date</type>
-      <value null="0"></value>
-      <extra></extra>
+      <value null="0"/>
+      <extra/>
     </field>
     <field xml:id="news_external">
       <name>news_external</name>
       <type>tinyint(4)</type>
-      <value null="0">0</value>
-      <extra></extra>
+      <value null="0"/>
+      <extra/>
     </field>
     <field xml:id="news_extsite">
       <name>news_extsite</name>
       <type>varchar(50)</type>
-      <value null="0"></value>
-      <extra></extra>
+      <value null="0"/>
+      <extra/>
     </field>
     <field xml:id="news_extlink">
       <name>news_extlink</name>
       <type>varchar(200)</type>
-      <value null="1"></value>
-      <extra></extra>
+      <value null="1"/>
+      <extra/>
     </field>
     <data/>
   </table>
