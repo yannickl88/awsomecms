@@ -1,1 +1,0 @@
-INSERT INTO `pages` (`page_name`, `page_location`, `page_template`, `page_timestamp`) VALUES('login', '/admin/', '{form component=''users'' form=''admin_login''}', NOW());

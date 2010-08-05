@@ -135,9 +135,7 @@ class CLI
             $className = $this->actions[$this->action];
             $actionObj = new $className();
             $actionObj->setup($this);
-            try {
-                $actionObj->exec($this, $this->action);
-            } catch(Exception $e) { }
+            $actionObj->exec($this, $this->action);
             $actionObj->cleanup($this);
         }
         else

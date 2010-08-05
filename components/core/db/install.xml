@@ -1,0 +1,378 @@
+<?xml version="1.0" encoding="utf-8"?>
+<sqldata>
+  <table name="components">
+    <field xml:id="component_name" pk="1">
+      <name>component_name</name>
+      <type>varchar(50)</type>
+      <value null="0"></value>
+      <extra></extra>
+    </field>
+    <field xml:id="component_path">
+      <name>component_path</name>
+      <type>varchar(255)</type>
+      <value null="0"></value>
+      <extra></extra>
+    </field>
+    <field xml:id="component_auth">
+      <name>component_auth</name>
+      <type>int(11)</type>
+      <value null="0"></value>
+      <extra></extra>
+    </field>
+    <field xml:id="component_patchlevel">
+      <name>component_patchlevel</name>
+      <type>int(11)</type>
+      <value null="0"></value>
+      <extra></extra>
+    </field>
+    <field xml:id="component_version">
+      <name>component_version</name>
+      <type>varchar(50)</type>
+      <value null="0"></value>
+      <extra></extra>
+    </field>
+    <field xml:id="component_updateurl">
+      <name>component_updateurl</name>
+      <type>varchar(200)</type>
+      <value null="0"></value>
+      <extra></extra>
+    </field>
+    <data>
+      <entry>
+        <component_name>core</component_name>
+        <component_path></component_path>
+        <component_auth>15</component_auth>
+        <component_patchlevel>5</component_patchlevel>
+        <component_version>1</component_version>
+        <component_updateurl></component_updateurl>
+      </entry>
+      <entry>
+        <component_name>comments</component_name>
+        <component_path></component_path>
+        <component_auth>15</component_auth>
+        <component_patchlevel>0</component_patchlevel>
+        <component_version>1</component_version>
+        <component_updateurl></component_updateurl>
+      </entry>
+      <entry>
+        <component_name>contact</component_name>
+        <component_path></component_path>
+        <component_auth>15</component_auth>
+        <component_patchlevel>0</component_patchlevel>
+        <component_version>1</component_version>
+        <component_updateurl></component_updateurl>
+      </entry>
+      <entry>
+        <component_name>file</component_name>
+        <component_path></component_path>
+        <component_auth>15</component_auth>
+        <component_patchlevel>0</component_patchlevel>
+        <component_version>1</component_version>
+        <component_updateurl></component_updateurl>
+      </entry>
+      <entry>
+        <component_name>gallery</component_name>
+        <component_path></component_path>
+        <component_auth>15</component_auth>
+        <component_patchlevel>2</component_patchlevel>
+        <component_version>1</component_version>
+        <component_updateurl></component_updateurl>
+      </entry>
+      <entry>
+        <component_name>groups</component_name>
+        <component_path></component_path>
+        <component_auth>15</component_auth>
+        <component_patchlevel>1</component_patchlevel>
+        <component_version>1</component_version>
+        <component_updateurl></component_updateurl>
+      </entry>
+      <entry>
+        <component_name>hyves</component_name>
+        <component_path></component_path>
+        <component_auth>15</component_auth>
+        <component_patchlevel>0</component_patchlevel>
+        <component_version>1</component_version>
+        <component_updateurl></component_updateurl>
+      </entry>
+      <entry>
+        <component_name>news</component_name>
+        <component_path></component_path>
+        <component_auth>15</component_auth>
+        <component_patchlevel>4</component_patchlevel>
+        <component_version>1</component_version>
+        <component_updateurl></component_updateurl>
+      </entry>
+      <entry>
+        <component_name>page</component_name>
+        <component_path></component_path>
+        <component_auth>15</component_auth>
+        <component_patchlevel>4</component_patchlevel>
+        <component_version>1</component_version>
+        <component_updateurl></component_updateurl>
+      </entry>
+      <entry>
+        <component_name>twitter</component_name>
+        <component_path></component_path>
+        <component_auth>15</component_auth>
+        <component_patchlevel>0</component_patchlevel>
+        <component_version>1</component_version>
+        <component_updateurl></component_updateurl>
+      </entry>
+      <entry>
+        <component_name>users</component_name>
+        <component_path></component_path>
+        <component_auth>15</component_auth>
+        <component_patchlevel>3</component_patchlevel>
+        <component_version>1</component_version>
+        <component_updateurl></component_updateurl>
+      </entry>
+    </data>
+  </table>
+  <table name="auth">
+    <field xml:id="auth_component">
+      <name>auth_component</name>
+      <type>varchar(50)</type>
+      <value null="0"></value>
+      <extra></extra>
+    </field>
+    <field xml:id="auth_action">
+      <name>auth_action</name>
+      <type>varchar(50)</type>
+      <value null="0"></value>
+      <extra></extra>
+    </field>
+    <field xml:id="auth_privilage">
+      <name>auth_privilage</name>
+      <type>varchar(50)</type>
+      <value null="0"></value>
+      <extra></extra>
+    </field>
+    <data>
+      <entry>
+        <auth_component>core</auth_component>
+        <auth_action>action_auth</auth_action>
+        <auth_privilage>admin</auth_privilage>
+      </entry>
+      <entry>
+        <auth_component>core</auth_component>
+        <auth_action>action_components</auth_action>
+        <auth_privilage>admin</auth_privilage>
+      </entry>
+      <entry>
+        <auth_component>core</auth_component>
+        <auth_action>action_install</auth_action>
+        <auth_privilage>admin</auth_privilage>
+      </entry>
+      <entry>
+        <auth_component>core</auth_component>
+        <auth_action>action_layout</auth_action>
+        <auth_privilage>admin</auth_privilage>
+      </entry>
+      <entry>
+        <auth_component>core</auth_component>
+        <auth_action>action_update</auth_action>
+        <auth_privilage>admin</auth_privilage>
+      </entry>
+      <entry>
+        <auth_component>contact</auth_component>
+        <auth_action>action_add</auth_action>
+        <auth_privilage>admin</auth_privilage>
+      </entry>
+      <entry>
+        <auth_component>contact</auth_component>
+        <auth_action>action_delete</auth_action>
+        <auth_privilage>admin</auth_privilage>
+      </entry>
+      <entry>
+        <auth_component>contact</auth_component>
+        <auth_action>action_edit</auth_action>
+        <auth_privilage>admin</auth_privilage>
+      </entry>
+      <entry>
+        <auth_component>file</auth_component>
+        <auth_action>action_add</auth_action>
+        <auth_privilage>admin</auth_privilage>
+      </entry>
+      <entry>
+        <auth_component>file</auth_component>
+        <auth_action>action_delete</auth_action>
+        <auth_privilage>admin</auth_privilage>
+      </entry>
+      <entry>
+        <auth_component>file</auth_component>
+        <auth_action>action_edit</auth_action>
+        <auth_privilage>admin</auth_privilage>
+      </entry>
+      <entry>
+        <auth_component>file</auth_component>
+        <auth_action>action_upload</auth_action>
+        <auth_privilage>admin</auth_privilage>
+      </entry>
+      <entry>
+        <auth_component>gallery</auth_component>
+        <auth_action>action_add</auth_action>
+        <auth_privilage>admin</auth_privilage>
+      </entry>
+      <entry>
+        <auth_component>gallery</auth_component>
+        <auth_action>action_delete</auth_action>
+        <auth_privilage>admin</auth_privilage>
+      </entry>
+      <entry>
+        <auth_component>gallery</auth_component>
+        <auth_action>action_edit</auth_action>
+        <auth_privilage>admin</auth_privilage>
+      </entry>
+      <entry>
+        <auth_component>groups</auth_component>
+        <auth_action>action_add</auth_action>
+        <auth_privilage>admin</auth_privilage>
+      </entry>
+      <entry>
+        <auth_component>groups</auth_component>
+        <auth_action>action_delete</auth_action>
+        <auth_privilage>admin</auth_privilage>
+      </entry>
+      <entry>
+        <auth_component>groups</auth_component>
+        <auth_action>action_edit</auth_action>
+        <auth_privilage>admin</auth_privilage>
+      </entry>
+      <entry>
+        <auth_component>news</auth_component>
+        <auth_action>action_add</auth_action>
+        <auth_privilage>admin</auth_privilage>
+      </entry>
+      <entry>
+        <auth_component>news</auth_component>
+        <auth_action>action_delete</auth_action>
+        <auth_privilage>admin</auth_privilage>
+      </entry>
+      <entry>
+        <auth_component>news</auth_component>
+        <auth_action>action_edit</auth_action>
+        <auth_privilage>admin</auth_privilage>
+      </entry>
+      <entry>
+        <auth_component>page</auth_component>
+        <auth_action>action_add</auth_action>
+        <auth_privilage>admin</auth_privilage>
+      </entry>
+      <entry>
+        <auth_component>page</auth_component>
+        <auth_action>action_delete</auth_action>
+        <auth_privilage>admin</auth_privilage>
+      </entry>
+      <entry>
+        <auth_component>page</auth_component>
+        <auth_action>action_edit</auth_action>
+        <auth_privilage>admin</auth_privilage>
+      </entry>
+      <entry>
+        <auth_component>users</auth_component>
+        <auth_action>action_add</auth_action>
+        <auth_privilage>admin</auth_privilage>
+      </entry>
+      <entry>
+        <auth_component>users</auth_component>
+        <auth_action>action_delete</auth_action>
+        <auth_privilage>admin</auth_privilage>
+      </entry>
+      <entry>
+        <auth_component>users</auth_component>
+        <auth_action>action_edit</auth_action>
+        <auth_privilage>admin</auth_privilage>
+      </entry>
+      <entry>
+        <auth_component>users</auth_component>
+        <auth_action>action_privadd</auth_action>
+        <auth_privilage>admin</auth_privilage>
+      </entry>
+      <entry>
+        <auth_component>users</auth_component>
+        <auth_action>action_privdelete</auth_action>
+        <auth_privilage>admin</auth_privilage>
+      </entry>
+      <entry>
+        <auth_component>users</auth_component>
+        <auth_action>action_privedit</auth_action>
+        <auth_privilage>admin</auth_privilage>
+      </entry>
+    </data>
+  </table>
+  <table name="search_items">
+    <field xml:id="item_id" pk="1">
+      <name>item_id</name>
+      <type>int(11)</type>
+      <value null="0"></value>
+      <extra>auto_increment</extra>
+    </field>
+    <field xml:id="item_link">
+      <name>item_link</name>
+      <type>varchar(200)</type>
+      <value null="0"></value>
+      <extra></extra>
+    </field>
+    <field xml:id="item_title">
+      <name>item_title</name>
+      <type>varchar(100)</type>
+      <value null="0"></value>
+      <extra></extra>
+    </field>
+    <field xml:id="item_checksum">
+      <name>item_checksum</name>
+      <type>varchar(50)</type>
+      <value null="0"></value>
+      <extra></extra>
+    </field>
+    <field xml:id="item_hook">
+      <name>item_hook</name>
+      <type>varchar(20)</type>
+      <value null="0"></value>
+      <extra></extra>
+    </field>
+    <data/>
+  </table>
+  <table name="search_refs">
+    <field xml:id="ref_word">
+      <name>ref_word</name>
+      <type>int(11)</type>
+      <value null="0"></value>
+      <extra></extra>
+    </field>
+    <field xml:id="ref_item">
+      <name>ref_item</name>
+      <type>int(11)</type>
+      <value null="0"></value>
+      <extra></extra>
+    </field>
+    <field xml:id="ref_count">
+      <name>ref_count</name>
+      <type>int(11)</type>
+      <value null="0"></value>
+      <extra></extra>
+    </field>
+    <field xml:id="ref_text">
+      <name>ref_text</name>
+      <type>varchar(100)</type>
+      <value null="0"></value>
+      <extra></extra>
+    </field>
+    <data/>
+  </table>
+  <table name="search_words">
+    <field xml:id="word_id">
+      <name>word_id</name>
+      <type>int(11)</type>
+      <value null="0"></value>
+      <extra></extra>
+    </field>
+    <field xml:id="word_word">
+      <name>word_word</name>
+      <type>varchar(100)</type>
+      <value null="0"></value>
+      <extra></extra>
+    </field>
+    <data/>
+  </table>
+</sqldata>

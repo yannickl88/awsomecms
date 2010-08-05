@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<sqldata>
+  <table name="users">
+    <field xml:id="user_id" pk="1">
+      <name>user_id</name>
+      <type>int(11)</type>
+      <value null="0"></value>
+      <extra>auto_increment</extra>
+    </field>
+    <field xml:id="user_name">
+      <name>user_name</name>
+      <type>varchar(100)</type>
+      <value null="0"></value>
+      <extra></extra>
+    </field>
+    <field xml:id="user_pass">
+      <name>user_pass</name>
+      <type>varchar(150)</type>
+      <value null="0"></value>
+      <extra></extra>
+    </field>
+    <field xml:id="user_privileges">
+      <name>user_privileges</name>
+      <type>bigint(20)</type>
+      <value null="0"></value>
+      <extra></extra>
+    </field>
+    <data>
+      <entry>
+        <user_name>admin</user_name>
+        <user_pass>a:2:{s:8:"password";s:40:"f88430b2bd2ee105810d924f3ea47a39d09b3c75";s:4:"salt";s:9:"UDRaaEuSY";}</user_pass>
+        <user_privileges>1</user_privileges>
+      </entry>
+    </data>
+  </table>
+  <table name="privileges">
+    <field xml:id="privilege_id" pk="1">
+      <name>privilege_id</name>
+      <type>int(11)</type>
+      <value null="0"></value>
+      <extra>auto_increment</extra>
+    </field>
+    <field xml:id="privilege_name">
+      <name>privilege_name</name>
+      <type>varchar(100)</type>
+      <value null="0"></value>
+      <extra></extra>
+    </field>
+    <field xml:id="privilege_int">
+      <name>privilege_int</name>
+      <type>bigint(20)</type>
+      <value null="0"></value>
+      <extra></extra>
+    </field>
+    <field xml:id="privilege_locked">
+      <name>privilege_locked</name>
+      <type>tinyint(4)</type>
+      <value null="0">0</value>
+      <extra></extra>
+    </field>
+    <data>
+      <entry>
+        <privilege_name>admin</privilege_name>
+        <privilege_int>1</privilege_int>
+        <privilege_locked>1</privilege_locked>
+      </entry>
+    </data>
+  </table>
+</sqldata>

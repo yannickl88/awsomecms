@@ -13,6 +13,7 @@
  * @version $Revision$
  */
 
+import('core/class.Debugger.inc');
 /**
  * SQLException when there was an error in executing a given Query
  * 
@@ -743,7 +744,7 @@ class SQLRecord
     
     private $index = 0;
     
-    public function __construct($record = null, $tables = null)
+    public function __construct($record = null, $tables = array())
     {
         $this->records = array();
         $this->record = null;
@@ -912,7 +913,7 @@ class SQL
     public function query($query)
     {
         $query_str = "";
-        $query_obj = null;
+        $query_obj = array();
         $request = null;
         $insert = false;
         

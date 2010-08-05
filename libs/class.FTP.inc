@@ -56,6 +56,11 @@ class FTP
         $username = Config::get("username", "", "ftp");
         $password = Config::get("password", "", "ftp");
         
+        if(empty($username) || empty($host) || empty($password))
+        {
+            throw new Exception("Login credentials are empty, please check your config");
+        }
+        
         $this->connection = ftp_connect($host); 
         $login_result = ftp_login($this->connection, $username, $password); 
 

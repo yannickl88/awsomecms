@@ -535,7 +535,13 @@ class InstallHelper
             
             while($row = $values->getRow())
             {
-                if($data = $domOld->getElementById($idField."-".$row->$idField))
+                $data = false;
+                if(!empty($idField))
+                {
+                    $data = $domOld->getElementById($idField."-".$row->$idField);
+                }
+                
+                if($data)
                 {
                     $dataRoot->appendChild($dom->importNode($data, true));
                 }
@@ -851,10 +857,31 @@ class InstallHelper
     /**
      * Generate the install XML's for each given component
      * 
-     * @param array $components
+     * @param String $components
      */
-    function generateInstallFiles($components)
+    function generateInstallFiles($location)
     {
+        $infoFile = parse_ini_file($location."/info.ini");
         
+        if(isset($infoFile['tabels']))
+        {
+            $xmlFile = $location."/db/install.xml";
+            if(file_exists($xmlFile) && false)
+            {
+                $oldFileContent = file_get_contents($xmlFile);
+            }
+            else
+            {
+                $oldFileContent = <<<STR
+<?xml version="1.0" encoding="UTF-8"?>
+<sqldata lastVersion="1"> 
+  <table name="pages" />
+  <data />
+</sqldata>
+STR;
+            }
+            
+            file_put_contents($xmlFile, $this->dumpTable($oldFileContent, $infoFile['tabels']));
+        }
     }
 }
