@@ -1,131 +1,131 @@
 <?xml version="1.0" encoding="utf-8"?>
 <sqldata>
   <table name="components">
-    <field xml:id="component_name" pk="1">
+    <field pk="1">
       <name>component_name</name>
       <type>varchar(50)</type>
-      <value null="0"/>
-      <extra/>
+      <value null="0"></value>
+      <extra></extra>
     </field>
-    <field xml:id="component_path">
+    <field>
       <name>component_path</name>
       <type>varchar(255)</type>
-      <value null="0"/>
-      <extra/>
+      <value null="0"></value>
+      <extra></extra>
     </field>
-    <field xml:id="component_auth">
+    <field>
       <name>component_auth</name>
       <type>int(11)</type>
-      <value null="0"/>
-      <extra/>
+      <value null="0"></value>
+      <extra></extra>
     </field>
-    <field xml:id="component_version">
+    <field>
       <name>component_version</name>
       <type>varchar(50)</type>
-      <value null="0"/>
-      <extra/>
+      <value null="0"></value>
+      <extra></extra>
     </field>
-    <field xml:id="component_updateurl">
+    <field>
       <name>component_updateurl</name>
       <type>varchar(200)</type>
-      <value null="0"/>
-      <extra/>
+      <value null="0"></value>
+      <extra></extra>
     </field>
     <data/>
   </table>
   <table name="auth">
-    <field xml:id="auth_component">
+    <field>
       <name>auth_component</name>
       <type>varchar(50)</type>
-      <value null="0"/>
-      <extra/>
+      <value null="0"></value>
+      <extra></extra>
     </field>
-    <field xml:id="auth_action">
+    <field>
       <name>auth_action</name>
       <type>varchar(50)</type>
-      <value null="0"/>
-      <extra/>
+      <value null="0"></value>
+      <extra></extra>
     </field>
-    <field xml:id="auth_privilage">
+    <field>
       <name>auth_privilage</name>
       <type>varchar(50)</type>
-      <value null="0"/>
-      <extra/>
+      <value null="0"></value>
+      <extra></extra>
     </field>
     <data/>
   </table>
   <table name="search_items">
-    <field xml:id="item_id" pk="1">
+    <field pk="1">
       <name>item_id</name>
       <type>int(11)</type>
-      <value null="0"/>
+      <value null="0"></value>
       <extra>auto_increment</extra>
     </field>
-    <field xml:id="item_link">
+    <field>
       <name>item_link</name>
       <type>varchar(200)</type>
-      <value null="0"/>
-      <extra/>
+      <value null="0"></value>
+      <extra></extra>
     </field>
-    <field xml:id="item_title">
+    <field>
       <name>item_title</name>
       <type>varchar(100)</type>
-      <value null="0"/>
-      <extra/>
+      <value null="0"></value>
+      <extra></extra>
     </field>
-    <field xml:id="item_checksum">
+    <field>
       <name>item_checksum</name>
       <type>varchar(50)</type>
-      <value null="0"/>
-      <extra/>
+      <value null="0"></value>
+      <extra></extra>
     </field>
-    <field xml:id="item_hook">
+    <field>
       <name>item_hook</name>
       <type>varchar(20)</type>
-      <value null="0"/>
-      <extra/>
+      <value null="0"></value>
+      <extra></extra>
     </field>
     <data/>
   </table>
   <table name="search_refs">
-    <field xml:id="ref_word">
+    <field>
       <name>ref_word</name>
       <type>int(11)</type>
-      <value null="0"/>
-      <extra/>
+      <value null="0"></value>
+      <extra></extra>
     </field>
-    <field xml:id="ref_item">
+    <field>
       <name>ref_item</name>
       <type>int(11)</type>
-      <value null="0"/>
-      <extra/>
+      <value null="0"></value>
+      <extra></extra>
     </field>
-    <field xml:id="ref_count">
+    <field>
       <name>ref_count</name>
       <type>int(11)</type>
-      <value null="0"/>
-      <extra/>
+      <value null="0"></value>
+      <extra></extra>
     </field>
-    <field xml:id="ref_text">
+    <field>
       <name>ref_text</name>
       <type>varchar(100)</type>
-      <value null="0"/>
-      <extra/>
+      <value null="0"></value>
+      <extra></extra>
     </field>
     <data/>
   </table>
   <table name="search_words">
-    <field xml:id="word_id">
+    <field>
       <name>word_id</name>
       <type>int(11)</type>
-      <value null="0"/>
-      <extra/>
+      <value null="0"></value>
+      <extra></extra>
     </field>
-    <field xml:id="word_word">
+    <field>
       <name>word_word</name>
       <type>varchar(100)</type>
-      <value null="0"/>
-      <extra/>
+      <value null="0"></value>
+      <extra></extra>
     </field>
     <data/>
   </table>

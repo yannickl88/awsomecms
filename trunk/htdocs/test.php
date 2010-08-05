@@ -22,13 +22,7 @@ try
     require_once '../core/init.inc';
     import("libs/class.Installhelper.inc");
     $h = new InstallHelper();
-    
-    $emptyTable = <<<STR
-<?xml version="1.0" encoding="UTF-8"?>
-<sqldata lastVersion="1"> 
-</sqldata>
-STR;
-    var_dump($h->dumpTable($emptyTable, array("pages:nodata")));
+    var_dump($h->dumpTable(array("pages:nodata")));
     //var_dump($h->loadTable(file_get_contents(getFrameworkRoot()."/components/core/db/install.xml")));
 }
 catch(NotInstalledException $e)

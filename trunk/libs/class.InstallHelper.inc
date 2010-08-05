@@ -546,7 +546,6 @@ class InstallHelper
                 
 
                 $field = $dom->createElement("field");
-                $field->setAttribute("xml:id", $row->Field);
                 $field->appendChild($dom->createElement("name", $row->Field));
                 //pk?
                 if($row->Key == "PRI")
@@ -603,14 +602,17 @@ class InstallHelper
         return $dom->saveXML();
     }
     /**
-     * Sync a database file with the database
+     * Sync a database file with the database, returns true if there was 
+     * anything to sync, else false
      * 
      * @param String $content
+     * @return boolean
      */
     public function loadTable($content)
     {
         $dom = new DOMDocument();
         $dom->loadXML($content);
+        $execQuery = false;
         
         //check the tables
         foreach($dom->getElementsByTagName("table") as $table)
@@ -657,6 +659,7 @@ class InstallHelper
                 $query .= ")";
                 
                 SQL::getInstance()->query($query);
+                $execQuery = true;
                 
                 //insert data too :D
                 foreach($table->getElementsByTagName("data")->item(0)->getElementsByTagName("entry") as $data)
@@ -669,6 +672,7 @@ class InstallHelper
                         $query->insert($field, $value);
                     }
                     $query->exec();
+                    $execQuery = true;
                 }
             }
             else
@@ -704,6 +708,7 @@ class InstallHelper
                             $query .= ";";
                             
                             SQL::getInstance()->query($query);
+                            $execQuery = true;
                         }
                     }
                     else
@@ -720,6 +725,7 @@ class InstallHelper
                         $query .= ";";
                         
                         SQL::getInstance()->query($query);
+                        $execQuery = true;
                     }
                     
                     $fieldsDB[$fieldName] = $field;
@@ -729,10 +735,12 @@ class InstallHelper
                 {
                     $query = "ALTER TABLE `{$tableName}` DROP `{$fieldName}`;";
                     SQL::getInstance()->query($query);
+                    $execQuery = true;
                 }
             }
-            
         }
+        
+        return $execQuery;
     }
     /**
      * Check if a DOMElement and the field row from the DB have the same values

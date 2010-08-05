@@ -1,41 +1,41 @@
 <?xml version="1.0" encoding="utf-8"?>
 <sqldata>
   <table name="pages">
-    <field xml:id="page_id" pk="1">
+    <field pk="1">
       <name>page_id</name>
       <type>int(11)</type>
-      <value null="0"/>
+      <value null="0"></value>
       <extra>auto_increment</extra>
     </field>
-    <field xml:id="page_name">
+    <field>
       <name>page_name</name>
       <type>varchar(100)</type>
-      <value null="0"/>
-      <extra/>
+      <value null="0"></value>
+      <extra></extra>
     </field>
-    <field xml:id="page_location">
+    <field>
       <name>page_location</name>
       <type>varchar(255)</type>
-      <value null="0"/>
-      <extra/>
+      <value null="0"></value>
+      <extra></extra>
     </field>
-    <field xml:id="page_template">
+    <field>
       <name>page_template</name>
       <type>text</type>
-      <value null="0"/>
-      <extra/>
+      <value null="0"></value>
+      <extra></extra>
     </field>
-    <field xml:id="page_timestamp">
+    <field>
       <name>page_timestamp</name>
       <type>datetime</type>
-      <value null="0"/>
-      <extra/>
+      <value null="0"></value>
+      <extra></extra>
     </field>
-    <field xml:id="page_html">
+    <field>
       <name>page_html</name>
       <type>tinyint(4)</type>
       <value null="0">1</value>
-      <extra/>
+      <extra></extra>
     </field>
     <data>
       <entry>
@@ -44,7 +44,7 @@
         <page_template>&lt;h1&gt;Welcome&lt;/h1&gt;&#13;
 &lt;p&gt;Installation was a success&lt;/p&gt;</page_template>
         <page_timestamp>2010-08-01 15:52:32</page_timestamp>
-        <page_html>0</page_html>
+        <page_html>1</page_html>
       </entry>
     </data>
   </table>

@@ -1,41 +1,41 @@
 <?xml version="1.0" encoding="utf-8"?>
 <sqldata>
   <table name="files">
-    <field xml:id="file_id" pk="1">
+    <field pk="1">
       <name>file_id</name>
       <type>int(11)</type>
-      <value null="0"/>
+      <value null="0"></value>
       <extra>auto_increment</extra>
     </field>
-    <field xml:id="file_name">
+    <field>
       <name>file_name</name>
       <type>varchar(200)</type>
-      <value null="0"/>
-      <extra/>
+      <value null="0"></value>
+      <extra></extra>
     </field>
-    <field xml:id="file_data">
+    <field>
       <name>file_data</name>
       <type>text</type>
-      <value null="0"/>
-      <extra/>
+      <value null="0"></value>
+      <extra></extra>
     </field>
-    <field xml:id="file_date">
+    <field>
       <name>file_date</name>
       <type>date</type>
-      <value null="0"/>
-      <extra/>
+      <value null="0"></value>
+      <extra></extra>
     </field>
-    <field xml:id="file_tag">
+    <field>
       <name>file_tag</name>
       <type>varchar(255)</type>
-      <value null="0"/>
-      <extra/>
+      <value null="0"></value>
+      <extra></extra>
     </field>
-    <field xml:id="file_description">
+    <field>
       <name>file_description</name>
       <type>text</type>
-      <value null="0"/>
-      <extra/>
+      <value null="0"></value>
+      <extra></extra>
     </field>
     <data/>
   </table>

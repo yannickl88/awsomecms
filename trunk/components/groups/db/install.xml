@@ -1,23 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
 <sqldata>
   <table name="groups">
-    <field xml:id="group_id" pk="1">
+    <field pk="1">
       <name>group_id</name>
       <type>int(11)</type>
-      <value null="0"/>
+      <value null="0"></value>
       <extra>auto_increment</extra>
     </field>
-    <field xml:id="group_name">
+    <field>
       <name>group_name</name>
       <type>varchar(100)</type>
-      <value null="0"/>
-      <extra/>
+      <value null="0"></value>
+      <extra></extra>
     </field>
-    <field xml:id="group_privileges">
+    <field>
       <name>group_privileges</name>
       <type>int(11)</type>
-      <value null="0"/>
-      <extra/>
+      <value null="0"></value>
+      <extra></extra>
     </field>
     <data>
       <entry>
@@ -31,17 +31,17 @@
     </data>
   </table>
   <table name="usersgroups">
-    <field xml:id="group_id" pk="1">
+    <field pk="1">
       <name>group_id</name>
       <type>int(11)</type>
       <value null="0"></value>
       <extra></extra>
     </field>
-    <field xml:id="user_id" pk="1">
+    <field pk="1">
       <name>user_id</name>
       <type>int(11)</type>
-      <value null="0"/>
-      <extra/>
+      <value null="0"></value>
+      <extra></extra>
     </field>
     <data>
       <entry>
