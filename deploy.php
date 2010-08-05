@@ -85,7 +85,7 @@ class Usage extends CLIAction
         $cli->output("php -f deploy.php [action] [u] [v]");
         $cli->output("");
         $cli->output("Options:");
-        $cli->output("action       help, update, pack, alpha, beta, stable, release");
+        $cli->output("action       help, update, pack, alpha, beta, stable, release, patch");
         $cli->output("  help       This text");
         $cli->output("  update     Create a set of update packages");
         $cli->output("  pack       Pack the site into an archve which can be send");
