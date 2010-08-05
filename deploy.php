@@ -207,7 +207,7 @@ class Update extends DeployAction
                 {
                     mkdir($cli->os->join($location,"RELEASES","components"), 0777, true);
                 }
-
+                $h->generateInstallFiles($cli->os->join($location,"components",$component));
                 $versions["components"][$component] = $h->getHightestRevNumber($cli->os->join($location,"components",$component));
 
                 $h->rcopy($cli->os->join($location,"components",$component), $cli->os->join($location,"RELEASES","tmp",$component));
