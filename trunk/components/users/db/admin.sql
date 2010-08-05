@@ -1,8 +1,0 @@
-INSERT INTO `pages` (`page_name`, `page_location`, `page_template`, `page_timestamp`) VALUES('add', '/admin/users/', '{form table=''users.users'' form=''add''}', NOW());
-INSERT INTO `pages` (`page_name`, `page_location`, `page_template`, `page_timestamp`) VALUES('edit', '/admin/users/', '{form table=''users.users'' form=''edit''}', NOW());
-INSERT INTO `pages` (`page_name`, `page_location`, `page_template`, `page_timestamp`) VALUES('delete', '/admin/users/', '{form table=''users.users'' form=''delete''}', NOW());
-INSERT INTO `pages` (`page_name`, `page_location`, `page_template`, `page_timestamp`) VALUES('admin', '/admin/users/', '{form table=''users.users'' form=''admin''}', NOW());
-INSERT INTO `pages` (`page_name`, `page_location`, `page_template`, `page_timestamp`) VALUES('privadmin', '/admin/users/', '{form table=''users.privileges'' form=''admin''}', NOW());
-INSERT INTO `pages` (`page_name`, `page_location`, `page_template`, `page_timestamp`) VALUES('privadd', '/admin/users/', '{form table=''users.privileges'' form=''add''}<br />', NOW());
-INSERT INTO `pages` (`page_name`, `page_location`, `page_template`, `page_timestamp`) VALUES('privedit', '/admin/users/', '{form table=''users.privileges'' form=''edit''}', NOW());
-INSERT INTO `pages` (`page_name`, `page_location`, `page_template`, `page_timestamp`) VALUES('privdelete', '/admin/users/', '{form table=''users.privileges'' form=''delete''}', NOW());

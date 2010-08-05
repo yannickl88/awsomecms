@@ -3,7 +3,7 @@
     {"svnfoundexp"|text}
 {/if}
 <h3>{"installedcomp"|text}:</h3>
-<table class="admin_table">
+<table class="admin_table admin_core_components">
     <tr class="header">
         <th style="width: 100px;">{"framework"|text}</th>
         <th style="width: 100px;">{"status"|text}</th>
@@ -16,13 +16,17 @@
         <td style="vertical-align: top;" class="updateCell">
             {if $framework->disable}
                 {if $framework->SVN}
-                    <button type="button" disabled="disabled">{"svnfound"|text|ucfirst}</button>
+                    <a href="#"><img src="/img/icons/package_disabled.png" alt="{"svnfound"|text|ucfirst}" title="{"svnfound"|text|ucfirst}"/></a>
                 {else}
-                    <button type="button" disabled="disabled">{"update"|text|ucfirst}</button>
+                    <a href="#"><img src="/img/icons/package_disabled.png" alt="{"update"|text|ucfirst}" title="{"update"|text|ucfirst}"/></a>
                 {/if}
             {else}
                 <img src="/img/admin/{if $framework->U2D}ok{else}fail{/if}-icon.png" alt="status"/> 
-                {if $framework->U2D}Up-to-date{else}<button type="button" onclick="updateFramework()">Update</button>{/if}
+                {if !$framework->U2D}
+                <a href="#" onclick="updateFramework(); return false;">
+                    <img src="/img/icons/package_go.png" alt="{"update"|text|ucfirst}" title="{"update"|text|ucfirst}"/>
+                </a>
+                {/if}
             {/if}
         </td>
         <td style="vertical-align: top;">
@@ -37,7 +41,7 @@
     <table class="admin_table">
         <tr class="header">
             <th style="width: 100px;">{"component"|text}</th>
-            <th style="width: 100px;">{"status"|text}</th>
+            <th style="width: 100px;">{"actions"|text}</th>
             <th>{"description"|text}</th>
             <th style="width: 100px;">{"pubaccess"|text}</th>
         </tr>
@@ -49,13 +53,28 @@
                 <td style="vertical-align: top;" class="updateCell">
                     {if $component->disable}
                         {if $component->SVN}
-                            <button type="button" disabled="disabled">{"svnfound"|text|ucfirst}</button>
+                            <a href="#">
+                                <img src="/img/icons/plugin_disabled.png" alt="{"svnfound"|text|ucfirst}" title="{"svnfound"|text|ucfirst}"/>
+                            </a>
                         {else}
-                            <button type="button" disabled="disabled">{"update"|text|ucfirst}</button>
+                            <a href="#">
+                                <img src="/img/icons/plugin_disabled.png" alt="{"update"|text|ucfirst}" title="{"update"|text|ucfirst}"/>
+                            </a>
                         {/if}
                     {else}
                         <img src="/img/admin/{if $component->U2D === "???"}unknown{elseif $component->U2D}ok{else}fail{/if}-icon.png" alt="status"/> 
-                        {if $component->U2D === "???"}{"unknown"|text}{elseif $component->U2D}{"uptodate"|text}{else}<button type="button" onclick="updateComponent('{$component->component_name}');">{"update"|text|ucfirst}</button>{/if}
+                        {if $component->U2D === "???"}
+                            <a href="#">
+                                <img src="/img/icons/plugin_error.png" alt="{"unknown"|text|ucfirst}" title="{"unknown"|text|ucfirst}"/>
+                            </a>
+                        {else}
+                            <a href="#" onclick="updateComponent('{$component->component_name}'); return false;">
+                                <img src="/img/icons/plugin_go.png" alt="{"update"|text|ucfirst}" title="{"update"|text|ucfirst}"/>
+                            </a>
+                        {/if}
+                    {/if}
+                    {if $component->component_patchlevel < $component->highestPatch}
+                        <a href="#"><img src="/img/icons/script_gear.png" alt="Run patches" title="Run patches"/></a>
                     {/if}
                 </td>
                 <td style="vertical-align: top;">
@@ -85,7 +104,7 @@
     </div>
 </form>
 <h3>{"uninstalledcomp"|text}:</h3>
-<table class="admin_table">
+<table class="admin_table admin_core_components">
     <tr class="header">
         <th style="width: 100px;">{"component"|text}</th>
         <th style="width: 100px;">{"status"|text}</th>
@@ -98,7 +117,9 @@
                 <i>{$component->component_name|ucfirst}</i>
             </td>
             <td style="vertical-align: top; padding-left: 17px;" class="updateCell">
-                <button type="button" onclick="installComponent('{$component->component_name}');">{"install"|text}</button>
+                <a href="#" onclick="installComponent('{$component->component_name}'); return false;">
+                    <img src="/img/icons/plugin_go.png" alt="{"install"|text}" title="{"install"|text}"/>
+                </a>
             </td>
             <td style="vertical-align: top;">
                 {$component->info.desc}

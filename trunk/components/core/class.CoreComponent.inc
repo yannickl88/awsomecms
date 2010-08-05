@@ -38,10 +38,13 @@ class CoreComponent extends Component
         $registerManager->registerURLMap('\/(.*)', 'core.index', 0);
         
         //admin pages
-        $registerManager->registerPage("index", "/admin/", '{"welcomeadmin"|text}');
-        $registerManager->registerPage("index", "/admin/core/", '{form component="core" form="layout"}');
-        $registerManager->registerPage("index", "/admin/core/", '{form component="core" form="components"}');
-        $registerManager->registerPage("index", "/admin/core/", '{form component="core" form="auth"}');
+        $registerManager->registerPage("index", "/".Config::get("location", "admin/", "admin"), '{"welcomeadmin"|text}');
+        $registerManager->registerPage("layout", "/".Config::get("location", "admin/", "admin").'core/', '{form component="core" form="layout"}');
+        $registerManager->registerPage("components", "/".Config::get("location", "admin/", "admin").'core/', '{form component="core" form="components"}');
+        $registerManager->registerPage("auth", "/".Config::get("location", "admin/", "admin").'core/', '{form component="core" form="auth"}');
+        $loginURL = explode("/", Config::get("login", "admin/", "admin"));
+        $loginPage = array_pop($loginURL);
+        $registerManager->registerPage($loginPage, "/".implode("/", $loginURL)."/", '{form component="users" form="admin_login"}');
     }
     /**
      * Index action, this is used when a page is shown by the cms
@@ -296,7 +299,6 @@ class CoreComponent extends Component
                 "U2D" => (file_exists(getFrameworkRoot()."/version.info") && isset($versions->framework) && trim(file_get_contents(getFrameworkRoot()."/version.info")) == trim($versions->framework)),
             );
             
-            //check if the framework is up to the newest revision
             
             
             $smarty->assign("framework", $framework);
@@ -307,12 +309,20 @@ class CoreComponent extends Component
             {
                 $version = $component->component_version;
                 
-                $components[$component->component_name]->SVN = file_exists($component->component_path."/.svn/");
-                $components[$component->component_name]->disable = $components[$component->component_name]->SVN;
-                $components[$component->component_name]->U2D = "???";
-                $components[$component->component_name]->info = array();
+                $component->SVN = file_exists($component->component_path.".svn/");
+                $component->disable = $component->SVN;
+                $component->U2D = "???";
+                $component->info = array();
+                $component->highestPatch = 0;
                 
                 $component_name = $component->component_name;
+                
+                //check if there are patches to be run
+                if(file_exists($component->component_path."db/"))
+                {
+                    $ih = new InstallHelper();
+                    $component->highestPatch = $ih->getHighestPatchLevel($component->component_path."db/");
+                }
                 
                 //is there an update URL set?
                 if(!empty($component->component_updateurl))
@@ -321,19 +331,19 @@ class CoreComponent extends Component
                     
                     if($extVersions === false || $extVersions === null)
                     {
-                        $components[$component->component_name]->U2D = "???";
+                        $component->U2D = "???";
                     }
                     else
                     {
-                        $components[$component->component_name]->U2D = (isset($versions->components->$component_name) && trim($extVersions->$component_name) == $version);
+                        $component->U2D = (isset($versions->components->$component_name) && trim($extVersions->$component_name) == $version);
                     }
                 }
                 else
                 {
-                    $components[$component->component_name]->U2D = (isset($versions->components->$component_name) && trim($versions->components->$component_name) == $version);
+                    $component->U2D = (isset($versions->components->$component_name) && trim($versions->components->$component_name) == $version);
                 }
                 
-                $components[$component->component_name]->info = parseInfoFile($component->component_path."/{$component_name}.info", $component_name);
+                $component->info = parseInfoFile($component->component_path."/{$component_name}.info", $component_name);
             }
             
             //search for non installed components
