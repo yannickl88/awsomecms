@@ -1,80 +1,80 @@
 <?xml version="1.0" encoding="utf-8"?>
 <sqldata>
   <table name="form_fields">
-    <field xml:id="field_id" pk="1">
+    <field pk="1">
       <name>field_id</name>
       <type>int(11)</type>
-      <value null="0"/>
+      <value null="0"></value>
       <extra>auto_increment</extra>
     </field>
-    <field xml:id="field_form">
+    <field>
       <name>field_form</name>
       <type>int(11)</type>
-      <value null="0"/>
-      <extra/>
+      <value null="0"></value>
+      <extra></extra>
     </field>
-    <field xml:id="field_name">
+    <field>
       <name>field_name</name>
       <type>varchar(100)</type>
-      <value null="0"/>
-      <extra/>
+      <value null="0"></value>
+      <extra></extra>
     </field>
-    <field xml:id="field_code">
+    <field>
       <name>field_code</name>
       <type>varchar(100)</type>
-      <value null="0"/>
-      <extra/>
+      <value null="0"></value>
+      <extra></extra>
     </field>
-    <field xml:id="field_type">
+    <field>
       <name>field_type</name>
       <type>tinyint(4)</type>
-      <value null="0"/>
-      <extra/>
+      <value null="0"></value>
+      <extra></extra>
     </field>
-    <field xml:id="field_required">
+    <field>
       <name>field_required</name>
       <type>tinyint(4)</type>
-      <value null="0"/>
-      <extra/>
+      <value null="0"></value>
+      <extra></extra>
     </field>
     <data/>
   </table>
   <table name="forms">
-    <field xml:id="form_id" pk="1">
+    <field pk="1">
       <name>form_id</name>
       <type>int(11)</type>
-      <value null="0"/>
+      <value null="0"></value>
       <extra>auto_increment</extra>
     </field>
-    <field xml:id="form_name">
+    <field>
       <name>form_name</name>
       <type>varchar(100)</type>
-      <value null="0"/>
-      <extra/>
+      <value null="0"></value>
+      <extra></extra>
     </field>
-    <field xml:id="form_to">
+    <field>
       <name>form_to</name>
       <type>varchar(100)</type>
-      <value null="0"/>
-      <extra/>
+      <value null="0"></value>
+      <extra></extra>
     </field>
-    <field xml:id="form_bcc">
+    <field>
       <name>form_bcc</name>
       <type>varchar(100)</type>
-      <value null="0"/>
-      <extra/>
+      <value null="0"></value>
+      <extra></extra>
     </field>
-    <field xml:id="form_subject">
+    <field>
       <name>form_subject</name>
       <type>varchar(100)</type>
-      <value null="0"/>
-      <extra/>
+      <value null="0"></value>
+      <extra></extra>
     </field>
-    <field xml:id="form_thanks">
+    <field>
       <name>form_thanks</name>
       <type>varchar(100)</type>
-      <value null="0"/>
-      <extra/>
+      <value null="0"></value>
+      <extra></extra>
     </field>
     <data/>
   </table>

@@ -36,7 +36,12 @@ class OS
      */
     public function join()
     {
-        return implode(DIRECTORY_SEPARATOR, func_get_args());
+        $items = func_get_args();
+        foreach($items as &$item)
+        {
+            $item = rtrim($item, DIRECTORY_SEPARATOR);
+        }
+        return implode(DIRECTORY_SEPARATOR, $items);
     }
 }
 

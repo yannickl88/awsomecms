@@ -93,6 +93,7 @@ class Usage extends CLIAction
         $cli->output("  beta       Create a beta release package");
         $cli->output("  stable     Create a stable release package");
         $cli->output("  release    Create a release release package");
+        $cli->output("  patch      Update the database according to the new install files");
         $cli->output("u            Upload data, only in Update made");
         $cli->output("v            Verbose mode");
         $cli->output("");
@@ -346,6 +347,39 @@ class Release extends DeployAction
     }
 }
 
+class Patch extends CLIAction
+{
+    /**
+     * (non-PHPdoc)
+     * @see libs/CLIAction::exec()
+     *
+     * @param CLI $cli
+     * @param String $action
+     */
+    public function exec($cli, $action)
+    {
+        import("core/class.RegisterManager.inc");
+        
+        $h = new InstallHelper();
+        $count = array();
+        $components = RegisterManager::getInstance()->getComponenets();
+        
+        foreach($components as $component)
+        {
+            $xmlFile = $cli->os->join($component->component_path, "db", "install.xml");
+            
+            if(file_exists($xmlFile))
+            {
+                if($h->loadTable(file_get_contents($xmlFile)))
+                {
+                    $count[] = $component->component_name;
+                }
+            }
+        }
+        $cli->output("Done, ".count($count)." components updated (".implode(', ', $count).")");
+    }
+}
+
 $cli = new CLI($argv);
 $cli->header();
 
@@ -363,5 +397,6 @@ $cli->registerAction("beta",        "Release");
 $cli->registerAction("alpha",       "Release");
 $cli->registerAction("update",      "Update");
 $cli->registerAction("pack",        "Pack");
+$cli->registerAction("patch",       "Patch");
 
 $cli->doAction();
