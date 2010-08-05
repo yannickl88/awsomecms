@@ -10,528 +10,348 @@
  *
  * @version $Revision$
  */
+global $websiteroot;
+$websiteroot = dirname(__FILE__).DIRECTORY_SEPARATOR."htdocs";
 
-/**
- * Usage:
- * 
- * To create a package of the current version
- * php -f deploy.php [alpha|beta|realase|stable]
- * 
- * To create the update packages use:
- * php -f deploy.php update [u]
- * 
- * To create a package of the current site for transport
- * php -f deploy.php pack
- */
+require_once 'core/functions.util.inc';
 
-//cli functions
-function prompt($question, $pattern = false)
-{
-    fwrite(STDOUT, trim($question)." ");
-    $result = trim(fgets(STDIN));
-    
-    //check if there was a valid awnser
-    if($pattern !== false && preg_match($pattern, $result) == 0)
-    {
-        return prompt($question, $pattern);
-    }
-    
-    return $result;
-}
-function confirm($question)
-{
-    $awnser = strtolower(prompt(trim($question)." [Y/N]"));
-    
-    //check if there was a valid awnser
-    if($awnser != 'y' && $awnser != 'n')
-    {
-        return confirm($question);
-    }
-    
-    return ($awnser == "y");
-}
-function output($message, $sameline, $verbose = false)
-{
-    $lb = '';
-    
-    if(!$sameline)
-    {
-        $lb = "\n";
-    }
-    
-    if(!$verbose)
-        fwrite(STDOUT, $message.$lb);
-}
+import('core/class.Config.inc');
+import('libs/class.FTP.inc');
+import('libs/class.InstallHelper.inc');
+import('libs/class.CLI.inc');
 
-//some util function
-function rcopy($source, $dest)
+//actions
+abstract class DeployAction extends CLIAction
 {
-    if(is_dir($source))
+    protected $helper;
+    protected $location;
+    /**
+     * Constructor
+     */
+    public function __construct()
     {
-        if(!file_exists($dest))
+        $this->helper = new InstallHelper();
+        $this->location = dirname(__FILE__);
+        var_dump($this->location);
+    }
+    /**
+     * (non-PHPdoc)
+     * @see libs/CLIAction::setup()
+     *
+     * @param CLI $cli
+     */
+    public function setup($cli)
+    {
+        if(!$cli->isVerbose())
         {
-            mkdir($dest);
-        }
-        
-        $files = scandir($source);
-        
-        foreach($files as $file)
-        {
-            if($file != '.' && $file != '..' && $file != '.svn')
+            $cli->output($this->location);
+            if(!$cli->confirm("Is this location correct?"))
             {
-                rcopy($source.DIRECTORY_SEPARATOR.$file, $dest.DIRECTORY_SEPARATOR.$file);
+                $this->location = $cli->prompt("Path to framework root:");
             }
         }
-    }
-    else
-    {
-        if(!@copy($source, $dest))
+
+        if(!file_exists($cli->os->join($this->location,"RELEASES","tmp")))
         {
-            output("FAILED to copy '{$source}' => '{$dest}'", false, $verbose);
+            mkdir($cli->os->join($this->location,"RELEASES","tmp"), 0777, true);
         }
     }
-}
-function raddFileToZip($source, $dest, $zip)
-{
-    if(is_dir($source))
+    /**
+     * (non-PHPdoc)
+     * @see libs/CLIAction::cleanup()
+     *
+     * @param CLI $cli
+     */
+    public function cleanup($cli)
     {
-        $files = scandir($source);
-        
-        if(count($files) > 2)
+        $this->helper->clearDir($cli->os->join($this->location,"RELEASES","tmp"));
+        rmdir($cli->os->join($this->location,"RELEASES","tmp"));
+    }
+}
+
+class Usage extends CLIAction
+{
+    /**
+     * (non-PHPdoc)
+     * @see libs/CLIAction::exec()
+     *
+     * @param CLI $cli
+     * @param String $action
+     */
+    public function exec($cli, $action)
+    {
+        $cli->output("php -f deploy.php [action] [u] [v]");
+        $cli->output("");
+        $cli->output("Options:");
+        $cli->output("action       help, update, pack, alpha, beta, stable, release");
+        $cli->output("  help       This text");
+        $cli->output("  update     Update");
+        $cli->output("  pack       Pack the site into an archve which can be send");
+        $cli->output("  alpha      Create an alpha release package");
+        $cli->output("  beta       Create a beta release package");
+        $cli->output("  stable     Create a stable release package");
+        $cli->output("  release    Create a release release package");
+        $cli->output("u            Upload data, only in Update made");
+        $cli->output("v            Verbose mode");
+        $cli->output("");
+        $cli->output("Usage:");
+        $cli->output("php -f deploy.php beta");
+        $cli->output("             To create a beta package of the current version");
+        $cli->output("php -f deploy.php update");
+        $cli->output("             To create the update packages");
+        $cli->output("php -f deploy.php update u");
+        $cli->output("             To create the update packages and directly upload them");
+        $cli->output("php -f deploy.php pack");
+        $cli->output("             To create a package of the current site for transport");
+        $cli->output("");
+    }
+}
+class Pack extends DeployAction
+{
+    /**
+     * (non-PHPdoc)
+     * @see libs/CLIAction::exec()
+     *
+     * @param CLI $cli
+     * @param String $action
+     */
+    public function exec($cli, $action)
+    {
+        $h = $this->helper;
+        $location = $this->location;
+
+        $dirname = strtolower(basename(rtrim(dirname(__FILE__), '/')));
+
+        $cli->output("Creating archive");
+        mkdir($cli->os->join($location,"RELEASES","tmp","cache"), 0777, true);
+        $cli->output(".", true);
+        $h->rcopy($cli->os->join($location,'components'), $cli->os->join($location,"RELEASES","tmp","components"));
+        $cli->output(".", true);
+        $h->rcopy($cli->os->join($location,'core'), $cli->os->join($location,"RELEASES","tmp","core"));
+        $cli->output(".", true);
+        $h->rcopy($cli->os->join($location,'docs'), $cli->os->join($location,"RELEASES","tmp","docs"));
+        $cli->output(".", true);
+        $h->rcopy($cli->os->join($location,'htdocs'), $cli->os->join($location,"RELEASES","tmp","htdocs"));
+        $h->clearDir($cli->os->join($location,"RELEASES","tmp","htdocs","templates_c"));
+        $cli->output(".", true);
+        $h->rcopy($cli->os->join($location,'libs'), $cli->os->join($location,"RELEASES","tmp","libs"));
+        $cli->output(".", true);
+        $h->rcopy($cli->os->join($location,'.htaccess'), $cli->os->join($location,"RELEASES","tmp",".htaccess"));
+        $cli->output(".", true);
+        $h->rcopy($cli->os->join($location,'index.php'), $cli->os->join($location,"RELEASES","tmp","index.php"));
+        $h->rcopy($cli->os->join($location,'version.info'), $cli->os->join($location,"RELEASES","tmp","version.info"));
+        $cli->output(".", true);
+        $h->rcopy($cli->os->join($location,'cron.php'), $cli->os->join($location,"RELEASES","tmp","cron.php"));
+        $cli->output(".", true);
+
+        $h->dir2zip($cli->os->join($location,"RELEASES","tmp"), $cli->os->join($location,"{$dirname}.zip"));
+        $cli->output(".");
+
+        //done
+        $cli->output("Archive '".$cli->os->join($location,"{$dirname}.zip")."' created");
+    }
+}
+class Update extends DeployAction
+{
+    /**
+     * (non-PHPdoc)
+     * @see libs/CLIAction::exec()
+     *
+     * @param CLI $cli
+     * @param String $action
+     */
+    public function exec($cli, $action)
+    {
+        $h = $this->helper;
+        $location = $this->location;
+        $versions = array();
+
+        $cli->output("Creating core archive");
+
+        $versions["framework"] = $h->getHightestRevNumber(array(
+            $cli->os->join($location,"core"),
+            $cli->os->join($location,"docs"),
+            $cli->os->join($location,"libs"))
+        );
+
+        //copy the core files
+        $h->rcopy($cli->os->join($location,"core"), $cli->os->join($location,"RELEASES","tmp","core"));
+        $h->rcopy($cli->os->join($location,'docs'), $cli->os->join($location,"RELEASES","tmp","docs"));
+        $h->rcopy($cli->os->join($location,"libs"), $cli->os->join($location,"RELEASES","tmp","libs"));
+        $h->rcopy($cli->os->join($location,"index.php"), $cli->os->join($location,"RELEASES","tmp","index.php"));
+        $h->rcopy($cli->os->join($location,"cron.php"), $cli->os->join($location,"RELEASES","tmp","cron.php"));
+
+        $h->dir2zip($cli->os->join($location,"RELEASES","tmp"), $cli->os->join($location,"RELEASES","framework.zip"));
+        $versions["components"] = array();
+
+        //cleanup
+        $h->clearDir($cli->os->join($location,"RELEASES","tmp"));
+
+        //create zips for all components
+        $components = scandir($cli->os->join($location,"components"));
+        $componentsList = array();
+
+        foreach($components as $component)
         {
-            foreach($files as $file)
+            if($component != '.' && $component != '..' && $component != '.svn')
             {
-                if($file != '.' && $file != '..' && $file != '.svn')
+                if(!file_exists($cli->os->join($location,"RELEASES","components")))
                 {
-                    raddFileToZip($source.DIRECTORY_SEPARATOR.$file, $dest.DIRECTORY_SEPARATOR.$file, $zip);
+                    mkdir($cli->os->join($location,"RELEASES","components"), 0777, true);
+                }
+
+                $versions["components"][$component] = $h->getHightestRevNumber($cli->os->join($location,"components",$component));
+
+                $h->rcopy($cli->os->join($location,"components",$component), $cli->os->join($location,"RELEASES","tmp",$component));
+
+                $infoContent = file_get_contents($cli->os->join($location,"RELEASES","tmp",$component,$component.".info"));
+                $infoContent = preg_replace("/@version: ?([1-9]*)/", "@version:".$versions["components"][$component], $infoContent);
+                file_put_contents($cli->os->join($location,"RELEASES","tmp",$component,$component.".info"), $infoContent);
+
+                $h->dir2zip($cli->os->join($location,"RELEASES","tmp",$component), $cli->os->join($location,"RELEASES","components",$component.".zip"));
+
+                //cleanup
+                $h->clearDir($cli->os->join($location,"RELEASES","tmp",$component));
+                rmdir($cli->os->join($location,"RELEASES","tmp",$component));
+                $cli->output(".", true, $verbose);
+
+                $componentsList[$component] = array("name" => $component, "version" => $versions["components"][$component]);
+
+                if($upload)
+                {
+                    $ftp = FTP::getInstance();
+                    $ftp->upload($cli->os->join($location,"RELEASES","components",$component.".zip"), "/public_html_update/components/{$component}.zip");
                 }
             }
+        }
+
+        //create version file
+        file_put_contents($cli->os->join($location,"RELEASES","version.json"), json_encode($versions));
+        file_put_contents($cli->os->join($location,"RELEASES","components","components.json"), json_encode($componentsList));
+
+        if($upload)
+        {
+            $ftp = FTP::getInstance();
+            $ftp->upload($cli->os->join($location,"RELEASES","framework.zip"), "/public_html_update/framework.zip");
+            $ftp->upload($cli->os->join($location,"RELEASES","version.json"), "/public_html_update/version.json");
+            $ftp->upload($cli->os->join($location,"RELEASES","components","components.json"), "/public_html_update/components/components.json");
+        }
+
+        $cli->output(".");
+        //done
+        $cli->output("Archives created");
+    }
+}
+class Release extends DeployAction
+{
+    /**
+     * (non-PHPdoc)
+     * @see libs/CLIAction::exec()
+     *
+     * @param CLI $cli
+     * @param String $action
+     */
+    public function exec($cli, $action)
+    {
+        $h = $this->helper;
+        $location = $this->location;
+
+        //ask for version
+        if(!$cli->isVerbose())
+        {
+            $version = $cli->prompt("Version:", '/^[0-9]+(\.[0-9]+)*$/');
         }
         else
         {
-            $zip->addEmptyDir($dest);
+            $version = 0;
         }
-    }
-    else
-    {
-        $zip->addFile($source, str_replace(DIRECTORY_SEPARATOR, "/", $dest));
-    }
-}
-function clearDir($source, $unless = array())
-{
-    $files = scandir($source);
-    
-    foreach($files as $file)
-    {
-        if($file != '.' && $file != '..')
-        {
-            if(is_dir($source.DIRECTORY_SEPARATOR.$file))
-            {
-                if(!in_array(realpath($source.DIRECTORY_SEPARATOR.$file), $unless))
-                {
-                    clearDir($source.DIRECTORY_SEPARATOR.$file);
-                    rmdir($source.DIRECTORY_SEPARATOR.$file);
-                }
-            }
-            else
-            {
-                if(!in_array(realpath($source.DIRECTORY_SEPARATOR.$file), $unless))
-                {
-                    unlink($source.DIRECTORY_SEPARATOR.$file);
-                }
-            }
-        }
-    }
-}
-function dir2zip($source, $dest)
-{
-    $ds = DIRECTORY_SEPARATOR;
-    $zip = new ZipArchive();
-    
-    if(file_exists($dest))
-    {
-        unlink($dest);
-    }
 
-    if($zip->open($dest, ZIPARCHIVE::CREATE))
-    {
-        $files = scandir($source);
-        
-        foreach($files as $file)
+        $cli->output("Creating archive");
+
+        $cli->output(".", true);
+        //copy all the required stuff
+        mkdir($cli->os->join($location,"RELEASES","tmp","cache"), 0777, true);
+        mkdir($cli->os->join($location,"RELEASES","tmp","htdocs","install"), 0777, true);
+        $cli->output(".", true);
+        $h->rcopy($cli->os->join($location,'components'), $cli->os->join($location,"RELEASES","tmp","components"));
+        $cli->output(".", true);
+        $h->rcopy($cli->os->join($location,'core'), $cli->os->join($location,"RELEASES","tmp","core"));
+        $h->rcopy($cli->os->join($location,'docs'), $cli->os->join($location,"RELEASES","tmp","docs"));
+        $cli->output(".", true);
+        $h->rcopy($cli->os->join($location,"htdocs","install"), $cli->os->join($location,"RELEASES","tmp","htdocs","install"));
+        $h->rcopy($cli->os->join($location,"htdocs","install.php"), $cli->os->join($location,"RELEASES","tmp","htdocs","install.php"));
+        $h->rcopy($cli->os->join($location,"htdocs","index.php"), $cli->os->join($location,"RELEASES","tmp","htdocs","index.php"));
+        $h->rcopy($cli->os->join($location,"htdocs","config-default.ini"), $cli->os->join($location,"RELEASES","tmp","htdocs","config-default.ini"));
+        $cli->output(".", true);
+        $h->rcopy($cli->os->join($location,'libs'), $cli->os->join($location,"RELEASES","tmp","libs"));
+        $cli->output(".", true);
+        $h->rcopy($cli->os->join($location,'.htaccess'), $cli->os->join($location,"RELEASES","tmp",".htaccess"));
+        $h->rcopy($cli->os->join($location,'index.php'), $cli->os->join($location,"RELEASES","tmp","index.php"));
+        $h->rcopy($cli->os->join($location,'cron.php'), $cli->os->join($location,"RELEASES","tmp","cron.php"));
+        $cli->output(".", true);
+
+        if($action != 'release' && $action != 'stable')
         {
-            if($file != '.' && $file != '..')
+            $h->rcopy($cli->os->join($location,'deploy.php'), $cli->os->join($location,"RELEASES","tmp","deploy.php"));
+        }
+
+        //fetch the version numbers
+        file_put_contents(
+        $cli->os->join($location,"RELEASES","tmp","version.info"),
+            $h->getHightestRevNumber(array(
+                $cli->os->join($location,"core"),
+                $cli->os->join($location,"docs"),
+                $cli->os->join($location,"libs")
+            ))
+        );
+        $cli->output(".", true);
+
+        $components = scandir($cli->os->join($location,"components"));
+
+        foreach($components as $component)
+        {
+            if($component != '.' && $component != '..' && $component != '.svn')
             {
-                raddFileToZip($source.$ds.$file, $file, $zip);
+                $compversion = $h->getHightestRevNumber($cli->os->join($location,"components",$component));
+
+                $infoContent = file_get_contents($cli->os->join($location,"RELEASES","tmp","components",$component, $component.".info"));
+                $infoContent = preg_replace("/@version: ?([1-9]*)/", "@version:".$compversion, $infoContent);
+
+                file_put_contents($cli->os->join($location,"RELEASES","tmp","components",$component,$component.".info"), $infoContent);
             }
         }
-        
-        return true;
-    }
-    else
-    {
-        return false;
-    }
-    $zip->close();
-}
-function getHightestRevNumber($source)
-{
-    if(is_array($source))
-    {
-        $hightest = -1;
-        
-        foreach($source as $file)
+        $cli->output(".", true);
+
+
+        //archive
+        if($action != 'release')
         {
-            $rev = getHightestRevNumber($file);
-            
-            if($rev > $hightest)
-            {
-                $hightest = $rev;
-            }
+            $suffix = '-'.$action;
         }
-        
-        return $hightest;
-    }
-    else
-    {
-        $source = realpath($source);
-        $result = array();
-        
-        exec("svn info {$source}", $result);
-        $matches = array();
-        preg_match('/Last Changed Rev: ([0-9]*)/m', implode("\n", $result), $matches);
-        
-        return (int) trim($matches[1]);
+
+        $h->dir2zip($cli->os->join($location,"RELEASES","tmp"), $cli->os->join($location,"RELEASES","AWSOMEcms_v{$version}{$suffix}.zip"));
+        $cli->output(".");
+        //done
+        $cli->output("Archive '".$cli->os->join($location,"RELEASES","AWSOMEcms_v{$version}{$suffix}.zip")."' created");
     }
 }
 
-//FTP functions
-class FTP
-{
-    private static $instance;
-    
-    private $connection = null;
-    private $ftphost = "ftp.yannickl88.nl";
-    private $username = "yannic";
-    private $password = "bUzysymY";
-    
-    private $dirsChecked;
-    
-    public static function getInstance()
-    {
-        if (!self::$instance instanceof self) {
-            self::$instance = new self();
-        }
-        
-        return self::$instance;
-    }
-    
-    private function __construct()
-    {
-        $this->dirsChecked = array();
-        $this->openConnection();
-    }
-    
-    private function openConnection()
-    {
-        $this->connection = ftp_connect($this->ftphost); 
-        $login_result = ftp_login($this->connection, $this->username, $this->password); 
+$cli = new CLI($argv);
+$cli->header();
 
-        // check connection
-        if ((!$this->connection) || (!$login_result))
-        { 
-            output("FTP connection has failed!", false, $verbose);
-            output("Attempted to connect to {$ftp_server} for user {$ftp_user_name}", false, $verbose);
-        }
-    }
-    
-    public function __destruct()
-    {
-        ftp_close($this->connection);
-        $this->connection = null;
-    }
-    
-    public function upload($source, $dest)
-    {
-        $this->makeDir(dirname($dest));
-        
-        if($this->connection == null)
-        {
-            $this->openConnection();
-        }
-        
-        $upload = @ftp_put($this->connection, $dest, $source, FTP_BINARY); 
-        
-        if (!$upload)
-        { 
-            output("FTP upload has failed! {$source} -> {$dest}", false, $verbose);
-        }
-        else
-        {
-            output("Uploaded {$source} -> {$dest}", false, $verbose);
-        }
-    }
-    
-    private function makeDir($dest)
-    {
-        if(in_array($dest, $this->dirsChecked))
-        {
-            return;
-        }
-        $dir = dirname($dest);
-        $me = substr($dest, strlen($dir) + 1);
-        
-        if($dir != "\\")
-        {
-            $parentFiles = $this->makeDir($dir);
-            
-            if(!in_array($me, $parentFiles))
-            {
-                ftp_mkdir($this->connection, $dest);
-            }
-            
-            $this->dirsChecked[] = $dest;
-        }
-        
-        return ftp_nlist($this->connection, $dest);
-    }
-}
-$verbose = in_array('v', $argv);
-
-output("==============================", false, $verbose);
-output("A.W.S.O.M.E. cms deploy script", false, $verbose);
-output("© 2009 yannickl88.nl", false, $verbose);
-output("==============================", false, $verbose);
-output("", false, $verbose);
-
+//check if we can even zip
 if(!class_exists('ZipArchive'))
 {
-    output("ZipArchive not found, please check your PHP distribution", false, $verbose);
+    $cli->output("ZipArchive not found, please check your PHP distribution");
     die(1);
 }
+//register the actions
+$cli->registerAction("help",        "Usage");
+$cli->registerAction("release",     "Release");
+$cli->registerAction("stable",      "Release");
+$cli->registerAction("beta",        "Release");
+$cli->registerAction("alpha",       "Release");
+$cli->registerAction("update",      "Update");
+$cli->registerAction("pack",        "Pack");
 
-$ds = DIRECTORY_SEPARATOR;
-
-if(in_array('release', $argv))
-    $env = 'release';
-elseif(in_array('stable', $argv))
-    $env = 'stable';
-elseif(in_array('beta', $argv))
-    $env = 'beta';
-elseif(in_array('update', $argv))
-    $env = 'update';
-elseif(in_array('pack', $argv))
-    $env = 'pack';
-else
-    $env = 'alpha';
-
-$upload = in_array("u", $argv);
-
-$location = dirname(__FILE__).$ds;
-
-output("'{$location}'", false, $verbose);
-if(!$verbose)
-{
-    if(!confirm("Is this location correct?"))
-    {
-        $location = prompt("Path to framework root:");
-    }
-}
-
-//check for tmp dir
-if(!file_exists($location."RELEASES{$ds}tmp"))
-{
-    mkdir($location."RELEASES{$ds}tmp", 0777, true);
-}
-
-if($env == 'pack')
-{
-    $dirname = strtolower(basename(rtrim(dirname(__FILE__), '/')));
-    
-    output("Creating archive", false, $verbose);
-    mkdir($location."RELEASES{$ds}tmp{$ds}cache{$ds}", 0777, true);
-    output(".", true, $verbose);
-    rcopy($location.'components', $location."RELEASES{$ds}tmp{$ds}components");
-    output(".", true, $verbose);
-    rcopy($location.'core', $location."RELEASES{$ds}tmp{$ds}core");
-    output(".", true, $verbose);
-    rcopy($location.'docs', $location."RELEASES{$ds}tmp{$ds}docs");
-    output(".", true, $verbose);
-    rcopy($location."htdocs{$ds}", $location."RELEASES{$ds}tmp{$ds}htdocs");
-    clearDir($location."RELEASES{$ds}tmp{$ds}htdocs{$ds}templates_c");
-    output(".", true, $verbose);
-    rcopy($location.'libs', $location."RELEASES{$ds}tmp{$ds}libs");
-    output(".", true, $verbose);
-    rcopy($location.'.htaccess', $location."RELEASES{$ds}tmp{$ds}.htaccess");
-    output(".", true, $verbose);
-    rcopy($location.'index.php', $location."RELEASES{$ds}tmp{$ds}index.php");
-    output(".", true, $verbose);
-    rcopy($location.'version.info', $location."RELEASES{$ds}tmp{$ds}version.info");
-    output(".", true, $verbose);
-    rcopy($location.'cron.php', $location."RELEASES{$ds}tmp{$ds}cron.php");
-    output(".", true, $verbose);
-    
-    dir2zip($location."RELEASES{$ds}tmp", $location."{$dirname}.zip");
-
-    output(".", false, $verbose);
-    //done
-    output("Archive '".$location."{$dirname}.zip' created", false, $verbose);
-}
-else if($env != 'update')
-{
-    if(!$verbose)
-    {
-        $version = prompt("Version:", '/^[0-9]+(\.[0-9]+)*$/');
-    }
-    else
-    {
-        $version = 0;
-    }
-    
-    output("Creating archive", false, $verbose);
-    
-    //copy all the required stuff
-    mkdir($location."RELEASES{$ds}tmp{$ds}cache", 0777, true);
-    mkdir($location."RELEASES{$ds}tmp{$ds}htdocs{$ds}install", 0777, true);
-    output(".", true, $verbose);
-    rcopy($location.'components', $location."RELEASES{$ds}tmp{$ds}components");
-    output(".", true, $verbose);
-    rcopy($location.'core', $location."RELEASES{$ds}tmp{$ds}core");
-    output(".", true, $verbose);
-    rcopy($location.'docs', $location."RELEASES{$ds}tmp{$ds}docs");
-    output(".", true, $verbose);
-    rcopy($location."htdocs{$ds}install", $location."RELEASES{$ds}tmp{$ds}htdocs{$ds}install");
-    rcopy($location."htdocs{$ds}install.php", $location."RELEASES{$ds}tmp{$ds}htdocs{$ds}install.php");
-    rcopy($location."htdocs{$ds}index.php", $location."RELEASES{$ds}tmp{$ds}htdocs{$ds}index.php");
-    rcopy($location."htdocs{$ds}config-default.ini", $location."RELEASES{$ds}tmp{$ds}htdocs{$ds}config-default.ini");
-    output(".", true, $verbose);
-    rcopy($location.'libs', $location."RELEASES{$ds}tmp{$ds}libs");
-    output(".", true, $verbose);
-    rcopy($location.'.htaccess', $location."RELEASES{$ds}tmp{$ds}.htaccess");
-    output(".", true, $verbose);
-    rcopy($location.'index.php', $location."RELEASES{$ds}tmp{$ds}index.php");
-    output(".", true, $verbose);
-    output(".", true, $verbose);
-    rcopy($location.'index.php', $location."RELEASES{$ds}tmp{$ds}cron.php");
-    output(".", true, $verbose);
-
-    if($env != 'release' && $env != 'stable')
-    {
-        rcopy($location.'deploy.php', $location."RELEASES{$ds}tmp{$ds}deploy.php");
-        output(".", true, $verbose);
-    }
-    
-    //fetch the version numbers
-    file_put_contents($location."RELEASES{$ds}tmp{$ds}version.info", getHightestRevNumber(array($location."core", $location."docs", $location."libs")));
-    
-    $components = scandir($location."components");
-    
-    foreach($components as $component)
-    {
-        if($component != '.' && $component != '..' && $component != '.svn')
-        {
-            $compversion = getHightestRevNumber($location."components{$ds}{$component}");
-            
-            $infoContent = file_get_contents($location."RELEASES{$ds}tmp{$ds}components{$ds}{$component}{$ds}{$component}.info");
-            $infoContent = preg_replace("/@version: ?([1-9]*)/", "@version:".$compversion, $infoContent);
-            
-            file_put_contents($location."RELEASES{$ds}tmp{$ds}components{$ds}{$component}{$ds}{$component}.info", $infoContent);
-        }
-    }
-    
-    
-    //archive
-    if($env != 'release')
-    {
-        $suffix = '-'.$env;
-    }
-    
-    dir2zip($location."RELEASES{$ds}tmp", $location."RELEASES{$ds}AWSOMEcms_v{$version}{$suffix}.zip");
-
-    output(".", false, $verbose);
-    //done
-    output("Archive '".$location."RELEASES{$ds}AWSOMEcms_v{$version}{$suffix}.zip' created", false, $verbose);
-}
-else
-{
-    $versions = array();
-    output("Creating core archive", false, $verbose);
-    
-    $versions["framework"] = getHightestRevNumber(array($location."core", $location."docs", $location."libs"));
-    
-    //copy the core files
-    rcopy($location."core", $location."RELEASES{$ds}tmp{$ds}core");
-    output(".", true, $verbose);
-    rcopy($location.'docs', $location."RELEASES{$ds}tmp{$ds}docs");
-    output(".", true, $verbose);
-    rcopy($location."libs", $location."RELEASES{$ds}tmp{$ds}libs");
-    output(".", true, $verbose);
-    rcopy($location."index.php", $location."RELEASES{$ds}tmp{$ds}index.php");
-    output(".", true, $verbose);
-    rcopy($location."cron.php", $location."RELEASES{$ds}tmp{$ds}cron.php");
-    output(".", true, $verbose);
-    
-    dir2zip($location."RELEASES{$ds}tmp", $location."RELEASES{$ds}framework.zip");
-    $versions["components"] = array();
-    
-    //cleanup
-    clearDir($location."RELEASES{$ds}tmp");
-    
-    //create zips for all components
-    $components = scandir($location."components");
-    $componentsList = array();
-    
-    foreach($components as $component)
-    {
-        if($component != '.' && $component != '..' && $component != '.svn')
-        {
-            if(!file_exists($location."RELEASES{$ds}components"))
-            {
-                mkdir($location."RELEASES{$ds}components", 0777, true);
-            }
-            
-            $versions["components"][$component] = getHightestRevNumber($location."components{$ds}{$component}");
-            
-            rcopy($location."components{$ds}{$component}", $location."RELEASES{$ds}tmp{$ds}{$component}");
-            
-            $infoContent = file_get_contents($location."RELEASES{$ds}tmp{$ds}{$component}{$ds}{$component}.info");
-            $infoContent = preg_replace("/@version: ?([1-9]*)/", "@version:".$versions["components"][$component], $infoContent);
-            file_put_contents($location."RELEASES{$ds}tmp{$ds}{$component}{$ds}{$component}.info", $infoContent);
-            
-            dir2zip($location."RELEASES{$ds}tmp{$ds}{$component}", $location."RELEASES{$ds}components{$ds}{$component}.zip");
-            output(".", true, $verbose);
-            
-            //cleanup
-            clearDir($location."RELEASES{$ds}tmp{$ds}{$component}");
-            rmdir($location."RELEASES{$ds}tmp{$ds}{$component}");
-            output(".", true, $verbose);
-            
-            $componentsList[$component] = array("name" => $component, "version" => $versions["components"][$component]);
-            
-            if($upload)
-            {
-                $ftp = FTP::getInstance();
-                $ftp->upload($location."RELEASES{$ds}components{$ds}{$component}.zip", "/public_html_update/components/{$component}.zip");
-            }
-        }
-    }
-    
-    //create version file
-    file_put_contents($location."RELEASES{$ds}version.json", json_encode($versions));
-    file_put_contents($location."RELEASES{$ds}components{$ds}components.json", json_encode($componentsList));
-    
-    if($upload)
-    {
-        $ftp = FTP::getInstance();
-        $ftp->upload($location."RELEASES{$ds}framework.zip", "/public_html_update/framework.zip");
-        $ftp->upload($location."RELEASES{$ds}version.json", "/public_html_update/version.json");
-        $ftp->upload($location."RELEASES{$ds}components{$ds}components.json", "/public_html_update/components/components.json");
-    }
-    
-    output(".", false, $verbose);
-    //done
-    output("Archives created", false, $verbose);
-}
-
-//cleanup
-clearDir($location."RELEASES{$ds}tmp");
-rmdir($location."RELEASES{$ds}tmp");
+$cli->doAction();

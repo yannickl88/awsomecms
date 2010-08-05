@@ -1,4 +1,0 @@
-INSERT INTO `pages` (`page_name`, `page_location`, `page_template`, `page_timestamp`) VALUES('admin', '/admin/groups/', '{form table=''groups.groups'' form=''admin''}', NOW());
-INSERT INTO `pages` (`page_name`, `page_location`, `page_template`, `page_timestamp`) VALUES('add', '/admin/groups/', '{form table=''groups.groups'' form=''add''}', NOW());
-INSERT INTO `pages` (`page_name`, `page_location`, `page_template`, `page_timestamp`) VALUES('edit', '/admin/groups/', '{form table=''groups.groups'' form=''edit''}', NOW());
-INSERT INTO `pages` (`page_name`, `page_location`, `page_template`, `page_timestamp`) VALUES('delete', '/admin/groups/', '{form table=''groups.groups'' form=''delete''}', NOW());
