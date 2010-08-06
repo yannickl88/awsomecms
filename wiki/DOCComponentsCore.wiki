@@ -10,8 +10,7 @@ included in the distribution.
 The following classes are located in this package
 === Classes: ===
 == `AuthTable` ==
-,,File: components/core/class.AuthTable.inc,,
-===== ,,class,, AuthTable ,,extends,, [DOCCore#Table Table] =====
+===== ,,class,, AuthTable ,,extends,, [DOCCore#Table Table] ^File: components/core/class.AuthTable.inc^ =====
 Auth table, this handels all interaction with the auth table in the database
  ==== *public* _void_ *`__construct`* (  ) ====
 Constructor
@@ -24,8 +23,7 @@ Constructor
  ==== *protected* _void_ *`delete`* (  ) ====
 (non-PHPdoc)
 == `ComponentsTable` ==
-,,File: components/core/class.ComponentsTable.inc,,
-===== ,,class,, ComponentsTable ,,extends,, [DOCCore#Table Table] =====
+===== ,,class,, ComponentsTable ,,extends,, [DOCCore#Table Table] ^File: components/core/class.ComponentsTable.inc^ =====
 Core table, this handels all interaction with the core table in the database
  ==== *public* _void_ *`__construct`* (  ) ====
 Constructor
@@ -38,8 +36,7 @@ Constructor
  ==== *protected* _void_ *`delete`* (  ) ====
 (non-PHPdoc)
 == `CoreComponent` ==
-,,File: components/core/class.CoreComponent.inc,,
-===== ,,class,, CoreComponent ,,extends,, [DOCCore#Component Component] =====
+===== ,,class,, CoreComponent ,,extends,, [DOCCore#Component Component] ^File: components/core/class.CoreComponent.inc^ =====
 Core component class, this includes all the logic for the core actions
  ==== *public* _void_ *`__construct`* (  ) ====
 Constructor
@@ -63,8 +60,7 @@ Components action, this is used for the compontent settings page
  ==== *public* _void_ *`registerMenuItems`* ( _[DOCComponentsPageUtil#Menu Menu]_ `$menu` ) ====
 Register menu items for this component
 == `TagsTable` ==
-,,File: components/core/class.TagsTable.inc,,
-===== ,,class,, TagsTable ,,extends,, [DOCCore#Table Table] =====
+===== ,,class,, TagsTable ,,extends,, [DOCCore#Table Table] ^File: components/core/class.TagsTable.inc^ =====
 Auth table, this handels all interaction with the auth table in the database
  ==== *public* _void_ *`__construct`* (  ) ====
 Constructor

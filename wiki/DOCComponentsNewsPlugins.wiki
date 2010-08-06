@@ -9,12 +9,9 @@ included in the distribution.
 == Contents: ==
 The following functions are located in this package
 === Functions: ===
- ==== _string_ *`smarty_function_news`* ( _array_ `$params`, _Smarty_ `$smarty` ) ====
-,,File: ,,
+ ==== _string_ *`smarty_function_news`* ( _array_ `$params`, _Smarty_ `$smarty` ) ^File: components/news/plugins/function.news.php^====
 Show a list of news items
- ==== _string_ *`smarty_function_newsitem`* ( _array_ `$params`, _Smarty_ `$smarty` ) ====
-,,File: ,,
+ ==== _string_ *`smarty_function_newsitem`* ( _array_ `$params`, _Smarty_ `$smarty` ) ^File: components/news/plugins/function.newsitem.php^====
 Show a news item
- ==== _string_ *`smarty_function_newstags`* ( _array_ `$params`, _Smarty_ `$smarty` ) ====
-,,File: ,,
+ ==== _string_ *`smarty_function_newstags`* ( _array_ `$params`, _Smarty_ `$smarty` ) ^File: components/news/plugins/function.newstags.php^====
 Show a list of tags that are used by all the news items

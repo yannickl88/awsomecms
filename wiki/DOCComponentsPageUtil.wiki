@@ -10,8 +10,7 @@ included in the distribution.
 The following classes are located in this package
 === Classes: ===
 == `MenuItem` ==
-,,File: components/page/util/class.Menu.inc,,
-===== ,,class,, MenuItem =====
+===== ,,class,, MenuItem ^File: components/page/util/class.Menu.inc^ =====
 Menu item that is used in the admin menu
  ==== *public* _void_ *`__construct`* ( _string_ `$name`, _string_ `$text`, _string_ `$page`, _string_ `$parent` ) ====
 Constructor
@@ -22,8 +21,7 @@ sort the items in this MenuItem
  ==== *public* _string_ *`toHTML`* (  ) ====
 Create a HTML represenation of this MenuItem
 == `Menu` ==
-,,File: components/page/util/class.Menu.inc,,
-===== ,,class,, Menu =====
+===== ,,class,, Menu ^File: components/page/util/class.Menu.inc^ =====
 Menu class, this is the root element of the menu
  ==== *public* *static* _[DOCComponentsPageUtil#Menu Menu]_ *`getInstance`* (  ) ====
 Singelton
@@ -36,8 +34,7 @@ Create HTML representation of this menu
  ==== *private* _int_ *`sort`* ( _[DOCComponentsPageUtil#MenuItem MenuItem]_ `$child1`, _[DOCComponentsPageUtil#MenuItem MenuItem]_ `$child2` ) ====
 Sort the items in the menu
 == `Tree` ==
-,,File: components/page/util/class.Tree.inc,,
-===== ,,class,, Tree =====
+===== ,,class,, Tree ^File: components/page/util/class.Tree.inc^ =====
 Tree class for the page admin tree
  ==== *public* *static* _void_ *`getInstance`* (  ) ====
  ==== *private* _void_ *`__construct`* ( _string_ `$name`, _string_ `$element` ) ====
@@ -50,8 +47,7 @@ get the name of the javascript element
  ==== *public* _string_ *`toJavascript`* (  ) ====
 Create the javascript code for the tree
 == `TreeNode` ==
-,,File: components/page/util/class.Tree.inc,,
-===== _abstract_ ,,class,, TreeNode =====
+===== _abstract_ ,,class,, TreeNode ^File: components/page/util/class.Tree.inc^ =====
 Abstract class for the nodes of the tree
  ==== *public* _void_ *`setParent`* ( _[DOCComponentsPageUtil#Tree Tree]_ `$parent` ) ====
 Set the parent, which is the tree
@@ -62,24 +58,21 @@ Get the type of this node
  ==== *public* _string_ *`registerIcons`* (  ) ====
 function that is called once on each type of node, you can add icons to the tree here
 == `PageItem` ==
-,,File: components/page/util/class.Tree.inc,,
-===== ,,class,, PageItem ,,extends,, [DOCComponentsPageUtil#TreeNode TreeNode] =====
+===== ,,class,, PageItem ,,extends,, [DOCComponentsPageUtil#TreeNode TreeNode] ^File: components/page/util/class.Tree.inc^ =====
 The node for the page items
  ==== *public* _void_ *`__construct`* ( _object_ `$record` ) ====
 Constructor
  ==== *public* _string_ *`toJavascript`* (  ) ====
 Create the javascript code for the tree
 == `Folder` ==
-,,File: components/page/util/class.Tree.inc,,
-===== ,,class,, Folder ,,extends,, [DOCComponentsPageUtil#TreeNode TreeNode] =====
+===== ,,class,, Folder ,,extends,, [DOCComponentsPageUtil#TreeNode TreeNode] ^File: components/page/util/class.Tree.inc^ =====
 
  ==== *public* _void_ *`__construct`* ( _object_ `$record` ) ====
 Constructor
  ==== *public* _string_ *`toJavascript`* (  ) ====
 Create the javascript code for the tree
 == `RootFolder` ==
-,,File: components/page/util/class.Tree.inc,,
-===== ,,class,, RootFolder ,,extends,, [DOCComponentsPageUtil#Folder Folder] =====
+===== ,,class,, RootFolder ,,extends,, [DOCComponentsPageUtil#Folder Folder] ^File: components/page/util/class.Tree.inc^ =====
 
  ==== *public* _string_ *`toJavascript`* (  ) ====
 Create the javascript code for the tree

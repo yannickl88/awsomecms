@@ -10,8 +10,7 @@ included in the distribution.
 The following classes are located in this package
 === Classes: ===
 == `BooleanField` ==
-,,File: core/fields/class.BooleanField.inc,,
-===== ,,class,, BooleanField ,,extends,, [DOCCoreFields#IntField IntField] =====
+===== ,,class,, BooleanField ,,extends,, [DOCCoreFields#IntField IntField] ^File: core/fields/class.BooleanField.inc^ =====
 Boolean field.
  ==== *protected* _string_ *`toHTML_add`* (  ) ====
 Create a HTML representation of add field
@@ -20,8 +19,7 @@ Create a HTML representation of edit field
  ==== *protected* _string_ *`toHTML_view`* (  ) ====
 Create a HTML representation of view field
 == `CaptchaField` ==
-,,File: core/fields/class.CaptchaField.inc,,
-===== ,,class,, CaptchaField ,,extends,, [DOCCoreFields#Field Field] =====
+===== ,,class,, CaptchaField ,,extends,, [DOCCoreFields#Field Field] ^File: core/fields/class.CaptchaField.inc^ =====
 Captcha field to prevent bots.
  ==== *public* _void_ *`__construct`* ( _string_ `$name`, _string_ `$displayName`, _int_ `$style` ) ====
 Constructor
@@ -32,8 +30,7 @@ Create a HTML representation of edit field
  ==== *public* _void_ *`validate`* ( _int_ `$mode` ) ====
 Validate the data for this field. This throws a FormException when not valid
 == `DateField` ==
-,,File: core/fields/class.DateField.inc,,
-===== ,,class,, DateField ,,extends,, [DOCCoreFields#Field Field] =====
+===== ,,class,, DateField ,,extends,, [DOCCoreFields#Field Field] ^File: core/fields/class.DateField.inc^ =====
 Date field, this shows a date selection field
  ==== *public* _string_ *`value2db`* ( __ `$value` ) ====
 Convert the value of the param to that what the DB expects
@@ -50,8 +47,7 @@ Create a HTML representation of view field
  ==== *public* _string_ *`getJavascript`* (  ) ====
 get the javascript for this field
 == `Field` ==
-,,File: core/fields/class.Field.inc,,
-===== ,,class,, Field =====
+===== ,,class,, Field ^File: core/fields/class.Field.inc^ =====
 Superclass for a Field.
  ==== *public* _[DOCCoreFields#Field Field]_ *`__construct`* ( _string_ `$name`, _`*`_ `$value` ) ====
 Constructor of the field
@@ -137,8 +133,7 @@ preform this action prior to the SQL execution that uses this field
  ==== *public* _void_ *`postSQL`* ( _[DOCCore#SQLRecord SQLRecord]_ `$sqlrecord`, _array_ `$record`, _[DOCCore#SQLQuery SQLQuery]_ `$query` ) ====
 preform this action prior to the SQL execution that uses this field
 == `IntField` ==
-,,File: core/fields/class.IntField.inc,,
-===== ,,class,, IntField ,,extends,, [DOCCoreFields#Field Field] =====
+===== ,,class,, IntField ,,extends,, [DOCCoreFields#Field Field] ^File: core/fields/class.IntField.inc^ =====
 Integer field
  ==== *protected* _string_ *`toHTML_add`* (  ) ====
 Create a HTML representation of add field
@@ -150,8 +145,7 @@ get the javascript for this field
  ==== *public* _void_ *`validate`* ( _int_ `$mode` ) ====
 Validate the data for this field. This throws a FormException when not valid
 == `PasswordField` ==
-,,File: core/fields/class.PasswordField.inc,,
-===== ,,class,, PasswordField ,,extends,, [DOCCoreFields#Field Field] =====
+===== ,,class,, PasswordField ,,extends,, [DOCCoreFields#Field Field] ^File: core/fields/class.PasswordField.inc^ =====
 Password field
  ==== *public* _void_ *`__construct`* ( _string_ `$name`, _string_ `$displayName`, _int_ `$style` ) ====
 Constructor
@@ -162,8 +156,7 @@ Create a HTML representation of edit field
  ==== *public* _void_ *`value2db`* (  ) ====
  ==== *public* _void_ *`db2value`* (  ) ====
 == `TagField` ==
-,,File: core/fields/class.TagField.inc,,
-===== ,,class,, TagField ,,extends,, [DOCCoreFields#Field Field] =====
+===== ,,class,, TagField ,,extends,, [DOCCoreFields#Field Field] ^File: core/fields/class.TagField.inc^ =====
 Tag field, this allows for quick search and assignment of tags
  ==== *public* _void_ *`preSQL`* ( _`*`_ `Array record that was used`, _[DOCCore#SQLQuery SQLQuery]_ `$query` ) ====
 preform this action prior to the SQL execution that uses this field
@@ -179,8 +172,7 @@ Add delete data for this field to a query
 get the javascript for this field
  ==== *private* _void_ *`getAllTags`* (  ) ====
 == `TextField` ==
-,,File: core/fields/class.TextField.inc,,
-===== ,,class,, TextField ,,extends,, [DOCCoreFields#Field Field] =====
+===== ,,class,, TextField ,,extends,, [DOCCoreFields#Field Field] ^File: core/fields/class.TextField.inc^ =====
 Textarea field
  ==== *public* _void_ *`__construct`* ( _string_ `$name`, _string_ `$displayName`, _int_ `$style` ) ====
 Constructor

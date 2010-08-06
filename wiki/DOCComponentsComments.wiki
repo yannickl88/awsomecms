@@ -10,16 +10,14 @@ included in the distribution.
 The following classes are located in this package
 === Classes: ===
 == `CommentsComponent` ==
-,,File: components/comments/class.CommentsComponent.inc,,
-===== ,,class,, CommentsComponent ,,extends,, [DOCCore#Component Component] =====
+===== ,,class,, CommentsComponent ,,extends,, [DOCCore#Component Component] ^File: components/comments/class.CommentsComponent.inc^ =====
 Comments compontent class, this includes all logic for an component
  ==== *public* _void_ *`__construct`* (  ) ====
 Constructor for the comments component
  ==== *public* _void_ *`action_reply`* ( _Smarty_ `$smarty`, _[DOCCore#SmartyPageLoader SmartyPageLoader]_ `$smartyLoader`, _array_ `$request` ) ====
 Repley action, this is called when a reply is posted
 == `CommentsTable` ==
-,,File: components/comments/class.CommentsTable.inc,,
-===== ,,class,, CommentsTable ,,extends,, [DOCCore#Table Table] =====
+===== ,,class,, CommentsTable ,,extends,, [DOCCore#Table Table] ^File: components/comments/class.CommentsTable.inc^ =====
 Comments table, this handels all interaction with the comments table in the database
  ==== *public* _void_ *`__construct`* (  ) ====
 Constructor

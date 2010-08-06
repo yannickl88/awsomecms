@@ -10,8 +10,7 @@ included in the distribution.
 The following classes are located in this package
 === Classes: ===
 == `FilesTable` ==
-,,File: components/file/class.FilesTable.inc,,
-===== ,,class,, FilesTable ,,extends,, [DOCCore#Table Table] =====
+===== ,,class,, FilesTable ,,extends,, [DOCCore#Table Table] ^File: components/file/class.FilesTable.inc^ =====
 Core table, this handels all interaction with the core table in the database
  ==== *public* _void_ *`__construct`* (  ) ====
 Constructor
@@ -24,8 +23,7 @@ Constructor
  ==== *protected* _void_ *`delete`* (  ) ====
 (non-PHPdoc)
 == `GalleryComponent` ==
-,,File: components/gallery/class.GalleryComponent.inc,,
-===== ,,class,, GalleryComponent ,,extends,, [DOCCore#Component Component] =====
+===== ,,class,, GalleryComponent ,,extends,, [DOCCore#Component Component] ^File: components/gallery/class.GalleryComponent.inc^ =====
 A simple component to manage and show a series of images on a page. Using a tag, images can be grouped together
  ==== *public* _`*`_ *`__construct`* (  ) ====
 Constructor
@@ -38,8 +36,7 @@ Action to delete an image
  ==== *public* _void_ *`registerMenuItems`* ( _[DOCComponentsPageUtil#Menu Menu]_ `$menu` ) ====
 Function for registering menu items to the admin menu
 == `GalleryTable` ==
-,,File: components/gallery/class.GalleryTable.inc,,
-===== ,,class,, GalleryTable ,,extends,, [DOCCore#Table Table] =====
+===== ,,class,, GalleryTable ,,extends,, [DOCCore#Table Table] ^File: components/gallery/class.GalleryTable.inc^ =====
 Core table, this handels all interaction with the core table in the database
  ==== *public* _void_ *`__construct`* (  ) ====
 Constructor

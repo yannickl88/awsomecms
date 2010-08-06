@@ -10,8 +10,7 @@ included in the distribution.
 The following classes are located in this package
 === Classes: ===
 == `PrivilegesTable` ==
-,,File: components/users/class.PrivilegesTable.inc,,
-===== ,,class,, PrivilegesTable ,,extends,, [DOCCore#Table Table] =====
+===== ,,class,, PrivilegesTable ,,extends,, [DOCCore#Table Table] ^File: components/users/class.PrivilegesTable.inc^ =====
 Privileges tabel.
  ==== *public* _[DOCCore#Table Table]_ *`__construct`* ( _string_ `$name` ) ====
 Constructor for Table
@@ -29,8 +28,7 @@ Preform a delete on the table
 Mapping of the action to the actuly hidden field content.
 When in need of custom mapping, like if you have two tables for one component, override this method
 == `UsersComponent` ==
-,,File: components/users/class.UsersComponent.inc,,
-===== ,,class,, UsersComponent ,,extends,, [DOCCore#Component Component] =====
+===== ,,class,, UsersComponent ,,extends,, [DOCCore#Component Component] ^File: components/users/class.UsersComponent.inc^ =====
 User component and the actions that it can do.
 This components gives you the option to create different users inside a
 system, these users can be assigned a name and password and privilages. If
@@ -64,8 +62,7 @@ Log a user out
  ==== *public* _void_ *`registerMenuItems`* ( _[DOCComponentsPageUtil#Menu Menu]_ `$menu` ) ====
 Register menu items for this component
 == `UsersTable` ==
-,,File: components/users/class.UsersTable.inc,,
-===== ,,class,, UsersTable ,,extends,, [DOCCore#Table Table] =====
+===== ,,class,, UsersTable ,,extends,, [DOCCore#Table Table] ^File: components/users/class.UsersTable.inc^ =====
 User table, this handels all interaction with the user table in the database
  ==== *public* _void_ *`__construct`* (  ) ====
 Constructor

@@ -9,24 +9,17 @@ included in the distribution.
 == Contents: ==
 The following functions are located in this package
 === Functions: ===
- ==== _void_ *`smarty_function_form`* ( _array_ `$params`, _Smarty_ `$smarty` ) ====
-,,File: ,,
+ ==== _void_ *`smarty_function_form`* ( _array_ `$params`, _Smarty_ `$smarty` ) ^File: components/core/plugins/function.form.php^====
 Form tag, this is used to add a form from a component to a page. This will call the action and hooks related to the action of the form
- ==== _bool_ *`smarty_modifier_count`* ( _array_ `$array` ) ====
-,,File: ,,
+ ==== _bool_ *`smarty_modifier_count`* ( _array_ `$array` ) ^File: components/core/plugins/modifier.count.php^====
 Modifier to count the number of elements
- ==== _bool_ *`smarty_modifier_hasflag`* ( _int_ `$int`, _int_ `$flag` ) ====
-,,File: ,,
+ ==== _bool_ *`smarty_modifier_hasflag`* ( _int_ `$int`, _int_ `$flag` ) ^File: components/core/plugins/modifier.hasflag.php^====
 Modifier to binary check if a flag is in a value
- ==== _bool_ *`smarty_modifier_installed`* ( _string_ `$element` ) ====
-,,File: ,,
+ ==== _bool_ *`smarty_modifier_installed`* ( _string_ `$element` ) ^File: components/core/plugins/modifier.installed.php^====
 Modifier to check if a given component is installed
- ==== _bool_ *`smarty_modifier_notin`* ( _`*`_ `$element`, _array_ `$array` ) ====
-,,File: ,,
+ ==== _bool_ *`smarty_modifier_notin`* ( _`*`_ `$element`, _array_ `$array` ) ^File: components/core/plugins/modifier.notin.php^====
 Modifier to check if value is in an array
- ==== _bool_ *`smarty_modifier_text`* ( _array_ `$array` ) ====
-,,File: ,,
+ ==== _bool_ *`smarty_modifier_text`* ( _array_ `$array` ) ^File: components/core/plugins/modifier.text.php^====
 Modifier to count the number of elements
- ==== _string_ *`smarty_modifier_ucfirst`* ( _string_ `$string` ) ====
-,,File: ,,
+ ==== _string_ *`smarty_modifier_ucfirst`* ( _string_ `$string` ) ^File: components/core/plugins/modifier.ucfirst.php^====
 Make the first letter of a string uppercase

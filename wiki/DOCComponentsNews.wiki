@@ -10,8 +10,7 @@ included in the distribution.
 The following classes are located in this package
 === Classes: ===
 == `NewsComponent` ==
-,,File: components/news/class.NewsComponent.inc,,
-===== ,,class,, NewsComponent ,,extends,, [DOCCore#Component Component] =====
+===== ,,class,, NewsComponent ,,extends,, [DOCCore#Component Component] ^File: components/news/class.NewsComponent.inc^ =====
 The News component provides a simple news system that allows for new messages.
 News items can be grouped using a tag if needed.
  ==== *public* _void_ *`__construct`* (  ) ====
@@ -29,8 +28,7 @@ Register tree items for this component
  ==== *public* _void_ *`registerURLMap`* (  ) ====
 (non-PHPdoc)
 == `NewsTable` ==
-,,File: components/news/class.NewsTable.inc,,
-===== ,,class,, NewsTable ,,extends,, [DOCCore#Table Table] =====
+===== ,,class,, NewsTable ,,extends,, [DOCCore#Table Table] ^File: components/news/class.NewsTable.inc^ =====
 News table, this handels all interaction with the news table in the database
  ==== *public* _void_ *`__construct`* (  ) ====
 constructor
