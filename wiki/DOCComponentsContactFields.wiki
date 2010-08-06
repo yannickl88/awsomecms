@@ -7,16 +7,6 @@ Detailed copyright and licensing information can be found
 in the doc/COPYRIGHT and doc/LICENSE files which should be
 included in the distribution.
 == Contents: ==
-The following functions are located in this package
-=== Functions: ===
- ===== _void_ *`prossesFields`* (  ) =====
-
- ===== _void_ *`addFieldsRow`* (  ) =====
-
- ===== _void_ *`deleteFieldsRow`* (  ) =====
-
- ===== _void_ *`resetFieldsRowIds`* (  ) =====
-
 The following classes are located in this package
 === Classes: ===
 == FieldsField ==
@@ -30,3 +20,7 @@ Create a HTML representation of add field
 Create a HTML representation of edit field
  ==== *public* _string_ *`getJavascript`* (  ) ====
 get the javascript for this field
+ ==== _void_ *`prossesFields`* (  ) ====
+ ==== _void_ *`addFieldsRow`* (  ) ====
+ ==== _void_ *`deleteFieldsRow`* (  ) ====
+ ==== _void_ *`resetFieldsRowIds`* (  ) ====

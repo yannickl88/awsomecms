@@ -37,21 +37,21 @@ the group component is installed, privilages will be delegated there
  ==== *private* _void_ *`login`* ( _array_ `$request`, _string_ `$redirect` ) ====
 Internal function to handle login. This checks user and password and
 if they are filled in or throws and FormException otherwise.
- ==== *public* _void_ *`action_login`* ( _Smarty_ `$smarty`, _[DOCDefault#SmartyPageLoader SmartyPageLoader]_ `$smartyLoader`, _array_ `$request` ) ====
+ ==== *public* _void_ *`action_login`* ( _Smarty_ `$smarty`, _[DOCCore#SmartyPageLoader SmartyPageLoader]_ `$smartyLoader`, _array_ `$request` ) ====
 Login and redirect to the admin section
- ==== *public* _void_ *`action_admin_login`* ( _Smarty_ `$smarty`, _[DOCDefault#SmartyPageLoader SmartyPageLoader]_ `$smartyLoader`, _array_ `$request` ) ====
+ ==== *public* _void_ *`action_admin_login`* ( _Smarty_ `$smarty`, _[DOCCore#SmartyPageLoader SmartyPageLoader]_ `$smartyLoader`, _array_ `$request` ) ====
 Login and redirect to the index
- ==== *public* _void_ *`action_add`* ( _Smarty_ `$smarty`, _[DOCDefault#SmartyPageLoader SmartyPageLoader]_ `$smartyLoader`, _array_ `$request` ) ====
+ ==== *public* _void_ *`action_add`* ( _Smarty_ `$smarty`, _[DOCCore#SmartyPageLoader SmartyPageLoader]_ `$smartyLoader`, _array_ `$request` ) ====
 Add a user
- ==== *public* _void_ *`action_edit`* ( _Smarty_ `$smarty`, _[DOCDefault#SmartyPageLoader SmartyPageLoader]_ `$smartyLoader`, _array_ `$request` ) ====
+ ==== *public* _void_ *`action_edit`* ( _Smarty_ `$smarty`, _[DOCCore#SmartyPageLoader SmartyPageLoader]_ `$smartyLoader`, _array_ `$request` ) ====
 Edit a user
- ==== *public* _void_ *`action_delete`* ( _Smarty_ `$smarty`, _[DOCDefault#SmartyPageLoader SmartyPageLoader]_ `$smartyLoader`, _array_ `$request` ) ====
+ ==== *public* _void_ *`action_delete`* ( _Smarty_ `$smarty`, _[DOCCore#SmartyPageLoader SmartyPageLoader]_ `$smartyLoader`, _array_ `$request` ) ====
 Delete a user
- ==== *public* _void_ *`action_privadd`* ( _Smarty_ `$smarty`, _[DOCDefault#SmartyPageLoader SmartyPageLoader]_ `$smartyLoader`, _array_ `$request` ) ====
+ ==== *public* _void_ *`action_privadd`* ( _Smarty_ `$smarty`, _[DOCCore#SmartyPageLoader SmartyPageLoader]_ `$smartyLoader`, _array_ `$request` ) ====
 Add a privilege
- ==== *public* _void_ *`action_privedit`* ( _Smarty_ `$smarty`, _[DOCDefault#SmartyPageLoader SmartyPageLoader]_ `$smartyLoader`, _array_ `$request` ) ====
+ ==== *public* _void_ *`action_privedit`* ( _Smarty_ `$smarty`, _[DOCCore#SmartyPageLoader SmartyPageLoader]_ `$smartyLoader`, _array_ `$request` ) ====
 Edit a privilege
- ==== *public* _void_ *`action_privdelete`* ( _Smarty_ `$smarty`, _[DOCDefault#SmartyPageLoader SmartyPageLoader]_ `$smartyLoader`, _array_ `$request` ) ====
+ ==== *public* _void_ *`action_privdelete`* ( _Smarty_ `$smarty`, _[DOCCore#SmartyPageLoader SmartyPageLoader]_ `$smartyLoader`, _array_ `$request` ) ====
 Delete a privilege
  ==== *public* _array_ *`getPrivilageMapping`* ( _int_ `$privileges` ) ====
 Get the privileges the user has

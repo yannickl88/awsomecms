@@ -16,11 +16,11 @@ Component that allowes for group based authentication, rather then user based
 Constructor
  ==== *public* _void_ *`register`* ( _[DOCCore#RegisterManager RegisterManager]_ `$registerManager` ) ====
 Register actions/hooks/mappings to the framework
- ==== *public* _void_ *`action_add`* ( _Smarty_ `$smarty`, _[DOCDefault#SmartyPageLoader SmartyPageLoader]_ `$smartyLoader`, _array_ `$request` ) ====
+ ==== *public* _void_ *`action_add`* ( _Smarty_ `$smarty`, _[DOCCore#SmartyPageLoader SmartyPageLoader]_ `$smartyLoader`, _array_ `$request` ) ====
 Action to add an group
- ==== *public* _void_ *`action_edit`* ( _Smarty_ `$smarty`, _[DOCDefault#SmartyPageLoader SmartyPageLoader]_ `$smartyLoader`, _array_ `$request` ) ====
+ ==== *public* _void_ *`action_edit`* ( _Smarty_ `$smarty`, _[DOCCore#SmartyPageLoader SmartyPageLoader]_ `$smartyLoader`, _array_ `$request` ) ====
 Action to edit an group
- ==== *public* _void_ *`action_delete`* ( _Smarty_ `$smarty`, _[DOCDefault#SmartyPageLoader SmartyPageLoader]_ `$smartyLoader`, _array_ `$request` ) ====
+ ==== *public* _void_ *`action_delete`* ( _Smarty_ `$smarty`, _[DOCCore#SmartyPageLoader SmartyPageLoader]_ `$smartyLoader`, _array_ `$request` ) ====
 Action to delete an group
  ==== *public* _array_ *`getPrivilageMapping`* ( _int_ `$privileges`, _array_ `$preset` ) ====
 Request a list of privilages a given groups has

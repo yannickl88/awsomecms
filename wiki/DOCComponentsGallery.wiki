@@ -27,11 +27,11 @@ Constructor
 A simple component to manage and show a series of images on a page. Using a tag, images can be grouped together
  ==== *public* _`*`_ *`__construct`* (  ) ====
 Constructor
- ==== *public* _void_ *`action_add`* ( _Smarty_ `$smarty`, _[DOCDefault#SmartyPageLoader SmartyPageLoader]_ `$smartyLoader`, _array_ `$request` ) ====
+ ==== *public* _void_ *`action_add`* ( _Smarty_ `$smarty`, _[DOCCore#SmartyPageLoader SmartyPageLoader]_ `$smartyLoader`, _array_ `$request` ) ====
 Action to add an image
- ==== *public* _void_ *`action_edit`* ( _Smarty_ `$smarty`, _[DOCDefault#SmartyPageLoader SmartyPageLoader]_ `$smartyLoader`, _array_ `$request` ) ====
+ ==== *public* _void_ *`action_edit`* ( _Smarty_ `$smarty`, _[DOCCore#SmartyPageLoader SmartyPageLoader]_ `$smartyLoader`, _array_ `$request` ) ====
 Action to edit an image
- ==== *public* _void_ *`action_delete`* ( _Smarty_ `$smarty`, _[DOCDefault#SmartyPageLoader SmartyPageLoader]_ `$smartyLoader`, _array_ `$request` ) ====
+ ==== *public* _void_ *`action_delete`* ( _Smarty_ `$smarty`, _[DOCCore#SmartyPageLoader SmartyPageLoader]_ `$smartyLoader`, _array_ `$request` ) ====
 Action to delete an image
  ==== *public* _void_ *`registerMenuItems`* ( _[DOCComponentsPageUtil#Menu Menu]_ `$menu` ) ====
 Function for registering menu items to the admin menu

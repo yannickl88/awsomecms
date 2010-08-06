@@ -14,7 +14,7 @@ The following classes are located in this package
 Comments compontent class, this includes all logic for an component
  ==== *public* _void_ *`__construct`* (  ) ====
 Constructor for the comments component
- ==== *public* _void_ *`action_reply`* ( _Smarty_ `$smarty`, _[DOCDefault#SmartyPageLoader SmartyPageLoader]_ `$smartyLoader`, _array_ `$request` ) ====
+ ==== *public* _void_ *`action_reply`* ( _Smarty_ `$smarty`, _[DOCCore#SmartyPageLoader SmartyPageLoader]_ `$smartyLoader`, _array_ `$request` ) ====
 Repley action, this is called when a reply is posted
 == CommentsTable ==
 ===== ,,class,, CommentsTable ,,extends,, [DOCCore#Table Table] =====

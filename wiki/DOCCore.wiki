@@ -9,17 +9,11 @@ included in the distribution.
 == Contents: ==
 The following functions are located in this package
 === Functions: ===
- ===== _array_ *`getPrivilageMapping`* ( __ `$privileges` ) =====
-Get the mapping of all privilages and if the user has it
- ===== _bool_ *`auth_login`* ( _string_ `$user_name`, _string_ `$user_pass` ) =====
-Log the user in
- ===== _bool_ *`auth_logout`* (  ) =====
-Log the user out
  ===== _void_ *`import`* ( _string_ `$file` ) =====
 Import a file, with the root the framework root
  ===== _void_ *`importField`* ( _string_ `$field` ) =====
 Import a field.
-You can use <FieldName> for core fields and <component>.<FieldName> for component specific fields.
+You can use {FieldName} for core fields and {component}.{FieldName} for component specific fields.
  ===== _string_ *`getFrameworkRoot`* (  ) =====
 Get the root of the framework
  ===== _bool_ *`handleError`* ( _int_ `$errno`, _string_ `$errstr`, _string_ `$errfile`, _int_ `$errline` ) =====
@@ -43,6 +37,12 @@ Authentication class that is a facade for loggin in and out
 Login, and setting the user session. This calls the component set in the config
  ==== *public* *static* _bool_ *`logout`* (  ) ====
 Logout, and clearing the user session. This calls the component set in the config
+ ==== *public* _array_ *`getPrivilageMapping`* ( __ `$privileges` ) ====
+Get the mapping of all privilages and if the user has it
+ ==== *public* _bool_ *`auth_login`* ( _string_ `$user_name`, _string_ `$user_pass` ) ====
+Log the user in
+ ==== *public* _bool_ *`auth_logout`* (  ) ====
+Log the user out
 == Cache ==
 ===== ,,class,, Cache =====
 Cache class which handels quick caching of data
@@ -148,7 +148,7 @@ remove the notifications for an URL
 Controller class that handels all the incomming data requests
  ==== *public* *static* _[DOCCore#Controller Controller]_ *`getInstance`* (  ) ====
 Singelton
- ==== *public* _void_ *`dispatch`* ( _Smarty_ `$smarty`, _[DOCDefault#SmartyPageLoader SmartyPageLoader]_ `$smartyLoader` ) ====
+ ==== *public* _void_ *`dispatch`* ( _Smarty_ `$smarty`, _[DOCCore#SmartyPageLoader SmartyPageLoader]_ `$smartyLoader` ) ====
 Handle a request
  ==== *public* _void_ *`setOutput`* ( __ `$string` ) ====
 Set the output to be returned on completion, this is used so that on
@@ -385,6 +385,27 @@ Exception thrown when a page could not be found
 == NotInstalledException ==
 ===== ,,class,, NotInstalledException ,,extends,, Exception =====
 Exception to be triggered when the framework is not properly installed (No components)
+== SmartyPageLoader ==
+===== ,,class,, SmartyPageLoader =====
+Handel all the database loading and file checking. Also do some util
+actions with smarty, like loading all the plugins
+ ==== *public* _void_ *`__construct`* (  ) ====
+constructor
+ ==== *public* _string_ *`getPage`* ( _string_ `$url`, _Smarty_ `$smarty_obj` ) ====
+Get the HTML of an page
+ ==== *public* _string_ *`getRenderedPage`* ( _string_ `$content`, _string_ `$url`, _Smarty_ `$smarty_obj` ) ====
+Get the page with the rendered page with the layout wraped around it
+ ==== *public* _bool_ *`getTemplate`* ( _string_ `$tpl_name`, _string_ `$tpl_source`, _Smarty_ `$smarty_obj` ) ====
+load the template from the database
+ ==== *public* _bool_ *`getTimestamp`* ( _string_ `$tpl_name`, _string_ `$tpl_timestamp`, _Smarty_ `$smarty_obj` ) ====
+check the timestamp for an template
+ ==== *public* _bool_ *`getSecure`* ( __ `$tpl_name`, __ `$smarty_obj` ) ====
+check if the template is secure
+ ==== *public* _bool_ *`getTrusted`* ( _string_ `$tpl_name`, _Smarty_ `$smarty_obj` ) ====
+check if the template is trusted
+ ==== *public* _void_ *`registerModulePlugins`* ( _Smarty_ `$smarty_obj` ) ====
+register all the smarty extentions from the components,
+see http://smarty.net/manual/en/plugins.php
 == DataContainer ==
 ===== ,,class,, DataContainer =====
 Container for dynamic data, this always returnes NULL when a propertie is not found
