@@ -7,7 +7,7 @@
  *
  * @copyright (c) 2009-2010 Yannick de Lange
  * @license http://www.gnu.org/licenses/gpl.txt
- *
+ * 
  * @version $Revision$
  */
 session_start();

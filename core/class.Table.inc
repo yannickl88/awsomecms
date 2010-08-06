@@ -988,28 +988,28 @@ abstract class Table
         }
     }
     /**
-     * Aditional Select data
+     * Additional Select data
      * 
      * @param SQLQuery $query
      * @param Object $data
      */
     abstract protected function select($query, $data = null);
     /**
-     * Aditional Insert data
+     * Additional Insert data
      * 
      * @param SQLQuery $query
      * @param Object $data
      */
     abstract protected function insert($query, $data = null);
     /**
-     * Aditional Update data
+     * Additional Update data
      * 
      * @param SQLQuery $query
      * @param Object $data
      */
     abstract protected function update($query, $data = null);
     /**
-     * Aditional Delete data
+     * Additional Delete data
      * 
      * @param SQLQuery $query
      * @param Object $data

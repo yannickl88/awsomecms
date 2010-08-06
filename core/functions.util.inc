@@ -37,7 +37,7 @@ function import($file)
 }
 /**
  * Import a field.
- * You can use <FieldName> for core fields and <component>.<FieldName> for component specific fields.
+ * You can use {FieldName} for core fields and {component}.{FieldName} for component specific fields.
  * 
  * @param string $field
  */
