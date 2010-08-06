@@ -38,7 +38,7 @@ class OutputWiki
                 }
 
                 $pageContent .= "== `{$class->name}` ==\n";
-                $pageContent .= "===== {$classHeader} =====\n";
+                $pageContent .= "===== {$classHeader} ^File: {$class->file}^ =====\n";
                 $text = htmlentities($class->header->text);
                 $pageContent .= "{$text}\n";
 
@@ -54,6 +54,7 @@ class OutputWiki
 
         foreach($infoXML->method as $function)
         {
+            $functionOrig = $function;
             $params = "";
             $id = $function['id'];
             if($function->header->see->__toString() != "")
@@ -89,8 +90,7 @@ class OutputWiki
                     if($params != "")
                     {
                         $params .= ", ";
-                    }
-                    $type = $param['type']->__toString();
+                    }                    $type = $param['type']->__toString();
                     if($type == "*") $type = "`*`";
                     
                     $type = $this->getRef($type);
@@ -105,9 +105,13 @@ class OutputWiki
                 if($return == "*") $return = "`*`";
             }
             $accessor = "";
-            if($function->accessor->__toString() !== "")
+            if($functionOrig->accessor->__toString() !== "")
             {
-                $accessor .= "*{$function->accessor}* ";
+                $accessor .= "*{$functionOrig->accessor}* ";
+            }
+            if($functionOrig->abstract->__toString() === "1")
+            {
+                $accessor .= "*abstract* ";
             }
             $static = "";
             if($function->static->__toString() === "1")
@@ -123,6 +127,11 @@ class OutputWiki
             $pageContent .= " ==== {$accessor}{$static}_{$return}_ *`{$function->name}`* ( {$params} ) ====\n";
             if(!empty($text))
             {
+                if($functionOrig != $function)
+                {
+                    $class = explode(".", $function['id']);
+                    $pageContent .= " Inherited from: ".$this->getRef($class[1])."\n";
+                }
                 $pageContent .= "{$text}\n";
             }
         }
@@ -162,7 +171,7 @@ class OutputWiki
                     if($return == "*") $return = "`*`";
                 }
 
-                $pageContent .= " ==== _{$return}_ *`{$function->name}`* ( {$params} ) ====\n";
+                $pageContent .= " ==== _{$return}_ *`{$function->name}`* ( {$params} ) ^File: {$function->file}^====\n";
                 $pageContent .= "{$function->header->text}\n";
             }
         }
@@ -232,14 +241,22 @@ class OutputWiki
         }
         return $packageName.".xml";
     }
-    private function getRef($name, $type = "class")
+    private function getRef($name, $type = "class", $anchor = "")
     {
-        $see = $this->refs->xpath("//ref[@id='{$type}.{$name}']");
+        if($anchor == "") $anchor = $name;
+        if($type == "ID")
+        {
+            $see = $this->refs->xpath("//ref[@id='{$name}']");
+        }
+        else
+        {
+            $see = $this->refs->xpath("//ref[@id='{$type}.{$name}']");
+        }
 
         if(count($see) > 0)
         {
             $loc = $this->translatePackageLocalName($see[0]->package->__toString(), false);
-            return "[{$loc}#{$name} {$name}]";
+            return "[{$loc}#{$anchor} {$name}]";
         }
         return $name;
     }
