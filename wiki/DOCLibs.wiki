@@ -137,6 +137,7 @@ BBCode Document root
  ==== *public* _void_ *`__construct`* (  ) ====
 Constructor
  ==== *public* _string_ *`valueOf`* ( _string_ `$level`, _int_ `$i` ) ====
+ Inherited from: [DOCLibs#_string__valueOf_(__string__$level_,_int__$i_) method.BBCodeElement.valueOf]
 Debug for showing the element tree from this element
 == `BBCodeDummyElement` ==
 ===== ,,class,, BBCodeDummyElement ,,extends,, [DOCLibs#BBCodeElement BBCodeElement] ^File: libs/class.BBCodeParser.inc^ =====
@@ -144,6 +145,7 @@ Dummy element, this is used for checking stuff
  ==== *public* _void_ *`__construct`* (  ) ====
 Constructor
  ==== *public* _string_ *`text`* (  ) ====
+ Inherited from: [DOCLibs#_string__text_(_) method.BBCodeElement.text]
 Get the HTML, including the wrapping, of the element
 == `BBCodeText` ==
 ===== ,,class,, BBCodeText ,,extends,, [DOCLibs#BBCodeElement BBCodeElement] ^File: libs/class.BBCodeParser.inc^ =====
@@ -151,6 +153,7 @@ Element which only contains text
  ==== *public* _void_ *`__construct`* (  ) ====
 Constructor
  ==== *public* _string_ *`text`* (  ) ====
+ Inherited from: [DOCLibs#_string__text_(_) method.BBCodeElement.text]
 Get the HTML, including the wrapping, of the element
 == `BBCodeNewLine` ==
 ===== ,,class,, BBCodeNewLine ,,extends,, [DOCLibs#BBCodeElement BBCodeElement] ^File: libs/class.BBCodeParser.inc^ =====
@@ -158,22 +161,26 @@ Element which indecates a new line
  ==== *public* _void_ *`__construct`* (  ) ====
 Constructor
  ==== *public* _string_ *`text`* (  ) ====
+ Inherited from: [DOCLibs#_string__text_(_) method.BBCodeElement.text]
 Get the HTML, including the wrapping, of the element
 == `BBCodeParagraph` ==
 ===== ,,class,, BBCodeParagraph ,,extends,, [DOCLibs#BBCodeElement BBCodeElement] ^File: libs/class.BBCodeParser.inc^ =====
 Element which is a paragraph in the document
  ==== *public* _void_ *`__construct`* (  ) ====
 Constructor
- ==== *protected* _void_ *`wrap`* ( _string_ `$text` ) ====
+ ==== *public* _void_ *`wrap`* ( _string_ `$text` ) ====
+ Inherited from: [DOCLibs#_void__wrap_(__string__$text_) method.BBCodeElement.wrap]
 Wrap the content of the element
 == `BBCodeUnknownElement` ==
 ===== ,,class,, BBCodeUnknownElement ,,extends,, [DOCLibs#BBCodeElement BBCodeElement] ^File: libs/class.BBCodeParser.inc^ =====
 Element which is a handler when there is no element to be found
- ==== *protected* _void_ *`wrap`* ( _string_ `$text` ) ====
+ ==== *public* _void_ *`wrap`* ( _string_ `$text` ) ====
+ Inherited from: [DOCLibs#_void__wrap_(__string__$text_) method.BBCodeElement.wrap]
 Wrap the content of the element
  ==== *public* _string_ *`serializeAttr`* (  ) ====
 Create a string which we can use as smarty params
  ==== *public* _bool_ *`singelTag`* (  ) ====
+ Inherited from: [DOCLibs#_bool__singelTag_(_) method.BBCodeElement.singelTag]
 Check if the element doesn't need a closing tag
 == `BBCodeParser` ==
 ===== ,,class,, BBCodeParser ^File: libs/class.BBCodeParser.inc^ =====
@@ -193,7 +200,7 @@ called before the exec
  ==== _void_ *`cleanup`* ( _[DOCLibs#CLI CLI]_ `$cli` ) ====
 Cleanup function, you can override this to add cleanup stuff. This is
 called after the exec
- ==== *abstract* _void_ *`exec`* ( _[DOCLibs#CLI CLI]_ `$cli`, _string_ `$action` ) ====
+ ==== _void_ *`exec`* ( _[DOCLibs#CLI CLI]_ `$cli`, _string_ `$action` ) ====
 Execute the action
 == `OS` ==
 ===== ,,class,, OS ^File: libs/class.CLI.inc^ =====

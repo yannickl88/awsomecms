@@ -15,4 +15,5 @@ This is more of an link to hyves, via a cron job blog post can be imported and a
  ==== *public* _void_ *`__construct`* (  ) ====
 Constructor
  ==== *public* _void_ *`execCron`* (  ) ====
+ Inherited from: [DOCCore#_void__execCron_(_) method.Component.execCron]
 Execute a task for the cron. This called in the interval secified in the config files.

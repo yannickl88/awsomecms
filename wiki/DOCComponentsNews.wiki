@@ -24,6 +24,7 @@ Action for editing a news item
  ==== *public* _void_ *`action_delete`* ( _Smarty_ `$smarty`, _[DOCCore#SmartyPageLoader SmartyPageLoader]_ `$smartyLoader`, _array_ `$request` ) ====
 Action for deleting a news item
  ==== *public* _void_ *`registerTreeItems`* ( _[DOCComponentsPageUtil#Tree Tree]_ `$tree` ) ====
+ Inherited from: [DOCCore#_void__registerTreeItems_(_$tree_) method.Component.registerTreeItems]
 Register tree items for this component
  ==== *public* _void_ *`registerURLMap`* (  ) ====
 (non-PHPdoc)
@@ -32,11 +33,15 @@ Register tree items for this component
 News table, this handels all interaction with the news table in the database
  ==== *public* _void_ *`__construct`* (  ) ====
 constructor
- ==== ** _void_ *`select`* ( _[DOCCore#SQLQuery SQLQuery]_ `$query`, _object_ `$data` ) ====
+ ==== *protected* _void_ *`select`* ( _[DOCCore#SQLQuery SQLQuery]_ `$query`, _object_ `$data` ) ====
+ Inherited from: [DOCCore#abstract__void__select_(_$query_,_object__$data_) method.Table.select]
 Additional Select data
- ==== ** _void_ *`update`* ( _[DOCCore#SQLQuery SQLQuery]_ `$query`, _object_ `$data` ) ====
+ ==== *protected* _void_ *`update`* ( _[DOCCore#SQLQuery SQLQuery]_ `$query`, _object_ `$data` ) ====
+ Inherited from: [DOCCore#abstract__void__update_(_$query_,_object__$data_) method.Table.update]
 Additional Update data
- ==== ** _void_ *`insert`* ( _[DOCCore#SQLQuery SQLQuery]_ `$query`, _object_ `$data` ) ====
+ ==== *protected* _void_ *`insert`* ( _[DOCCore#SQLQuery SQLQuery]_ `$query`, _object_ `$data` ) ====
+ Inherited from: [DOCCore#abstract__void__insert_(_$query_,_object__$data_) method.Table.insert]
 Additional Insert data
- ==== ** _void_ *`delete`* ( _[DOCCore#SQLQuery SQLQuery]_ `$query`, _object_ `$data` ) ====
+ ==== *protected* _void_ *`delete`* ( _[DOCCore#SQLQuery SQLQuery]_ `$query`, _object_ `$data` ) ====
+ Inherited from: [DOCCore#abstract__void__delete_(_$query_,_object__$data_) method.Table.delete]
 Additional Delete data

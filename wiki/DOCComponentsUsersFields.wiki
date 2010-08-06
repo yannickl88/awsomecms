@@ -13,25 +13,34 @@ The following classes are located in this package
 ===== ,,class,, PrivlilegesField ,,extends,, [DOCCoreFields#IntField IntField] ^File: components/users/fields/class.PrivlilegesField.inc^ =====
 Privileges list of check boxes
  ==== *protected* _string_ *`toHTML_add`* (  ) ====
+ Inherited from: [DOCCoreFields#_string__toHTML_add_(_) method.Field.toHTML_add]
 Create a HTML representation of add field
  ==== *protected* _string_ *`toHTML_edit`* (  ) ====
+ Inherited from: [DOCCoreFields#_string__toHTML_edit_(_) method.Field.toHTML_edit]
 Create a HTML representation of edit field
  ==== *public* _string_ *`value2db`* ( __ `$value` ) ====
+ Inherited from: [DOCCoreFields#_string__value2db_(____$value_) method.Field.value2db]
 Convert the value of the param to that what the DB expects
 == `UsersField` ==
 ===== ,,class,, UsersField ,,extends,, [DOCCoreFields#Field Field] ^File: components/users/fields/class.UsersField.inc^ =====
 Selection list of all the users
  ==== *public* _[DOCCoreFields#Field Field]_ *`setData`* ( _object_ `$value` ) ====
+ Inherited from: [DOCCoreFields#_setData_(__object__$value_) method.Field.setData]
 Set the Value of this field with an result object
  ==== *public* _`*`_ *`getValue`* ( _object_ `$data` ) ====
+ Inherited from: [DOCCoreFields#___getValue_(__object__$data_) method.Field.getValue]
 get the data from this field
  ==== *protected* _string_ *`toHTML_add`* (  ) ====
+ Inherited from: [DOCCoreFields#_string__toHTML_add_(_) method.Field.toHTML_add]
 Create a HTML representation of add field
  ==== *protected* _string_ *`toHTML_edit`* (  ) ====
+ Inherited from: [DOCCoreFields#_string__toHTML_edit_(_) method.Field.toHTML_edit]
 Create a HTML representation of edit field
  ==== *protected* _string_ *`toHTML_view`* (  ) ====
+ Inherited from: [DOCCoreFields#_string__toHTML_view_(_) method.Field.toHTML_view]
 Create a HTML representation of view field
  ==== *public* _void_ *`select`* ( __ `$query`, __ `$data` ) ====
+ Inherited from: [DOCCoreFields#_void__select_(____$query_,___$data_) method.Field.select]
 Add select data for this field to a query
 == `UsersselectField` ==
 ===== ,,class,, UsersselectField ,,extends,, [DOCCoreFields#Field Field] ^File: components/users/fields/class.UsersselectField.inc^ =====
@@ -39,12 +48,16 @@ Selection list of all the users, do note you may want to use this as a dummy
 field and so something with it yourself. There is currently no relation
 option or something.
  ==== *protected* _string_ *`toHTML_add`* (  ) ====
+ Inherited from: [DOCCoreFields#_string__toHTML_add_(_) method.Field.toHTML_add]
 Create a HTML representation of add field
  ==== *protected* _string_ *`toHTML_edit`* (  ) ====
+ Inherited from: [DOCCoreFields#_string__toHTML_edit_(_) method.Field.toHTML_edit]
 Create a HTML representation of edit field
  ==== *protected* _string_ *`toHTML_view`* (  ) ====
+ Inherited from: [DOCCoreFields#_string__toHTML_view_(_) method.Field.toHTML_view]
 Create a HTML representation of view field
  ==== *public* _string_ *`getJavascript`* (  ) ====
+ Inherited from: [DOCCoreFields#_string__getJavascript_(_) method.Field.getJavascript]
 get the javascript for this field
  ==== _void_ *`form_UsersselectField_moveItem`* (  ) ====
  ==== _void_ *`form_UsersselectField_updateUsersField`* (  ) ====

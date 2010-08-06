@@ -14,26 +14,34 @@ The following classes are located in this package
 Auth table, this handels all interaction with the auth table in the database
  ==== *public* _void_ *`__construct`* (  ) ====
 Constructor
- ==== ** _void_ *`select`* ( _[DOCCore#SQLQuery SQLQuery]_ `$query`, _object_ `$data` ) ====
+ ==== *protected* _void_ *`select`* ( _[DOCCore#SQLQuery SQLQuery]_ `$query`, _object_ `$data` ) ====
+ Inherited from: [DOCCore#abstract__void__select_(_$query_,_object__$data_) method.Table.select]
 Additional Select data
- ==== ** _void_ *`insert`* ( _[DOCCore#SQLQuery SQLQuery]_ `$query`, _object_ `$data` ) ====
+ ==== *protected* _void_ *`insert`* ( _[DOCCore#SQLQuery SQLQuery]_ `$query`, _object_ `$data` ) ====
+ Inherited from: [DOCCore#abstract__void__insert_(_$query_,_object__$data_) method.Table.insert]
 Additional Insert data
- ==== ** _void_ *`update`* ( _[DOCCore#SQLQuery SQLQuery]_ `$query`, _object_ `$data` ) ====
+ ==== *protected* _void_ *`update`* ( _[DOCCore#SQLQuery SQLQuery]_ `$query`, _object_ `$data` ) ====
+ Inherited from: [DOCCore#abstract__void__update_(_$query_,_object__$data_) method.Table.update]
 Additional Update data
- ==== ** _void_ *`delete`* ( _[DOCCore#SQLQuery SQLQuery]_ `$query`, _object_ `$data` ) ====
+ ==== *protected* _void_ *`delete`* ( _[DOCCore#SQLQuery SQLQuery]_ `$query`, _object_ `$data` ) ====
+ Inherited from: [DOCCore#abstract__void__delete_(_$query_,_object__$data_) method.Table.delete]
 Additional Delete data
 == `ComponentsTable` ==
 ===== ,,class,, ComponentsTable ,,extends,, [DOCCore#Table Table] ^File: components/core/class.ComponentsTable.inc^ =====
 Core table, this handels all interaction with the core table in the database
  ==== *public* _void_ *`__construct`* (  ) ====
 Constructor
- ==== ** _void_ *`select`* ( _[DOCCore#SQLQuery SQLQuery]_ `$query`, _object_ `$data` ) ====
+ ==== *protected* _void_ *`select`* ( _[DOCCore#SQLQuery SQLQuery]_ `$query`, _object_ `$data` ) ====
+ Inherited from: [DOCCore#abstract__void__select_(_$query_,_object__$data_) method.Table.select]
 Additional Select data
- ==== ** _void_ *`insert`* ( _[DOCCore#SQLQuery SQLQuery]_ `$query`, _object_ `$data` ) ====
+ ==== *protected* _void_ *`insert`* ( _[DOCCore#SQLQuery SQLQuery]_ `$query`, _object_ `$data` ) ====
+ Inherited from: [DOCCore#abstract__void__insert_(_$query_,_object__$data_) method.Table.insert]
 Additional Insert data
- ==== ** _void_ *`update`* ( _[DOCCore#SQLQuery SQLQuery]_ `$query`, _object_ `$data` ) ====
+ ==== *protected* _void_ *`update`* ( _[DOCCore#SQLQuery SQLQuery]_ `$query`, _object_ `$data` ) ====
+ Inherited from: [DOCCore#abstract__void__update_(_$query_,_object__$data_) method.Table.update]
 Additional Update data
- ==== ** _void_ *`delete`* ( _[DOCCore#SQLQuery SQLQuery]_ `$query`, _object_ `$data` ) ====
+ ==== *protected* _void_ *`delete`* ( _[DOCCore#SQLQuery SQLQuery]_ `$query`, _object_ `$data` ) ====
+ Inherited from: [DOCCore#abstract__void__delete_(_$query_,_object__$data_) method.Table.delete]
 Additional Delete data
 == `CoreComponent` ==
 ===== ,,class,, CoreComponent ,,extends,, [DOCCore#Component Component] ^File: components/core/class.CoreComponent.inc^ =====
@@ -41,6 +49,7 @@ Core component class, this includes all the logic for the core actions
  ==== *public* _void_ *`__construct`* (  ) ====
 Constructor
  ==== *public* _void_ *`register`* ( _[DOCCore#RegisterManager RegisterManager]_ `$registerManager` ) ====
+ Inherited from: [DOCCore#_void__register_(_$registerManager_) method.Component.register]
 Register actions/hooks/mappings to the framework
  ==== *public* _void_ *`action_index`* ( _Smarty_ `$smarty`, _[DOCCore#SmartyPageLoader SmartyPageLoader]_ `$smartyLoader`, _array_ `$request` ) ====
 Index action, this is used when a page is shown by the cms
@@ -58,17 +67,22 @@ Components action, this is used for the compontent settings page
  ==== *public* _void_ *`action_deleteinstall`* (  ) ====
  ==== *public* _void_ *`action_getform`* (  ) ====
  ==== *public* _void_ *`registerMenuItems`* ( _[DOCComponentsPageUtil#Menu Menu]_ `$menu` ) ====
+ Inherited from: [DOCCore#_void__registerMenuItems_(_$menu_) method.Component.registerMenuItems]
 Register menu items for this component
 == `TagsTable` ==
 ===== ,,class,, TagsTable ,,extends,, [DOCCore#Table Table] ^File: components/core/class.TagsTable.inc^ =====
 Auth table, this handels all interaction with the auth table in the database
  ==== *public* _void_ *`__construct`* (  ) ====
 Constructor
- ==== ** _void_ *`select`* ( _[DOCCore#SQLQuery SQLQuery]_ `$query`, _object_ `$data` ) ====
+ ==== *protected* _void_ *`select`* ( _[DOCCore#SQLQuery SQLQuery]_ `$query`, _object_ `$data` ) ====
+ Inherited from: [DOCCore#abstract__void__select_(_$query_,_object__$data_) method.Table.select]
 Additional Select data
- ==== ** _void_ *`insert`* ( _[DOCCore#SQLQuery SQLQuery]_ `$query`, _object_ `$data` ) ====
+ ==== *protected* _void_ *`insert`* ( _[DOCCore#SQLQuery SQLQuery]_ `$query`, _object_ `$data` ) ====
+ Inherited from: [DOCCore#abstract__void__insert_(_$query_,_object__$data_) method.Table.insert]
 Additional Insert data
- ==== ** _void_ *`update`* ( _[DOCCore#SQLQuery SQLQuery]_ `$query`, _object_ `$data` ) ====
+ ==== *protected* _void_ *`update`* ( _[DOCCore#SQLQuery SQLQuery]_ `$query`, _object_ `$data` ) ====
+ Inherited from: [DOCCore#abstract__void__update_(_$query_,_object__$data_) method.Table.update]
 Additional Update data
- ==== ** _void_ *`delete`* ( _[DOCCore#SQLQuery SQLQuery]_ `$query`, _object_ `$data` ) ====
+ ==== *protected* _void_ *`delete`* ( _[DOCCore#SQLQuery SQLQuery]_ `$query`, _object_ `$data` ) ====
+ Inherited from: [DOCCore#abstract__void__delete_(_$query_,_object__$data_) method.Table.delete]
 Additional Delete data

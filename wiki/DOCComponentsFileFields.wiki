@@ -15,8 +15,10 @@ Field for uploading files
  ==== *public* _void_ *`__construct`* ( _string_ `$name`, _int_ `$style` ) ====
 Constructor
  ==== *protected* _string_ *`toHTML_add`* (  ) ====
+ Inherited from: [DOCCoreFields#_string__toHTML_add_(_) method.Field.toHTML_add]
 Create a HTML representation of add field
  ==== *protected* _string_ *`toHTML_edit`* (  ) ====
+ Inherited from: [DOCCoreFields#_string__toHTML_edit_(_) method.Field.toHTML_edit]
 Create a HTML representation of edit field
  ==== *public* _`*`_ *`db2value`* ( __ `$value` ) ====
 Convert the dbvalue of the param to what the field expects
@@ -28,8 +30,10 @@ Field for uploading files
  ==== *public* _void_ *`__construct`* ( _string_ `$name`, _int_ `$style` ) ====
 Constructor
  ==== *protected* _string_ *`toHTML_add`* (  ) ====
+ Inherited from: [DOCCoreFields#_string__toHTML_add_(_) method.Field.toHTML_add]
 Create a HTML representation of add field
  ==== *protected* _string_ *`toHTML_edit`* (  ) ====
+ Inherited from: [DOCCoreFields#_string__toHTML_edit_(_) method.Field.toHTML_edit]
 Create a HTML representation of edit field
  ==== *public* _`*`_ *`db2value`* ( __ `$value` ) ====
 Convert the dbvalue of the param to what the field expects

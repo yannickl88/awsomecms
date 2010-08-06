@@ -63,34 +63,41 @@ in the doc/COPYRIGHT and doc/LICENSE files which should be
 included in the distribution.
  ==== *public* _void_ *`__construct`* (  ) ====
 Constructor
- ==== ** _void_ *`setup`* ( _[DOCLibs#CLI CLI]_ `$cli` ) ====
+ ==== *public* _void_ *`setup`* ( _[DOCLibs#CLI CLI]_ `$cli` ) ====
+ Inherited from: [DOCLibs#_void__setup_(_$cli_) method.CLIAction.setup]
 Setup function, you can override this to add setup stuff. This is
 called before the exec
- ==== ** _void_ *`cleanup`* ( _[DOCLibs#CLI CLI]_ `$cli` ) ====
+ ==== *public* _void_ *`cleanup`* ( _[DOCLibs#CLI CLI]_ `$cli` ) ====
+ Inherited from: [DOCLibs#_void__cleanup_(_$cli_) method.CLIAction.cleanup]
 Cleanup function, you can override this to add cleanup stuff. This is
 called after the exec
 == `Usage` ==
 ===== ,,class,, Usage ,,extends,, [DOCLibs#CLIAction CLIAction] ^File: deploy.php^ =====
 
- ==== ** _void_ *`exec`* ( _[DOCLibs#CLI CLI]_ `$cli`, _string_ `$action` ) ====
+ ==== *public* _void_ *`exec`* ( _[DOCLibs#CLI CLI]_ `$cli`, _string_ `$action` ) ====
+ Inherited from: [DOCLibs#abstract__void__exec_(_$cli_,_string__$action_) method.CLIAction.exec]
 Execute the action
 == `Pack` ==
 ===== ,,class,, Pack ,,extends,, [DOCDefault#DeployAction DeployAction] ^File: deploy.php^ =====
 
- ==== ** _void_ *`exec`* ( _[DOCLibs#CLI CLI]_ `$cli`, _string_ `$action` ) ====
+ ==== *public* _void_ *`exec`* ( _[DOCLibs#CLI CLI]_ `$cli`, _string_ `$action` ) ====
+ Inherited from: [DOCLibs#abstract__void__exec_(_$cli_,_string__$action_) method.CLIAction.exec]
 Execute the action
 == `Update` ==
 ===== ,,class,, Update ,,extends,, [DOCDefault#DeployAction DeployAction] ^File: deploy.php^ =====
 
- ==== ** _void_ *`exec`* ( _[DOCLibs#CLI CLI]_ `$cli`, _string_ `$action` ) ====
+ ==== *public* _void_ *`exec`* ( _[DOCLibs#CLI CLI]_ `$cli`, _string_ `$action` ) ====
+ Inherited from: [DOCLibs#abstract__void__exec_(_$cli_,_string__$action_) method.CLIAction.exec]
 Execute the action
 == `Release` ==
 ===== ,,class,, Release ,,extends,, [DOCDefault#DeployAction DeployAction] ^File: deploy.php^ =====
 
- ==== ** _void_ *`exec`* ( _[DOCLibs#CLI CLI]_ `$cli`, _string_ `$action` ) ====
+ ==== *public* _void_ *`exec`* ( _[DOCLibs#CLI CLI]_ `$cli`, _string_ `$action` ) ====
+ Inherited from: [DOCLibs#abstract__void__exec_(_$cli_,_string__$action_) method.CLIAction.exec]
 Execute the action
 == `Patch` ==
 ===== ,,class,, Patch ,,extends,, [DOCLibs#CLIAction CLIAction] ^File: deploy.php^ =====
 
- ==== ** _void_ *`exec`* ( _[DOCLibs#CLI CLI]_ `$cli`, _string_ `$action` ) ====
+ ==== *public* _void_ *`exec`* ( _[DOCLibs#CLI CLI]_ `$cli`, _string_ `$action` ) ====
+ Inherited from: [DOCLibs#abstract__void__exec_(_$cli_,_string__$action_) method.CLIAction.exec]
 Execute the action
