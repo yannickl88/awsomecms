@@ -64,9 +64,9 @@ More info: http://php.net/manual/en/language.oop5.serialization.php
 Superclass for all the components
  ==== *public* _void_ *`__construct`* ( _string_ `$component` ) ====
   constructor
- ==== *public* *static* _Component_ *`init`* ( _string_ `$component` ) ====
+ ==== *public* *static* _[DOCCore#Component Component]_ *`init`* ( _string_ `$component` ) ====
   Initialisation of the component corresponding with the give name
- ==== *public* *static* _Component_ *`createComponent`* ( _string_ `$name`, _string_ `$path` ) ====
+ ==== *public* *static* _[DOCCore#Component Component]_ *`createComponent`* ( _string_ `$name`, _string_ `$path` ) ====
   Create a component instance based on the name and the path
 
 NOTE: do not use this, use Component::init().
@@ -81,18 +81,18 @@ Only use this to resolve ciclur reference from the register manager
   Get the fields for this component
  ==== *protected* _void_ *`setCurrentTable`* ( _string_ `$table` ) ====
   Set the current table to be validated against
- ==== *public* _void_ *`registerMenuItems`* ( _Menu_ `$menu` ) ====
+ ==== *public* _void_ *`registerMenuItems`* ( _[DOCComponentsPageUtil#Menu Menu]_ `$menu` ) ====
   Register menu items for this component
- ==== *public* _void_ *`registerTreeItems`* ( _Tree_ `$tree` ) ====
+ ==== *public* _void_ *`registerTreeItems`* ( _[DOCComponentsPageUtil#Tree Tree]_ `$tree` ) ====
   Register tree items for this component
- ==== *public* _void_ *`register`* ( _RegisterManager_ `$registerManager` ) ====
+ ==== *public* _void_ *`register`* ( _[DOCCore#RegisterManager RegisterManager]_ `$registerManager` ) ====
   Register actions/hooks/mappings to the framework
  ==== *public* _void_ *`execCron`* (  ) ====
   Execute a task for the cron. This called in the interval secified in the config files.
 == Config ==
 ===== ,,class,, Config =====
 Configuration class, this is used to retrive all the data from seperate config files
- ==== *public* *static* _Config_ *`getInstance`* (  ) ====
+ ==== *public* *static* _[DOCCore#Config Config]_ *`getInstance`* (  ) ====
   singelton
  ==== *public* *static* _`*`_ *`get`* ( _string_ `$key`, _`*`_ `$default`, _string_ `$section` ) ====
   Get something from the config
@@ -127,7 +127,7 @@ Exception to be triggered when the current user does not have the proper authori
 == Notifications ==
 ===== ,,class,, Notifications =====
 Manager for handeling notifications
- ==== *public* *static* _Notifications_ *`getInstance`* (  ) ====
+ ==== *public* *static* _[DOCCore#Notifications Notifications]_ *`getInstance`* (  ) ====
   Singelton
  ==== *private* _void_ *`__construct`* (  ) ====
   Constructor
@@ -146,9 +146,9 @@ Note: This is also called when changes happen inside this object
 == Controller ==
 ===== ,,class,, Controller =====
 Controller class that handels all the incomming data requests
- ==== *public* *static* _Controller_ *`getInstance`* (  ) ====
+ ==== *public* *static* _[DOCCore#Controller Controller]_ *`getInstance`* (  ) ====
   Singelton
- ==== *public* _void_ *`dispatch`* ( _Smarty_ `$smarty`, _SmartyPageLoader_ `$smartyLoader` ) ====
+ ==== *public* _void_ *`dispatch`* ( _Smarty_ `$smarty`, _[DOCDefault#SmartyPageLoader SmartyPageLoader]_ `$smartyLoader` ) ====
   Handle a request
  ==== *public* _void_ *`setOutput`* ( __ `$string` ) ====
   Set the output to be returned on completion, this is used so that on
@@ -156,11 +156,11 @@ redirecting there is no content.
  ==== *public* _void_ *`appendOutput`* ( __ `$string` ) ====
   Append the output to be returned on completion, this is used so that on
 redirecting there is no content.
- ==== *public* _`*`_ *`callAction`* ( _Component_ `$component`, _string_ `$action`, _Request_ `$request` ) ====
+ ==== *public* _`*`_ *`callAction`* ( _[DOCCore#Component Component]_ `$component`, _string_ `$action`, _[DOCCore#Request Request]_ `$request` ) ====
   call an action on a component with it's hooks
- ==== *public* _void_ *`callTable`* ( _Component_ `$component`, _string_ `$action`, _Request_ `$request` ) ====
+ ==== *public* _void_ *`callTable`* ( _[DOCCore#Component Component]_ `$component`, _string_ `$action`, _[DOCCore#Request Request]_ `$request` ) ====
   Handel the request made by the proxy
- ==== *public* _Request_ *`getRequest`* (  ) ====
+ ==== *public* _[DOCCore#Request Request]_ *`getRequest`* (  ) ====
   Get the request
  ==== *public* _Smarty_ *`getSmarty`* (  ) ====
   Get the smarty object that is used for the page rendering
@@ -175,7 +175,7 @@ redirecting there is no content.
 == Debugger ==
 ===== ,,class,, Debugger =====
 Debugger class that handels all debug messages generated from the CMS
- ==== *public* *static* _Debugger_ *`getInstance`* (  ) ====
+ ==== *public* *static* _[DOCCore#Debugger Debugger]_ *`getInstance`* (  ) ====
   singelton
  ==== *private* _void_ *`__construct`* (  ) ====
   constructor
@@ -224,7 +224,7 @@ Exception class when a form is not valid
 == Language ==
 ===== ,,class,, Language =====
 Multilanguage class which handels translation
- ==== *public* *static* _Language_ *`getInstance`* (  ) ====
+ ==== *public* *static* _[DOCCore#Language Language]_ *`getInstance`* (  ) ====
   Singelton
  ==== *public* *static* _string_ *`get`* ( _string_ `$key`, _string_ `$lang` ) ====
   Static way to get a language string from a key
@@ -237,7 +237,7 @@ Multilanguage class which handels translation
 == RegisterManager ==
 ===== ,,class,, RegisterManager =====
 Manager for registering components, hooks, mappings and pages dynamicly
- ==== *public* *static* _RegisterManager_ *`getInstance`* (  ) ====
+ ==== *public* *static* _[DOCCore#RegisterManager RegisterManager]_ *`getInstance`* (  ) ====
   Singelton
  ==== *private* _void_ *`__construct`* (  ) ====
   Construcor
@@ -292,45 +292,45 @@ Abstraction of a SQL query
   Constructor
  ==== *public* _string_ *`getAction`* (  ) ====
   return the action for this query
- ==== *public* *static* _SQLQuery_ *`doSelect`* ( _string_ `$field`, _string_ `$distrinct` ) ====
+ ==== *public* *static* _[DOCCore#SQLQuery SQLQuery]_ *`doSelect`* ( _string_ `$field`, _string_ `$distrinct` ) ====
   Create a select query object
- ==== *public* *static* _SQLQuery_ *`doInsert`* ( _string_ `$field`, _string_ `$value` ) ====
+ ==== *public* *static* _[DOCCore#SQLQuery SQLQuery]_ *`doInsert`* ( _string_ `$field`, _string_ `$value` ) ====
   Create a insert query object
- ==== *public* *static* _SQLQuery_ *`doMInsert`* ( _array_ `$values` ) ====
+ ==== *public* *static* _[DOCCore#SQLQuery SQLQuery]_ *`doMInsert`* ( _array_ `$values` ) ====
   Create a multiple insert query object
- ==== *public* *static* _SQLQuery_ *`doUpdate`* ( _string_ `$field`, _string_ `$value` ) ====
+ ==== *public* *static* _[DOCCore#SQLQuery SQLQuery]_ *`doUpdate`* ( _string_ `$field`, _string_ `$value` ) ====
   Create a update query object
- ==== *public* *static* _SQLQuery_ *`doDelete`* (  ) ====
+ ==== *public* *static* _[DOCCore#SQLQuery SQLQuery]_ *`doDelete`* (  ) ====
   Create a delete query object
- ==== *public* _SQLQuery_ *`select`* ( _string_ `$field`, _bool_ `$distrinct` ) ====
+ ==== *public* _[DOCCore#SQLQuery SQLQuery]_ *`select`* ( _string_ `$field`, _bool_ `$distrinct` ) ====
   add select statement
- ==== *public* _SQLQuery_ *`insert`* ( _string_ `$field`, _`*`_ `$value` ) ====
+ ==== *public* _[DOCCore#SQLQuery SQLQuery]_ *`insert`* ( _string_ `$field`, _`*`_ `$value` ) ====
   add insert statement
- ==== *public* _SQLQuery_ *`mInsert`* ( _array_ `$values` ) ====
+ ==== *public* _[DOCCore#SQLQuery SQLQuery]_ *`mInsert`* ( _array_ `$values` ) ====
   add insert statement
- ==== *public* _SQLQuery_ *`insertWhenSet`* ( _string_ `$field`, _`*`_ `$value` ) ====
+ ==== *public* _[DOCCore#SQLQuery SQLQuery]_ *`insertWhenSet`* ( _string_ `$field`, _`*`_ `$value` ) ====
   add insert statement, only when the value is set
- ==== *public* _SQLQuery_ *`update`* ( _string_ `$field`, _`*`_ `$value` ) ====
+ ==== *public* _[DOCCore#SQLQuery SQLQuery]_ *`update`* ( _string_ `$field`, _`*`_ `$value` ) ====
   add update statement
- ==== *public* _SQLQuery_ *`updateWhenSet`* ( _string_ `$field`, _`*`_ `$value` ) ====
+ ==== *public* _[DOCCore#SQLQuery SQLQuery]_ *`updateWhenSet`* ( _string_ `$field`, _`*`_ `$value` ) ====
   add update statement, only when the value is set
- ==== *public* _SQLQuery_ *`table`* ( _string_ `$table` ) ====
+ ==== *public* _[DOCCore#SQLQuery SQLQuery]_ *`table`* ( _string_ `$table` ) ====
   add tabel
- ==== *public* _SQLQuery_ *`where`* ( _string_ `$field`, _`*`_ `$value`, _string_ `$comparison`, _string_ `$orAnd` ) ====
+ ==== *public* _[DOCCore#SQLQuery SQLQuery]_ *`where`* ( _string_ `$field`, _`*`_ `$value`, _string_ `$comparison`, _string_ `$orAnd` ) ====
   add where statement
- ==== *public* _SQLQuery_ *`whereWhenSet`* ( _string_ `$field`, _`*`_ `$value`, _string_ `$comparison`, _string_ `$orAnd` ) ====
+ ==== *public* _[DOCCore#SQLQuery SQLQuery]_ *`whereWhenSet`* ( _string_ `$field`, _`*`_ `$value`, _string_ `$comparison`, _string_ `$orAnd` ) ====
   add where statement, only when the value is set
- ==== *public* _SQLQuery_ *`groupBy`* ( _string_ `$field` ) ====
+ ==== *public* _[DOCCore#SQLQuery SQLQuery]_ *`groupBy`* ( _string_ `$field` ) ====
   add group statement
- ==== *public* _SQLQuery_ *`orderBy`* ( _string_ `$field`, _string_ `$sort` ) ====
+ ==== *public* _[DOCCore#SQLQuery SQLQuery]_ *`orderBy`* ( _string_ `$field`, _string_ `$sort` ) ====
   add order statement
- ==== *public* _SQLQuery_ *`limit`* ( _int_ `$amount`, _in_ `$start` ) ====
+ ==== *public* _[DOCCore#SQLQuery SQLQuery]_ *`limit`* ( _int_ `$amount`, _in_ `$start` ) ====
   add limit statement
- ==== *public* _SQLQuery_ *`join`* ( _string_ `$table`, _string_ `$local`, _string_ `$forign`, _string_ `$type` ) ====
+ ==== *public* _[DOCCore#SQLQuery SQLQuery]_ *`join`* ( _string_ `$table`, _string_ `$local`, _string_ `$forign`, _string_ `$type` ) ====
   add join statement
  ==== *public* *static* _bool_ *`isEmpty`* ( _string_ `$value` ) ====
   Check if a value is empty
- ==== *public* _SQLRecord_ *`exec`* (  ) ====
+ ==== *public* _[DOCCore#SQLRecord SQLRecord]_ *`exec`* (  ) ====
   execute the statement
  ==== *public* _string_ *`getSQL`* (  ) ====
   Get the SQL statement as a string formed by this query
@@ -366,14 +366,14 @@ SQLRecord that is a wrapper for all data generated from the queries
 == SQL ==
 ===== ,,class,, SQL =====
 SQL class that handels the connection to the database
- ==== *public* *static* _SQL_ *`getInstance`* (  ) ====
+ ==== *public* *static* _[DOCCore#SQL SQL]_ *`getInstance`* (  ) ====
   Get a SQL instance
  ==== *private* _void_ *`__construct`* (  ) ====
  ==== *public* _void_ *`reconnect`* (  ) ====
   Reconnect with the database
  ==== *public* _PDO_ *`getPDOInstance`* (  ) ====
   Get the PDO instance that this SQL class uses
- ==== *public* _SQLRecord_ *`query`* ( _SQLQuery_ `$query` ) ====
+ ==== *public* _[DOCCore#SQLRecord SQLRecord]_ *`query`* ( _[DOCCore#SQLQuery SQLQuery]_ `$query` ) ====
   Execute a query
  ==== *public* _array_ *`multi_query`* ( _string_ `$queries` ) ====
   Execute multiple queries
@@ -397,25 +397,25 @@ Container for dynamic data, this always returnes NULL when a propertie is not fo
 == Table ==
 ===== _abstract_ ,,class,, Table =====
 Abstract class that handels all the information about a table
- ==== *public* *static* _Table_ *`init`* ( _string_ `$table` ) ====
+ ==== *public* *static* _[DOCCore#Table Table]_ *`init`* ( _string_ `$table` ) ====
   Static function to get a table object
- ==== *protected* _Table_ *`setURLs`* ( _string_ `$admin`, _string_ `$add`, _string_ `$edit`, _string_ `$delete` ) ====
+ ==== *protected* _[DOCCore#Table Table]_ *`setURLs`* ( _string_ `$admin`, _string_ `$add`, _string_ `$edit`, _string_ `$delete` ) ====
   Set the urls the Table needs to have for redirection on errors
- ==== *public* _Table_ *`__construct`* ( _string_ `$name` ) ====
+ ==== *public* _[DOCCore#Table Table]_ *`__construct`* ( _string_ `$name` ) ====
   Constructor for Table
- ==== *public* _Table_ *`setExternal`* ( _bool_ `$fromExternal` ) ====
+ ==== *public* _[DOCCore#Table Table]_ *`setExternal`* ( _bool_ `$fromExternal` ) ====
   Set if the table is being accessed from an external source.
  ==== *public* _bool_ *`getExternal`* (  ) ====
   Check if the table is being accessed from an external source.
- ==== *public* _Table_ *`setMultipart`* ( _bool_ `$multipart` ) ====
+ ==== *public* _[DOCCore#Table Table]_ *`setMultipart`* ( _bool_ `$multipart` ) ====
   Set the multipart so the forms are send with that field
- ==== *public* _Table_ *`assign`* ( _string_ `$component`, _string_ `$action` ) ====
+ ==== *public* _[DOCCore#Table Table]_ *`assign`* ( _string_ `$component`, _string_ `$action` ) ====
   Assign the table to a component with an action.
- ==== *public* _Table_ *`addField`* ( _Field_ `$field`, _int_ `$sort` ) ====
+ ==== *public* _[DOCCore#Table Table]_ *`addField`* ( _[DOCCoreFields#Field Field]_ `$field`, _int_ `$sort` ) ====
   Add Field to the table
  ==== *public* _string_ *`__get`* ( _string_ `$name` ) ====
   This is designed to give fast acces to the toHTML functions
- ==== *public* _Field_ *`getField`* ( _string_ `$name` ) ====
+ ==== *public* _[DOCCoreFields#Field Field]_ *`getField`* ( _string_ `$name` ) ====
   Get a field based on it's name, NULL when there was no field found
  ==== *public* _array_ *`getFields`* (  ) ====
   Get all the fields in this table
@@ -425,15 +425,15 @@ Abstract class that handels all the information about a table
   Get the name of this tabel.
  ==== *public* _string_ *`getTitle`* (  ) ====
   Get the title of this tabel record. This is a pre-parsed string with the values from the record
- ==== *public* _Table_ *`setTitle`* ( __ `$titleString` ) ====
+ ==== *public* _[DOCCore#Table Table]_ *`setTitle`* ( __ `$titleString` ) ====
   Set the title of this tabel record. This is a string with the field names between [ and ]
- ==== *public* _Table_ *`setRecord`* ( _object_ `$data` ) ====
+ ==== *public* _[DOCCore#Table Table]_ *`setRecord`* ( _object_ `$data` ) ====
   Set the current record of the table
- ==== *public* _Table_ *`setRequest`* ( _object_ `$data` ) ====
+ ==== *public* _[DOCCore#Table Table]_ *`setRequest`* ( _object_ `$data` ) ====
   Set the request data for this table
  ==== *public* _void_ *`getRecord`* (  ) ====
  ==== *public* _void_ *`getRequest`* (  ) ====
- ==== *public* _Table_ *`setError`* ( _InvalidFormException_ `$error` ) ====
+ ==== *public* _[DOCCore#Table Table]_ *`setError`* ( _[DOCCore#InvalidFormException InvalidFormException]_ `$error` ) ====
   Set the current error record of the table, this has priority over the current one
  ==== *public* _void_ *`toHTML`* ( _int_ `$mode` ) ====
   Get the HTML representation of this field.
@@ -442,7 +442,7 @@ NOTE:Do not overwrite this function. Use the toHTML_add/edit/view instaid if you
   Convert this table to a string
  ==== *protected* _void_ *`sortFields`* (  ) ====
   Sort the fields by their sort values
- ==== *protected* _int_ *`handleSort`* ( _Field_ `$a`, _Field_ `$b` ) ====
+ ==== *protected* _int_ *`handleSort`* ( _[DOCCoreFields#Field Field]_ `$a`, _[DOCCoreFields#Field Field]_ `$b` ) ====
   Sorthing algorithem
  ==== *protected* _string_ *`toHTML_add`* (  ) ====
   HTML representation for add Form
@@ -454,13 +454,13 @@ NOTE:Do not overwrite this function. Use the toHTML_add/edit/view instaid if you
   HTML representation for delete Form
  ==== *protected* _string_ *`parseTitle`* ( _string_ `$title`, _array_ `$data` ) ====
   A way to parse the title string.
- ==== *public* _SQLRecord_ *`doSelect`* (  ) ====
+ ==== *public* _[DOCCore#SQLRecord SQLRecord]_ *`doSelect`* (  ) ====
   Preform a select on the table
- ==== *public* _SQLRecord_ *`doInsert`* (  ) ====
+ ==== *public* _[DOCCore#SQLRecord SQLRecord]_ *`doInsert`* (  ) ====
   Preform an insert on the table
- ==== *public* _SQLRecord_ *`doUpdate`* (  ) ====
+ ==== *public* _[DOCCore#SQLRecord SQLRecord]_ *`doUpdate`* (  ) ====
   Preform an update on the table
- ==== *public* _SQLRecord_ *`doDelete`* (  ) ====
+ ==== *public* _[DOCCore#SQLRecord SQLRecord]_ *`doDelete`* (  ) ====
   Preform a delete on the table
  ==== *protected* _string_ *`getJavascript`* (  ) ====
   Get the JavaScript for this table
@@ -473,7 +473,7 @@ NOTE:Do not overwrite this function. Use the toHTML_add/edit/view instaid if you
 When in need of custom mapping, like if you have two tables for one component, override this method
  ==== *protected* _int_ *`string2action`* ( _string_ `$string` ) ====
   String to an action that the table can understand
- ==== *public* _void_ *`validate`* ( _SQLQuery_ `$query`, _object_ `$data`, _SQLQuery_ `$query`, _object_ `$data`, _SQLQuery_ `$query`, _object_ `$data`, _SQLQuery_ `$query`, _object_ `$data`, _int_ `$mode` ) ====
+ ==== *public* _void_ *`validate`* ( _[DOCCore#SQLQuery SQLQuery]_ `$query`, _object_ `$data`, _[DOCCore#SQLQuery SQLQuery]_ `$query`, _object_ `$data`, _[DOCCore#SQLQuery SQLQuery]_ `$query`, _object_ `$data`, _[DOCCore#SQLQuery SQLQuery]_ `$query`, _object_ `$data`, _int_ `$mode` ) ====
   Validate the data with the fields in this table. If not valid a InvalidFormException is thrown
  ==== *public* _int_ *`getInsertedID`* (  ) ====
   Get the last inserted ID for this table.

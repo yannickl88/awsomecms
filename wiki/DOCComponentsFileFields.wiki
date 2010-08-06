@@ -35,7 +35,7 @@ Field for uploading files
   Convert the dbvalue of the param to what the field expects
  ==== *public* _string_ *`value2db`* ( __ `$value` ) ====
   Convert the value of the param to that what the DB expects
- ==== *public* _void_ *`preSQL`* ( _SQLRecord_ `$record`, _SQLQuery_ `$query` ) ====
+ ==== *public* _void_ *`preSQL`* ( _[DOCCore#SQLRecord SQLRecord]_ `$record`, _[DOCCore#SQLQuery SQLQuery]_ `$query` ) ====
   upload the file on edit
  ==== *private* _void_ *`handleFileUpload`* (  ) ====
  ==== *private* _void_ *`createThumb`* (  ) ====

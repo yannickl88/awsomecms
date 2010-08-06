@@ -14,15 +14,15 @@ The following classes are located in this package
 The Page component, together with the core component, is this used to show pages and manage them
  ==== *public* _void_ *`__construct`* (  ) ====
   Constructor
- ==== *public* _void_ *`action_add`* ( _Smarty_ `$smarty`, _SmartyPageLoader_ `$smartyLoader`, _array_ `$request` ) ====
+ ==== *public* _void_ *`action_add`* ( _Smarty_ `$smarty`, _[DOCDefault#SmartyPageLoader SmartyPageLoader]_ `$smartyLoader`, _array_ `$request` ) ====
   Action for adding a page
- ==== *public* _void_ *`action_edit`* ( _Smarty_ `$smarty`, _SmartyPageLoader_ `$smartyLoader`, _array_ `$request` ) ====
+ ==== *public* _void_ *`action_edit`* ( _Smarty_ `$smarty`, _[DOCDefault#SmartyPageLoader SmartyPageLoader]_ `$smartyLoader`, _array_ `$request` ) ====
   Action for editing a page
- ==== *public* _void_ *`action_delete`* ( _Smarty_ `$smarty`, _SmartyPageLoader_ `$smartyLoader`, _array_ `$request` ) ====
+ ==== *public* _void_ *`action_delete`* ( _Smarty_ `$smarty`, _[DOCDefault#SmartyPageLoader SmartyPageLoader]_ `$smartyLoader`, _array_ `$request` ) ====
   Action for deleting a page
- ==== *public* _void_ *`registerMenuItems`* ( _Menu_ `$menu` ) ====
+ ==== *public* _void_ *`registerMenuItems`* ( _[DOCComponentsPageUtil#Menu Menu]_ `$menu` ) ====
   Register menu items for this component
- ==== *public* _void_ *`registerTreeItems`* ( _Tree_ `$tree` ) ====
+ ==== *public* _void_ *`registerTreeItems`* ( _[DOCComponentsPageUtil#Tree Tree]_ `$tree` ) ====
   Register tree items for this component
 == PagesTable ==
 ===== ,,class,, PagesTable ,,extends,, [DOCCore#Table Table] =====

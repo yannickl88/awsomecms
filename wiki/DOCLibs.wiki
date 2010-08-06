@@ -88,13 +88,13 @@ Exception which is triggered if something goes wrong
 And BBCode element which is linked to an HTML element
  ==== *public* _void_ *`__construct`* ( _string_ `$type` ) ====
   Constructor
- ==== *public* *static* _BBCodeElement_ *`init`* ( _string_ `$tag` ) ====
+ ==== *public* *static* _[DOCLibs#BBCodeElement BBCodeElement]_ *`init`* ( _string_ `$tag` ) ====
   Init an element dynamicly based on the tag
  ==== *public* *static* _array_ *`parseTag`* ( _string_ `$tag` ) ====
   Parse the tag name for type and arguments passed
 
 where the first element is the tag and the second a key value array with arguments
- ==== *public* _BBCodeElement_ *`getParent`* (  ) ====
+ ==== *public* _[DOCLibs#BBCodeElement BBCodeElement]_ *`getParent`* (  ) ====
   Get the parent or null if not set
 
 NOTE: this is only set when added to another element using the BBCodeElement::addChild()
@@ -102,9 +102,9 @@ NOTE: this is only set when added to another element using the BBCodeElement::ad
   Check if the element doesn't need a closing tag and can only be a singel line
  ==== *public* _bool_ *`singelTag`* (  ) ====
   Check if the element doesn't need a closing tag
- ==== *public* _void_ *`addChild`* ( _BBCodeElement_ `$child` ) ====
+ ==== *public* _void_ *`addChild`* ( _[DOCLibs#BBCodeElement BBCodeElement]_ `$child` ) ====
   Add a Child to the element
- ==== *public* _BBCodeElement_ *`getLastChild`* (  ) ====
+ ==== *public* _[DOCLibs#BBCodeElement BBCodeElement]_ *`getLastChild`* (  ) ====
   Get the last child in this element
 
 NOTE: if there is no child, this will return a BBCodeDummyElement rather then null or false
@@ -187,10 +187,10 @@ The BBCodeParser which does the actual work
 == CLIAction ==
 ===== _abstract_ ,,class,, CLIAction =====
 CliAction interface
- ==== _void_ *`setup`* ( _CLI_ `$cli` ) ====
+ ==== _void_ *`setup`* ( _[DOCLibs#CLI CLI]_ `$cli` ) ====
   Setup function, you can override this to add setup stuff. This is
 called before the exec
- ==== _void_ *`cleanup`* ( _CLI_ `$cli` ) ====
+ ==== _void_ *`cleanup`* ( _[DOCLibs#CLI CLI]_ `$cli` ) ====
   Cleanup function, you can override this to add cleanup stuff. This is
 called after the exec
 == OS ==
@@ -242,7 +242,7 @@ Parser for cron time string
 == FTP ==
 ===== ,,class,, FTP =====
 Helper class for uploading stuff using FTP
- ==== *public* *static* _FTP_ *`getInstance`* (  ) ====
+ ==== *public* *static* _[DOCLibs#FTP FTP]_ *`getInstance`* (  ) ====
   Singelton
  ==== *private* _void_ *`__construct`* (  ) ====
   Constructor

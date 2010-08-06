@@ -18,6 +18,6 @@ The following classes are located in this package
  ==== *public* _void_ *`action_upload`* (  ) ====
  ==== *public* _void_ *`action_edit`* (  ) ====
  ==== *public* _void_ *`action_delete`* (  ) ====
- ==== *public* _void_ *`registerTreeItems`* ( _Tree_ `$tree` ) ====
+ ==== *public* _void_ *`registerTreeItems`* ( _[DOCComponentsPageUtil#Tree Tree]_ `$tree` ) ====
   Register tree items for this component
  ==== *public* _void_ *`getType`* (  ) ====

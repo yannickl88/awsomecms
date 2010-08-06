@@ -21,7 +21,7 @@ Privileges list of check boxes
 == UsersField ==
 ===== ,,class,, UsersField ,,extends,, [DOCCoreFields#Field Field] =====
 Selection list of all the users
- ==== *public* _Field_ *`setData`* ( _object_ `$value` ) ====
+ ==== *public* _[DOCCoreFields#Field Field]_ *`setData`* ( _object_ `$value` ) ====
   Set the Value of this field with an result object
  ==== *public* _`*`_ *`getValue`* ( _object_ `$data` ) ====
   get the data from this field

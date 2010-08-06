@@ -14,24 +14,24 @@ The following classes are located in this package
 Menu item that is used in the admin menu
  ==== *public* _void_ *`__construct`* ( _string_ `$name`, _string_ `$text`, _string_ `$page`, _string_ `$parent` ) ====
   Constructor
- ==== *public* _bool_ *`addChild`* ( _MenuItem_ `$child` ) ====
+ ==== *public* _bool_ *`addChild`* ( _[DOCComponentsPageUtil#MenuItem MenuItem]_ `$child` ) ====
   Add a menu items to this item, returns true or false depending if succeded
- ==== *private* _int_ *`sort`* ( _MenuItem_ `$child1`, _MenuItem_ `$child2` ) ====
+ ==== *private* _int_ *`sort`* ( _[DOCComponentsPageUtil#MenuItem MenuItem]_ `$child1`, _[DOCComponentsPageUtil#MenuItem MenuItem]_ `$child2` ) ====
   sort the items in this MenuItem
  ==== *public* _string_ *`toHTML`* (  ) ====
   Create a HTML represenation of this MenuItem
 == Menu ==
 ===== ,,class,, Menu =====
 Menu class, this is the root element of the menu
- ==== *public* *static* _Menu_ *`getInstance`* (  ) ====
+ ==== *public* *static* _[DOCComponentsPageUtil#Menu Menu]_ *`getInstance`* (  ) ====
   Singelton
  ==== *private* _void_ *`__construct`* (  ) ====
   Constructor
- ==== *public* _bool_ *`addChild`* ( _MenuItem_ `$child` ) ====
+ ==== *public* _bool_ *`addChild`* ( _[DOCComponentsPageUtil#MenuItem MenuItem]_ `$child` ) ====
   Add a menu items to this menu, returns true or false depending if succeded
  ==== *public* _string_ *`toHTML`* (  ) ====
   Create HTML representation of this menu
- ==== *private* _int_ *`sort`* ( _MenuItem_ `$child1`, _MenuItem_ `$child2` ) ====
+ ==== *private* _int_ *`sort`* ( _[DOCComponentsPageUtil#MenuItem MenuItem]_ `$child1`, _[DOCComponentsPageUtil#MenuItem MenuItem]_ `$child2` ) ====
   Sort the items in the menu
 == Tree ==
 ===== ,,class,, Tree =====
@@ -39,7 +39,7 @@ Tree class for the page admin tree
  ==== *public* *static* _void_ *`getInstance`* (  ) ====
  ==== *private* _void_ *`__construct`* ( _string_ `$name`, _string_ `$element` ) ====
   Constructor
- ==== *public* _void_ *`addChild`* ( _TreeNode_ `$child` ) ====
+ ==== *public* _void_ *`addChild`* ( _[DOCComponentsPageUtil#TreeNode TreeNode]_ `$child` ) ====
   Add a child to the tree
  ==== *public* _void_ *`addIcon`* (  ) ====
  ==== *public* _string_ *`getName`* (  ) ====
@@ -49,7 +49,7 @@ Tree class for the page admin tree
 == TreeNode ==
 ===== _abstract_ ,,class,, TreeNode =====
 Abstract class for the nodes of the tree
- ==== *public* _void_ *`setParent`* ( _Tree_ `$parent` ) ====
+ ==== *public* _void_ *`setParent`* ( _[DOCComponentsPageUtil#Tree Tree]_ `$parent` ) ====
   Set the parent, which is the tree
  ==== *public* _void_ *`setType`* ( _int_ `$type` ) ====
   Set the type of this node

@@ -14,15 +14,15 @@ The following classes are located in this package
 Contact component class, this holds all the logic for the contact component
  ==== *public* _void_ *`__construct`* (  ) ====
   Constructor class for the contact component
- ==== *public* _void_ *`action_add`* ( _Smarty_ `$smarty`, _SmartyPageLoader_ `$smartyLoader`, _array_ `$request` ) ====
+ ==== *public* _void_ *`action_add`* ( _Smarty_ `$smarty`, _[DOCDefault#SmartyPageLoader SmartyPageLoader]_ `$smartyLoader`, _array_ `$request` ) ====
   Add action, this is called when a contact form is added
- ==== *public* _void_ *`action_edit`* ( _Smarty_ `$smarty`, _SmartyPageLoader_ `$smartyLoader`, _array_ `$request` ) ====
+ ==== *public* _void_ *`action_edit`* ( _Smarty_ `$smarty`, _[DOCDefault#SmartyPageLoader SmartyPageLoader]_ `$smartyLoader`, _array_ `$request` ) ====
   Edit action, this is called when a contact form is edited
- ==== *public* _void_ *`action_delete`* ( _Smarty_ `$smarty`, _SmartyPageLoader_ `$smartyLoader`, _array_ `$request` ) ====
+ ==== *public* _void_ *`action_delete`* ( _Smarty_ `$smarty`, _[DOCDefault#SmartyPageLoader SmartyPageLoader]_ `$smartyLoader`, _array_ `$request` ) ====
   Delete action, this is called when a form is deleted
- ==== *public* _void_ *`action_send`* ( _Smarty_ `$smarty`, _SmartyPageLoader_ `$smartyLoader`, _array_ `$request` ) ====
+ ==== *public* _void_ *`action_send`* ( _Smarty_ `$smarty`, _[DOCDefault#SmartyPageLoader SmartyPageLoader]_ `$smartyLoader`, _array_ `$request` ) ====
   Send action, this is called when a form is submitted
- ==== *public* _void_ *`registerMenuItems`* ( _Menu_ `$menu` ) ====
+ ==== *public* _void_ *`registerMenuItems`* ( _[DOCComponentsPageUtil#Menu Menu]_ `$menu` ) ====
   Function for registering menu items to the admin menu
 == FormfieldsTable ==
 ===== ,,class,, FormfieldsTable ,,extends,, [DOCCore#Table Table] =====

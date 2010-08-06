@@ -14,13 +14,13 @@ The following classes are located in this package
 Component that allowes for group based authentication, rather then user based
  ==== *public* _`*`_ *`__construct`* (  ) ====
   Constructor
- ==== *public* _void_ *`register`* ( _RegisterManager_ `$registerManager` ) ====
+ ==== *public* _void_ *`register`* ( _[DOCCore#RegisterManager RegisterManager]_ `$registerManager` ) ====
   Register actions/hooks/mappings to the framework
- ==== *public* _void_ *`action_add`* ( _Smarty_ `$smarty`, _SmartyPageLoader_ `$smartyLoader`, _array_ `$request` ) ====
+ ==== *public* _void_ *`action_add`* ( _Smarty_ `$smarty`, _[DOCDefault#SmartyPageLoader SmartyPageLoader]_ `$smartyLoader`, _array_ `$request` ) ====
   Action to add an group
- ==== *public* _void_ *`action_edit`* ( _Smarty_ `$smarty`, _SmartyPageLoader_ `$smartyLoader`, _array_ `$request` ) ====
+ ==== *public* _void_ *`action_edit`* ( _Smarty_ `$smarty`, _[DOCDefault#SmartyPageLoader SmartyPageLoader]_ `$smartyLoader`, _array_ `$request` ) ====
   Action to edit an group
- ==== *public* _void_ *`action_delete`* ( _Smarty_ `$smarty`, _SmartyPageLoader_ `$smartyLoader`, _array_ `$request` ) ====
+ ==== *public* _void_ *`action_delete`* ( _Smarty_ `$smarty`, _[DOCDefault#SmartyPageLoader SmartyPageLoader]_ `$smartyLoader`, _array_ `$request` ) ====
   Action to delete an group
  ==== *public* _array_ *`getPrivilageMapping`* ( _int_ `$privileges`, _array_ `$preset` ) ====
   Request a list of privilages a given groups has
@@ -32,7 +32,7 @@ Component that allowes for group based authentication, rather then user based
   Hook to add a reference of a user when it is deleted in the user component
  ==== *public* _bool_ *`hook_userdel`* ( _Smarty_ `$smarty`, _array_ `$request` ) ====
   Hook to delete a reference of a user when it is deleted in the user component
- ==== *public* _void_ *`registerMenuItems`* ( _Menu_ `$menu` ) ====
+ ==== *public* _void_ *`registerMenuItems`* ( _[DOCComponentsPageUtil#Menu Menu]_ `$menu` ) ====
   Register menu items for this component
 == GroupsTable ==
 ===== ,,class,, GroupsTable ,,extends,, [DOCCore#Table Table] =====

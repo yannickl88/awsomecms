@@ -232,34 +232,34 @@ in the doc/COPYRIGHT and doc/LICENSE files which should be
 included in the distribution.
  ==== *public* _void_ *`__construct`* (  ) ====
   Constructor
- ==== _void_ *`setup`* ( _CLI_ `$cli` ) ====
+ ==== _void_ *`setup`* ( _[DOCLibs#CLI CLI]_ `$cli` ) ====
   Setup function, you can override this to add setup stuff. This is
 called before the exec
- ==== _void_ *`cleanup`* ( _CLI_ `$cli` ) ====
+ ==== _void_ *`cleanup`* ( _[DOCLibs#CLI CLI]_ `$cli` ) ====
   Cleanup function, you can override this to add cleanup stuff. This is
 called after the exec
 == Usage ==
 ===== ,,class,, Usage ,,extends,, [DOCLibs#CLIAction CLIAction] =====
 
- ==== *public* _void_ *`exec`* ( _CLI_ `$cli`, _string_ `$action` ) ====
+ ==== *public* _void_ *`exec`* ( _[DOCLibs#CLI CLI]_ `$cli`, _string_ `$action` ) ====
   (non-PHPdoc)
 == Pack ==
 ===== ,,class,, Pack ,,extends,, [DOCDefault#DeployAction DeployAction] =====
 
- ==== *public* _void_ *`exec`* ( _CLI_ `$cli`, _string_ `$action` ) ====
+ ==== *public* _void_ *`exec`* ( _[DOCLibs#CLI CLI]_ `$cli`, _string_ `$action` ) ====
   (non-PHPdoc)
 == Update ==
 ===== ,,class,, Update ,,extends,, [DOCDefault#DeployAction DeployAction] =====
 
- ==== *public* _void_ *`exec`* ( _CLI_ `$cli`, _string_ `$action` ) ====
+ ==== *public* _void_ *`exec`* ( _[DOCLibs#CLI CLI]_ `$cli`, _string_ `$action` ) ====
   (non-PHPdoc)
 == Release ==
 ===== ,,class,, Release ,,extends,, [DOCDefault#DeployAction DeployAction] =====
 
- ==== *public* _void_ *`exec`* ( _CLI_ `$cli`, _string_ `$action` ) ====
+ ==== *public* _void_ *`exec`* ( _[DOCLibs#CLI CLI]_ `$cli`, _string_ `$action` ) ====
   (non-PHPdoc)
 == Patch ==
 ===== ,,class,, Patch ,,extends,, [DOCLibs#CLIAction CLIAction] =====
 
- ==== *public* _void_ *`exec`* ( _CLI_ `$cli`, _string_ `$action` ) ====
+ ==== *public* _void_ *`exec`* ( _[DOCLibs#CLI CLI]_ `$cli`, _string_ `$action` ) ====
   (non-PHPdoc)

@@ -49,7 +49,7 @@ Date field, this shows a date selection field
 == Field ==
 ===== ,,class,, Field =====
 Superclass for a Field.
- ==== *public* _Field_ *`__construct`* ( _string_ `$name`, _`*`_ `$value` ) ====
+ ==== *public* _[DOCCoreFields#Field Field]_ *`__construct`* ( _string_ `$name`, _`*`_ `$value` ) ====
   Constructor of the field
  ==== *public* _bool_ *`hasFlag`* ( _int_ `$flag` ) ====
   Check if this field has a give flag
@@ -57,15 +57,15 @@ Superclass for a Field.
   Get the name of this field
  ==== *public* _string_ *`getDisplayName`* (  ) ====
   Get the name that should be show in the forms
- ==== *public* _Field_ *`setValue`* ( _`*`_ `$value` ) ====
+ ==== *public* _[DOCCoreFields#Field Field]_ *`setValue`* ( _`*`_ `$value` ) ====
   Set the Value of this field
- ==== *public* _Field_ *`setParent`* ( _Table_ `$value` ) ====
+ ==== *public* _[DOCCoreFields#Field Field]_ *`setParent`* ( _[DOCCore#Table Table]_ `$value` ) ====
   Set the Parent table of this field
- ==== *public* _Field_ *`setRequestValue`* ( _`*`_ `$value` ) ====
+ ==== *public* _[DOCCoreFields#Field Field]_ *`setRequestValue`* ( _`*`_ `$value` ) ====
   Set the value that the field got in the request
- ==== *public* _Field_ *`setData`* ( _object_ `$value` ) ====
+ ==== *public* _[DOCCoreFields#Field Field]_ *`setData`* ( _object_ `$value` ) ====
   Set the Value of this field with an result object
- ==== *public* _Field_ *`setRequestData`* ( _object_ `$record` ) ====
+ ==== *public* _[DOCCoreFields#Field Field]_ *`setRequestData`* ( _object_ `$record` ) ====
   Set the request value of this field with an request object
  ==== *public* _`*`_ *`getValue`* ( _object_ `$data` ) ====
   get the data from this field
@@ -75,23 +75,23 @@ Superclass for a Field.
   Check if this field has a value that is not empty
  ==== *public* _bool_ *`isRequired`* ( _int_ `$mode` ) ====
   Check if this field is required
- ==== *public* _Field_ *`setRequired`* ( _bool_ `$required` ) ====
+ ==== *public* _[DOCCoreFields#Field Field]_ *`setRequired`* ( _bool_ `$required` ) ====
   Set the field to be required
  ==== *public* _bool_ *`canBeNull`* (  ) ====
   Check if this field can be null
- ==== *public* _Field_ *`setCanBeNull`* ( _bool_ `$null` ) ====
+ ==== *public* _[DOCCoreFields#Field Field]_ *`setCanBeNull`* ( _bool_ `$null` ) ====
   Set the field to be null
  ==== *public* _`*`_ *`getDefaultValue`* (  ) ====
   Get the default value of this field
- ==== *public* _Field_ *`setDefaultValue`* ( _`*`_ `$value` ) ====
+ ==== *public* _[DOCCoreFields#Field Field]_ *`setDefaultValue`* ( _`*`_ `$value` ) ====
   Set the field to have a default value
  ==== *public* _int_ *`getMaxSize`* (  ) ====
   get the max size of this field
- ==== *public* _Field_ *`setMaxSize`* ( _int_ `$size` ) ====
+ ==== *public* _[DOCCoreFields#Field Field]_ *`setMaxSize`* ( _int_ `$size` ) ====
   Set the field max size, -1 to have no size
  ==== *public* _bool_ *`isIndex`* (  ) ====
   Check if this field in an index field
- ==== *public* _Field_ *`setIndex`* ( _string_ `$index` ) ====
+ ==== *public* _[DOCCoreFields#Field Field]_ *`setIndex`* ( _string_ `$index` ) ====
   Set the field ability to have an index
  ==== *public* _bool_ *`visible`* ( _int_ `$mode` ) ====
   check if this field is visible
@@ -128,9 +128,9 @@ NOTE:Do not overwrite this function. Use the toHTML_add/edit/view instaid if you
   Convert the dbvalue of the param to what the field expects
  ==== *public* _string_ *`getDBName`* (  ) ====
   Get the name to be used in the SQL queries
- ==== *public* _void_ *`preSQL`* ( _`*`_ `Array record that was used`, _SQLQuery_ `$query` ) ====
+ ==== *public* _void_ *`preSQL`* ( _`*`_ `Array record that was used`, _[DOCCore#SQLQuery SQLQuery]_ `$query` ) ====
   preform this action prior to the SQL execution that uses this field
- ==== *public* _void_ *`postSQL`* ( _SQLRecord_ `$sqlrecord`, _array_ `$record`, _SQLQuery_ `$query` ) ====
+ ==== *public* _void_ *`postSQL`* ( _[DOCCore#SQLRecord SQLRecord]_ `$sqlrecord`, _array_ `$record`, _[DOCCore#SQLQuery SQLQuery]_ `$query` ) ====
   preform this action prior to the SQL execution that uses this field
 == IntField ==
 ===== ,,class,, IntField ,,extends,, [DOCCoreFields#Field Field] =====
@@ -158,7 +158,7 @@ Password field
 == TagField ==
 ===== ,,class,, TagField ,,extends,, [DOCCoreFields#Field Field] =====
 Tag field, this allows for quick search and assignment of tags
- ==== *public* _void_ *`preSQL`* ( _`*`_ `Array record that was used`, _SQLQuery_ `$query` ) ====
+ ==== *public* _void_ *`preSQL`* ( _`*`_ `Array record that was used`, _[DOCCore#SQLQuery SQLQuery]_ `$query` ) ====
   preform this action prior to the SQL execution that uses this field
  ==== *public* _void_ *`insert`* ( __ `$query`, __ `$data` ) ====
   Add insert data for this field to a query
