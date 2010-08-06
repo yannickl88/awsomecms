@@ -9,7 +9,7 @@ included in the distribution.
 == Contents: ==
 The following classes are located in this package
 === Classes: ===
-== AuthTable ==
+== `AuthTable` ==
 ===== ,,class,, AuthTable ,,extends,, [DOCCore#Table Table] =====
 Auth table, this handels all interaction with the auth table in the database
  ==== *public* _void_ *`__construct`* (  ) ====
@@ -22,7 +22,7 @@ Constructor
 (non-PHPdoc)
  ==== *protected* _void_ *`delete`* (  ) ====
 (non-PHPdoc)
-== ComponentsTable ==
+== `ComponentsTable` ==
 ===== ,,class,, ComponentsTable ,,extends,, [DOCCore#Table Table] =====
 Core table, this handels all interaction with the core table in the database
  ==== *public* _void_ *`__construct`* (  ) ====
@@ -35,7 +35,7 @@ Constructor
 (non-PHPdoc)
  ==== *protected* _void_ *`delete`* (  ) ====
 (non-PHPdoc)
-== CoreComponent ==
+== `CoreComponent` ==
 ===== ,,class,, CoreComponent ,,extends,, [DOCCore#Component Component] =====
 Core component class, this includes all the logic for the core actions
  ==== *public* _void_ *`__construct`* (  ) ====
@@ -59,7 +59,7 @@ Components action, this is used for the compontent settings page
  ==== *public* _void_ *`action_getform`* (  ) ====
  ==== *public* _void_ *`registerMenuItems`* ( _[DOCComponentsPageUtil#Menu Menu]_ `$menu` ) ====
 Register menu items for this component
-== TagsTable ==
+== `TagsTable` ==
 ===== ,,class,, TagsTable ,,extends,, [DOCCore#Table Table] =====
 Auth table, this handels all interaction with the auth table in the database
  ==== *public* _void_ *`__construct`* (  ) ====

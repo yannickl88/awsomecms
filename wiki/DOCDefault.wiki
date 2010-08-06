@@ -12,14 +12,14 @@ The following functions are located in this package
 
 The following classes are located in this package
 === Classes: ===
-== FileItem ==
+== `FileItem` ==
 ===== ,,class,, FileItem ,,extends,, [DOCComponentsPageUtil#TreeNode TreeNode] =====
 
  ==== *public* _void_ *`__construct`* ( _object_ `$record` ) ====
 Constructor
  ==== *public* _string_ *`toJavascript`* (  ) ====
 Create the javascript code for the tree
-== ImageFolder ==
+== `ImageFolder` ==
 ===== ,,class,, ImageFolder ,,extends,, [DOCComponentsPageUtil#Folder Folder] =====
 
  ==== *public* _void_ *`__construct`* ( _object_ `$record` ) ====
@@ -28,7 +28,7 @@ Constructor
 See parent
  ==== *public* _string_ *`toJavascript`* (  ) ====
 Create the javascript code for the tree
-== UploadFolder ==
+== `UploadFolder` ==
 ===== ,,class,, UploadFolder ,,extends,, [DOCComponentsPageUtil#Folder Folder] =====
 
  ==== *public* _void_ *`__construct`* ( _object_ `$record` ) ====
@@ -37,7 +37,7 @@ Constructor
 See parent
  ==== *public* _string_ *`toJavascript`* (  ) ====
 Create the javascript code for the tree
-== NewsItem ==
+== `NewsItem` ==
 ===== ,,class,, NewsItem ,,extends,, [DOCComponentsPageUtil#TreeNode TreeNode] =====
 The node for the page items
  ==== *public* _void_ *`__construct`* ( _object_ `$record` ) ====
@@ -46,7 +46,7 @@ Constructor
 See parent
  ==== *public* _string_ *`toJavascript`* (  ) ====
 Create the javascript code for the tree
-== NewsFolder ==
+== `NewsFolder` ==
 ===== ,,class,, NewsFolder ,,extends,, [DOCComponentsPageUtil#TreeNode TreeNode] =====
 
  ==== *public* _void_ *`__construct`* ( _object_ `$record` ) ====
@@ -55,7 +55,7 @@ Constructor
 See parent
  ==== *public* _string_ *`toJavascript`* (  ) ====
 Create the javascript code for the tree
-== DeployAction ==
+== `DeployAction` ==
 ===== _abstract_ ,,class,, DeployAction ,,extends,, [DOCLibs#CLIAction CLIAction] =====
 This file is part of the A.W.S.O.M.E.cms distribution.
 Detailed copyright and licensing information can be found
@@ -69,27 +69,27 @@ called before the exec
  ==== _void_ *`cleanup`* ( _[DOCLibs#CLI CLI]_ `$cli` ) ====
 Cleanup function, you can override this to add cleanup stuff. This is
 called after the exec
-== Usage ==
+== `Usage` ==
 ===== ,,class,, Usage ,,extends,, [DOCLibs#CLIAction CLIAction] =====
 
  ==== *public* _void_ *`exec`* ( _[DOCLibs#CLI CLI]_ `$cli`, _string_ `$action` ) ====
 (non-PHPdoc)
-== Pack ==
+== `Pack` ==
 ===== ,,class,, Pack ,,extends,, [DOCDefault#DeployAction DeployAction] =====
 
  ==== *public* _void_ *`exec`* ( _[DOCLibs#CLI CLI]_ `$cli`, _string_ `$action` ) ====
 (non-PHPdoc)
-== Update ==
+== `Update` ==
 ===== ,,class,, Update ,,extends,, [DOCDefault#DeployAction DeployAction] =====
 
  ==== *public* _void_ *`exec`* ( _[DOCLibs#CLI CLI]_ `$cli`, _string_ `$action` ) ====
 (non-PHPdoc)
-== Release ==
+== `Release` ==
 ===== ,,class,, Release ,,extends,, [DOCDefault#DeployAction DeployAction] =====
 
  ==== *public* _void_ *`exec`* ( _[DOCLibs#CLI CLI]_ `$cli`, _string_ `$action` ) ====
 (non-PHPdoc)
-== Patch ==
+== `Patch` ==
 ===== ,,class,, Patch ,,extends,, [DOCLibs#CLIAction CLIAction] =====
 
  ==== *public* _void_ *`exec`* ( _[DOCLibs#CLI CLI]_ `$cli`, _string_ `$action` ) ====

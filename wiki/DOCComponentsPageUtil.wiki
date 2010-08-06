@@ -9,7 +9,7 @@ included in the distribution.
 == Contents: ==
 The following classes are located in this package
 === Classes: ===
-== MenuItem ==
+== `MenuItem` ==
 ===== ,,class,, MenuItem =====
 Menu item that is used in the admin menu
  ==== *public* _void_ *`__construct`* ( _string_ `$name`, _string_ `$text`, _string_ `$page`, _string_ `$parent` ) ====
@@ -20,7 +20,7 @@ Add a menu items to this item, returns true or false depending if succeded
 sort the items in this MenuItem
  ==== *public* _string_ *`toHTML`* (  ) ====
 Create a HTML represenation of this MenuItem
-== Menu ==
+== `Menu` ==
 ===== ,,class,, Menu =====
 Menu class, this is the root element of the menu
  ==== *public* *static* _[DOCComponentsPageUtil#Menu Menu]_ *`getInstance`* (  ) ====
@@ -33,7 +33,7 @@ Add a menu items to this menu, returns true or false depending if succeded
 Create HTML representation of this menu
  ==== *private* _int_ *`sort`* ( _[DOCComponentsPageUtil#MenuItem MenuItem]_ `$child1`, _[DOCComponentsPageUtil#MenuItem MenuItem]_ `$child2` ) ====
 Sort the items in the menu
-== Tree ==
+== `Tree` ==
 ===== ,,class,, Tree =====
 Tree class for the page admin tree
  ==== *public* *static* _void_ *`getInstance`* (  ) ====
@@ -46,7 +46,7 @@ Add a child to the tree
 get the name of the javascript element
  ==== *public* _string_ *`toJavascript`* (  ) ====
 Create the javascript code for the tree
-== TreeNode ==
+== `TreeNode` ==
 ===== _abstract_ ,,class,, TreeNode =====
 Abstract class for the nodes of the tree
  ==== *public* _void_ *`setParent`* ( _[DOCComponentsPageUtil#Tree Tree]_ `$parent` ) ====
@@ -57,21 +57,21 @@ Set the type of this node
 Get the type of this node
  ==== *public* _string_ *`registerIcons`* (  ) ====
 function that is called once on each type of node, you can add icons to the tree here
-== PageItem ==
+== `PageItem` ==
 ===== ,,class,, PageItem ,,extends,, [DOCComponentsPageUtil#TreeNode TreeNode] =====
 The node for the page items
  ==== *public* _void_ *`__construct`* ( _object_ `$record` ) ====
 Constructor
  ==== *public* _string_ *`toJavascript`* (  ) ====
 Create the javascript code for the tree
-== Folder ==
+== `Folder` ==
 ===== ,,class,, Folder ,,extends,, [DOCComponentsPageUtil#TreeNode TreeNode] =====
 
  ==== *public* _void_ *`__construct`* ( _object_ `$record` ) ====
 Constructor
  ==== *public* _string_ *`toJavascript`* (  ) ====
 Create the javascript code for the tree
-== RootFolder ==
+== `RootFolder` ==
 ===== ,,class,, RootFolder ,,extends,, [DOCComponentsPageUtil#Folder Folder] =====
 
  ==== *public* _string_ *`toJavascript`* (  ) ====

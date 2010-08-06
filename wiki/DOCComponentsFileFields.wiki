@@ -9,7 +9,7 @@ included in the distribution.
 == Contents: ==
 The following classes are located in this package
 === Classes: ===
-== FileSelectField ==
+== `FileSelectField` ==
 ===== ,,class,, FileSelectField ,,extends,, [DOCCoreFields#Field Field] =====
 Field for uploading files
  ==== *public* _void_ *`__construct`* ( _string_ `$name`, _int_ `$style` ) ====
@@ -22,7 +22,7 @@ Create a HTML representation of edit field
 Convert the dbvalue of the param to what the field expects
  ==== *public* _string_ *`value2db`* ( __ `$value` ) ====
 Convert the value of the param to that what the DB expects
-== UploadField ==
+== `UploadField` ==
 ===== ,,class,, UploadField ,,extends,, [DOCCoreFields#Field Field] =====
 Field for uploading files
  ==== *public* _void_ *`__construct`* ( _string_ `$name`, _int_ `$style` ) ====

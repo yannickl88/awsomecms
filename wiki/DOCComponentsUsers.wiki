@@ -9,7 +9,7 @@ included in the distribution.
 == Contents: ==
 The following classes are located in this package
 === Classes: ===
-== PrivilegesTable ==
+== `PrivilegesTable` ==
 ===== ,,class,, PrivilegesTable ,,extends,, [DOCCore#Table Table] =====
 Privileges tabel.
  ==== *public* _[DOCCore#Table Table]_ *`__construct`* ( _string_ `$name` ) ====
@@ -27,7 +27,7 @@ Preform a delete on the table
  ==== *public* _string_ *`getAction`* ( _int_ `$mode` ) ====
 Mapping of the action to the actuly hidden field content.
 When in need of custom mapping, like if you have two tables for one component, override this method
-== UsersComponent ==
+== `UsersComponent` ==
 ===== ,,class,, UsersComponent ,,extends,, [DOCCore#Component Component] =====
 User component and the actions that it can do.
 This components gives you the option to create different users inside a
@@ -61,7 +61,7 @@ Authenticate a user
 Log a user out
  ==== *public* _void_ *`registerMenuItems`* ( _[DOCComponentsPageUtil#Menu Menu]_ `$menu` ) ====
 Register menu items for this component
-== UsersTable ==
+== `UsersTable` ==
 ===== ,,class,, UsersTable ,,extends,, [DOCCore#Table Table] =====
 User table, this handels all interaction with the user table in the database
  ==== *public* _void_ *`__construct`* (  ) ====

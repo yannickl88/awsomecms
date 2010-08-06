@@ -9,7 +9,7 @@ included in the distribution.
 == Contents: ==
 The following classes are located in this package
 === Classes: ===
-== FileComponent ==
+== `FileComponent` ==
 ===== ,,class,, FileComponent ,,extends,, [DOCCore#Component Component] =====
 
  ==== *public* _`*`_ *`__construct`* (  ) ====
