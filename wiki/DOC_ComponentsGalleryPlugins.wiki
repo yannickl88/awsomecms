@@ -1,0 +1,13 @@
+#labels Documentation
+#summary Documentation for content in the components.gallery.plugins package.
+_Package: 'components.gallery.plugins'_ 
+
+This file is part of the A.W.S.O.M.E.cms distribution.
+Detailed copyright and licensing information can be found
+in the doc/COPYRIGHT and doc/LICENSE files which should be
+included in the distribution.
+== Contents: ==
+The following functions are located in this package
+=== Functions: ===
+ ===== _string_ *`smarty_function_gallery`* ( _array_ `$params`, _Smarty_ `$smarty` ) =====
+  Show the gallery on the page

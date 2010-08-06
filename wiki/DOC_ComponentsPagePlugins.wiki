@@ -1,0 +1,23 @@
+#labels Documentation
+#summary Documentation for content in the components.page.plugins package.
+_Package: 'components.page.plugins'_ 
+
+This file is part of the A.W.S.O.M.E.cms distribution.
+Detailed copyright and licensing information can be found
+in the doc/COPYRIGHT and doc/LICENSE files which should be
+included in the distribution.
+== Contents: ==
+The following functions are located in this package
+=== Functions: ===
+ ===== _string_ *`smarty_function_adminmenu`* ( _array_ `$params`, _Smarty_ `$smarty` ) =====
+  Show the admin menu
+ ===== _string_ *`smarty_function_admintree`* ( _array_ `$params`, _Smarty_ `$smarty` ) =====
+  Show the admin tree
+ ===== _void_ *`smarty_function_layout`* ( _array_ `$params`, _Smarty_ `$smarty` ) =====
+  Change the layout to be wrapped around the page
+ ===== _string_ *`smarty_function_renderdebug`* ( _array_ `$params`, _Smarty_ `$smarty` ) =====
+  Show the debugger content
+ ===== _int_ *`smarty_function_rendertime`* ( _array_ `$params`, _Smarty_ `$smarty` ) =====
+  Show the time it has taken for the site to render
+ ===== _string_ *`smarty_function_search`* ( _array_ `$params`, _Smarty_ `$smarty` ) =====
+  Show a list of results on this page

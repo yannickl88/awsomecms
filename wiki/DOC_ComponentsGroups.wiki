@@ -1,0 +1,62 @@
+#labels Documentation
+#summary Documentation for content in the components.groups package.
+_Package: 'components.groups'_ 
+
+This file is part of the A.W.S.O.M.E.cms distribution.
+Detailed copyright and licensing information can be found
+in the doc/COPYRIGHT and doc/LICENSE files which should be
+included in the distribution.
+== Contents: ==
+The following classes are located in this package
+=== Classes: ===
+== GroupsComponent ==
+===== ,,class,, !GroupsComponent ,,extends,, `[DOC_Core#Component Component]` =====
+Component that allowes for group based authentication, rather then user based
+ ==== *public* _`*`_ *`__construct`* (  ) ====
+  Constructor
+ ==== *public* _void_ *`register`* ( _RegisterManager_ `$registerManager` ) ====
+  Register actions/hooks/mappings to the framework
+ ==== *public* _void_ *`action_add`* ( _Smarty_ `$smarty`, _SmartyPageLoader_ `$smartyLoader`, _array_ `$request` ) ====
+  Action to add an group
+ ==== *public* _void_ *`action_edit`* ( _Smarty_ `$smarty`, _SmartyPageLoader_ `$smartyLoader`, _array_ `$request` ) ====
+  Action to edit an group
+ ==== *public* _void_ *`action_delete`* ( _Smarty_ `$smarty`, _SmartyPageLoader_ `$smartyLoader`, _array_ `$request` ) ====
+  Action to delete an group
+ ==== *public* _array_ *`getPrivilageMapping`* ( _int_ `$privileges`, _array_ `$preset` ) ====
+  Request a list of privilages a given groups has
+ ==== *public* _bool_ *`auth_login`* ( _string_ `$user_name`, _string_ `$user_pass` ) ====
+  Log a user in with crendtials
+ ==== *public* _void_ *`auth_logout`* (  ) ====
+  Log a user out
+ ==== *public* _bool_ *`hook_useradd`* ( _Smarty_ `$smarty`, _array_ `$request` ) ====
+  Hook to add a reference of a user when it is deleted in the user component
+ ==== *public* _bool_ *`hook_userdel`* ( _Smarty_ `$smarty`, _array_ `$request` ) ====
+  Hook to delete a reference of a user when it is deleted in the user component
+ ==== *public* _void_ *`registerMenuItems`* ( _Menu_ `$menu` ) ====
+  Register menu items for this component
+== GroupsTable ==
+===== ,,class,, !GroupsTable ,,extends,, `[DOC_Core#Table Table]` =====
+User table, this handels all interaction with the user table in the database
+ ==== *public* _void_ *`__construct`* (  ) ====
+  Constructor
+ ==== *protected* _void_ *`select`* (  ) ====
+  (non-PHPdoc)
+ ==== *protected* _void_ *`insert`* (  ) ====
+  (non-PHPdoc)
+ ==== *protected* _void_ *`update`* (  ) ====
+  (non-PHPdoc)
+ ==== *protected* _void_ *`delete`* (  ) ====
+  (non-PHPdoc)
+== UsersgroupsTable ==
+===== ,,class,, !UsersgroupsTable ,,extends,, `[DOC_Core#Table Table]` =====
+Usersgroups table, this is a raltional table to keep track of what users are in which groups
+ ==== *public* _void_ *`__construct`* (  ) ====
+  Constructor
+ ==== *protected* _void_ *`select`* (  ) ====
+  (non-PHPdoc)
+ ==== *protected* _void_ *`insert`* (  ) ====
+  (non-PHPdoc)
+ ==== *protected* _void_ *`update`* (  ) ====
+  (non-PHPdoc)
+ ==== *protected* _void_ *`delete`* (  ) ====
+  (non-PHPdoc)

@@ -1,0 +1,185 @@
+#labels Documentation
+#summary Documentation for content in the core.fields package.
+_Package: 'core.fields'_ 
+
+This file is part of the A.W.S.O.M.E.cms distribution.
+Detailed copyright and licensing information can be found
+in the doc/COPYRIGHT and doc/LICENSE files which should be
+included in the distribution.
+== Contents: ==
+The following classes are located in this package
+=== Classes: ===
+== BooleanField ==
+===== ,,class,, !BooleanField ,,extends,, `[DOC_CoreFields#IntField IntField]` =====
+Boolean field.
+ ==== *protected* _string_ *`toHTML_add`* (  ) ====
+  Create a HTML representation of add field
+ ==== *protected* _string_ *`toHTML_edit`* (  ) ====
+  Create a HTML representation of edit field
+ ==== *protected* _string_ *`toHTML_view`* (  ) ====
+  Create a HTML representation of view field
+== CaptchaField ==
+===== ,,class,, !CaptchaField ,,extends,, `[DOC_CoreFields#Field Field]` =====
+Captcha field to prevent bots.
+ ==== *public* _void_ *`__construct`* ( _string_ `$name`, _string_ `$displayName`, _int_ `$style` ) ====
+  Constructor
+ ==== *protected* _string_ *`toHTML_add`* (  ) ====
+  Create a HTML representation of add field
+ ==== *protected* _string_ *`toHTML_edit`* (  ) ====
+  Create a HTML representation of edit field
+ ==== *public* _void_ *`validate`* ( _int_ `$mode` ) ====
+  Validate the data for this field. This throws a FormException when not valid
+== DateField ==
+===== ,,class,, !DateField ,,extends,, `[DOC_CoreFields#Field Field]` =====
+Date field, this shows a date selection field
+ ==== *public* _string_ *`value2db`* ( __ `$value` ) ====
+  Convert the value of the param to that what the DB expects
+ ==== *public* _`*`_ *`getValue`* ( _object_ `$data` ) ====
+  get the data from this field
+ ==== *public* _`*`_ *`getDefaultValue`* (  ) ====
+  Get the default value of this field
+ ==== *protected* _string_ *`toHTML_add`* (  ) ====
+  Create a HTML representation of add field
+ ==== *protected* _string_ *`toHTML_edit`* (  ) ====
+  Create a HTML representation of edit field
+ ==== *protected* _string_ *`toHTML_view`* (  ) ====
+  Create a HTML representation of view field
+ ==== *public* _string_ *`getJavascript`* (  ) ====
+  get the javascript for this field
+== Field ==
+===== ,,class,, !Field =====
+Superclass for a Field.
+ ==== *public* _Field_ *`__construct`* ( _string_ `$name`, _`*`_ `$value` ) ====
+  Constructor of the field
+ ==== *public* _bool_ *`hasFlag`* ( _int_ `$flag` ) ====
+  Check if this field has a give flag
+ ==== *public* _string_ *`getName`* (  ) ====
+  Get the name of this field
+ ==== *public* _string_ *`getDisplayName`* (  ) ====
+  Get the name that should be show in the forms
+ ==== *public* _Field_ *`setValue`* ( _`*`_ `$value` ) ====
+  Set the Value of this field
+ ==== *public* _Field_ *`setParent`* ( _Table_ `$value` ) ====
+  Set the Parent table of this field
+ ==== *public* _Field_ *`setRequestValue`* ( _`*`_ `$value` ) ====
+  Set the value that the field got in the request
+ ==== *public* _Field_ *`setData`* ( _object_ `$value` ) ====
+  Set the Value of this field with an result object
+ ==== *public* _Field_ *`setRequestData`* ( _object_ `$record` ) ====
+  Set the request value of this field with an request object
+ ==== *public* _`*`_ *`getValue`* ( _object_ `$data` ) ====
+  get the data from this field
+ ==== *public* _`*`_ *`getRequestValue`* ( _object_ `$data` ) ====
+  get the request data from this field
+ ==== *public* _bool_ *`hasValue`* ( _array_ `$data` ) ====
+  Check if this field has a value that is not empty
+ ==== *public* _bool_ *`isRequired`* ( _int_ `$mode` ) ====
+  Check if this field is required
+ ==== *public* _Field_ *`setRequired`* ( _bool_ `$required` ) ====
+  Set the field to be required
+ ==== *public* _bool_ *`canBeNull`* (  ) ====
+  Check if this field can be null
+ ==== *public* _Field_ *`setCanBeNull`* ( _bool_ `$null` ) ====
+  Set the field to be null
+ ==== *public* _`*`_ *`getDefaultValue`* (  ) ====
+  Get the default value of this field
+ ==== *public* _Field_ *`setDefaultValue`* ( _`*`_ `$value` ) ====
+  Set the field to have a default value
+ ==== *public* _int_ *`getMaxSize`* (  ) ====
+  get the max size of this field
+ ==== *public* _Field_ *`setMaxSize`* ( _int_ `$size` ) ====
+  Set the field max size, -1 to have no size
+ ==== *public* _bool_ *`isIndex`* (  ) ====
+  Check if this field in an index field
+ ==== *public* _Field_ *`setIndex`* ( _string_ `$index` ) ====
+  Set the field ability to have an index
+ ==== *public* _bool_ *`visible`* ( _int_ `$mode` ) ====
+  check if this field is visible
+ ==== *public* _string_ *`__get`* ( _string_ `$name` ) ====
+  This is designed to give fast acces to the toHTML functions
+ ==== *public* _void_ *`toHTML`* ( _int_ `$mode` ) ====
+  Get the HTML representation of this field.
+NOTE:Do not overwrite this function. Use the toHTML_add/edit/view instaid if you want to change the way the HTML looks
+ ==== *public* _string_ *`__toString`* (  ) ====
+  String representation of this field
+ ==== *protected* _string_ *`toHTML_add`* (  ) ====
+  Create a HTML representation of add field
+ ==== *protected* _string_ *`toHTML_edit`* (  ) ====
+  Create a HTML representation of edit field
+ ==== *protected* _string_ *`toHTML_edit_hidden`* (  ) ====
+  Create a HTML representation of hidden field
+ ==== *protected* _string_ *`toHTML_view`* (  ) ====
+  Create a HTML representation of view field
+ ==== *public* _string_ *`getJavascript`* (  ) ====
+  get the javascript for this field
+ ==== *public* _void_ *`select`* ( __ `$query`, __ `$data` ) ====
+  Add select data for this field to a query
+ ==== *public* _void_ *`insert`* ( __ `$query`, __ `$data` ) ====
+  Add insert data for this field to a query
+ ==== *public* _void_ *`update`* ( __ `$query`, __ `$data` ) ====
+  Add update data for this field to a query
+ ==== *public* _void_ *`delete`* ( __ `$query`, __ `$data` ) ====
+  Add delete data for this field to a query
+ ==== *public* _void_ *`validate`* ( _int_ `$mode` ) ====
+  Validate the data for this field. This throws a FormException when not valid
+ ==== *public* _string_ *`value2db`* ( __ `$value` ) ====
+  Convert the value of the param to that what the DB expects
+ ==== *public* _`*`_ *`db2value`* ( __ `$value` ) ====
+  Convert the dbvalue of the param to what the field expects
+ ==== *public* _string_ *`getDBName`* (  ) ====
+  Get the name to be used in the SQL queries
+ ==== *public* _void_ *`preSQL`* ( _`*`_ `Array record that was used`, _SQLQuery_ `$query` ) ====
+  preform this action prior to the SQL execution that uses this field
+ ==== *public* _void_ *`postSQL`* ( _SQLRecord_ `$sqlrecord`, _array_ `$record`, _SQLQuery_ `$query` ) ====
+  preform this action prior to the SQL execution that uses this field
+== IntField ==
+===== ,,class,, !IntField ,,extends,, `[DOC_CoreFields#Field Field]` =====
+Integer field
+ ==== *protected* _string_ *`toHTML_add`* (  ) ====
+  Create a HTML representation of add field
+ ==== *protected* _string_ *`toHTML_edit`* (  ) ====
+  Create a HTML representation of edit field
+ ==== *public* _string_ *`getJavascript`* (  ) ====
+  get the javascript for this field
+ ==== _void_ *`form_IntField_handleKey`* (  ) ====
+ ==== *public* _void_ *`validate`* ( _int_ `$mode` ) ====
+  Validate the data for this field. This throws a FormException when not valid
+== PasswordField ==
+===== ,,class,, !PasswordField ,,extends,, `[DOC_CoreFields#Field Field]` =====
+Password field
+ ==== *public* _void_ *`__construct`* ( _string_ `$name`, _string_ `$displayName`, _int_ `$style` ) ====
+  Constructor
+ ==== *protected* _string_ *`toHTML_add`* (  ) ====
+  Create a HTML representation of add field
+ ==== *protected* _string_ *`toHTML_edit`* (  ) ====
+  Create a HTML representation of edit field
+ ==== *public* _void_ *`value2db`* (  ) ====
+ ==== *public* _void_ *`db2value`* (  ) ====
+== TagField ==
+===== ,,class,, !TagField ,,extends,, `[DOC_CoreFields#Field Field]` =====
+Tag field, this allows for quick search and assignment of tags
+ ==== *public* _void_ *`preSQL`* ( _`*`_ `Array record that was used`, _SQLQuery_ `$query` ) ====
+  preform this action prior to the SQL execution that uses this field
+ ==== *public* _void_ *`insert`* ( __ `$query`, __ `$data` ) ====
+  Add insert data for this field to a query
+ ==== *public* _void_ *`insert`* ( __ `$query`, __ `$data` ) ====
+  Add insert data for this field to a query
+ ==== *public* _void_ *`update`* ( __ `$query`, __ `$data` ) ====
+  Add update data for this field to a query
+ ==== *public* _void_ *`delete`* ( __ `$query`, __ `$data` ) ====
+  Add delete data for this field to a query
+ ==== *public* _string_ *`getJavascript`* (  ) ====
+  get the javascript for this field
+ ==== *private* _void_ *`getAllTags`* (  ) ====
+== TextField ==
+===== ,,class,, !TextField ,,extends,, `[DOC_CoreFields#Field Field]` =====
+Textarea field
+ ==== *public* _void_ *`__construct`* ( _string_ `$name`, _string_ `$displayName`, _int_ `$style` ) ====
+  Constructor
+ ==== *protected* _string_ *`toHTML_add`* (  ) ====
+  Create a HTML representation of add field
+ ==== *protected* _string_ *`toHTML_edit`* (  ) ====
+  Create a HTML representation of edit field
+ ==== *public* _string_ *`getJavascript`* (  ) ====
+  get the javascript for this field
+ ==== _void_ *`bindEditor`* (  ) ====

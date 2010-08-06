@@ -1,0 +1,43 @@
+#labels Documentation
+#summary Documentation for content in the components.file.fields package.
+_Package: 'components.file.fields'_ 
+
+This file is part of the A.W.S.O.M.E.cms distribution.
+Detailed copyright and licensing information can be found
+in the doc/COPYRIGHT and doc/LICENSE files which should be
+included in the distribution.
+== Contents: ==
+The following classes are located in this package
+=== Classes: ===
+== FileSelectField ==
+===== ,,class,, !FileSelectField ,,extends,, `[DOC_CoreFields#Field Field]` =====
+Field for uploading files
+ ==== *public* _void_ *`__construct`* ( _string_ `$name`, _int_ `$style` ) ====
+  Constructor
+ ==== *protected* _string_ *`toHTML_add`* (  ) ====
+  Create a HTML representation of add field
+ ==== *protected* _string_ *`toHTML_edit`* (  ) ====
+  Create a HTML representation of edit field
+ ==== *public* _`*`_ *`db2value`* ( __ `$value` ) ====
+  Convert the dbvalue of the param to what the field expects
+ ==== *public* _string_ *`value2db`* ( __ `$value` ) ====
+  Convert the value of the param to that what the DB expects
+== UploadField ==
+===== ,,class,, !UploadField ,,extends,, `[DOC_CoreFields#Field Field]` =====
+Field for uploading files
+ ==== *public* _void_ *`__construct`* ( _string_ `$name`, _int_ `$style` ) ====
+  Constructor
+ ==== *protected* _string_ *`toHTML_add`* (  ) ====
+  Create a HTML representation of add field
+ ==== *protected* _string_ *`toHTML_edit`* (  ) ====
+  Create a HTML representation of edit field
+ ==== *public* _`*`_ *`db2value`* ( __ `$value` ) ====
+  Convert the dbvalue of the param to what the field expects
+ ==== *public* _string_ *`value2db`* ( __ `$value` ) ====
+  Convert the value of the param to that what the DB expects
+ ==== *public* _void_ *`preSQL`* ( _SQLRecord_ `$record`, _SQLQuery_ `$query` ) ====
+  upload the file on edit
+ ==== *private* _void_ *`handleFileUpload`* (  ) ====
+ ==== *private* _void_ *`createThumb`* (  ) ====
+ ==== *public* _void_ *`validate`* (  ) ====
+ ==== *public* _void_ *`isRequired`* (  ) ====

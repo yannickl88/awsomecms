@@ -1,0 +1,50 @@
+#labels Documentation
+#summary Documentation for content in the components.gallery package.
+_Package: 'components.gallery'_ 
+
+This file is part of the A.W.S.O.M.E.cms distribution.
+Detailed copyright and licensing information can be found
+in the doc/COPYRIGHT and doc/LICENSE files which should be
+included in the distribution.
+== Contents: ==
+The following classes are located in this package
+=== Classes: ===
+== FilesTable ==
+===== ,,class,, !FilesTable ,,extends,, `[DOC_Core#Table Table]` =====
+Core table, this handels all interaction with the core table in the database
+ ==== *public* _void_ *`__construct`* (  ) ====
+  Constructor
+ ==== *protected* _void_ *`select`* (  ) ====
+  (non-PHPdoc)
+ ==== *protected* _void_ *`insert`* (  ) ====
+  (non-PHPdoc)
+ ==== *protected* _void_ *`update`* (  ) ====
+  (non-PHPdoc)
+ ==== *protected* _void_ *`delete`* (  ) ====
+  (non-PHPdoc)
+== GalleryComponent ==
+===== ,,class,, !GalleryComponent ,,extends,, `[DOC_Core#Component Component]` =====
+A simple component to manage and show a series of images on a page. Using a tag, images can be grouped together
+ ==== *public* _`*`_ *`__construct`* (  ) ====
+  Constructor
+ ==== *public* _void_ *`action_add`* ( _Smarty_ `$smarty`, _SmartyPageLoader_ `$smartyLoader`, _array_ `$request` ) ====
+  Action to add an image
+ ==== *public* _void_ *`action_edit`* ( _Smarty_ `$smarty`, _SmartyPageLoader_ `$smartyLoader`, _array_ `$request` ) ====
+  Action to edit an image
+ ==== *public* _void_ *`action_delete`* ( _Smarty_ `$smarty`, _SmartyPageLoader_ `$smartyLoader`, _array_ `$request` ) ====
+  Action to delete an image
+ ==== *public* _void_ *`registerMenuItems`* ( _Menu_ `$menu` ) ====
+  Function for registering menu items to the admin menu
+== GalleryTable ==
+===== ,,class,, !GalleryTable ,,extends,, `[DOC_Core#Table Table]` =====
+Core table, this handels all interaction with the core table in the database
+ ==== *public* _void_ *`__construct`* (  ) ====
+  Constructor
+ ==== *protected* _void_ *`select`* (  ) ====
+  (non-PHPdoc)
+ ==== *protected* _void_ *`insert`* (  ) ====
+  (non-PHPdoc)
+ ==== *protected* _void_ *`update`* (  ) ====
+  (non-PHPdoc)
+ ==== *protected* _void_ *`delete`* (  ) ====
+  (non-PHPdoc)

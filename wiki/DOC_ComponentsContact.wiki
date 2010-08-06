@@ -1,0 +1,53 @@
+#labels Documentation
+#summary Documentation for content in the components.contact package.
+_Package: 'components.contact'_ 
+
+This file is part of the A.W.S.O.M.E.cms distribution.
+Detailed copyright and licensing information can be found
+in the doc/COPYRIGHT and doc/LICENSE files which should be
+included in the distribution.
+== Contents: ==
+The following classes are located in this package
+=== Classes: ===
+== ContactComponent ==
+===== ,,class,, !ContactComponent ,,extends,, `[DOC_Core#Component Component]` =====
+Contact component class, this holds all the logic for the contact component
+ ==== *public* _void_ *`__construct`* (  ) ====
+  Constructor class for the contact component
+ ==== *public* _void_ *`action_add`* ( _Smarty_ `$smarty`, _SmartyPageLoader_ `$smartyLoader`, _array_ `$request` ) ====
+  Add action, this is called when a contact form is added
+ ==== *public* _void_ *`action_edit`* ( _Smarty_ `$smarty`, _SmartyPageLoader_ `$smartyLoader`, _array_ `$request` ) ====
+  Edit action, this is called when a contact form is edited
+ ==== *public* _void_ *`action_delete`* ( _Smarty_ `$smarty`, _SmartyPageLoader_ `$smartyLoader`, _array_ `$request` ) ====
+  Delete action, this is called when a form is deleted
+ ==== *public* _void_ *`action_send`* ( _Smarty_ `$smarty`, _SmartyPageLoader_ `$smartyLoader`, _array_ `$request` ) ====
+  Send action, this is called when a form is submitted
+ ==== *public* _void_ *`registerMenuItems`* ( _Menu_ `$menu` ) ====
+  Function for registering menu items to the admin menu
+== FormfieldsTable ==
+===== ,,class,, !FormfieldsTable ,,extends,, `[DOC_Core#Table Table]` =====
+Form table, this is where all the forms are stored
+ ==== *public* _void_ *`__construct`* (  ) ====
+  Constructor
+ ==== *protected* _void_ *`select`* (  ) ====
+  (non-PHPdoc)
+ ==== *protected* _void_ *`insert`* (  ) ====
+  (non-PHPdoc)
+ ==== *protected* _void_ *`update`* (  ) ====
+  (non-PHPdoc)
+ ==== *protected* _void_ *`delete`* (  ) ====
+  (non-PHPdoc)
+== FormsTable ==
+===== ,,class,, !FormsTable ,,extends,, `[DOC_Core#Table Table]` =====
+Form table, this is where all the forms are stored
+ ==== *public* _void_ *`__construct`* (  ) ====
+  Constructor
+ ==== *protected* _void_ *`select`* (  ) ====
+  (non-PHPdoc)
+ ==== *protected* _void_ *`insert`* (  ) ====
+  (non-PHPdoc)
+ ==== *protected* _void_ *`update`* (  ) ====
+  (non-PHPdoc)
+ ==== *protected* _void_ *`delete`* (  ) ====
+  (non-PHPdoc)
+ ==== *public* _void_ *`doSelect`* (  ) ====

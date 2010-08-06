@@ -1,0 +1,50 @@
+#labels Documentation
+#summary Documentation for content in the components.users.fields package.
+_Package: 'components.users.fields'_ 
+
+This file is part of the A.W.S.O.M.E.cms distribution.
+Detailed copyright and licensing information can be found
+in the doc/COPYRIGHT and doc/LICENSE files which should be
+included in the distribution.
+== Contents: ==
+The following classes are located in this package
+=== Classes: ===
+== PrivlilegesField ==
+===== ,,class,, !PrivlilegesField ,,extends,, `[DOC_CoreFields#IntField IntField]` =====
+Privileges list of check boxes
+ ==== *protected* _string_ *`toHTML_add`* (  ) ====
+  Create a HTML representation of add field
+ ==== *protected* _string_ *`toHTML_edit`* (  ) ====
+  Create a HTML representation of edit field
+ ==== *public* _string_ *`value2db`* ( __ `$value` ) ====
+  Convert the value of the param to that what the DB expects
+== UsersField ==
+===== ,,class,, !UsersField ,,extends,, `[DOC_CoreFields#Field Field]` =====
+Selection list of all the users
+ ==== *public* _Field_ *`setData`* ( _object_ `$value` ) ====
+  Set the Value of this field with an result object
+ ==== *public* _`*`_ *`getValue`* ( _object_ `$data` ) ====
+  get the data from this field
+ ==== *protected* _string_ *`toHTML_add`* (  ) ====
+  Create a HTML representation of add field
+ ==== *protected* _string_ *`toHTML_edit`* (  ) ====
+  Create a HTML representation of edit field
+ ==== *protected* _string_ *`toHTML_view`* (  ) ====
+  Create a HTML representation of view field
+ ==== *public* _void_ *`select`* ( __ `$query`, __ `$data` ) ====
+  Add select data for this field to a query
+== UsersselectField ==
+===== ,,class,, !UsersselectField ,,extends,, `[DOC_CoreFields#Field Field]` =====
+Selection list of all the users, do note you may want to use this as a dummy
+field and so something with it yourself. There is currently no relation
+option or something.
+ ==== *protected* _string_ *`toHTML_add`* (  ) ====
+  Create a HTML representation of add field
+ ==== *protected* _string_ *`toHTML_edit`* (  ) ====
+  Create a HTML representation of edit field
+ ==== *protected* _string_ *`toHTML_view`* (  ) ====
+  Create a HTML representation of view field
+ ==== *public* _string_ *`getJavascript`* (  ) ====
+  get the javascript for this field
+ ==== _void_ *`form_UsersselectField_moveItem`* (  ) ====
+ ==== _void_ *`form_UsersselectField_updateUsersField`* (  ) ====

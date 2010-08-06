@@ -1,0 +1,15 @@
+#labels Documentation
+#summary Documentation for content in the components.contact.plugins package.
+_Package: 'components.contact.plugins'_ 
+
+This file is part of the A.W.S.O.M.E.cms distribution.
+Detailed copyright and licensing information can be found
+in the doc/COPYRIGHT and doc/LICENSE files which should be
+included in the distribution.
+== Contents: ==
+The following functions are located in this package
+=== Functions: ===
+ ===== _void_ *`smarty_function_contactform`* ( _array_ `$params`, _Smarty_ `$smarty` ) =====
+  Contact for tag, this addes a form to a page
+
+params: form

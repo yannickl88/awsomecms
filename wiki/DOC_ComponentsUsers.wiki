@@ -1,0 +1,76 @@
+#labels Documentation
+#summary Documentation for content in the components.users package.
+_Package: 'components.users'_ 
+
+This file is part of the A.W.S.O.M.E.cms distribution.
+Detailed copyright and licensing information can be found
+in the doc/COPYRIGHT and doc/LICENSE files which should be
+included in the distribution.
+== Contents: ==
+The following classes are located in this package
+=== Classes: ===
+== PrivilegesTable ==
+===== ,,class,, !PrivilegesTable ,,extends,, `[DOC_Core#Table Table]` =====
+Privileges tabel.
+ ==== *public* _Table_ *`__construct`* ( _string_ `$name` ) ====
+  Constructor for Table
+ ==== *protected* _void_ *`select`* (  ) ====
+  (non-PHPdoc)
+ ==== *protected* _void_ *`insert`* (  ) ====
+  (non-PHPdoc)
+ ==== *protected* _void_ *`update`* (  ) ====
+  (non-PHPdoc)
+ ==== *protected* _void_ *`delete`* (  ) ====
+  (non-PHPdoc)
+ ==== *public* _SQLRecord_ *`doDelete`* (  ) ====
+  Preform a delete on the table
+ ==== *public* _string_ *`getAction`* ( _int_ `$mode` ) ====
+  Mapping of the action to the actuly hidden field content.
+When in need of custom mapping, like if you have two tables for one component, override this method
+== UsersComponent ==
+===== ,,class,, !UsersComponent ,,extends,, `[DOC_Core#Component Component]` =====
+User component and the actions that it can do.
+This components gives you the option to create different users inside a
+system, these users can be assigned a name and password and privilages. If
+the group component is installed, privilages will be delegated there
+ ==== *public* _void_ *`__construct`* (  ) ====
+ ==== *private* _void_ *`login`* ( _array_ `$request`, _string_ `$redirect` ) ====
+  Internal function to handle login. This checks user and password and
+if they are filled in or throws and FormException otherwise.
+ ==== *public* _void_ *`action_login`* ( _Smarty_ `$smarty`, _SmartyPageLoader_ `$smartyLoader`, _array_ `$request` ) ====
+  Login and redirect to the admin section
+ ==== *public* _void_ *`action_admin_login`* ( _Smarty_ `$smarty`, _SmartyPageLoader_ `$smartyLoader`, _array_ `$request` ) ====
+  Login and redirect to the index
+ ==== *public* _void_ *`action_add`* ( _Smarty_ `$smarty`, _SmartyPageLoader_ `$smartyLoader`, _array_ `$request` ) ====
+  Add a user
+ ==== *public* _void_ *`action_edit`* ( _Smarty_ `$smarty`, _SmartyPageLoader_ `$smartyLoader`, _array_ `$request` ) ====
+  Edit a user
+ ==== *public* _void_ *`action_delete`* ( _Smarty_ `$smarty`, _SmartyPageLoader_ `$smartyLoader`, _array_ `$request` ) ====
+  Delete a user
+ ==== *public* _void_ *`action_privadd`* ( _Smarty_ `$smarty`, _SmartyPageLoader_ `$smartyLoader`, _array_ `$request` ) ====
+  Add a privilege
+ ==== *public* _void_ *`action_privedit`* ( _Smarty_ `$smarty`, _SmartyPageLoader_ `$smartyLoader`, _array_ `$request` ) ====
+  Edit a privilege
+ ==== *public* _void_ *`action_privdelete`* ( _Smarty_ `$smarty`, _SmartyPageLoader_ `$smartyLoader`, _array_ `$request` ) ====
+  Delete a privilege
+ ==== *public* _array_ *`getPrivilageMapping`* ( _int_ `$privileges` ) ====
+  Get the privileges the user has
+ ==== *public* _bool_ *`auth_login`* ( _string_ `$user_name`, _string_ `$user_pass` ) ====
+  Authenticate a user
+ ==== *public* _void_ *`auth_logout`* (  ) ====
+  Log a user out
+ ==== *public* _void_ *`registerMenuItems`* ( _Menu_ `$menu` ) ====
+  Register menu items for this component
+== UsersTable ==
+===== ,,class,, !UsersTable ,,extends,, `[DOC_Core#Table Table]` =====
+User table, this handels all interaction with the user table in the database
+ ==== *public* _void_ *`__construct`* (  ) ====
+  Constructor
+ ==== *protected* _void_ *`select`* (  ) ====
+  (non-PHPdoc)
+ ==== *protected* _void_ *`insert`* (  ) ====
+  (non-PHPdoc)
+ ==== *protected* _void_ *`update`* (  ) ====
+  (non-PHPdoc)
+ ==== *protected* _void_ *`delete`* (  ) ====
+  (non-PHPdoc)

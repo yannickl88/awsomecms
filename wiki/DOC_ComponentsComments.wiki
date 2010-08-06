@@ -1,0 +1,31 @@
+#labels Documentation
+#summary Documentation for content in the components.comments package.
+_Package: 'components.comments'_ 
+
+This file is part of the A.W.S.O.M.E.cms distribution.
+Detailed copyright and licensing information can be found
+in the doc/COPYRIGHT and doc/LICENSE files which should be
+included in the distribution.
+== Contents: ==
+The following classes are located in this package
+=== Classes: ===
+== CommentsComponent ==
+===== ,,class,, !CommentsComponent ,,extends,, `[DOC_Core#Component Component]` =====
+Comments compontent class, this includes all logic for an component
+ ==== *public* _void_ *`__construct`* (  ) ====
+  Constructor for the comments component
+ ==== *public* _void_ *`action_reply`* ( _Smarty_ `$smarty`, _SmartyPageLoader_ `$smartyLoader`, _array_ `$request` ) ====
+  Repley action, this is called when a reply is posted
+== CommentsTable ==
+===== ,,class,, !CommentsTable ,,extends,, `[DOC_Core#Table Table]` =====
+Comments table, this handels all interaction with the comments table in the database
+ ==== *public* _void_ *`__construct`* (  ) ====
+  Constructor
+ ==== *protected* _void_ *`select`* (  ) ====
+  (non-PHPdoc)
+ ==== *protected* _void_ *`insert`* (  ) ====
+  (non-PHPdoc)
+ ==== *protected* _void_ *`update`* (  ) ====
+  (non-PHPdoc)
+ ==== *protected* _void_ *`delete`* (  ) ====
+  (non-PHPdoc)

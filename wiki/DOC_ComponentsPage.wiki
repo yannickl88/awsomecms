@@ -1,0 +1,39 @@
+#labels Documentation
+#summary Documentation for content in the components.page package.
+_Package: 'components.page'_ 
+
+This file is part of the A.W.S.O.M.E.cms distribution.
+Detailed copyright and licensing information can be found
+in the doc/COPYRIGHT and doc/LICENSE files which should be
+included in the distribution.
+== Contents: ==
+The following classes are located in this package
+=== Classes: ===
+== PageComponent ==
+===== ,,class,, !PageComponent ,,extends,, `[DOC_Core#Component Component]` =====
+The Page component, together with the core component, is this used to show pages and manage them
+ ==== *public* _void_ *`__construct`* (  ) ====
+  Constructor
+ ==== *public* _void_ *`action_add`* ( _Smarty_ `$smarty`, _SmartyPageLoader_ `$smartyLoader`, _array_ `$request` ) ====
+  Action for adding a page
+ ==== *public* _void_ *`action_edit`* ( _Smarty_ `$smarty`, _SmartyPageLoader_ `$smartyLoader`, _array_ `$request` ) ====
+  Action for editing a page
+ ==== *public* _void_ *`action_delete`* ( _Smarty_ `$smarty`, _SmartyPageLoader_ `$smartyLoader`, _array_ `$request` ) ====
+  Action for deleting a page
+ ==== *public* _void_ *`registerMenuItems`* ( _Menu_ `$menu` ) ====
+  Register menu items for this component
+ ==== *public* _void_ *`registerTreeItems`* ( _Tree_ `$tree` ) ====
+  Register tree items for this component
+== PagesTable ==
+===== ,,class,, !PagesTable ,,extends,, `[DOC_Core#Table Table]` =====
+Pages table, this handels all interaction with the pages table in the database
+ ==== *public* _void_ *`__construct`* (  ) ====
+  Constructor
+ ==== *protected* _void_ *`select`* (  ) ====
+  (non-PHPdoc)
+ ==== *protected* _void_ *`update`* (  ) ====
+  (non-PHPdoc)
+ ==== *protected* _void_ *`insert`* (  ) ====
+  (non-PHPdoc)
+ ==== *protected* _void_ *`delete`* (  ) ====
+  (non-PHPdoc)
