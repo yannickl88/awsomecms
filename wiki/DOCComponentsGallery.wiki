@@ -15,16 +15,16 @@ Core table, this handels all interaction with the core table in the database
  ==== *public* _void_ *`__construct`* (  ) ====
 Constructor
  ==== *protected* _void_ *`select`* ( _[DOCCore#SQLQuery SQLQuery]_ `$query`, _object_ `$data` ) ====
- Inherited from: [DOCCore#abstract__void__select_(_$query_,_object__$data_) method.Table.select]
+ Inherited from: [DOCCore#Table Table]
 Additional Select data
  ==== *protected* _void_ *`insert`* ( _[DOCCore#SQLQuery SQLQuery]_ `$query`, _object_ `$data` ) ====
- Inherited from: [DOCCore#abstract__void__insert_(_$query_,_object__$data_) method.Table.insert]
+ Inherited from: [DOCCore#Table Table]
 Additional Insert data
  ==== *protected* _void_ *`update`* ( _[DOCCore#SQLQuery SQLQuery]_ `$query`, _object_ `$data` ) ====
- Inherited from: [DOCCore#abstract__void__update_(_$query_,_object__$data_) method.Table.update]
+ Inherited from: [DOCCore#Table Table]
 Additional Update data
  ==== *protected* _void_ *`delete`* ( _[DOCCore#SQLQuery SQLQuery]_ `$query`, _object_ `$data` ) ====
- Inherited from: [DOCCore#abstract__void__delete_(_$query_,_object__$data_) method.Table.delete]
+ Inherited from: [DOCCore#Table Table]
 Additional Delete data
 == `GalleryComponent` ==
 ===== ,,class,, GalleryComponent ,,extends,, [DOCCore#Component Component] ^File: components/gallery/class.GalleryComponent.inc^ =====
@@ -45,14 +45,14 @@ Core table, this handels all interaction with the core table in the database
  ==== *public* _void_ *`__construct`* (  ) ====
 Constructor
  ==== *protected* _void_ *`select`* ( _[DOCCore#SQLQuery SQLQuery]_ `$query`, _object_ `$data` ) ====
- Inherited from: [DOCCore#abstract__void__select_(_$query_,_object__$data_) method.Table.select]
+ Inherited from: [DOCCore#Table Table]
 Additional Select data
  ==== *protected* _void_ *`insert`* ( _[DOCCore#SQLQuery SQLQuery]_ `$query`, _object_ `$data` ) ====
- Inherited from: [DOCCore#abstract__void__insert_(_$query_,_object__$data_) method.Table.insert]
+ Inherited from: [DOCCore#Table Table]
 Additional Insert data
  ==== *protected* _void_ *`update`* ( _[DOCCore#SQLQuery SQLQuery]_ `$query`, _object_ `$data` ) ====
- Inherited from: [DOCCore#abstract__void__update_(_$query_,_object__$data_) method.Table.update]
+ Inherited from: [DOCCore#Table Table]
 Additional Update data
  ==== *protected* _void_ *`delete`* ( _[DOCCore#SQLQuery SQLQuery]_ `$query`, _object_ `$data` ) ====
- Inherited from: [DOCCore#abstract__void__delete_(_$query_,_object__$data_) method.Table.delete]
+ Inherited from: [DOCCore#Table Table]
 Additional Delete data

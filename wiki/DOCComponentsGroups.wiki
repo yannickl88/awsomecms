@@ -15,7 +15,7 @@ Component that allowes for group based authentication, rather then user based
  ==== *public* _`*`_ *`__construct`* (  ) ====
 Constructor
  ==== *public* _void_ *`register`* ( _[DOCCore#RegisterManager RegisterManager]_ `$registerManager` ) ====
- Inherited from: [DOCCore#_void__register_(_$registerManager_) method.Component.register]
+ Inherited from: [DOCCore#Component Component]
 Register actions/hooks/mappings to the framework
  ==== *public* _void_ *`action_add`* ( _Smarty_ `$smarty`, _[DOCCore#SmartyPageLoader SmartyPageLoader]_ `$smartyLoader`, _array_ `$request` ) ====
 Action to add an group
@@ -34,7 +34,7 @@ Hook to add a reference of a user when it is deleted in the user component
  ==== *public* _bool_ *`hook_userdel`* ( _Smarty_ `$smarty`, _array_ `$request` ) ====
 Hook to delete a reference of a user when it is deleted in the user component
  ==== *public* _void_ *`registerMenuItems`* ( _[DOCComponentsPageUtil#Menu Menu]_ `$menu` ) ====
- Inherited from: [DOCCore#_void__registerMenuItems_(_$menu_) method.Component.registerMenuItems]
+ Inherited from: [DOCCore#Component Component]
 Register menu items for this component
 == `GroupsTable` ==
 ===== ,,class,, GroupsTable ,,extends,, [DOCCore#Table Table] ^File: components/groups/class.GroupsTable.inc^ =====
@@ -42,16 +42,16 @@ User table, this handels all interaction with the user table in the database
  ==== *public* _void_ *`__construct`* (  ) ====
 Constructor
  ==== *protected* _void_ *`select`* ( _[DOCCore#SQLQuery SQLQuery]_ `$query`, _object_ `$data` ) ====
- Inherited from: [DOCCore#abstract__void__select_(_$query_,_object__$data_) method.Table.select]
+ Inherited from: [DOCCore#Table Table]
 Additional Select data
  ==== *protected* _void_ *`insert`* ( _[DOCCore#SQLQuery SQLQuery]_ `$query`, _object_ `$data` ) ====
- Inherited from: [DOCCore#abstract__void__insert_(_$query_,_object__$data_) method.Table.insert]
+ Inherited from: [DOCCore#Table Table]
 Additional Insert data
  ==== *protected* _void_ *`update`* ( _[DOCCore#SQLQuery SQLQuery]_ `$query`, _object_ `$data` ) ====
- Inherited from: [DOCCore#abstract__void__update_(_$query_,_object__$data_) method.Table.update]
+ Inherited from: [DOCCore#Table Table]
 Additional Update data
  ==== *protected* _void_ *`delete`* ( _[DOCCore#SQLQuery SQLQuery]_ `$query`, _object_ `$data` ) ====
- Inherited from: [DOCCore#abstract__void__delete_(_$query_,_object__$data_) method.Table.delete]
+ Inherited from: [DOCCore#Table Table]
 Additional Delete data
 == `UsersgroupsTable` ==
 ===== ,,class,, UsersgroupsTable ,,extends,, [DOCCore#Table Table] ^File: components/groups/class.UsersgroupsTable.inc^ =====
@@ -59,14 +59,14 @@ Usersgroups table, this is a raltional table to keep track of what users are in 
  ==== *public* _void_ *`__construct`* (  ) ====
 Constructor
  ==== *protected* _void_ *`select`* ( _[DOCCore#SQLQuery SQLQuery]_ `$query`, _object_ `$data` ) ====
- Inherited from: [DOCCore#abstract__void__select_(_$query_,_object__$data_) method.Table.select]
+ Inherited from: [DOCCore#Table Table]
 Additional Select data
  ==== *protected* _void_ *`insert`* ( _[DOCCore#SQLQuery SQLQuery]_ `$query`, _object_ `$data` ) ====
- Inherited from: [DOCCore#abstract__void__insert_(_$query_,_object__$data_) method.Table.insert]
+ Inherited from: [DOCCore#Table Table]
 Additional Insert data
  ==== *protected* _void_ *`update`* ( _[DOCCore#SQLQuery SQLQuery]_ `$query`, _object_ `$data` ) ====
- Inherited from: [DOCCore#abstract__void__update_(_$query_,_object__$data_) method.Table.update]
+ Inherited from: [DOCCore#Table Table]
 Additional Update data
  ==== *protected* _void_ *`delete`* ( _[DOCCore#SQLQuery SQLQuery]_ `$query`, _object_ `$data` ) ====
- Inherited from: [DOCCore#abstract__void__delete_(_$query_,_object__$data_) method.Table.delete]
+ Inherited from: [DOCCore#Table Table]
 Additional Delete data

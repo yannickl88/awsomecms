@@ -13,13 +13,13 @@ The following classes are located in this package
 ===== ,,class,, BooleanField ,,extends,, [DOCCoreFields#IntField IntField] ^File: core/fields/class.BooleanField.inc^ =====
 Boolean field.
  ==== *protected* _string_ *`toHTML_add`* (  ) ====
- Inherited from: [DOCCoreFields#_string__toHTML_add_(_) method.Field.toHTML_add]
+ Inherited from: [DOCCoreFields#Field Field]
 Create a HTML representation of add field
  ==== *protected* _string_ *`toHTML_edit`* (  ) ====
- Inherited from: [DOCCoreFields#_string__toHTML_edit_(_) method.Field.toHTML_edit]
+ Inherited from: [DOCCoreFields#Field Field]
 Create a HTML representation of edit field
  ==== *protected* _string_ *`toHTML_view`* (  ) ====
- Inherited from: [DOCCoreFields#_string__toHTML_view_(_) method.Field.toHTML_view]
+ Inherited from: [DOCCoreFields#Field Field]
 Create a HTML representation of view field
 == `CaptchaField` ==
 ===== ,,class,, CaptchaField ,,extends,, [DOCCoreFields#Field Field] ^File: core/fields/class.CaptchaField.inc^ =====
@@ -27,37 +27,37 @@ Captcha field to prevent bots.
  ==== *public* _void_ *`__construct`* ( _string_ `$name`, _string_ `$displayName`, _int_ `$style` ) ====
 Constructor
  ==== *protected* _string_ *`toHTML_add`* (  ) ====
- Inherited from: [DOCCoreFields#_string__toHTML_add_(_) method.Field.toHTML_add]
+ Inherited from: [DOCCoreFields#Field Field]
 Create a HTML representation of add field
  ==== *protected* _string_ *`toHTML_edit`* (  ) ====
- Inherited from: [DOCCoreFields#_string__toHTML_edit_(_) method.Field.toHTML_edit]
+ Inherited from: [DOCCoreFields#Field Field]
 Create a HTML representation of edit field
  ==== *public* _void_ *`validate`* ( _int_ `$mode` ) ====
- Inherited from: [DOCCoreFields#_void__validate_(__int__$mode_) method.Field.validate]
+ Inherited from: [DOCCoreFields#Field Field]
 Validate the data for this field. This throws a FormException when not valid
 == `DateField` ==
 ===== ,,class,, DateField ,,extends,, [DOCCoreFields#Field Field] ^File: core/fields/class.DateField.inc^ =====
 Date field, this shows a date selection field
  ==== *public* _string_ *`value2db`* ( __ `$value` ) ====
- Inherited from: [DOCCoreFields#_string__value2db_(____$value_) method.Field.value2db]
+ Inherited from: [DOCCoreFields#Field Field]
 Convert the value of the param to that what the DB expects
  ==== *public* _`*`_ *`getValue`* ( _object_ `$data` ) ====
- Inherited from: [DOCCoreFields#___getValue_(__object__$data_) method.Field.getValue]
+ Inherited from: [DOCCoreFields#Field Field]
 get the data from this field
  ==== *public* _`*`_ *`getDefaultValue`* (  ) ====
- Inherited from: [DOCCoreFields#___getDefaultValue_(_) method.Field.getDefaultValue]
+ Inherited from: [DOCCoreFields#Field Field]
 Get the default value of this field
  ==== *protected* _string_ *`toHTML_add`* (  ) ====
- Inherited from: [DOCCoreFields#_string__toHTML_add_(_) method.Field.toHTML_add]
+ Inherited from: [DOCCoreFields#Field Field]
 Create a HTML representation of add field
  ==== *protected* _string_ *`toHTML_edit`* (  ) ====
- Inherited from: [DOCCoreFields#_string__toHTML_edit_(_) method.Field.toHTML_edit]
+ Inherited from: [DOCCoreFields#Field Field]
 Create a HTML representation of edit field
  ==== *protected* _string_ *`toHTML_view`* (  ) ====
- Inherited from: [DOCCoreFields#_string__toHTML_view_(_) method.Field.toHTML_view]
+ Inherited from: [DOCCoreFields#Field Field]
 Create a HTML representation of view field
  ==== *public* _string_ *`getJavascript`* (  ) ====
- Inherited from: [DOCCoreFields#_string__getJavascript_(_) method.Field.getJavascript]
+ Inherited from: [DOCCoreFields#Field Field]
 get the javascript for this field
 == `Field` ==
 ===== ,,class,, Field ^File: core/fields/class.Field.inc^ =====
@@ -149,17 +149,17 @@ preform this action prior to the SQL execution that uses this field
 ===== ,,class,, IntField ,,extends,, [DOCCoreFields#Field Field] ^File: core/fields/class.IntField.inc^ =====
 Integer field
  ==== *protected* _string_ *`toHTML_add`* (  ) ====
- Inherited from: [DOCCoreFields#_string__toHTML_add_(_) method.Field.toHTML_add]
+ Inherited from: [DOCCoreFields#Field Field]
 Create a HTML representation of add field
  ==== *protected* _string_ *`toHTML_edit`* (  ) ====
- Inherited from: [DOCCoreFields#_string__toHTML_edit_(_) method.Field.toHTML_edit]
+ Inherited from: [DOCCoreFields#Field Field]
 Create a HTML representation of edit field
  ==== *public* _string_ *`getJavascript`* (  ) ====
- Inherited from: [DOCCoreFields#_string__getJavascript_(_) method.Field.getJavascript]
+ Inherited from: [DOCCoreFields#Field Field]
 get the javascript for this field
  ==== _void_ *`form_IntField_handleKey`* (  ) ====
  ==== *public* _void_ *`validate`* ( _int_ `$mode` ) ====
- Inherited from: [DOCCoreFields#_void__validate_(__int__$mode_) method.Field.validate]
+ Inherited from: [DOCCoreFields#Field Field]
 Validate the data for this field. This throws a FormException when not valid
 == `PasswordField` ==
 ===== ,,class,, PasswordField ,,extends,, [DOCCoreFields#Field Field] ^File: core/fields/class.PasswordField.inc^ =====
@@ -167,10 +167,10 @@ Password field
  ==== *public* _void_ *`__construct`* ( _string_ `$name`, _string_ `$displayName`, _int_ `$style` ) ====
 Constructor
  ==== *protected* _string_ *`toHTML_add`* (  ) ====
- Inherited from: [DOCCoreFields#_string__toHTML_add_(_) method.Field.toHTML_add]
+ Inherited from: [DOCCoreFields#Field Field]
 Create a HTML representation of add field
  ==== *protected* _string_ *`toHTML_edit`* (  ) ====
- Inherited from: [DOCCoreFields#_string__toHTML_edit_(_) method.Field.toHTML_edit]
+ Inherited from: [DOCCoreFields#Field Field]
 Create a HTML representation of edit field
  ==== *public* _void_ *`value2db`* (  ) ====
  ==== *public* _void_ *`db2value`* (  ) ====
@@ -178,22 +178,22 @@ Create a HTML representation of edit field
 ===== ,,class,, TagField ,,extends,, [DOCCoreFields#Field Field] ^File: core/fields/class.TagField.inc^ =====
 Tag field, this allows for quick search and assignment of tags
  ==== *public* _void_ *`preSQL`* ( _`*`_ `Array record that was used`, _[DOCCore#SQLQuery SQLQuery]_ `$query` ) ====
- Inherited from: [DOCCoreFields#_void__preSQL_(____Array_record_that_was_used_,$query_) method.Field.preSQL]
+ Inherited from: [DOCCoreFields#Field Field]
 preform this action prior to the SQL execution that uses this field
  ==== *public* _void_ *`insert`* ( __ `$query`, __ `$data` ) ====
- Inherited from: [DOCCoreFields#_void__insert_(____$query_,___$data_) method.Field.insert]
+ Inherited from: [DOCCoreFields#Field Field]
 Add insert data for this field to a query
  ==== *public* _void_ *`insert`* ( __ `$query`, __ `$data` ) ====
- Inherited from: [DOCCoreFields#_void__insert_(____$query_,___$data_) method.Field.insert]
+ Inherited from: [DOCCoreFields#Field Field]
 Add insert data for this field to a query
  ==== *public* _void_ *`update`* ( __ `$query`, __ `$data` ) ====
- Inherited from: [DOCCoreFields#_void__update_(____$query_,___$data_) method.Field.update]
+ Inherited from: [DOCCoreFields#Field Field]
 Add update data for this field to a query
  ==== *public* _void_ *`delete`* ( __ `$query`, __ `$data` ) ====
- Inherited from: [DOCCoreFields#_void__delete_(____$query_,___$data_) method.Field.delete]
+ Inherited from: [DOCCoreFields#Field Field]
 Add delete data for this field to a query
  ==== *public* _string_ *`getJavascript`* (  ) ====
- Inherited from: [DOCCoreFields#_string__getJavascript_(_) method.Field.getJavascript]
+ Inherited from: [DOCCoreFields#Field Field]
 get the javascript for this field
  ==== *private* _void_ *`getAllTags`* (  ) ====
 == `TextField` ==
@@ -202,12 +202,12 @@ Textarea field
  ==== *public* _void_ *`__construct`* ( _string_ `$name`, _string_ `$displayName`, _int_ `$style` ) ====
 Constructor
  ==== *protected* _string_ *`toHTML_add`* (  ) ====
- Inherited from: [DOCCoreFields#_string__toHTML_add_(_) method.Field.toHTML_add]
+ Inherited from: [DOCCoreFields#Field Field]
 Create a HTML representation of add field
  ==== *protected* _string_ *`toHTML_edit`* (  ) ====
- Inherited from: [DOCCoreFields#_string__toHTML_edit_(_) method.Field.toHTML_edit]
+ Inherited from: [DOCCoreFields#Field Field]
 Create a HTML representation of edit field
  ==== *public* _string_ *`getJavascript`* (  ) ====
- Inherited from: [DOCCoreFields#_string__getJavascript_(_) method.Field.getJavascript]
+ Inherited from: [DOCCoreFields#Field Field]
 get the javascript for this field
  ==== _void_ *`bindEditor`* (  ) ====

@@ -19,6 +19,6 @@ Constructor
  ==== *public* _void_ *`action_edit`* (  ) ====
  ==== *public* _void_ *`action_delete`* (  ) ====
  ==== *public* _void_ *`registerTreeItems`* ( _[DOCComponentsPageUtil#Tree Tree]_ `$tree` ) ====
- Inherited from: [DOCCore#_void__registerTreeItems_(_$tree_) method.Component.registerTreeItems]
+ Inherited from: [DOCCore#Component Component]
 Register tree items for this component
  ==== *public* _void_ *`getType`* (  ) ====
