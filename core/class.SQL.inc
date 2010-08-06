@@ -49,7 +49,11 @@ class SQLQuery
     private $where;
     
     private $action;
-    
+    /**
+     * Constructor
+     * 
+     * @param String $action
+     */
     private function __construct($action)
     {
         //select

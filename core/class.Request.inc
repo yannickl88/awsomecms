@@ -67,7 +67,7 @@ class Request
         $this->url = $_SERVER['REQUEST_URI'];
         if($this->isProxyRequest)
         {
-            $this->table = substr($this->fullUrl, strlen($config->get("proxy", 'www.google.com', 'proxy'))+1);
+            $this->table = substr($this->fullUrl, strlen($config->get("proxy", 'http://www.google.com/', 'proxy')));
             if(strrpos($this->table, "?") > 0)
             {
                 $this->table = substr($this->table, 0, strrpos($this->table, "?"));
