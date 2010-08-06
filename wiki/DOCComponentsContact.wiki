@@ -29,25 +29,25 @@ Function for registering menu items to the admin menu
 Form table, this is where all the forms are stored
  ==== *public* _void_ *`__construct`* (  ) ====
 Constructor
- ==== _void_ *`select`* ( _[DOCCore#SQLQuery SQLQuery]_ `$query`, _object_ `$data` ) ====
+ ==== ** _void_ *`select`* ( _[DOCCore#SQLQuery SQLQuery]_ `$query`, _object_ `$data` ) ====
 Additional Select data
- ==== _void_ *`insert`* ( _[DOCCore#SQLQuery SQLQuery]_ `$query`, _object_ `$data` ) ====
+ ==== ** _void_ *`insert`* ( _[DOCCore#SQLQuery SQLQuery]_ `$query`, _object_ `$data` ) ====
 Additional Insert data
- ==== _void_ *`update`* ( _[DOCCore#SQLQuery SQLQuery]_ `$query`, _object_ `$data` ) ====
+ ==== ** _void_ *`update`* ( _[DOCCore#SQLQuery SQLQuery]_ `$query`, _object_ `$data` ) ====
 Additional Update data
- ==== _void_ *`delete`* ( _[DOCCore#SQLQuery SQLQuery]_ `$query`, _object_ `$data` ) ====
+ ==== ** _void_ *`delete`* ( _[DOCCore#SQLQuery SQLQuery]_ `$query`, _object_ `$data` ) ====
 Additional Delete data
 == `FormsTable` ==
 ===== ,,class,, FormsTable ,,extends,, [DOCCore#Table Table] ^File: components/contact/class.FormsTable.inc^ =====
 Form table, this is where all the forms are stored
  ==== *public* _void_ *`__construct`* (  ) ====
 Constructor
- ==== _void_ *`select`* ( _[DOCCore#SQLQuery SQLQuery]_ `$query`, _object_ `$data` ) ====
+ ==== ** _void_ *`select`* ( _[DOCCore#SQLQuery SQLQuery]_ `$query`, _object_ `$data` ) ====
 Additional Select data
- ==== _void_ *`insert`* ( _[DOCCore#SQLQuery SQLQuery]_ `$query`, _object_ `$data` ) ====
+ ==== ** _void_ *`insert`* ( _[DOCCore#SQLQuery SQLQuery]_ `$query`, _object_ `$data` ) ====
 Additional Insert data
- ==== _void_ *`update`* ( _[DOCCore#SQLQuery SQLQuery]_ `$query`, _object_ `$data` ) ====
+ ==== ** _void_ *`update`* ( _[DOCCore#SQLQuery SQLQuery]_ `$query`, _object_ `$data` ) ====
 Additional Update data
- ==== _void_ *`delete`* ( _[DOCCore#SQLQuery SQLQuery]_ `$query`, _object_ `$data` ) ====
+ ==== ** _void_ *`delete`* ( _[DOCCore#SQLQuery SQLQuery]_ `$query`, _object_ `$data` ) ====
 Additional Delete data
  ==== *public* _void_ *`doSelect`* (  ) ====
