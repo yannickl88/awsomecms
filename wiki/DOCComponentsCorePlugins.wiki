@@ -9,17 +9,17 @@ included in the distribution.
 == Contents: ==
 The following functions are located in this package
 === Functions: ===
- ===== _void_ *`smarty_function_form`* ( _array_ `$params`, _Smarty_ `$smarty` ) =====
+ ==== _void_ *`smarty_function_form`* ( _array_ `$params`, _Smarty_ `$smarty` ) ====
 Form tag, this is used to add a form from a component to a page. This will call the action and hooks related to the action of the form
- ===== _bool_ *`smarty_modifier_count`* ( _array_ `$array` ) =====
+ ==== _bool_ *`smarty_modifier_count`* ( _array_ `$array` ) ====
 Modifier to count the number of elements
- ===== _bool_ *`smarty_modifier_hasflag`* ( _int_ `$int`, _int_ `$flag` ) =====
+ ==== _bool_ *`smarty_modifier_hasflag`* ( _int_ `$int`, _int_ `$flag` ) ====
 Modifier to binary check if a flag is in a value
- ===== _bool_ *`smarty_modifier_installed`* ( _string_ `$element` ) =====
+ ==== _bool_ *`smarty_modifier_installed`* ( _string_ `$element` ) ====
 Modifier to check if a given component is installed
- ===== _bool_ *`smarty_modifier_notin`* ( _`*`_ `$element`, _array_ `$array` ) =====
+ ==== _bool_ *`smarty_modifier_notin`* ( _`*`_ `$element`, _array_ `$array` ) ====
 Modifier to check if value is in an array
- ===== _bool_ *`smarty_modifier_text`* ( _array_ `$array` ) =====
+ ==== _bool_ *`smarty_modifier_text`* ( _array_ `$array` ) ====
 Modifier to count the number of elements
- ===== _string_ *`smarty_modifier_ucfirst`* ( _string_ `$string` ) =====
+ ==== _string_ *`smarty_modifier_ucfirst`* ( _string_ `$string` ) ====
 Make the first letter of a string uppercase

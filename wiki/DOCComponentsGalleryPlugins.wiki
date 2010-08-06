@@ -9,5 +9,5 @@ included in the distribution.
 == Contents: ==
 The following functions are located in this package
 === Functions: ===
- ===== _string_ *`smarty_function_gallery`* ( _array_ `$params`, _Smarty_ `$smarty` ) =====
+ ==== _string_ *`smarty_function_gallery`* ( _array_ `$params`, _Smarty_ `$smarty` ) ====
 Show the gallery on the page

@@ -6,9 +6,9 @@ _Package: 'default'_
 == Contents: ==
 The following functions are located in this package
 === Functions: ===
- ===== _void_ *`generateTranslateable`* (  ) =====
+ ==== _void_ *`generateTranslateable`* (  ) ====
 
- ===== _void_ *`generateNewLangFile`* (  ) =====
+ ==== _void_ *`generateNewLangFile`* (  ) ====
 
 The following classes are located in this package
 === Classes: ===

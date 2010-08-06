@@ -9,7 +9,7 @@ included in the distribution.
 == Contents: ==
 The following functions are located in this package
 === Functions: ===
- ===== _void_ *`smarty_function_comments`* ( _array_ `$params`, _Smarty_ `$smarty` ) =====
+ ==== _void_ *`smarty_function_comments`* ( _array_ `$params`, _Smarty_ `$smarty` ) ====
 Comments tag, this adds the comments functionality to a page
 
 params: hook, redirect

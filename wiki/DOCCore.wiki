@@ -9,24 +9,24 @@ included in the distribution.
 == Contents: ==
 The following functions are located in this package
 === Functions: ===
- ===== _void_ *`import`* ( _string_ `$file` ) =====
+ ==== _void_ *`import`* ( _string_ `$file` ) ====
 Import a file, with the root the framework root
- ===== _void_ *`importField`* ( _string_ `$field` ) =====
+ ==== _void_ *`importField`* ( _string_ `$field` ) ====
 Import a field.
 You can use {FieldName} for core fields and {component}.{FieldName} for component specific fields.
- ===== _string_ *`getFrameworkRoot`* (  ) =====
+ ==== _string_ *`getFrameworkRoot`* (  ) ====
 Get the root of the framework
- ===== _bool_ *`handleError`* ( _int_ `$errno`, _string_ `$errstr`, _string_ `$errfile`, _int_ `$errline` ) =====
+ ==== _bool_ *`handleError`* ( _int_ `$errno`, _string_ `$errstr`, _string_ `$errfile`, _int_ `$errline` ) ====
 Error handeler for the framework
- ===== _array_ *`parseInfoFile`* ( _string_ `$file`, _string_ `$component` ) =====
+ ==== _array_ *`parseInfoFile`* ( _string_ `$file`, _string_ `$component` ) ====
 Parse an info file from a component
- ===== _string_ *`addSlashesConfig`* ( _string_ `$string` ) =====
+ ==== _string_ *`addSlashesConfig`* ( _string_ `$string` ) ====
 Add slashes to a string only when magic_quotes_gpc is turned off.
- ===== _array_ *`getActions`* ( _string_ `$component` ) =====
+ ==== _array_ *`getActions`* ( _string_ `$component` ) ====
 Get the actions of a give component
- ===== _string_ *`urlEscape`* ( _string_ `$string` ) =====
+ ==== _string_ *`urlEscape`* ( _string_ `$string` ) ====
 Clean up a string so it can be validly passed in the url
- ===== _void_ *`str_rand`* ( _int_ `$p` ) =====
+ ==== _void_ *`str_rand`* ( _int_ `$p` ) ====
 Generate a random string
 The following classes are located in this package
 === Classes: ===
