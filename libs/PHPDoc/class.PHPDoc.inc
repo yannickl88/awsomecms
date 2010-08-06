@@ -407,6 +407,7 @@ class PHPDocFunction extends PHPDocBlock
     {
         $xml = "<function id='{$this->getID()}'>";
         $xml .= "<name>".htmlentities($this->name)."</name>";
+        $xml .= "<file>".htmlentities($this->getFile())."</file>";
         $xml .= $this->header->toXML();
         foreach($this->blocks as $block)
         {
@@ -484,7 +485,7 @@ class PHPFileDoc
                     $currentItem = new PHPDocComment($fileInfo);
                     $currentClass = $e;
                 }
-                elseif(preg_match('/^(public|private|protected)?[ ]*(static)?[ ]*function/', $line) === 1) //comment open
+                elseif(preg_match('/^(abstract)? ?(public|private|protected)?[ ]*(static)?[ ]*function/', $line) === 1) //comment open
                 {
                     if($currentClass != null)
                     {
