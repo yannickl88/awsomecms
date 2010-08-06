@@ -55,6 +55,8 @@ Set the parent, which is the tree
 Set the type of this node
  ==== *public* _int_ *`getType`* (  ) ====
 Get the type of this node
+ ==== _string_ *`toJavascript`* (  ) ====
+Create the javascript code for the node
  ==== *public* _string_ *`registerIcons`* (  ) ====
 function that is called once on each type of node, you can add icons to the tree here
 == `PageItem` ==

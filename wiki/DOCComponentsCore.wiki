@@ -14,27 +14,27 @@ The following classes are located in this package
 Auth table, this handels all interaction with the auth table in the database
  ==== *public* _void_ *`__construct`* (  ) ====
 Constructor
- ==== *protected* _void_ *`select`* (  ) ====
-(non-PHPdoc)
- ==== *protected* _void_ *`insert`* (  ) ====
-(non-PHPdoc)
- ==== *protected* _void_ *`update`* (  ) ====
-(non-PHPdoc)
- ==== *protected* _void_ *`delete`* (  ) ====
-(non-PHPdoc)
+ ==== _void_ *`select`* ( _[DOCCore#SQLQuery SQLQuery]_ `$query`, _object_ `$data` ) ====
+Additional Select data
+ ==== _void_ *`insert`* ( _[DOCCore#SQLQuery SQLQuery]_ `$query`, _object_ `$data` ) ====
+Additional Insert data
+ ==== _void_ *`update`* ( _[DOCCore#SQLQuery SQLQuery]_ `$query`, _object_ `$data` ) ====
+Additional Update data
+ ==== _void_ *`delete`* ( _[DOCCore#SQLQuery SQLQuery]_ `$query`, _object_ `$data` ) ====
+Additional Delete data
 == `ComponentsTable` ==
 ===== ,,class,, ComponentsTable ,,extends,, [DOCCore#Table Table] ^File: components/core/class.ComponentsTable.inc^ =====
 Core table, this handels all interaction with the core table in the database
  ==== *public* _void_ *`__construct`* (  ) ====
 Constructor
- ==== *protected* _void_ *`select`* (  ) ====
-(non-PHPdoc)
- ==== *protected* _void_ *`insert`* (  ) ====
-(non-PHPdoc)
- ==== *protected* _void_ *`update`* (  ) ====
-(non-PHPdoc)
- ==== *protected* _void_ *`delete`* (  ) ====
-(non-PHPdoc)
+ ==== _void_ *`select`* ( _[DOCCore#SQLQuery SQLQuery]_ `$query`, _object_ `$data` ) ====
+Additional Select data
+ ==== _void_ *`insert`* ( _[DOCCore#SQLQuery SQLQuery]_ `$query`, _object_ `$data` ) ====
+Additional Insert data
+ ==== _void_ *`update`* ( _[DOCCore#SQLQuery SQLQuery]_ `$query`, _object_ `$data` ) ====
+Additional Update data
+ ==== _void_ *`delete`* ( _[DOCCore#SQLQuery SQLQuery]_ `$query`, _object_ `$data` ) ====
+Additional Delete data
 == `CoreComponent` ==
 ===== ,,class,, CoreComponent ,,extends,, [DOCCore#Component Component] ^File: components/core/class.CoreComponent.inc^ =====
 Core component class, this includes all the logic for the core actions
@@ -64,11 +64,11 @@ Register menu items for this component
 Auth table, this handels all interaction with the auth table in the database
  ==== *public* _void_ *`__construct`* (  ) ====
 Constructor
- ==== *protected* _void_ *`select`* (  ) ====
-(non-PHPdoc)
- ==== *protected* _void_ *`insert`* (  ) ====
-(non-PHPdoc)
- ==== *protected* _void_ *`update`* (  ) ====
-(non-PHPdoc)
- ==== *protected* _void_ *`delete`* (  ) ====
-(non-PHPdoc)
+ ==== _void_ *`select`* ( _[DOCCore#SQLQuery SQLQuery]_ `$query`, _object_ `$data` ) ====
+Additional Select data
+ ==== _void_ *`insert`* ( _[DOCCore#SQLQuery SQLQuery]_ `$query`, _object_ `$data` ) ====
+Additional Insert data
+ ==== _void_ *`update`* ( _[DOCCore#SQLQuery SQLQuery]_ `$query`, _object_ `$data` ) ====
+Additional Update data
+ ==== _void_ *`delete`* ( _[DOCCore#SQLQuery SQLQuery]_ `$query`, _object_ `$data` ) ====
+Additional Delete data

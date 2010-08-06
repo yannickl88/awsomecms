@@ -193,6 +193,8 @@ called before the exec
  ==== _void_ *`cleanup`* ( _[DOCLibs#CLI CLI]_ `$cli` ) ====
 Cleanup function, you can override this to add cleanup stuff. This is
 called after the exec
+ ==== _void_ *`exec`* ( _[DOCLibs#CLI CLI]_ `$cli`, _string_ `$action` ) ====
+Execute the action
 == `OS` ==
 ===== ,,class,, OS ^File: libs/class.CLI.inc^ =====
 OS abstraction, this provides a way to easiely join a path

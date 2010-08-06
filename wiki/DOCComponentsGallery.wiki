@@ -14,14 +14,14 @@ The following classes are located in this package
 Core table, this handels all interaction with the core table in the database
  ==== *public* _void_ *`__construct`* (  ) ====
 Constructor
- ==== *protected* _void_ *`select`* (  ) ====
-(non-PHPdoc)
- ==== *protected* _void_ *`insert`* (  ) ====
-(non-PHPdoc)
- ==== *protected* _void_ *`update`* (  ) ====
-(non-PHPdoc)
- ==== *protected* _void_ *`delete`* (  ) ====
-(non-PHPdoc)
+ ==== _void_ *`select`* ( _[DOCCore#SQLQuery SQLQuery]_ `$query`, _object_ `$data` ) ====
+Additional Select data
+ ==== _void_ *`insert`* ( _[DOCCore#SQLQuery SQLQuery]_ `$query`, _object_ `$data` ) ====
+Additional Insert data
+ ==== _void_ *`update`* ( _[DOCCore#SQLQuery SQLQuery]_ `$query`, _object_ `$data` ) ====
+Additional Update data
+ ==== _void_ *`delete`* ( _[DOCCore#SQLQuery SQLQuery]_ `$query`, _object_ `$data` ) ====
+Additional Delete data
 == `GalleryComponent` ==
 ===== ,,class,, GalleryComponent ,,extends,, [DOCCore#Component Component] ^File: components/gallery/class.GalleryComponent.inc^ =====
 A simple component to manage and show a series of images on a page. Using a tag, images can be grouped together
@@ -40,11 +40,11 @@ Function for registering menu items to the admin menu
 Core table, this handels all interaction with the core table in the database
  ==== *public* _void_ *`__construct`* (  ) ====
 Constructor
- ==== *protected* _void_ *`select`* (  ) ====
-(non-PHPdoc)
- ==== *protected* _void_ *`insert`* (  ) ====
-(non-PHPdoc)
- ==== *protected* _void_ *`update`* (  ) ====
-(non-PHPdoc)
- ==== *protected* _void_ *`delete`* (  ) ====
-(non-PHPdoc)
+ ==== _void_ *`select`* ( _[DOCCore#SQLQuery SQLQuery]_ `$query`, _object_ `$data` ) ====
+Additional Select data
+ ==== _void_ *`insert`* ( _[DOCCore#SQLQuery SQLQuery]_ `$query`, _object_ `$data` ) ====
+Additional Insert data
+ ==== _void_ *`update`* ( _[DOCCore#SQLQuery SQLQuery]_ `$query`, _object_ `$data` ) ====
+Additional Update data
+ ==== _void_ *`delete`* ( _[DOCCore#SQLQuery SQLQuery]_ `$query`, _object_ `$data` ) ====
+Additional Delete data

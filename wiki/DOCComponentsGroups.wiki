@@ -39,24 +39,24 @@ Register menu items for this component
 User table, this handels all interaction with the user table in the database
  ==== *public* _void_ *`__construct`* (  ) ====
 Constructor
- ==== *protected* _void_ *`select`* (  ) ====
-(non-PHPdoc)
- ==== *protected* _void_ *`insert`* (  ) ====
-(non-PHPdoc)
- ==== *protected* _void_ *`update`* (  ) ====
-(non-PHPdoc)
- ==== *protected* _void_ *`delete`* (  ) ====
-(non-PHPdoc)
+ ==== _void_ *`select`* ( _[DOCCore#SQLQuery SQLQuery]_ `$query`, _object_ `$data` ) ====
+Additional Select data
+ ==== _void_ *`insert`* ( _[DOCCore#SQLQuery SQLQuery]_ `$query`, _object_ `$data` ) ====
+Additional Insert data
+ ==== _void_ *`update`* ( _[DOCCore#SQLQuery SQLQuery]_ `$query`, _object_ `$data` ) ====
+Additional Update data
+ ==== _void_ *`delete`* ( _[DOCCore#SQLQuery SQLQuery]_ `$query`, _object_ `$data` ) ====
+Additional Delete data
 == `UsersgroupsTable` ==
 ===== ,,class,, UsersgroupsTable ,,extends,, [DOCCore#Table Table] ^File: components/groups/class.UsersgroupsTable.inc^ =====
 Usersgroups table, this is a raltional table to keep track of what users are in which groups
  ==== *public* _void_ *`__construct`* (  ) ====
 Constructor
- ==== *protected* _void_ *`select`* (  ) ====
-(non-PHPdoc)
- ==== *protected* _void_ *`insert`* (  ) ====
-(non-PHPdoc)
- ==== *protected* _void_ *`update`* (  ) ====
-(non-PHPdoc)
- ==== *protected* _void_ *`delete`* (  ) ====
-(non-PHPdoc)
+ ==== _void_ *`select`* ( _[DOCCore#SQLQuery SQLQuery]_ `$query`, _object_ `$data` ) ====
+Additional Select data
+ ==== _void_ *`insert`* ( _[DOCCore#SQLQuery SQLQuery]_ `$query`, _object_ `$data` ) ====
+Additional Insert data
+ ==== _void_ *`update`* ( _[DOCCore#SQLQuery SQLQuery]_ `$query`, _object_ `$data` ) ====
+Additional Update data
+ ==== _void_ *`delete`* ( _[DOCCore#SQLQuery SQLQuery]_ `$query`, _object_ `$data` ) ====
+Additional Delete data

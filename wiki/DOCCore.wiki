@@ -494,7 +494,15 @@ Mapping of the action to the actuly hidden field content.
 When in need of custom mapping, like if you have two tables for one component, override this method
  ==== *protected* _int_ *`string2action`* ( _string_ `$string` ) ====
 String to an action that the table can understand
- ==== *public* _void_ *`validate`* ( _[DOCCore#SQLQuery SQLQuery]_ `$query`, _object_ `$data`, _[DOCCore#SQLQuery SQLQuery]_ `$query`, _object_ `$data`, _[DOCCore#SQLQuery SQLQuery]_ `$query`, _object_ `$data`, _[DOCCore#SQLQuery SQLQuery]_ `$query`, _object_ `$data`, _int_ `$mode` ) ====
+ ==== _void_ *`select`* ( _[DOCCore#SQLQuery SQLQuery]_ `$query`, _object_ `$data` ) ====
+Additional Select data
+ ==== _void_ *`insert`* ( _[DOCCore#SQLQuery SQLQuery]_ `$query`, _object_ `$data` ) ====
+Additional Insert data
+ ==== _void_ *`update`* ( _[DOCCore#SQLQuery SQLQuery]_ `$query`, _object_ `$data` ) ====
+Additional Update data
+ ==== _void_ *`delete`* ( _[DOCCore#SQLQuery SQLQuery]_ `$query`, _object_ `$data` ) ====
+Additional Delete data
+ ==== *public* _void_ *`validate`* ( _int_ `$mode` ) ====
 Validate the data with the fields in this table. If not valid a InvalidFormException is thrown
  ==== *public* _int_ *`getInsertedID`* (  ) ====
 Get the last inserted ID for this table.
