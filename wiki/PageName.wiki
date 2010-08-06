@@ -1,0 +1,41 @@
+
+= Package: 'components.file' =
+
+This file is part of the A.W.S.O.M.E.cms distribution.
+Detailed copyright and licensing information can be found
+in the doc/COPYRIGHT and doc/LICENSE files which should be
+included in the distribution.
+== Contents: ==
+The following classes are located in this package
+=== Classes: ===
+== FileComponent extends `Component` ==
+
+=== Methodes: ===
+<a name='method.FileComponent.__construct' />*public* _`*`_ *`__construct`* (  )
+{{{
+Constructor
+}}}
+<a name='method.FileComponent.action_add' />*public* _void_ *`action_add`* (  )
+{{{
+
+}}}
+<a name='method.FileComponent.action_upload' />*public* _void_ *`action_upload`* (  )
+{{{
+
+}}}
+<a name='method.FileComponent.action_edit' />*public* _void_ *`action_edit`* (  )
+{{{
+
+}}}
+<a name='method.FileComponent.action_delete' />*public* _void_ *`action_delete`* (  )
+{{{
+
+}}}
+<a name='method.FileComponent.registerTreeItems' />*public* _void_ *`registerTreeItems`* ( _Tree_ `$tree` )
+{{{
+Register tree items for this component
+}}}
+<a name='method.FileComponent.getType' />*public* _void_ *`getType`* (  )
+{{{
+
+}}}
