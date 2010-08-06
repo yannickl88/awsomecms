@@ -10,6 +10,7 @@ included in the distribution.
 The following classes are located in this package
 === Classes: ===
 == `PrivlilegesField` ==
+,,File: components/users/fields/class.PrivlilegesField.inc,,
 ===== ,,class,, PrivlilegesField ,,extends,, [DOCCoreFields#IntField IntField] =====
 Privileges list of check boxes
  ==== *protected* _string_ *`toHTML_add`* (  ) ====
@@ -19,6 +20,7 @@ Create a HTML representation of edit field
  ==== *public* _string_ *`value2db`* ( __ `$value` ) ====
 Convert the value of the param to that what the DB expects
 == `UsersField` ==
+,,File: components/users/fields/class.UsersField.inc,,
 ===== ,,class,, UsersField ,,extends,, [DOCCoreFields#Field Field] =====
 Selection list of all the users
  ==== *public* _[DOCCoreFields#Field Field]_ *`setData`* ( _object_ `$value` ) ====
@@ -34,6 +36,7 @@ Create a HTML representation of view field
  ==== *public* _void_ *`select`* ( __ `$query`, __ `$data` ) ====
 Add select data for this field to a query
 == `UsersselectField` ==
+,,File: components/users/fields/class.UsersselectField.inc,,
 ===== ,,class,, UsersselectField ,,extends,, [DOCCoreFields#Field Field] =====
 Selection list of all the users, do note you may want to use this as a dummy
 field and so something with it yourself. There is currently no relation

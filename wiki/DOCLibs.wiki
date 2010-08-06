@@ -10,80 +10,97 @@ included in the distribution.
 The following classes are located in this package
 === Classes: ===
 == `BElement` ==
+,,File: libs/class.BBCodeElements.inc,,
 ===== ,,class,, BElement ,,extends,, [DOCLibs#BBCodeElement BBCodeElement] =====
 This file contains All the supported BBCodeElements and all methods that
 are defined are overwrites from BBCodeElement
  ==== *public* _void_ *`wrap`* (  ) ====
 == `UElement` ==
+,,File: libs/class.BBCodeElements.inc,,
 ===== ,,class,, UElement ,,extends,, [DOCLibs#BBCodeElement BBCodeElement] =====
 
  ==== *public* _void_ *`wrap`* (  ) ====
 == `IElement` ==
+,,File: libs/class.BBCodeElements.inc,,
 ===== ,,class,, IElement ,,extends,, [DOCLibs#BBCodeElement BBCodeElement] =====
 
  ==== *public* _void_ *`wrap`* (  ) ====
 == `H1Element` ==
+,,File: libs/class.BBCodeElements.inc,,
 ===== ,,class,, H1Element ,,extends,, [DOCLibs#BBCodeElement BBCodeElement] =====
 
  ==== *public* _void_ *`wrap`* (  ) ====
  ==== *public* _void_ *`isBlock`* (  ) ====
  ==== *public* _void_ *`mayContainPars`* (  ) ====
 == `H2Element` ==
+,,File: libs/class.BBCodeElements.inc,,
 ===== ,,class,, H2Element ,,extends,, [DOCLibs#BBCodeElement BBCodeElement] =====
 
  ==== *public* _void_ *`wrap`* (  ) ====
  ==== *public* _void_ *`isBlock`* (  ) ====
  ==== *public* _void_ *`mayContainPars`* (  ) ====
 == `H3Element` ==
+,,File: libs/class.BBCodeElements.inc,,
 ===== ,,class,, H3Element ,,extends,, [DOCLibs#BBCodeElement BBCodeElement] =====
 
  ==== *public* _void_ *`wrap`* (  ) ====
  ==== *public* _void_ *`isBlock`* (  ) ====
  ==== *public* _void_ *`mayContainPars`* (  ) ====
 == `ImgElement` ==
+,,File: libs/class.BBCodeElements.inc,,
 ===== ,,class,, ImgElement ,,extends,, [DOCLibs#BBCodeElement BBCodeElement] =====
 
  ==== *public* _void_ *`wrap`* (  ) ====
 == `YoutubeElement` ==
+,,File: libs/class.BBCodeElements.inc,,
 ===== ,,class,, YoutubeElement ,,extends,, [DOCLibs#BBCodeElement BBCodeElement] =====
 
  ==== *public* _void_ *`wrap`* (  ) ====
 == `UrlElement` ==
+,,File: libs/class.BBCodeElements.inc,,
 ===== ,,class,, UrlElement ,,extends,, [DOCLibs#BBCodeElement BBCodeElement] =====
 
  ==== *public* _void_ *`wrap`* (  ) ====
 == `EmailElement` ==
+,,File: libs/class.BBCodeElements.inc,,
 ===== ,,class,, EmailElement ,,extends,, [DOCLibs#BBCodeElement BBCodeElement] =====
 
  ==== *public* _void_ *`wrap`* (  ) ====
 == `LeftElement` ==
+,,File: libs/class.BBCodeElements.inc,,
 ===== ,,class,, LeftElement ,,extends,, [DOCLibs#BBCodeElement BBCodeElement] =====
 
  ==== *public* _void_ *`wrap`* (  ) ====
  ==== *public* _void_ *`isBlock`* (  ) ====
 == `RightElement` ==
+,,File: libs/class.BBCodeElements.inc,,
 ===== ,,class,, RightElement ,,extends,, [DOCLibs#BBCodeElement BBCodeElement] =====
 
  ==== *public* _void_ *`wrap`* (  ) ====
  ==== *public* _void_ *`isBlock`* (  ) ====
 == `CenterElement` ==
+,,File: libs/class.BBCodeElements.inc,,
 ===== ,,class,, CenterElement ,,extends,, [DOCLibs#BBCodeElement BBCodeElement] =====
 
  ==== *public* _void_ *`wrap`* (  ) ====
  ==== *public* _void_ *`isBlock`* (  ) ====
 == `ListElement` ==
+,,File: libs/class.BBCodeElements.inc,,
 ===== ,,class,, ListElement ,,extends,, [DOCLibs#BBCodeElement BBCodeElement] =====
 
  ==== *public* _void_ *`wrap`* (  ) ====
 == `ItemElement` ==
+,,File: libs/class.BBCodeElements.inc,,
 ===== ,,class,, ItemElement ,,extends,, [DOCLibs#BBCodeElement BBCodeElement] =====
 
  ==== *public* _void_ *`wrap`* (  ) ====
  ==== *public* _void_ *`singelLine`* (  ) ====
 == `BBCodeException` ==
+,,File: libs/class.BBCodeParser.inc,,
 ===== ,,class,, BBCodeException ,,extends,, Exception =====
 Exception which is triggered if something goes wrong
 == `BBCodeElement` ==
+,,File: libs/class.BBCodeParser.inc,,
 ===== ,,class,, BBCodeElement =====
 And BBCode element which is linked to an HTML element
  ==== *public* _void_ *`__construct`* ( _string_ `$type` ) ====
@@ -132,6 +149,7 @@ Debug for showing the element tree from this element
  ==== *public* _void_ *`removeTrailingBreak`* (  ) ====
 Remove trailing breaks so don't end a block with a return
 == `BBCodeDocument` ==
+,,File: libs/class.BBCodeParser.inc,,
 ===== ,,class,, BBCodeDocument ,,extends,, [DOCLibs#BBCodeElement BBCodeElement] =====
 BBCode Document root
  ==== *public* _void_ *`__construct`* (  ) ====
@@ -139,6 +157,7 @@ Constructor
  ==== *public* _string_ *`valueOf`* ( _string_ `$level`, _int_ `$i` ) ====
 Debug for showing the element tree from this element
 == `BBCodeDummyElement` ==
+,,File: libs/class.BBCodeParser.inc,,
 ===== ,,class,, BBCodeDummyElement ,,extends,, [DOCLibs#BBCodeElement BBCodeElement] =====
 Dummy element, this is used for checking stuff
  ==== *public* _void_ *`__construct`* (  ) ====
@@ -146,6 +165,7 @@ Constructor
  ==== *public* _string_ *`text`* (  ) ====
 Get the HTML, including the wrapping, of the element
 == `BBCodeText` ==
+,,File: libs/class.BBCodeParser.inc,,
 ===== ,,class,, BBCodeText ,,extends,, [DOCLibs#BBCodeElement BBCodeElement] =====
 Element which only contains text
  ==== *public* _void_ *`__construct`* (  ) ====
@@ -153,6 +173,7 @@ Constructor
  ==== *public* _string_ *`text`* (  ) ====
 Get the HTML, including the wrapping, of the element
 == `BBCodeNewLine` ==
+,,File: libs/class.BBCodeParser.inc,,
 ===== ,,class,, BBCodeNewLine ,,extends,, [DOCLibs#BBCodeElement BBCodeElement] =====
 Element which indecates a new line
  ==== *public* _void_ *`__construct`* (  ) ====
@@ -160,6 +181,7 @@ Constructor
  ==== *public* _string_ *`text`* (  ) ====
 Get the HTML, including the wrapping, of the element
 == `BBCodeParagraph` ==
+,,File: libs/class.BBCodeParser.inc,,
 ===== ,,class,, BBCodeParagraph ,,extends,, [DOCLibs#BBCodeElement BBCodeElement] =====
 Element which is a paragraph in the document
  ==== *public* _void_ *`__construct`* (  ) ====
@@ -167,6 +189,7 @@ Constructor
  ==== *protected* _void_ *`wrap`* ( _string_ `$text` ) ====
 Wrap the content of the element
 == `BBCodeUnknownElement` ==
+,,File: libs/class.BBCodeParser.inc,,
 ===== ,,class,, BBCodeUnknownElement ,,extends,, [DOCLibs#BBCodeElement BBCodeElement] =====
 Element which is a handler when there is no element to be found
  ==== *protected* _void_ *`wrap`* ( _string_ `$text` ) ====
@@ -176,6 +199,7 @@ Create a string which we can use as smarty params
  ==== *public* _bool_ *`singelTag`* (  ) ====
 Check if the element doesn't need a closing tag
 == `BBCodeParser` ==
+,,File: libs/class.BBCodeParser.inc,,
 ===== ,,class,, BBCodeParser =====
 The BBCodeParser which does the actual work
  ==== *public* *static* _string_ *`parse`* ( _string_ `$text` ) ====
@@ -185,6 +209,7 @@ Constructor
  ==== *private* _string_ *`process`* (  ) ====
 Process the given string and return a XHTML string
 == `CLIAction` ==
+,,File: libs/class.CLI.inc,,
 ===== _abstract_ ,,class,, CLIAction =====
 CliAction interface
  ==== _void_ *`setup`* ( _[DOCLibs#CLI CLI]_ `$cli` ) ====
@@ -194,11 +219,13 @@ called before the exec
 Cleanup function, you can override this to add cleanup stuff. This is
 called after the exec
 == `OS` ==
+,,File: libs/class.CLI.inc,,
 ===== ,,class,, OS =====
 OS abstraction, this provides a way to easiely join a path
  ==== *public* _string_ *`join`* ( _`*`_ `String ...`, _`*`_ `String ...` ) ====
 Join a series of path elements together in an OS safe way
 == `CLI` ==
+,,File: libs/class.CLI.inc,,
 ===== ,,class,, CLI =====
 Cli main class
  ==== *public* _void_ *`__construct`* ( _array_ `$argv` ) ====
@@ -229,6 +256,7 @@ Show the header info
  ==== *private* _void_ *`_header`* (  ) ====
 Fallback when there was no header
 == `CronParser` ==
+,,File: libs/class.CronParser.inc,,
 ===== ,,class,, CronParser =====
 Parser for cron time string
  ==== *public* _array_ *`mustRunNow`* ( _string_ `$cronTime`, _int_ `$now` ) ====
@@ -240,6 +268,7 @@ Parse a cron time string
  ==== *private* _array_ *`parseNumberString`* ( _string_ `$timeString` ) ====
 Parse a set of numbers
 == `FTP` ==
+,,File: libs/class.FTP.inc,,
 ===== ,,class,, FTP =====
 Helper class for uploading stuff using FTP
  ==== *public* *static* _[DOCLibs#FTP FTP]_ *`getInstance`* (  ) ====
@@ -255,6 +284,7 @@ Upload a directory to the FTP server, throws exception if failed
  ==== *private* _void_ *`makeDir`* ( _`*`_ `$dest` ) ====
 Make a folder on the FTP server
 == `TableInfo` ==
+,,File: libs/class.InstallHelper.inc,,
 ===== ,,class,, TableInfo =====
 Wrapper for the table info in the info files, these can contain options
  ==== *public* _void_ *`__construct`* ( _string_ `$ID` ) ====
@@ -266,6 +296,7 @@ Get the name of the table
  ==== *public* _string_ *`__toString`* (  ) ====
 To String, this is called when cast to string
 == `InstallHelper` ==
+,,File: libs/class.InstallHelper.inc,,
 ===== ,,class,, InstallHelper =====
 Helper class for installing and managing components
  ==== *public* _bool_ *`downloadAndInstall`* ( _string_ `$source`, _string_ `$root` ) ====
@@ -314,6 +345,7 @@ Get the highest revsion number
  ==== *public* _void_ *`generateInstallFiles`* ( _string_ `$components` ) ====
 Generate the install XML's for each given component
 == `TextSpider` ==
+,,File: libs/class.TextSpider.inc,,
 ===== ,,class,, TextSpider =====
 Spider class for indexing and searching in the text items
  ==== *public* _void_ *`__construct`* (  ) ====

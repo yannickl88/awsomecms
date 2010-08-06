@@ -10,6 +10,7 @@ included in the distribution.
 The following classes are located in this package
 === Classes: ===
 == `ContactComponent` ==
+,,File: components/contact/class.ContactComponent.inc,,
 ===== ,,class,, ContactComponent ,,extends,, [DOCCore#Component Component] =====
 Contact component class, this holds all the logic for the contact component
  ==== *public* _void_ *`__construct`* (  ) ====
@@ -25,6 +26,7 @@ Send action, this is called when a form is submitted
  ==== *public* _void_ *`registerMenuItems`* ( _[DOCComponentsPageUtil#Menu Menu]_ `$menu` ) ====
 Function for registering menu items to the admin menu
 == `FormfieldsTable` ==
+,,File: components/contact/class.FormfieldsTable.inc,,
 ===== ,,class,, FormfieldsTable ,,extends,, [DOCCore#Table Table] =====
 Form table, this is where all the forms are stored
  ==== *public* _void_ *`__construct`* (  ) ====
@@ -38,6 +40,7 @@ Constructor
  ==== *protected* _void_ *`delete`* (  ) ====
 (non-PHPdoc)
 == `FormsTable` ==
+,,File: components/contact/class.FormsTable.inc,,
 ===== ,,class,, FormsTable ,,extends,, [DOCCore#Table Table] =====
 Form table, this is where all the forms are stored
  ==== *public* _void_ *`__construct`* (  ) ====

@@ -10,14 +10,20 @@ included in the distribution.
 The following functions are located in this package
 === Functions: ===
  ==== _string_ *`smarty_function_adminmenu`* ( _array_ `$params`, _Smarty_ `$smarty` ) ====
+,,File: ,,
 Show the admin menu
  ==== _string_ *`smarty_function_admintree`* ( _array_ `$params`, _Smarty_ `$smarty` ) ====
+,,File: ,,
 Show the admin tree
  ==== _void_ *`smarty_function_layout`* ( _array_ `$params`, _Smarty_ `$smarty` ) ====
+,,File: ,,
 Change the layout to be wrapped around the page
  ==== _string_ *`smarty_function_renderdebug`* ( _array_ `$params`, _Smarty_ `$smarty` ) ====
+,,File: ,,
 Show the debugger content
  ==== _int_ *`smarty_function_rendertime`* ( _array_ `$params`, _Smarty_ `$smarty` ) ====
+,,File: ,,
 Show the time it has taken for the site to render
  ==== _string_ *`smarty_function_search`* ( _array_ `$params`, _Smarty_ `$smarty` ) ====
+,,File: ,,
 Show a list of results on this page

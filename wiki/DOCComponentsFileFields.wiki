@@ -10,6 +10,7 @@ included in the distribution.
 The following classes are located in this package
 === Classes: ===
 == `FileSelectField` ==
+,,File: components/file/fields/class.FileSelectField.inc,,
 ===== ,,class,, FileSelectField ,,extends,, [DOCCoreFields#Field Field] =====
 Field for uploading files
  ==== *public* _void_ *`__construct`* ( _string_ `$name`, _int_ `$style` ) ====
@@ -23,6 +24,7 @@ Convert the dbvalue of the param to what the field expects
  ==== *public* _string_ *`value2db`* ( __ `$value` ) ====
 Convert the value of the param to that what the DB expects
 == `UploadField` ==
+,,File: components/file/fields/class.UploadField.inc,,
 ===== ,,class,, UploadField ,,extends,, [DOCCoreFields#Field Field] =====
 Field for uploading files
  ==== *public* _void_ *`__construct`* ( _string_ `$name`, _int_ `$style` ) ====

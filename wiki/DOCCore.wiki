@@ -10,27 +10,37 @@ included in the distribution.
 The following functions are located in this package
 === Functions: ===
  ==== _void_ *`import`* ( _string_ `$file` ) ====
+,,File: ,,
 Import a file, with the root the framework root
  ==== _void_ *`importField`* ( _string_ `$field` ) ====
+,,File: ,,
 Import a field.
 You can use {FieldName} for core fields and {component}.{FieldName} for component specific fields.
  ==== _string_ *`getFrameworkRoot`* (  ) ====
+,,File: ,,
 Get the root of the framework
  ==== _bool_ *`handleError`* ( _int_ `$errno`, _string_ `$errstr`, _string_ `$errfile`, _int_ `$errline` ) ====
+,,File: ,,
 Error handeler for the framework
  ==== _array_ *`parseInfoFile`* ( _string_ `$file`, _string_ `$component` ) ====
+,,File: ,,
 Parse an info file from a component
  ==== _string_ *`addSlashesConfig`* ( _string_ `$string` ) ====
+,,File: ,,
 Add slashes to a string only when magic_quotes_gpc is turned off.
  ==== _array_ *`getActions`* ( _string_ `$component` ) ====
+,,File: ,,
 Get the actions of a give component
  ==== _string_ *`urlEscape`* ( _string_ `$string` ) ====
+,,File: ,,
 Clean up a string so it can be validly passed in the url
  ==== _void_ *`str_rand`* ( _int_ `$p` ) ====
+,,File: ,,
 Generate a random string
 The following classes are located in this package
 === Classes: ===
 == `Authentication` ==
+,,File: core/class.Authentication.inc,,
 ===== ,,class,, Authentication =====
 Authentication class that is a facade for loggin in and out
  ==== *public* *static* _bool_ *`login`* ( _string_ `$user_name`, _string_ `$user_pass` ) ====
@@ -44,6 +54,7 @@ Log the user in
  ==== *public* _bool_ *`auth_logout`* (  ) ====
 Log the user out
 == `Cache` ==
+,,File: core/class.Cache.inc,,
 ===== ,,class,, Cache =====
 Cache class which handels quick caching of data
 NOTE: data is serialized using the build-in PHP serialize and unserialize
@@ -60,6 +71,7 @@ Set cached data
  ==== *public* *static* _void_ *`clear`* ( _string_ `$key` ) ====
 Clear cached data
 == `Component` ==
+,,File: core/class.Component.inc,,
 ===== ,,class,, Component =====
 Superclass for all the components
  ==== *public* _void_ *`__construct`* ( _string_ `$component` ) ====
@@ -90,6 +102,7 @@ Register actions/hooks/mappings to the framework
  ==== *public* _void_ *`execCron`* (  ) ====
 Execute a task for the cron. This called in the interval secified in the config files.
 == `Config` ==
+,,File: core/class.Config.inc,,
 ===== ,,class,, Config =====
 Configuration class, this is used to retrive all the data from seperate config files
  ==== *public* *static* _[DOCCore#Config Config]_ *`getInstance`* (  ) ====
@@ -113,18 +126,23 @@ Note that the value is not saved in a config.
  ==== *public* *static* _bool_ *`hasFlag`* ( _int_ `$int`, _int_ `$flag` ) ====
 Check if a value contains another value. This is done using bitwise comparison
 == `ComponentNotFoundException` ==
+,,File: core/class.Controller.inc,,
 ===== ,,class,, ComponentNotFoundException ,,extends,, Exception =====
 Exception thrown if the given component is not installed or found
 == `ActionNotFoundException` ==
+,,File: core/class.Controller.inc,,
 ===== ,,class,, ActionNotFoundException ,,extends,, Exception =====
 Exception thrown if the given action for an component could not be found
 == `NotInstanciatedException` ==
+,,File: core/class.Controller.inc,,
 ===== ,,class,, NotInstanciatedException ,,extends,, Exception =====
 Exception thrown if controller is waiting for the setData to be called
 == `UnauthException` ==
+,,File: core/class.Controller.inc,,
 ===== ,,class,, UnauthException ,,extends,, Exception =====
 Exception to be triggered when the current user does not have the proper authorization
 == `Notifications` ==
+,,File: core/class.Controller.inc,,
 ===== ,,class,, Notifications =====
 Manager for handeling notifications
  ==== *public* *static* _[DOCCore#Notifications Notifications]_ *`getInstance`* (  ) ====
@@ -144,6 +162,7 @@ Note: This is also called when changes happen inside this object
  ==== *public* _void_ *`removeNotification`* ( _string_ `$url` ) ====
 remove the notifications for an URL
 == `Controller` ==
+,,File: core/class.Controller.inc,,
 ===== ,,class,, Controller =====
 Controller class that handels all the incomming data requests
  ==== *public* *static* _[DOCCore#Controller Controller]_ *`getInstance`* (  ) ====
@@ -173,6 +192,7 @@ Check if the page will be redirecting once done
  ==== *public* _void_ *`setRedirect`* ( _string_ `$url` ) ====
 Set the redirect, this can be used to prospone the redirect till everything is done executing
 == `Debugger` ==
+,,File: core/class.Debugger.inc,,
 ===== ,,class,, Debugger =====
 Debugger class that handels all debug messages generated from the CMS
  ==== *public* *static* _[DOCCore#Debugger Debugger]_ *`getInstance`* (  ) ====
@@ -197,12 +217,14 @@ Render the debug list as HTML
  ==== _void_ *`debug_toggleDebug`* (  ) ====
  ==== *public* _void_ *`setType`* (  ) ====
 == `FormException` ==
+,,File: core/class.InvalidFormException.inc,,
 ===== ,,class,, FormException ,,extends,, Exception =====
 Exception to be triggered when a field is not validly filled in
  ==== *public* _void_ *`__construct`* (  ) ====
  ==== *public* _string_ *`getField`* (  ) ====
 Get the field that were not valid
 == `InvalidFormException` ==
+,,File: core/class.InvalidFormException.inc,,
 ===== ,,class,, InvalidFormException ,,extends,, Exception =====
 Exception class when a form is not valid
  ==== *public* _void_ *`__construct`* (  ) ====
@@ -222,6 +244,7 @@ Get the data that should be passed when redirecting
 Set the data that should be passed when redirecting
  ==== *public* _void_ *`__toString`* (  ) ====
 == `Language` ==
+,,File: core/class.Language.inc,,
 ===== ,,class,, Language =====
 Multilanguage class which handels translation
  ==== *public* *static* _[DOCCore#Language Language]_ *`getInstance`* (  ) ====
@@ -235,6 +258,7 @@ Get mapped keys to string for a given language
  ==== *private* _void_ *`loadLang`* ( _string_ `$lang` ) ====
 Load a language file based on the language key
 == `RegisterManager` ==
+,,File: core/class.RegisterManager.inc,,
 ===== ,,class,, RegisterManager =====
 Manager for registering components, hooks, mappings and pages dynamicly
  ==== *public* *static* _[DOCCore#RegisterManager RegisterManager]_ *`getInstance`* (  ) ====
@@ -268,9 +292,11 @@ Check if a page is rgistered
  ==== *public* _bool_ *`hasHook`* ( _string_ `$component`, _string_ `$action`, _string_ `$prepost` ) ====
 Check if a hook is rgistered
 == `ForbiddenException` ==
+,,File: core/class.Request.inc,,
 ===== ,,class,, ForbiddenException ,,extends,, Exception =====
 Exception thrown when you cannot make an call to that action
 == `Request` ==
+,,File: core/class.Request.inc,,
 ===== ,,class,, Request =====
 request object, datawrapper for an request call
  ==== *public* _void_ *`__construct`* (  ) ====
@@ -280,12 +306,15 @@ Check if the request is made through the proxy url
  ==== *public* _string_ *`translateAction`* (  ) ====
 translate the HTTP method to SQL method
 == `SQLExeption` ==
+,,File: core/class.SQL.inc,,
 ===== ,,class,, SQLExeption ,,extends,, Exception =====
 SQLException when there was an error in executing a given Query
 == `SQLConnenectionExeption` ==
+,,File: core/class.SQL.inc,,
 ===== ,,class,, SQLConnenectionExeption ,,extends,, [DOCCore#SQLExeption SQLExeption] =====
 SQLException when there was a problem connecting to the database
 == `SQLQuery` ==
+,,File: core/class.SQL.inc,,
 ===== ,,class,, SQLQuery =====
 Abstraction of a SQL query
  ==== *private* _void_ *`__construct`* ( _string_ `$action` ) ====
@@ -350,6 +379,7 @@ Get the SQL statement for an update
 Get the SQL statement for an Delete
  ==== *public* _void_ *`getRequest`* (  ) ====
 == `SQLRecord` ==
+,,File: core/class.SQL.inc,,
 ===== ,,class,, SQLRecord =====
 SQLRecord that is a wrapper for all data generated from the queries
  ==== *public* _void_ *`__construct`* (  ) ====
@@ -364,6 +394,7 @@ Get the amount of rows returned by the query
  ==== *public* _int_ *`insertID`* (  ) ====
 Get the latest ID from the last insert. This is 0 when there was no insert done
 == `SQL` ==
+,,File: core/class.SQL.inc,,
 ===== ,,class,, SQL =====
 SQL class that handels the connection to the database
  ==== *public* *static* _[DOCCore#SQL SQL]_ *`getInstance`* (  ) ====
@@ -380,12 +411,15 @@ Execute multiple queries
  ==== *private* _void_ *`triggerSQLError`* ( _string_ `$error`, _int_ `$type` ) ====
 Trigger a SQL exception and throws it
 == `PageNotFoundExeption` ==
+,,File: core/class.SmartyPageLoader.inc,,
 ===== ,,class,, PageNotFoundExeption ,,extends,, Exception =====
 Exception thrown when a page could not be found
 == `NotInstalledException` ==
+,,File: core/class.SmartyPageLoader.inc,,
 ===== ,,class,, NotInstalledException ,,extends,, Exception =====
 Exception to be triggered when the framework is not properly installed (No components)
 == `SmartyPageLoader` ==
+,,File: core/class.SmartyPageLoader.inc,,
 ===== ,,class,, SmartyPageLoader =====
 Handel all the database loading and file checking. Also do some util
 actions with smarty, like loading all the plugins
@@ -407,6 +441,7 @@ check if the template is trusted
 register all the smarty extentions from the components,
 see http://smarty.net/manual/en/plugins.php
 == `DataContainer` ==
+,,File: core/class.Table.inc,,
 ===== ,,class,, DataContainer =====
 Container for dynamic data, this always returnes NULL when a propertie is not found
  ==== *public* _`*`_ *`__get`* ( _`*`_ `$key` ) ====
@@ -416,6 +451,7 @@ Setter
  ==== *public* *static* _`*`_ *`init`* ( _object_ `$data` ) ====
 Wrap an object or an array containing object in the DataContainer
 == `Table` ==
+,,File: core/class.Table.inc,,
 ===== _abstract_ ,,class,, Table =====
 Abstract class that handels all the information about a table
  ==== *public* *static* _[DOCCore#Table Table]_ *`init`* ( _string_ `$table` ) ====

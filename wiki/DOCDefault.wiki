@@ -7,12 +7,15 @@ _Package: 'default'_
 The following functions are located in this package
 === Functions: ===
  ==== _void_ *`generateTranslateable`* (  ) ====
+,,File: ,,
 
  ==== _void_ *`generateNewLangFile`* (  ) ====
+,,File: ,,
 
 The following classes are located in this package
 === Classes: ===
 == `FileItem` ==
+,,File: components/file/util/class.FileTree.inc,,
 ===== ,,class,, FileItem ,,extends,, [DOCComponentsPageUtil#TreeNode TreeNode] =====
 
  ==== *public* _void_ *`__construct`* ( _object_ `$record` ) ====
@@ -20,6 +23,7 @@ Constructor
  ==== *public* _string_ *`toJavascript`* (  ) ====
 Create the javascript code for the tree
 == `ImageFolder` ==
+,,File: components/file/util/class.FileTree.inc,,
 ===== ,,class,, ImageFolder ,,extends,, [DOCComponentsPageUtil#Folder Folder] =====
 
  ==== *public* _void_ *`__construct`* ( _object_ `$record` ) ====
@@ -29,6 +33,7 @@ See parent
  ==== *public* _string_ *`toJavascript`* (  ) ====
 Create the javascript code for the tree
 == `UploadFolder` ==
+,,File: components/file/util/class.FileTree.inc,,
 ===== ,,class,, UploadFolder ,,extends,, [DOCComponentsPageUtil#Folder Folder] =====
 
  ==== *public* _void_ *`__construct`* ( _object_ `$record` ) ====
@@ -38,6 +43,7 @@ See parent
  ==== *public* _string_ *`toJavascript`* (  ) ====
 Create the javascript code for the tree
 == `NewsItem` ==
+,,File: components/news/util/class.NewsTree.inc,,
 ===== ,,class,, NewsItem ,,extends,, [DOCComponentsPageUtil#TreeNode TreeNode] =====
 The node for the page items
  ==== *public* _void_ *`__construct`* ( _object_ `$record` ) ====
@@ -47,6 +53,7 @@ See parent
  ==== *public* _string_ *`toJavascript`* (  ) ====
 Create the javascript code for the tree
 == `NewsFolder` ==
+,,File: components/news/util/class.NewsTree.inc,,
 ===== ,,class,, NewsFolder ,,extends,, [DOCComponentsPageUtil#TreeNode TreeNode] =====
 
  ==== *public* _void_ *`__construct`* ( _object_ `$record` ) ====
@@ -56,6 +63,7 @@ See parent
  ==== *public* _string_ *`toJavascript`* (  ) ====
 Create the javascript code for the tree
 == `DeployAction` ==
+,,File: deploy.php,,
 ===== _abstract_ ,,class,, DeployAction ,,extends,, [DOCLibs#CLIAction CLIAction] =====
 This file is part of the A.W.S.O.M.E.cms distribution.
 Detailed copyright and licensing information can be found
@@ -70,26 +78,31 @@ called before the exec
 Cleanup function, you can override this to add cleanup stuff. This is
 called after the exec
 == `Usage` ==
+,,File: deploy.php,,
 ===== ,,class,, Usage ,,extends,, [DOCLibs#CLIAction CLIAction] =====
 
  ==== *public* _void_ *`exec`* ( _[DOCLibs#CLI CLI]_ `$cli`, _string_ `$action` ) ====
 (non-PHPdoc)
 == `Pack` ==
+,,File: deploy.php,,
 ===== ,,class,, Pack ,,extends,, [DOCDefault#DeployAction DeployAction] =====
 
  ==== *public* _void_ *`exec`* ( _[DOCLibs#CLI CLI]_ `$cli`, _string_ `$action` ) ====
 (non-PHPdoc)
 == `Update` ==
+,,File: deploy.php,,
 ===== ,,class,, Update ,,extends,, [DOCDefault#DeployAction DeployAction] =====
 
  ==== *public* _void_ *`exec`* ( _[DOCLibs#CLI CLI]_ `$cli`, _string_ `$action` ) ====
 (non-PHPdoc)
 == `Release` ==
+,,File: deploy.php,,
 ===== ,,class,, Release ,,extends,, [DOCDefault#DeployAction DeployAction] =====
 
  ==== *public* _void_ *`exec`* ( _[DOCLibs#CLI CLI]_ `$cli`, _string_ `$action` ) ====
 (non-PHPdoc)
 == `Patch` ==
+,,File: deploy.php,,
 ===== ,,class,, Patch ,,extends,, [DOCLibs#CLIAction CLIAction] =====
 
  ==== *public* _void_ *`exec`* ( _[DOCLibs#CLI CLI]_ `$cli`, _string_ `$action` ) ====

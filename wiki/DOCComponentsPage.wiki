@@ -10,6 +10,7 @@ included in the distribution.
 The following classes are located in this package
 === Classes: ===
 == `PageComponent` ==
+,,File: components/page/class.PageComponent.inc,,
 ===== ,,class,, PageComponent ,,extends,, [DOCCore#Component Component] =====
 The Page component, together with the core component, is this used to show pages and manage them
  ==== *public* _void_ *`__construct`* (  ) ====
@@ -25,6 +26,7 @@ Register menu items for this component
  ==== *public* _void_ *`registerTreeItems`* ( _[DOCComponentsPageUtil#Tree Tree]_ `$tree` ) ====
 Register tree items for this component
 == `PagesTable` ==
+,,File: components/page/class.PagesTable.inc,,
 ===== ,,class,, PagesTable ,,extends,, [DOCCore#Table Table] =====
 Pages table, this handels all interaction with the pages table in the database
  ==== *public* _void_ *`__construct`* (  ) ====

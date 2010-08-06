@@ -10,6 +10,7 @@ included in the distribution.
 The following classes are located in this package
 === Classes: ===
 == `GroupsComponent` ==
+,,File: components/groups/class.GroupsComponent.inc,,
 ===== ,,class,, GroupsComponent ,,extends,, [DOCCore#Component Component] =====
 Component that allowes for group based authentication, rather then user based
  ==== *public* _`*`_ *`__construct`* (  ) ====
@@ -35,6 +36,7 @@ Hook to delete a reference of a user when it is deleted in the user component
  ==== *public* _void_ *`registerMenuItems`* ( _[DOCComponentsPageUtil#Menu Menu]_ `$menu` ) ====
 Register menu items for this component
 == `GroupsTable` ==
+,,File: components/groups/class.GroupsTable.inc,,
 ===== ,,class,, GroupsTable ,,extends,, [DOCCore#Table Table] =====
 User table, this handels all interaction with the user table in the database
  ==== *public* _void_ *`__construct`* (  ) ====
@@ -48,6 +50,7 @@ Constructor
  ==== *protected* _void_ *`delete`* (  ) ====
 (non-PHPdoc)
 == `UsersgroupsTable` ==
+,,File: components/groups/class.UsersgroupsTable.inc,,
 ===== ,,class,, UsersgroupsTable ,,extends,, [DOCCore#Table Table] =====
 Usersgroups table, this is a raltional table to keep track of what users are in which groups
  ==== *public* _void_ *`__construct`* (  ) ====

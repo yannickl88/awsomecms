@@ -10,6 +10,7 @@ included in the distribution.
 The following classes are located in this package
 === Classes: ===
 == `FileComponent` ==
+,,File: components/file/class.FileComponent.inc,,
 ===== ,,class,, FileComponent ,,extends,, [DOCCore#Component Component] =====
 
  ==== *public* _`*`_ *`__construct`* (  ) ====
