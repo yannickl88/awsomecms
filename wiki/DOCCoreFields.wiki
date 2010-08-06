@@ -13,173 +13,173 @@ The following classes are located in this package
 ===== ,,class,, BooleanField ,,extends,, [DOCCoreFields#IntField IntField] =====
 Boolean field.
  ==== *protected* _string_ *`toHTML_add`* (  ) ====
-  Create a HTML representation of add field
+Create a HTML representation of add field
  ==== *protected* _string_ *`toHTML_edit`* (  ) ====
-  Create a HTML representation of edit field
+Create a HTML representation of edit field
  ==== *protected* _string_ *`toHTML_view`* (  ) ====
-  Create a HTML representation of view field
+Create a HTML representation of view field
 == CaptchaField ==
 ===== ,,class,, CaptchaField ,,extends,, [DOCCoreFields#Field Field] =====
 Captcha field to prevent bots.
  ==== *public* _void_ *`__construct`* ( _string_ `$name`, _string_ `$displayName`, _int_ `$style` ) ====
-  Constructor
+Constructor
  ==== *protected* _string_ *`toHTML_add`* (  ) ====
-  Create a HTML representation of add field
+Create a HTML representation of add field
  ==== *protected* _string_ *`toHTML_edit`* (  ) ====
-  Create a HTML representation of edit field
+Create a HTML representation of edit field
  ==== *public* _void_ *`validate`* ( _int_ `$mode` ) ====
-  Validate the data for this field. This throws a FormException when not valid
+Validate the data for this field. This throws a FormException when not valid
 == DateField ==
 ===== ,,class,, DateField ,,extends,, [DOCCoreFields#Field Field] =====
 Date field, this shows a date selection field
  ==== *public* _string_ *`value2db`* ( __ `$value` ) ====
-  Convert the value of the param to that what the DB expects
+Convert the value of the param to that what the DB expects
  ==== *public* _`*`_ *`getValue`* ( _object_ `$data` ) ====
-  get the data from this field
+get the data from this field
  ==== *public* _`*`_ *`getDefaultValue`* (  ) ====
-  Get the default value of this field
+Get the default value of this field
  ==== *protected* _string_ *`toHTML_add`* (  ) ====
-  Create a HTML representation of add field
+Create a HTML representation of add field
  ==== *protected* _string_ *`toHTML_edit`* (  ) ====
-  Create a HTML representation of edit field
+Create a HTML representation of edit field
  ==== *protected* _string_ *`toHTML_view`* (  ) ====
-  Create a HTML representation of view field
+Create a HTML representation of view field
  ==== *public* _string_ *`getJavascript`* (  ) ====
-  get the javascript for this field
+get the javascript for this field
 == Field ==
 ===== ,,class,, Field =====
 Superclass for a Field.
  ==== *public* _[DOCCoreFields#Field Field]_ *`__construct`* ( _string_ `$name`, _`*`_ `$value` ) ====
-  Constructor of the field
+Constructor of the field
  ==== *public* _bool_ *`hasFlag`* ( _int_ `$flag` ) ====
-  Check if this field has a give flag
+Check if this field has a give flag
  ==== *public* _string_ *`getName`* (  ) ====
-  Get the name of this field
+Get the name of this field
  ==== *public* _string_ *`getDisplayName`* (  ) ====
-  Get the name that should be show in the forms
+Get the name that should be show in the forms
  ==== *public* _[DOCCoreFields#Field Field]_ *`setValue`* ( _`*`_ `$value` ) ====
-  Set the Value of this field
+Set the Value of this field
  ==== *public* _[DOCCoreFields#Field Field]_ *`setParent`* ( _[DOCCore#Table Table]_ `$value` ) ====
-  Set the Parent table of this field
+Set the Parent table of this field
  ==== *public* _[DOCCoreFields#Field Field]_ *`setRequestValue`* ( _`*`_ `$value` ) ====
-  Set the value that the field got in the request
+Set the value that the field got in the request
  ==== *public* _[DOCCoreFields#Field Field]_ *`setData`* ( _object_ `$value` ) ====
-  Set the Value of this field with an result object
+Set the Value of this field with an result object
  ==== *public* _[DOCCoreFields#Field Field]_ *`setRequestData`* ( _object_ `$record` ) ====
-  Set the request value of this field with an request object
+Set the request value of this field with an request object
  ==== *public* _`*`_ *`getValue`* ( _object_ `$data` ) ====
-  get the data from this field
+get the data from this field
  ==== *public* _`*`_ *`getRequestValue`* ( _object_ `$data` ) ====
-  get the request data from this field
+get the request data from this field
  ==== *public* _bool_ *`hasValue`* ( _array_ `$data` ) ====
-  Check if this field has a value that is not empty
+Check if this field has a value that is not empty
  ==== *public* _bool_ *`isRequired`* ( _int_ `$mode` ) ====
-  Check if this field is required
+Check if this field is required
  ==== *public* _[DOCCoreFields#Field Field]_ *`setRequired`* ( _bool_ `$required` ) ====
-  Set the field to be required
+Set the field to be required
  ==== *public* _bool_ *`canBeNull`* (  ) ====
-  Check if this field can be null
+Check if this field can be null
  ==== *public* _[DOCCoreFields#Field Field]_ *`setCanBeNull`* ( _bool_ `$null` ) ====
-  Set the field to be null
+Set the field to be null
  ==== *public* _`*`_ *`getDefaultValue`* (  ) ====
-  Get the default value of this field
+Get the default value of this field
  ==== *public* _[DOCCoreFields#Field Field]_ *`setDefaultValue`* ( _`*`_ `$value` ) ====
-  Set the field to have a default value
+Set the field to have a default value
  ==== *public* _int_ *`getMaxSize`* (  ) ====
-  get the max size of this field
+get the max size of this field
  ==== *public* _[DOCCoreFields#Field Field]_ *`setMaxSize`* ( _int_ `$size` ) ====
-  Set the field max size, -1 to have no size
+Set the field max size, -1 to have no size
  ==== *public* _bool_ *`isIndex`* (  ) ====
-  Check if this field in an index field
+Check if this field in an index field
  ==== *public* _[DOCCoreFields#Field Field]_ *`setIndex`* ( _string_ `$index` ) ====
-  Set the field ability to have an index
+Set the field ability to have an index
  ==== *public* _bool_ *`visible`* ( _int_ `$mode` ) ====
-  check if this field is visible
+check if this field is visible
  ==== *public* _string_ *`__get`* ( _string_ `$name` ) ====
-  This is designed to give fast acces to the toHTML functions
+This is designed to give fast acces to the toHTML functions
  ==== *public* _void_ *`toHTML`* ( _int_ `$mode` ) ====
-  Get the HTML representation of this field.
+Get the HTML representation of this field.
 NOTE:Do not overwrite this function. Use the toHTML_add/edit/view instaid if you want to change the way the HTML looks
  ==== *public* _string_ *`__toString`* (  ) ====
-  String representation of this field
+String representation of this field
  ==== *protected* _string_ *`toHTML_add`* (  ) ====
-  Create a HTML representation of add field
+Create a HTML representation of add field
  ==== *protected* _string_ *`toHTML_edit`* (  ) ====
-  Create a HTML representation of edit field
+Create a HTML representation of edit field
  ==== *protected* _string_ *`toHTML_edit_hidden`* (  ) ====
-  Create a HTML representation of hidden field
+Create a HTML representation of hidden field
  ==== *protected* _string_ *`toHTML_view`* (  ) ====
-  Create a HTML representation of view field
+Create a HTML representation of view field
  ==== *public* _string_ *`getJavascript`* (  ) ====
-  get the javascript for this field
+get the javascript for this field
  ==== *public* _void_ *`select`* ( __ `$query`, __ `$data` ) ====
-  Add select data for this field to a query
+Add select data for this field to a query
  ==== *public* _void_ *`insert`* ( __ `$query`, __ `$data` ) ====
-  Add insert data for this field to a query
+Add insert data for this field to a query
  ==== *public* _void_ *`update`* ( __ `$query`, __ `$data` ) ====
-  Add update data for this field to a query
+Add update data for this field to a query
  ==== *public* _void_ *`delete`* ( __ `$query`, __ `$data` ) ====
-  Add delete data for this field to a query
+Add delete data for this field to a query
  ==== *public* _void_ *`validate`* ( _int_ `$mode` ) ====
-  Validate the data for this field. This throws a FormException when not valid
+Validate the data for this field. This throws a FormException when not valid
  ==== *public* _string_ *`value2db`* ( __ `$value` ) ====
-  Convert the value of the param to that what the DB expects
+Convert the value of the param to that what the DB expects
  ==== *public* _`*`_ *`db2value`* ( __ `$value` ) ====
-  Convert the dbvalue of the param to what the field expects
+Convert the dbvalue of the param to what the field expects
  ==== *public* _string_ *`getDBName`* (  ) ====
-  Get the name to be used in the SQL queries
+Get the name to be used in the SQL queries
  ==== *public* _void_ *`preSQL`* ( _`*`_ `Array record that was used`, _[DOCCore#SQLQuery SQLQuery]_ `$query` ) ====
-  preform this action prior to the SQL execution that uses this field
+preform this action prior to the SQL execution that uses this field
  ==== *public* _void_ *`postSQL`* ( _[DOCCore#SQLRecord SQLRecord]_ `$sqlrecord`, _array_ `$record`, _[DOCCore#SQLQuery SQLQuery]_ `$query` ) ====
-  preform this action prior to the SQL execution that uses this field
+preform this action prior to the SQL execution that uses this field
 == IntField ==
 ===== ,,class,, IntField ,,extends,, [DOCCoreFields#Field Field] =====
 Integer field
  ==== *protected* _string_ *`toHTML_add`* (  ) ====
-  Create a HTML representation of add field
+Create a HTML representation of add field
  ==== *protected* _string_ *`toHTML_edit`* (  ) ====
-  Create a HTML representation of edit field
+Create a HTML representation of edit field
  ==== *public* _string_ *`getJavascript`* (  ) ====
-  get the javascript for this field
+get the javascript for this field
  ==== _void_ *`form_IntField_handleKey`* (  ) ====
  ==== *public* _void_ *`validate`* ( _int_ `$mode` ) ====
-  Validate the data for this field. This throws a FormException when not valid
+Validate the data for this field. This throws a FormException when not valid
 == PasswordField ==
 ===== ,,class,, PasswordField ,,extends,, [DOCCoreFields#Field Field] =====
 Password field
  ==== *public* _void_ *`__construct`* ( _string_ `$name`, _string_ `$displayName`, _int_ `$style` ) ====
-  Constructor
+Constructor
  ==== *protected* _string_ *`toHTML_add`* (  ) ====
-  Create a HTML representation of add field
+Create a HTML representation of add field
  ==== *protected* _string_ *`toHTML_edit`* (  ) ====
-  Create a HTML representation of edit field
+Create a HTML representation of edit field
  ==== *public* _void_ *`value2db`* (  ) ====
  ==== *public* _void_ *`db2value`* (  ) ====
 == TagField ==
 ===== ,,class,, TagField ,,extends,, [DOCCoreFields#Field Field] =====
 Tag field, this allows for quick search and assignment of tags
  ==== *public* _void_ *`preSQL`* ( _`*`_ `Array record that was used`, _[DOCCore#SQLQuery SQLQuery]_ `$query` ) ====
-  preform this action prior to the SQL execution that uses this field
+preform this action prior to the SQL execution that uses this field
  ==== *public* _void_ *`insert`* ( __ `$query`, __ `$data` ) ====
-  Add insert data for this field to a query
+Add insert data for this field to a query
  ==== *public* _void_ *`insert`* ( __ `$query`, __ `$data` ) ====
-  Add insert data for this field to a query
+Add insert data for this field to a query
  ==== *public* _void_ *`update`* ( __ `$query`, __ `$data` ) ====
-  Add update data for this field to a query
+Add update data for this field to a query
  ==== *public* _void_ *`delete`* ( __ `$query`, __ `$data` ) ====
-  Add delete data for this field to a query
+Add delete data for this field to a query
  ==== *public* _string_ *`getJavascript`* (  ) ====
-  get the javascript for this field
+get the javascript for this field
  ==== *private* _void_ *`getAllTags`* (  ) ====
 == TextField ==
 ===== ,,class,, TextField ,,extends,, [DOCCoreFields#Field Field] =====
 Textarea field
  ==== *public* _void_ *`__construct`* ( _string_ `$name`, _string_ `$displayName`, _int_ `$style` ) ====
-  Constructor
+Constructor
  ==== *protected* _string_ *`toHTML_add`* (  ) ====
-  Create a HTML representation of add field
+Create a HTML representation of add field
  ==== *protected* _string_ *`toHTML_edit`* (  ) ====
-  Create a HTML representation of edit field
+Create a HTML representation of edit field
  ==== *public* _string_ *`getJavascript`* (  ) ====
-  get the javascript for this field
+get the javascript for this field
  ==== _void_ *`bindEditor`* (  ) ====

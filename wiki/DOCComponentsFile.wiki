@@ -13,11 +13,11 @@ The following classes are located in this package
 ===== ,,class,, FileComponent ,,extends,, [DOCCore#Component Component] =====
 
  ==== *public* _`*`_ *`__construct`* (  ) ====
-  Constructor
+Constructor
  ==== *public* _void_ *`action_add`* (  ) ====
  ==== *public* _void_ *`action_upload`* (  ) ====
  ==== *public* _void_ *`action_edit`* (  ) ====
  ==== *public* _void_ *`action_delete`* (  ) ====
  ==== *public* _void_ *`registerTreeItems`* ( _[DOCComponentsPageUtil#Tree Tree]_ `$tree` ) ====
-  Register tree items for this component
+Register tree items for this component
  ==== *public* _void_ *`getType`* (  ) ====

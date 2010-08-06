@@ -10,8 +10,8 @@ included in the distribution.
 The following functions are located in this package
 === Functions: ===
  ===== _string_ *`smarty_function_news`* ( _array_ `$params`, _Smarty_ `$smarty` ) =====
-  Show a list of news items
+Show a list of news items
  ===== _string_ *`smarty_function_newsitem`* ( _array_ `$params`, _Smarty_ `$smarty` ) =====
-  Show a news item
+Show a news item
  ===== _string_ *`smarty_function_newstags`* ( _array_ `$params`, _Smarty_ `$smarty` ) =====
-  Show a list of tags that are used by all the news items
+Show a list of tags that are used by all the news items

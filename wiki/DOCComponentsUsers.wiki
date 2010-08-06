@@ -13,19 +13,19 @@ The following classes are located in this package
 ===== ,,class,, PrivilegesTable ,,extends,, [DOCCore#Table Table] =====
 Privileges tabel.
  ==== *public* _[DOCCore#Table Table]_ *`__construct`* ( _string_ `$name` ) ====
-  Constructor for Table
+Constructor for Table
  ==== *protected* _void_ *`select`* (  ) ====
-  (non-PHPdoc)
+(non-PHPdoc)
  ==== *protected* _void_ *`insert`* (  ) ====
-  (non-PHPdoc)
+(non-PHPdoc)
  ==== *protected* _void_ *`update`* (  ) ====
-  (non-PHPdoc)
+(non-PHPdoc)
  ==== *protected* _void_ *`delete`* (  ) ====
-  (non-PHPdoc)
+(non-PHPdoc)
  ==== *public* _[DOCCore#SQLRecord SQLRecord]_ *`doDelete`* (  ) ====
-  Preform a delete on the table
+Preform a delete on the table
  ==== *public* _string_ *`getAction`* ( _int_ `$mode` ) ====
-  Mapping of the action to the actuly hidden field content.
+Mapping of the action to the actuly hidden field content.
 When in need of custom mapping, like if you have two tables for one component, override this method
 == UsersComponent ==
 ===== ,,class,, UsersComponent ,,extends,, [DOCCore#Component Component] =====
@@ -35,42 +35,42 @@ system, these users can be assigned a name and password and privilages. If
 the group component is installed, privilages will be delegated there
  ==== *public* _void_ *`__construct`* (  ) ====
  ==== *private* _void_ *`login`* ( _array_ `$request`, _string_ `$redirect` ) ====
-  Internal function to handle login. This checks user and password and
+Internal function to handle login. This checks user and password and
 if they are filled in or throws and FormException otherwise.
  ==== *public* _void_ *`action_login`* ( _Smarty_ `$smarty`, _[DOCDefault#SmartyPageLoader SmartyPageLoader]_ `$smartyLoader`, _array_ `$request` ) ====
-  Login and redirect to the admin section
+Login and redirect to the admin section
  ==== *public* _void_ *`action_admin_login`* ( _Smarty_ `$smarty`, _[DOCDefault#SmartyPageLoader SmartyPageLoader]_ `$smartyLoader`, _array_ `$request` ) ====
-  Login and redirect to the index
+Login and redirect to the index
  ==== *public* _void_ *`action_add`* ( _Smarty_ `$smarty`, _[DOCDefault#SmartyPageLoader SmartyPageLoader]_ `$smartyLoader`, _array_ `$request` ) ====
-  Add a user
+Add a user
  ==== *public* _void_ *`action_edit`* ( _Smarty_ `$smarty`, _[DOCDefault#SmartyPageLoader SmartyPageLoader]_ `$smartyLoader`, _array_ `$request` ) ====
-  Edit a user
+Edit a user
  ==== *public* _void_ *`action_delete`* ( _Smarty_ `$smarty`, _[DOCDefault#SmartyPageLoader SmartyPageLoader]_ `$smartyLoader`, _array_ `$request` ) ====
-  Delete a user
+Delete a user
  ==== *public* _void_ *`action_privadd`* ( _Smarty_ `$smarty`, _[DOCDefault#SmartyPageLoader SmartyPageLoader]_ `$smartyLoader`, _array_ `$request` ) ====
-  Add a privilege
+Add a privilege
  ==== *public* _void_ *`action_privedit`* ( _Smarty_ `$smarty`, _[DOCDefault#SmartyPageLoader SmartyPageLoader]_ `$smartyLoader`, _array_ `$request` ) ====
-  Edit a privilege
+Edit a privilege
  ==== *public* _void_ *`action_privdelete`* ( _Smarty_ `$smarty`, _[DOCDefault#SmartyPageLoader SmartyPageLoader]_ `$smartyLoader`, _array_ `$request` ) ====
-  Delete a privilege
+Delete a privilege
  ==== *public* _array_ *`getPrivilageMapping`* ( _int_ `$privileges` ) ====
-  Get the privileges the user has
+Get the privileges the user has
  ==== *public* _bool_ *`auth_login`* ( _string_ `$user_name`, _string_ `$user_pass` ) ====
-  Authenticate a user
+Authenticate a user
  ==== *public* _void_ *`auth_logout`* (  ) ====
-  Log a user out
+Log a user out
  ==== *public* _void_ *`registerMenuItems`* ( _[DOCComponentsPageUtil#Menu Menu]_ `$menu` ) ====
-  Register menu items for this component
+Register menu items for this component
 == UsersTable ==
 ===== ,,class,, UsersTable ,,extends,, [DOCCore#Table Table] =====
 User table, this handels all interaction with the user table in the database
  ==== *public* _void_ *`__construct`* (  ) ====
-  Constructor
+Constructor
  ==== *protected* _void_ *`select`* (  ) ====
-  (non-PHPdoc)
+(non-PHPdoc)
  ==== *protected* _void_ *`insert`* (  ) ====
-  (non-PHPdoc)
+(non-PHPdoc)
  ==== *protected* _void_ *`update`* (  ) ====
-  (non-PHPdoc)
+(non-PHPdoc)
  ==== *protected* _void_ *`delete`* (  ) ====
-  (non-PHPdoc)
+(non-PHPdoc)

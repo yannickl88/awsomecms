@@ -10,6 +10,6 @@ included in the distribution.
 The following functions are located in this package
 === Functions: ===
  ===== _void_ *`smarty_function_contactform`* ( _array_ `$params`, _Smarty_ `$smarty` ) =====
-  Contact for tag, this addes a form to a page
+Contact for tag, this addes a form to a page
 
 params: form

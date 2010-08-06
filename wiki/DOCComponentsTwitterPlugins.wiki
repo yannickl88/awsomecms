@@ -10,4 +10,4 @@ included in the distribution.
 The following functions are located in this package
 === Functions: ===
  ===== _string_ *`smarty_function_twitter`* ( _array_ `$params`, _Smarty_ `$smarty` ) =====
-  Add the latest twitter message to your site
+Add the latest twitter message to your site

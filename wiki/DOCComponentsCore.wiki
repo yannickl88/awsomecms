@@ -13,62 +13,62 @@ The following classes are located in this package
 ===== ,,class,, AuthTable ,,extends,, [DOCCore#Table Table] =====
 Auth table, this handels all interaction with the auth table in the database
  ==== *public* _void_ *`__construct`* (  ) ====
-  Constructor
+Constructor
  ==== *protected* _void_ *`select`* (  ) ====
-  (non-PHPdoc)
+(non-PHPdoc)
  ==== *protected* _void_ *`insert`* (  ) ====
-  (non-PHPdoc)
+(non-PHPdoc)
  ==== *protected* _void_ *`update`* (  ) ====
-  (non-PHPdoc)
+(non-PHPdoc)
  ==== *protected* _void_ *`delete`* (  ) ====
-  (non-PHPdoc)
+(non-PHPdoc)
 == ComponentsTable ==
 ===== ,,class,, ComponentsTable ,,extends,, [DOCCore#Table Table] =====
 Core table, this handels all interaction with the core table in the database
  ==== *public* _void_ *`__construct`* (  ) ====
-  Constructor
+Constructor
  ==== *protected* _void_ *`select`* (  ) ====
-  (non-PHPdoc)
+(non-PHPdoc)
  ==== *protected* _void_ *`insert`* (  ) ====
-  (non-PHPdoc)
+(non-PHPdoc)
  ==== *protected* _void_ *`update`* (  ) ====
-  (non-PHPdoc)
+(non-PHPdoc)
  ==== *protected* _void_ *`delete`* (  ) ====
-  (non-PHPdoc)
+(non-PHPdoc)
 == CoreComponent ==
 ===== ,,class,, CoreComponent ,,extends,, [DOCCore#Component Component] =====
 Core component class, this includes all the logic for the core actions
  ==== *public* _void_ *`__construct`* (  ) ====
-  Constructor
+Constructor
  ==== *public* _void_ *`register`* ( _[DOCCore#RegisterManager RegisterManager]_ `$registerManager` ) ====
-  Register actions/hooks/mappings to the framework
+Register actions/hooks/mappings to the framework
  ==== *public* _void_ *`action_index`* ( _Smarty_ `$smarty`, _[DOCDefault#SmartyPageLoader SmartyPageLoader]_ `$smartyLoader`, _array_ `$request` ) ====
-  Index action, this is used when a page is shown by the cms
+Index action, this is used when a page is shown by the cms
  ==== *public* _void_ *`action_session`* ( _Smarty_ `$smarty`, _[DOCDefault#SmartyPageLoader SmartyPageLoader]_ `$smartyLoader`, _array_ `$request` ) ====
-  Session action, this is used to set some data for the templates, like if a user is logged in or if the page is part of the admin section.
+Session action, this is used to set some data for the templates, like if a user is logged in or if the page is part of the admin section.
  ==== *public* _void_ *`action_layout`* ( _Smarty_ `$smarty`, _[DOCDefault#SmartyPageLoader SmartyPageLoader]_ `$smartyLoader` ) ====
-  Layout action, this is used for the layout mapping page.
+Layout action, this is used for the layout mapping page.
  ==== *public* _void_ *`action_install`* ( _Smarty_ `$smarty`, _[DOCDefault#SmartyPageLoader SmartyPageLoader]_ `$smartyLoader`, _array_ `$request` ) ====
-  Install action, this is used for the update manager.
+Install action, this is used for the update manager.
  ==== *public* _void_ *`action_update`* ( _Smarty_ `$smarty`, _[DOCDefault#SmartyPageLoader SmartyPageLoader]_ `$smartyLoader`, _array_ `$request` ) ====
-  Update action, this is used for the update manager.
+Update action, this is used for the update manager.
  ==== *public* _void_ *`action_components`* ( _Smarty_ `$smarty`, _[DOCDefault#SmartyPageLoader SmartyPageLoader]_ `$smartyLoader`, _array_ `$request` ) ====
-  Components action, this is used for the compontent settings page
+Components action, this is used for the compontent settings page
  ==== *public* _void_ *`action_auth`* (  ) ====
  ==== *public* _void_ *`action_deleteinstall`* (  ) ====
  ==== *public* _void_ *`action_getform`* (  ) ====
  ==== *public* _void_ *`registerMenuItems`* ( _[DOCComponentsPageUtil#Menu Menu]_ `$menu` ) ====
-  Register menu items for this component
+Register menu items for this component
 == TagsTable ==
 ===== ,,class,, TagsTable ,,extends,, [DOCCore#Table Table] =====
 Auth table, this handels all interaction with the auth table in the database
  ==== *public* _void_ *`__construct`* (  ) ====
-  Constructor
+Constructor
  ==== *protected* _void_ *`select`* (  ) ====
-  (non-PHPdoc)
+(non-PHPdoc)
  ==== *protected* _void_ *`insert`* (  ) ====
-  (non-PHPdoc)
+(non-PHPdoc)
  ==== *protected* _void_ *`update`* (  ) ====
-  (non-PHPdoc)
+(non-PHPdoc)
  ==== *protected* _void_ *`delete`* (  ) ====
-  (non-PHPdoc)
+(non-PHPdoc)

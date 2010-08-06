@@ -7,223 +7,54 @@ _Package: 'default'_
 The following functions are located in this package
 === Functions: ===
  ===== _void_ *`generateTranslateable`* (  ) =====
-  
+
  ===== _void_ *`generateNewLangFile`* (  ) =====
-  
+
 The following classes are located in this package
 === Classes: ===
 == FileItem ==
 ===== ,,class,, FileItem ,,extends,, [DOCComponentsPageUtil#TreeNode TreeNode] =====
 
  ==== *public* _void_ *`__construct`* ( _object_ `$record` ) ====
-  Constructor
+Constructor
  ==== *public* _string_ *`toJavascript`* (  ) ====
-  Create the javascript code for the tree
+Create the javascript code for the tree
 == ImageFolder ==
 ===== ,,class,, ImageFolder ,,extends,, [DOCComponentsPageUtil#Folder Folder] =====
 
  ==== *public* _void_ *`__construct`* ( _object_ `$record` ) ====
-  Constructor
+Constructor
  ==== *public* _void_ *`registerIcons`* (  ) ====
-  See parent
+See parent
  ==== *public* _string_ *`toJavascript`* (  ) ====
-  Create the javascript code for the tree
+Create the javascript code for the tree
 == UploadFolder ==
 ===== ,,class,, UploadFolder ,,extends,, [DOCComponentsPageUtil#Folder Folder] =====
 
  ==== *public* _void_ *`__construct`* ( _object_ `$record` ) ====
-  Constructor
+Constructor
  ==== *public* _void_ *`registerIcons`* (  ) ====
-  See parent
+See parent
  ==== *public* _string_ *`toJavascript`* (  ) ====
-  Create the javascript code for the tree
+Create the javascript code for the tree
 == NewsItem ==
 ===== ,,class,, NewsItem ,,extends,, [DOCComponentsPageUtil#TreeNode TreeNode] =====
 The node for the page items
  ==== *public* _void_ *`__construct`* ( _object_ `$record` ) ====
-  Constructor
+Constructor
  ==== *public* _void_ *`registerIcons`* (  ) ====
-  See parent
+See parent
  ==== *public* _string_ *`toJavascript`* (  ) ====
-  Create the javascript code for the tree
+Create the javascript code for the tree
 == NewsFolder ==
 ===== ,,class,, NewsFolder ,,extends,, [DOCComponentsPageUtil#TreeNode TreeNode] =====
 
  ==== *public* _void_ *`__construct`* ( _object_ `$record` ) ====
-  Constructor
+Constructor
  ==== *public* _void_ *`registerIcons`* (  ) ====
-  See parent
+See parent
  ==== *public* _string_ *`toJavascript`* (  ) ====
-  Create the javascript code for the tree
-== Twitter ==
-===== ,,class,, Twitter =====
-Twitter class
-
-This source file can be used to communicate with Twitter (http://twitter.com)
-
-The class is documented in the file itself. If you find any bugs help me out and report them. Reporting can be done by sending an email to php-twitter-bugs[at]verkoyen[dot]eu.
-If you report a bug, make sure you give me enough information (include your code).
-
-Changelog since 1.0.0
-- dont send postfields as an array, pass them as an urldecoded string (otherwise @ won't work
-
-Changelog since 1.0.1
-- fixed a bug in verifyCredentials, it return a boolean instead of throwing an exception when the credentials are invalid (thx @Rahul)
-
-Changelog since 1.0.2
-- sinceId is from now on treated as a string instead of int. (thx @Paul Matthews)
-
-Changelog since 1.0.3
-- rewrote some comments
-- fixed some PHPDoc
-- it seems Twitter removed the $since-parameter, so I removed it from getFriendsTimeline, getUserTimeline, getDirectMessages, getSentDirectMessages, ...
-- implemented maxId into getFriendsTimeline
-- renamed getReplies to getMentions to reflect the Twitter API
-- added $count for getDirectMessages, getSentDirectMessages, ...
-- added getFriendship which shows more details about a friendship
-- added getFriendIds and getFollowerIds which return only the ids instead of a user-array
-- added existsBlock which test if a block exists
-- added getBlocked, which returns an array of blocked user-arrays
-- added getBlockedIds, which returns an array of blocked ids
-
-License
-Copyright (c) 2008, Tijs Verkoyen. All rights reserved.
-
-Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:
-
-1. Redistributions of source code must retain the above copyright notice, this list of conditions and the following disclaimer.
-2. Redistributions in binary form must reproduce the above copyright notice, this list of conditions and the following disclaimer in the documentation and/or other materials provided with the distribution.
-3. The name of the author may not be used to endorse or promote products derived from this software without specific prior written permission.
-
-This software is provided by the author "as is" and any express or implied warranties, including, but not limited to, the implied warranties of merchantability and fitness for a particular purpose are disclaimed. In no event shall the author be liable for any direct, indirect, incidental, special, exemplary, or consequential damages (including, but not limited to, procurement of substitute goods or services; loss of use, data, or profits; or business interruption) however caused and on any theory of liability, whether in contract, strict liability, or tort (including negligence or otherwise) arising in any way out of the use of this software, even if advised of the possibility of such damage.
- ==== *public* _void_ *`__construct`* ( _`*`_ `string[optional] $username`, _`*`_ `string[optional] $password` ) ====
-  Default constructor
- ==== *private* _string_ *`doCall`* ( _string_ `$url`, _`*`_ `array[optiona] $aParameters`, _`*`_ `bool[optional] $authenticate`, _`*`_ `bool[optional] $usePost` ) ====
-  Make the call
- ==== *private* _string_ *`getPassword`* (  ) ====
-  Get the password
- ==== *public* _int_ *`getTimeOut`* (  ) ====
-  Get the timeout
- ==== *public* _string_ *`getUserAgent`* (  ) ====
-  Get the useragent
- ==== *private* _string_ *`getUsername`* (  ) ====
-  Get the username
- ==== *private* _array_ *`messageXMLToArray`* ( _SimpleXMLElement_ `$xml` ) ====
-  Converts a piece of XML into a message-array
- ==== *public* _void_ *`setPassword`* ( _string_ `$password` ) ====
-  Set password
- ==== *public* _void_ *`setTimeOut`* ( _int_ `$seconds` ) ====
-  Set the timeout
- ==== *public* _void_ *`setUserAgent`* ( _string_ `$userAgent` ) ====
-  Set the user-agent for you application
-It will be appended to ours
- ==== *public* _void_ *`setUsername`* ( _string_ `$username` ) ====
-  Set username
- ==== *private* _array_ *`statusXMLToArray`* ( _SimpleXMLElement_ `$xml` ) ====
-  Converts a piece of XML into a status-array
- ==== *private* _array_ *`userXMLToArray`* ( _SimpleXMLElement_ `$xml` ) ====
-  Converts a piece of XML into an user-array
- ==== *public* _array_ *`getPublicTimeline`* (  ) ====
-  Returns the 20 most recent statuses from non-protected users who have set a custom user icon.
-Note that the public timeline is cached for 60 seconds so requesting it more often than that is a waste of resources.
- ==== *public* _array_ *`getFriendsTimeline`* ( _`*`_ `string[optional] $sinceId    Returns only statuses with an id greater than (that is, more recent than) the specified $sinceId.`, _`*`_ `string[optional] $maxId    Returns only statuses with an ID less than (that is, older than) or equal to the specified $maxId.`, _`*`_ `int[optional] $count    Specifies the number of statuses to retrieve. May not be greater than 200.`, _`*`_ `int[optional] $page` ) ====
-  Returns the 20 most recent statuses posted by the authenticating user and that user's friends.
-This is the equivalent of /home on the Web.
- ==== *public* _array_ *`getUserTimeline`* ( _`*`_ `string[optional] $id    Specifies the id or screen name of the user for whom to return the friends_timeline.`, _`*`_ `string[optional] $sinceId    Returns only statuses with an id greater than (that is, more recent than) the specified $sinceId.`, _`*`_ `string[optional] $maxId    Returns only statuses with an ID less than (that is, older than) or equal to the specified $maxId.`, _`*`_ `int[optional] $count    Specifies the number of statuses to retrieve. May not be greater than 200.`, _`*`_ `int[optional] $page    Specifies the page or results to retrieve.` ) ====
-  Returns the 20 most recent statuses posted from the authenticating user. It's also possible to request another user's timeline via the id parameter below.
-This is the equivalent of the Web /archive page for your own user, or the profile page for a third party.
- ==== *public* _array_ *`getMentionsReplies`* ( _`*`_ `string[optional] $sinceId    Returns only statuses with an id greater than (that is, more recent than) the specified $sinceId.`, _`*`_ `string[optional] $maxId    Returns only statuses with an ID less than (that is, older than) or equal to the specified $maxId.`, _`*`_ `int[optional] $count    Specifies the number of statuses to retrieve. May not be greater than 200.`, _`*`_ `int[optional] $page    Specifies the page or results to retrieve.` ) ====
-  Returns the 20 most recent mentions (status containing @username) for the authenticating user.
- ==== *public* _array_ *`getStatus`* ( _int_ `$id` ) ====
-  Returns a single status, specified by the id parameter below.
- ==== *public* _array_ *`updateStatus`* ( _string_ `$status`, _`*`_ `int[optional] $inReplyToId    The id of an existing status that the status to be posted is in reply to.` ) ====
-  Updates the authenticating user's status.
-A status update with text identical to the authenticating user's current status will be ignored.
- ==== *public* _array_ *`deleteStatus`* ( _`*`_ `int[optional] $id` ) ====
-  Destroys the status specified by the required $id parameter.
-The authenticating user must be the author of the specified status.
- ==== *public* _array_ *`getUser`* ( _string_ `$id` ) ====
-  Returns extended information of a given user, specified by id or screen name.
-This information includes design settings, so third party developers can theme their widgets according to a given user's preferences.
-You must be properly authenticated to request the page of a protected user.
- ==== *public* _array_ *`getFriends`* ( _`*`_ `string[optional] $id    The id or screen name of the user for whom to request a list of friends.`, _`*`_ `int[optional] $page    Specifies the page of friends to receive.` ) ====
-  Returns up to 100 of the authenticating user's friends who have most recently updated.
-It's also possible to request another user's recent friends list via the $id parameter.
- ==== *public* _array_ *`getFollowers`* ( _`*`_ `string[optional] $id     The id or screen name of the user for whom to request a list of followers.`, _`*`_ `int[optional] $page` ) ====
-  Returns the authenticating user's followers.
- ==== *public* _array_ *`getDirectMessages`* ( _`*`_ `string[optional] $sinceId    Returns only direct messages with an id greater than (that is, more recent than) the specified $sinceId.`, _`*`_ `string[optional] $maxId    Returns only statuses with an ID less than (that is, older than) or equal to the specified $maxId.`, _`*`_ `int[optional] $count    Specifies the number of statuses to retrieve. May not be greater than 200.`, _`*`_ `int[optional] $page` ) ====
-  Returns a list of the 20 most recent direct messages sent to the authenticating user.
- ==== *public* _array_ *`getSentDirectMessages`* ( _`*`_ `string[optional] $sinceId    Returns only sent direct messages with an id greater than (that is, more recent than) the specified $sinceId.`, _`*`_ `string[optional] $maxId    Returns only statuses with an ID less than (that is, older than) or equal to the specified $maxId.`, _`*`_ `int[optiona] $count    Specifies the number of direct messages to retrieve. May not be greater than 200.`, _`*`_ `int[optional] $page` ) ====
-  Returns a list of the 20 most recent direct messages sent by the authenticating user.
- ==== *public* _array_ *`sendDirectMessage`* ( _string_ `$id`, _string_ `$text` ) ====
-  Sends a new direct message to the specified user from the authenticating user.
- ==== *public* _array_ *`deleteDirectMessage`* ( _string_ `$id` ) ====
-  Destroys the direct message.
-The authenticating user must be the recipient of the specified direct message.
- ==== *public* _array_ *`createFriendship`* ( _string_ `$id`, _`*`_ `bool[optional] $follow    Enable notifications for the target user in addition to becoming friends.` ) ====
-  Befriends the user specified in the id parameter as the authenticating user.
- ==== *public* _array_ *`deleteFriendship`* ( _string_ `$id` ) ====
-  Discontinues friendship with the user.
- ==== *public* _bool_ *`existsFriendship`* ( _string_ `$id`, _string_ `$friendId` ) ====
-  Tests if a friendship exists between two users.
- ==== *public* _array_ *`getFriendship`* ( _string_ `$id`, _string_ `$friendId` ) ====
-  Returns detailed information about the relationship between two users.
- ==== *public* _array_ *`getFriendIds`* ( _`*`_ `string[optional] $id    The id or screen name of the user for whom to request a list of friends.`, _`*`_ `int[optional] $page    Specifies the page number of the results beginning at 1. A single page contains 5000 ids. This is recommended for users with large ID lists. If not provided all ids are returned. (Please note that the result set isn't guaranteed to be 5000 every time as suspended users will be filtered out.)` ) ====
-  Returns an array of numeric IDs for every user the specified user is following.
- ==== *public* _array_ *`getFollowerIds`* ( _`*`_ `string[optional] $id    The id or screen name  of the user to retrieve the friends ID list for.`, _`*`_ `int[optional] $page    Specifies the page number of the results beginning at 1. A single page contains 5000 ids. This is recommended for users with large ID lists. If not provided all ids are returned. (Please note that the result set isn't guaranteed to be 5000 every time as suspended users will be filtered out.)` ) ====
-  Returns an array of numeric IDs for every user following the specified user.
- ==== *public* _bool_ *`verifyCrendentials`* (  ) ====
-  Verifies your credentials
-Use this method to test if supplied user credentials are valid.
- ==== *public* _array_ *`getRateLimitStatus`* (  ) ====
-  Returns the remaining number of API requests available to the requesting user before the API limit is reached for the current hour.
- ==== *public* _void_ *`endSession`* (  ) ====
-  Ends the session of the authenticating user, returning a null cookie.
-Use this method to sign users out of client-facing applications like widgets.
- ==== *public* _array_ *`updateDeliveryDevice`* ( _string_ `$device` ) ====
-  Sets which device Twitter delivers updates to for the authenticating user.
-Sending none as the device parameter will disable IM or SMS updates.
- ==== *public* _array_ *`updateProfileColors`* ( _`*`_ `string[optiona] $backgroundColor`, _`*`_ `string[optiona] $textColor`, _`*`_ `string[optiona] $linkColor`, _`*`_ `string[optiona] $sidebarBackgroundColor`, _`*`_ `string[optiona] $sidebarBorderColor` ) ====
-  Sets one or more hex values that control the color scheme of the authenticating user's profile page on twitter.com.
-Only the parameters specified will be updated.
- ==== *public* _void_ *`updateProfileImage`* ( _string_ `$image` ) ====
-  Updates the authenticating user's profile image.
-Expects raw multipart data, not a URL to an image.
- ==== *public* _void_ *`updateProfileBackgroundImage`* ( _string_ `$image` ) ====
-  Updates the authenticating user's profile background image.
-Expects raw multipart data, not a URL to an image.
- ==== *public* _array_ *`updateProfile`* ( _`*`_ `string[optional] $name`, _`*`_ `string[optional] $email`, _`*`_ `string[optional] $url`, _`*`_ `string[optional] $location`, _`*`_ `string[optional] $description` ) ====
-  Sets values that users are able to set under the "Account" tab of their settings page.
-Only the parameters specified will be updated.
- ==== *public* _array_ *`getFavorites`* ( _`*`_ `string[optional] $id    The id or screen name of the user for whom to request a list of favorite statuses.`, _`*`_ `int[optional] $page` ) ====
-  Returns the 20 most recent favorite statuses for the authenticating user or user specified by the $id parameter
- ==== *public* _array_ *`createFavorite`* ( _string_ `$id` ) ====
-  Favorites the status specified in the id parameter as the authenticating user.
- ==== *public* _array_ *`deleteFavorite`* ( _string_ `$id` ) ====
-  Un-favorites the status specified in the id parameter as the authenticating user.
- ==== *public* _void_ *`follow`* ( _string_ `$id` ) ====
-  Enables notifications for updates from the specified user to the authenticating user.
-This method requires the authenticated user to already be friends with the specified user otherwise the error "there was a problem following the specified user" will be returned.
- ==== *public* _void_ *`unfollow`* ( _string_ `$id` ) ====
-  Disables notifications for updates from the specified user to the authenticating user.
-This method requires the authenticated user to already be friends with the specified user otherwise the error "there was a problem following the specified user" will be returned.
- ==== *public* _void_ *`createBlock`* ( _string_ `$id` ) ====
-  Blocks the user specified in the id parameter as the authenticating user.
- ==== *public* _void_ *`deleteBlock`* ( _string_ `$id` ) ====
-  Un-blocks the user specified in the id parameter as the authenticating user.
- ==== *public* _bool_ *`existsBlock`* ( _string_ `$id` ) ====
-  Returns if the authenticating user is blocking a target user.
- ==== *public* _array_ *`getBlocked`* ( _`*`_ `int[optional] $page    Specifies the page number of the results beginning at 1. A single page contains 20 ids.` ) ====
-  Returns an array of user that the authenticating user is blocking.
- ==== *public* _array_ *`getBlockedIds`* (  ) ====
-  Returns an array of numeric user ids the authenticating user is blocking.
- ==== *public* _bool_ *`test`* (  ) ====
-  Test the connection to Twitter
-== TwitterException ==
-===== ,,class,, TwitterException ,,extends,, Exception =====
-Twitter Exception class
- ==== *public* _void_ *`__construct`* ( _`*`_ `string[optional] $message`, _`*`_ `int[optional] $code` ) ====
-  Default constructor
+Create the javascript code for the tree
 == DeployAction ==
 ===== _abstract_ ,,class,, DeployAction ,,extends,, [DOCLibs#CLIAction CLIAction] =====
 This file is part of the A.W.S.O.M.E.cms distribution.
@@ -231,35 +62,35 @@ Detailed copyright and licensing information can be found
 in the doc/COPYRIGHT and doc/LICENSE files which should be
 included in the distribution.
  ==== *public* _void_ *`__construct`* (  ) ====
-  Constructor
+Constructor
  ==== _void_ *`setup`* ( _[DOCLibs#CLI CLI]_ `$cli` ) ====
-  Setup function, you can override this to add setup stuff. This is
+Setup function, you can override this to add setup stuff. This is
 called before the exec
  ==== _void_ *`cleanup`* ( _[DOCLibs#CLI CLI]_ `$cli` ) ====
-  Cleanup function, you can override this to add cleanup stuff. This is
+Cleanup function, you can override this to add cleanup stuff. This is
 called after the exec
 == Usage ==
 ===== ,,class,, Usage ,,extends,, [DOCLibs#CLIAction CLIAction] =====
 
  ==== *public* _void_ *`exec`* ( _[DOCLibs#CLI CLI]_ `$cli`, _string_ `$action` ) ====
-  (non-PHPdoc)
+(non-PHPdoc)
 == Pack ==
 ===== ,,class,, Pack ,,extends,, [DOCDefault#DeployAction DeployAction] =====
 
  ==== *public* _void_ *`exec`* ( _[DOCLibs#CLI CLI]_ `$cli`, _string_ `$action` ) ====
-  (non-PHPdoc)
+(non-PHPdoc)
 == Update ==
 ===== ,,class,, Update ,,extends,, [DOCDefault#DeployAction DeployAction] =====
 
  ==== *public* _void_ *`exec`* ( _[DOCLibs#CLI CLI]_ `$cli`, _string_ `$action` ) ====
-  (non-PHPdoc)
+(non-PHPdoc)
 == Release ==
 ===== ,,class,, Release ,,extends,, [DOCDefault#DeployAction DeployAction] =====
 
  ==== *public* _void_ *`exec`* ( _[DOCLibs#CLI CLI]_ `$cli`, _string_ `$action` ) ====
-  (non-PHPdoc)
+(non-PHPdoc)
 == Patch ==
 ===== ,,class,, Patch ,,extends,, [DOCLibs#CLIAction CLIAction] =====
 
  ==== *public* _void_ *`exec`* ( _[DOCLibs#CLI CLI]_ `$cli`, _string_ `$action` ) ====
-  (non-PHPdoc)
+(non-PHPdoc)

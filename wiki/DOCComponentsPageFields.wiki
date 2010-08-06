@@ -13,8 +13,8 @@ The following classes are located in this package
 ===== ,,class,, LocationField ,,extends,, [DOCCoreFields#Field Field] =====
 Field for selecting the location within the site
  ==== *public* _void_ *`__construct`* ( _string_ `$name`, _string_ `$displayName`, _int_ `$style` ) ====
-  Constructor
+Constructor
  ==== *protected* _string_ *`toHTML_add`* (  ) ====
-  Create a HTML representation of add field
+Create a HTML representation of add field
  ==== *protected* _string_ *`toHTML_edit`* (  ) ====
-  Create a HTML representation of edit field
+Create a HTML representation of edit field

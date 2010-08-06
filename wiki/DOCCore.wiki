@@ -10,39 +10,39 @@ included in the distribution.
 The following functions are located in this package
 === Functions: ===
  ===== _array_ *`getPrivilageMapping`* ( __ `$privileges` ) =====
-  Get the mapping of all privilages and if the user has it
+Get the mapping of all privilages and if the user has it
  ===== _bool_ *`auth_login`* ( _string_ `$user_name`, _string_ `$user_pass` ) =====
-  Log the user in
+Log the user in
  ===== _bool_ *`auth_logout`* (  ) =====
-  Log the user out
+Log the user out
  ===== _void_ *`import`* ( _string_ `$file` ) =====
-  Import a file, with the root the framework root
+Import a file, with the root the framework root
  ===== _void_ *`importField`* ( _string_ `$field` ) =====
-  Import a field.
+Import a field.
 You can use <FieldName> for core fields and <component>.<FieldName> for component specific fields.
  ===== _string_ *`getFrameworkRoot`* (  ) =====
-  Get the root of the framework
+Get the root of the framework
  ===== _bool_ *`handleError`* ( _int_ `$errno`, _string_ `$errstr`, _string_ `$errfile`, _int_ `$errline` ) =====
-  Error handeler for the framework
+Error handeler for the framework
  ===== _array_ *`parseInfoFile`* ( _string_ `$file`, _string_ `$component` ) =====
-  Parse an info file from a component
+Parse an info file from a component
  ===== _string_ *`addSlashesConfig`* ( _string_ `$string` ) =====
-  Add slashes to a string only when magic_quotes_gpc is turned off.
+Add slashes to a string only when magic_quotes_gpc is turned off.
  ===== _array_ *`getActions`* ( _string_ `$component` ) =====
-  Get the actions of a give component
+Get the actions of a give component
  ===== _string_ *`urlEscape`* ( _string_ `$string` ) =====
-  Clean up a string so it can be validly passed in the url
+Clean up a string so it can be validly passed in the url
  ===== _void_ *`str_rand`* ( _int_ `$p` ) =====
-  Generate a random string
+Generate a random string
 The following classes are located in this package
 === Classes: ===
 == Authentication ==
 ===== ,,class,, Authentication =====
 Authentication class that is a facade for loggin in and out
  ==== *public* *static* _bool_ *`login`* ( _string_ `$user_name`, _string_ `$user_pass` ) ====
-  Login, and setting the user session. This calls the component set in the config
+Login, and setting the user session. This calls the component set in the config
  ==== *public* *static* _bool_ *`logout`* (  ) ====
-  Logout, and clearing the user session. This calls the component set in the config
+Logout, and clearing the user session. This calls the component set in the config
 == Cache ==
 ===== ,,class,, Cache =====
 Cache class which handels quick caching of data
@@ -50,68 +50,68 @@ NOTE: data is serialized using the build-in PHP serialize and unserialize
 functions, make sure your data can be serialized.
 More info: http://php.net/manual/en/language.oop5.serialization.php
  ==== *public* *static* _string_ *`getCacheDir`* (  ) ====
-  Get the cache directory
+Get the cache directory
  ==== *public* *static* _`*`_ *`get`* ( _string_ `$key` ) ====
-  Get cached data
+Get cached data
  ==== *public* *static* _bool_ *`has`* ( _string_ `$key` ) ====
-  Check if there is cached data
+Check if there is cached data
  ==== *public* *static* _void_ *`set`* ( _string_ `$key`, _string_ `$value` ) ====
-  Set cached data
+Set cached data
  ==== *public* *static* _void_ *`clear`* ( _string_ `$key` ) ====
-  Clear cached data
+Clear cached data
 == Component ==
 ===== ,,class,, Component =====
 Superclass for all the components
  ==== *public* _void_ *`__construct`* ( _string_ `$component` ) ====
-  constructor
+constructor
  ==== *public* *static* _[DOCCore#Component Component]_ *`init`* ( _string_ `$component` ) ====
-  Initialisation of the component corresponding with the give name
+Initialisation of the component corresponding with the give name
  ==== *public* *static* _[DOCCore#Component Component]_ *`createComponent`* ( _string_ `$name`, _string_ `$path` ) ====
-  Create a component instance based on the name and the path
+Create a component instance based on the name and the path
 
 NOTE: do not use this, use Component::init().
 Only use this to resolve ciclur reference from the register manager
  ==== *protected* _void_ *`setDefaultRequest`* ( _string_ `$request` ) ====
-  Set the default request that is linked to the component, default is the same as the component name
+Set the default request that is linked to the component, default is the same as the component name
  ==== *protected* _void_ *`redirect`* ( _string_ `$url`, _array_ `$data` ) ====
-  Do an redirect
+Do an redirect
  ==== *protected* _void_ *`ajax`* ( _`*`_ `$data` ) ====
-  Do an ajax return (just data, no HTML) in json format
+Do an ajax return (just data, no HTML) in json format
  ==== *protected* _array_ *`getFields`* (  ) ====
-  Get the fields for this component
+Get the fields for this component
  ==== *protected* _void_ *`setCurrentTable`* ( _string_ `$table` ) ====
-  Set the current table to be validated against
+Set the current table to be validated against
  ==== *public* _void_ *`registerMenuItems`* ( _[DOCComponentsPageUtil#Menu Menu]_ `$menu` ) ====
-  Register menu items for this component
+Register menu items for this component
  ==== *public* _void_ *`registerTreeItems`* ( _[DOCComponentsPageUtil#Tree Tree]_ `$tree` ) ====
-  Register tree items for this component
+Register tree items for this component
  ==== *public* _void_ *`register`* ( _[DOCCore#RegisterManager RegisterManager]_ `$registerManager` ) ====
-  Register actions/hooks/mappings to the framework
+Register actions/hooks/mappings to the framework
  ==== *public* _void_ *`execCron`* (  ) ====
-  Execute a task for the cron. This called in the interval secified in the config files.
+Execute a task for the cron. This called in the interval secified in the config files.
 == Config ==
 ===== ,,class,, Config =====
 Configuration class, this is used to retrive all the data from seperate config files
  ==== *public* *static* _[DOCCore#Config Config]_ *`getInstance`* (  ) ====
-  singelton
+singelton
  ==== *public* *static* _`*`_ *`get`* ( _string_ `$key`, _`*`_ `$default`, _string_ `$section` ) ====
-  Get something from the config
+Get something from the config
  ==== *private* _void_ *`__construct`* (  ) ====
-  constructor
+constructor
  ==== *public* _void_ *`inject`* ( _array_ `$data` ) ====
-  Inject data into the config. This can be used to add data to the
+Inject data into the config. This can be used to add data to the
 config while there is no config file to read yet.
  ==== *private* _void_ *`fillData`* (  ) ====
-  Populate the config from the ini files
+Populate the config from the ini files
  ==== *public* _`*`_ *`getItem`* ( _string_ `$key`, _`*`_ `$default`, _string_ `$section` ) ====
-  Get something from the config
+Get something from the config
  ==== *public* _void_ *`reload`* (  ) ====
-  reload the config values, this should be called when the config is changed during the execution of a page
+reload the config values, this should be called when the config is changed during the execution of a page
  ==== *public* _void_ *`set`* ( _string_ `$key`, _`*`_ `$default`, _string_ `$section` ) ====
-  Set something for the current request.
+Set something for the current request.
 Note that the value is not saved in a config.
  ==== *public* *static* _bool_ *`hasFlag`* ( _int_ `$int`, _int_ `$flag` ) ====
-  Check if a value contains another value. This is done using bitwise comparison
+Check if a value contains another value. This is done using bitwise comparison
 == ComponentNotFoundException ==
 ===== ,,class,, ComponentNotFoundException ,,extends,, Exception =====
 Exception thrown if the given component is not installed or found
@@ -128,71 +128,71 @@ Exception to be triggered when the current user does not have the proper authori
 ===== ,,class,, Notifications =====
 Manager for handeling notifications
  ==== *public* *static* _[DOCCore#Notifications Notifications]_ *`getInstance`* (  ) ====
-  Singelton
+Singelton
  ==== *private* _void_ *`__construct`* (  ) ====
-  Constructor
+Constructor
  ==== *public* _void_ *`addNotification`* ( _string_ `$mess`, _string_ `$url` ) ====
-  Add a notifications for a given URL
+Add a notifications for a given URL
  ==== *public* _bool_ *`hasNotification`* ( _string_ `$key` ) ====
-  Check if a given notification already exists
+Check if a given notification already exists
  ==== *public* _array_ *`getNotifications`* ( _string_ `$url` ) ====
-  Get the notifications for a give URL
+Get the notifications for a give URL
  ==== *public* _void_ *`save`* (  ) ====
-  Save the notications to the session.
+Save the notications to the session.
 
 Note: This is also called when changes happen inside this object
  ==== *public* _void_ *`removeNotification`* ( _string_ `$url` ) ====
-  remove the notifications for an URL
+remove the notifications for an URL
 == Controller ==
 ===== ,,class,, Controller =====
 Controller class that handels all the incomming data requests
  ==== *public* *static* _[DOCCore#Controller Controller]_ *`getInstance`* (  ) ====
-  Singelton
+Singelton
  ==== *public* _void_ *`dispatch`* ( _Smarty_ `$smarty`, _[DOCDefault#SmartyPageLoader SmartyPageLoader]_ `$smartyLoader` ) ====
-  Handle a request
+Handle a request
  ==== *public* _void_ *`setOutput`* ( __ `$string` ) ====
-  Set the output to be returned on completion, this is used so that on
+Set the output to be returned on completion, this is used so that on
 redirecting there is no content.
  ==== *public* _void_ *`appendOutput`* ( __ `$string` ) ====
-  Append the output to be returned on completion, this is used so that on
+Append the output to be returned on completion, this is used so that on
 redirecting there is no content.
  ==== *public* _`*`_ *`callAction`* ( _[DOCCore#Component Component]_ `$component`, _string_ `$action`, _[DOCCore#Request Request]_ `$request` ) ====
-  call an action on a component with it's hooks
+call an action on a component with it's hooks
  ==== *public* _void_ *`callTable`* ( _[DOCCore#Component Component]_ `$component`, _string_ `$action`, _[DOCCore#Request Request]_ `$request` ) ====
-  Handel the request made by the proxy
+Handel the request made by the proxy
  ==== *public* _[DOCCore#Request Request]_ *`getRequest`* (  ) ====
-  Get the request
+Get the request
  ==== *public* _Smarty_ *`getSmarty`* (  ) ====
-  Get the smarty object that is used for the page rendering
+Get the smarty object that is used for the page rendering
  ==== *public* _array_ *`getActionAuthExceptions`* (  ) ====
-  List of action that do not need auth checking
+List of action that do not need auth checking
  ==== *public* _void_ *`redirect`* ( _string_ `$url`, _array_ `$data` ) ====
-  Do an redirect, based on what is set.
+Do an redirect, based on what is set.
  ==== *public* _bool_ *`isRedirecting`* (  ) ====
-  Check if the page will be redirecting once done
+Check if the page will be redirecting once done
  ==== *public* _void_ *`setRedirect`* ( _string_ `$url` ) ====
-  Set the redirect, this can be used to prospone the redirect till everything is done executing
+Set the redirect, this can be used to prospone the redirect till everything is done executing
 == Debugger ==
 ===== ,,class,, Debugger =====
 Debugger class that handels all debug messages generated from the CMS
  ==== *public* *static* _[DOCCore#Debugger Debugger]_ *`getInstance`* (  ) ====
-  singelton
+singelton
  ==== *private* _void_ *`__construct`* (  ) ====
-  constructor
+constructor
  ==== *public* _`*`_ *`setRobot`* ( __ `$robot` ) ====
-  Set the robot that was used when visiting the site
+Set the robot that was used when visiting the site
  ==== *public* _void_ *`log`* ( _string_ `$message`, _int_ `$level` ) ====
-  Add a log message
+Add a log message
  ==== *public* _void_ *`warning`* ( _string_ `$message` ) ====
-  Add a warning message
+Add a warning message
  ==== *public* _void_ *`error`* ( _string_ `$message` ) ====
-  Add a error message
+Add a error message
  ==== *public* _void_ *`notice`* ( _string_ `$message` ) ====
-  Add a notice message
+Add a notice message
  ==== *public* _string_ *`__toString`* (  ) ====
-  Converet the debugger to a string representation
+Converet the debugger to a string representation
  ==== *public* _string_ *`renderDebug`* (  ) ====
-  Render the debug list as HTML
+Render the debug list as HTML
  ==== _void_ *`debug_hadCookie`* (  ) ====
  ==== _void_ *`debug_toggleDebug`* (  ) ====
  ==== *public* _void_ *`setType`* (  ) ====
@@ -201,72 +201,72 @@ Debugger class that handels all debug messages generated from the CMS
 Exception to be triggered when a field is not validly filled in
  ==== *public* _void_ *`__construct`* (  ) ====
  ==== *public* _string_ *`getField`* (  ) ====
-  Get the field that were not valid
+Get the field that were not valid
 == InvalidFormException ==
 ===== ,,class,, InvalidFormException ,,extends,, Exception =====
 Exception class when a form is not valid
  ==== *public* _void_ *`__construct`* (  ) ====
  ==== *public* _void_ *`addInvalidField`* ( _string_ `$field`, _string_ `$message` ) ====
-  Add field that is was not valid
+Add field that is was not valid
  ==== *public* _array_ *`getInvalidFields`* (  ) ====
-  Get the fields that were not valid
+Get the fields that were not valid
  ==== *public* _object_ *`getRecord`* (  ) ====
-  Get the record that was not valid
+Get the record that was not valid
  ==== *public* _string_ *`getRedirect`* (  ) ====
-  Get the page that should be redirected to
+Get the page that should be redirected to
  ==== *public* _void_ *`getTable`* (  ) ====
-  Get the table that the fields belong to
+Get the table that the fields belong to
  ==== *public* _array_ *`getRedirectData`* (  ) ====
-  Get the data that should be passed when redirecting
+Get the data that should be passed when redirecting
  ==== *public* _void_ *`setRedirectData`* ( _array_ `$redirectData` ) ====
-  Set the data that should be passed when redirecting
+Set the data that should be passed when redirecting
  ==== *public* _void_ *`__toString`* (  ) ====
 == Language ==
 ===== ,,class,, Language =====
 Multilanguage class which handels translation
  ==== *public* *static* _[DOCCore#Language Language]_ *`getInstance`* (  ) ====
-  Singelton
+Singelton
  ==== *public* *static* _string_ *`get`* ( _string_ `$key`, _string_ `$lang` ) ====
-  Static way to get a language string from a key
+Static way to get a language string from a key
  ==== *public* _string_ *`getText`* ( _string_ `$key`, _string_ `$lang` ) ====
-  Get a language string from a key
+Get a language string from a key
  ==== *public* _array_ *`getLangMap`* ( _string_ `$lang` ) ====
-  Get mapped keys to string for a given language
+Get mapped keys to string for a given language
  ==== *private* _void_ *`loadLang`* ( _string_ `$lang` ) ====
-  Load a language file based on the language key
+Load a language file based on the language key
 == RegisterManager ==
 ===== ,,class,, RegisterManager =====
 Manager for registering components, hooks, mappings and pages dynamicly
  ==== *public* *static* _[DOCCore#RegisterManager RegisterManager]_ *`getInstance`* (  ) ====
-  Singelton
+Singelton
  ==== *private* _void_ *`__construct`* (  ) ====
-  Construcor
+Construcor
  ==== *public* _void_ *`needsRevalidation`* (  ) ====
-  Check if the cache is avalible and usable
+Check if the cache is avalible and usable
  ==== *private* _void_ *`load`* (  ) ====
-  Load the content for the RegisterManager, either from cache or from the components
+Load the content for the RegisterManager, either from cache or from the components
  ==== *private* _void_ *`save`* (  ) ====
-  Cache the content of the RegisterManager
+Cache the content of the RegisterManager
  ==== *public* _void_ *`registerHook`* (  ) ====
-  Register a Hook
+Register a Hook
  ==== *public* _void_ *`registerPage`* ( _string_ `$location`, _`*`_ `$content` ) ====
-  Register a page
+Register a page
  ==== *public* _void_ *`registerURLMap`* ( _string_ `$pattern`, _string_ `$action`, _int_ `$sort` ) ====
-  Register an urlmapping
+Register an urlmapping
  ==== *public* _void_ *`getHook`* (  ) ====
-  Get a Hook
+Get a Hook
  ==== *public* _void_ *`getPage`* (  ) ====
-  Get a page
+Get a page
  ==== *public* _void_ *`getURLMap`* ( _string_ `$url`, _array_ `$request` ) ====
-  Get the mapping for an URL
+Get the mapping for an URL
  ==== *public* _array_ *`getComponenets`* (  ) ====
-  Get all components
+Get all components
  ==== *public* _bool_ *`hasComponent`* ( _string_ `$component` ) ====
-  Check if a component is installed
+Check if a component is installed
  ==== *public* _bool_ *`hasPage`* ( _string_ `$pageName`, _string_ `$pageLocation` ) ====
-  Check if a page is rgistered
+Check if a page is rgistered
  ==== *public* _bool_ *`hasHook`* ( _string_ `$component`, _string_ `$action`, _string_ `$prepost` ) ====
-  Check if a hook is rgistered
+Check if a hook is rgistered
 == ForbiddenException ==
 ===== ,,class,, ForbiddenException ,,extends,, Exception =====
 Exception thrown when you cannot make an call to that action
@@ -274,11 +274,11 @@ Exception thrown when you cannot make an call to that action
 ===== ,,class,, Request =====
 request object, datawrapper for an request call
  ==== *public* _void_ *`__construct`* (  ) ====
-  Constructor, all relevent data is gathered here
+Constructor, all relevent data is gathered here
  ==== *public* _bool_ *`isMadeByProxy`* (  ) ====
-  Check if the request is made through the proxy url
+Check if the request is made through the proxy url
  ==== *public* _string_ *`translateAction`* (  ) ====
-  translate the HTTP method to SQL method
+translate the HTTP method to SQL method
 == SQLExeption ==
 ===== ,,class,, SQLExeption ,,extends,, Exception =====
 SQLException when there was an error in executing a given Query
@@ -289,96 +289,96 @@ SQLException when there was a problem connecting to the database
 ===== ,,class,, SQLQuery =====
 Abstraction of a SQL query
  ==== *private* _void_ *`__construct`* ( _string_ `$action` ) ====
-  Constructor
+Constructor
  ==== *public* _string_ *`getAction`* (  ) ====
-  return the action for this query
+return the action for this query
  ==== *public* *static* _[DOCCore#SQLQuery SQLQuery]_ *`doSelect`* ( _string_ `$field`, _string_ `$distrinct` ) ====
-  Create a select query object
+Create a select query object
  ==== *public* *static* _[DOCCore#SQLQuery SQLQuery]_ *`doInsert`* ( _string_ `$field`, _string_ `$value` ) ====
-  Create a insert query object
+Create a insert query object
  ==== *public* *static* _[DOCCore#SQLQuery SQLQuery]_ *`doMInsert`* ( _array_ `$values` ) ====
-  Create a multiple insert query object
+Create a multiple insert query object
  ==== *public* *static* _[DOCCore#SQLQuery SQLQuery]_ *`doUpdate`* ( _string_ `$field`, _string_ `$value` ) ====
-  Create a update query object
+Create a update query object
  ==== *public* *static* _[DOCCore#SQLQuery SQLQuery]_ *`doDelete`* (  ) ====
-  Create a delete query object
+Create a delete query object
  ==== *public* _[DOCCore#SQLQuery SQLQuery]_ *`select`* ( _string_ `$field`, _bool_ `$distrinct` ) ====
-  add select statement
+add select statement
  ==== *public* _[DOCCore#SQLQuery SQLQuery]_ *`insert`* ( _string_ `$field`, _`*`_ `$value` ) ====
-  add insert statement
+add insert statement
  ==== *public* _[DOCCore#SQLQuery SQLQuery]_ *`mInsert`* ( _array_ `$values` ) ====
-  add insert statement
+add insert statement
  ==== *public* _[DOCCore#SQLQuery SQLQuery]_ *`insertWhenSet`* ( _string_ `$field`, _`*`_ `$value` ) ====
-  add insert statement, only when the value is set
+add insert statement, only when the value is set
  ==== *public* _[DOCCore#SQLQuery SQLQuery]_ *`update`* ( _string_ `$field`, _`*`_ `$value` ) ====
-  add update statement
+add update statement
  ==== *public* _[DOCCore#SQLQuery SQLQuery]_ *`updateWhenSet`* ( _string_ `$field`, _`*`_ `$value` ) ====
-  add update statement, only when the value is set
+add update statement, only when the value is set
  ==== *public* _[DOCCore#SQLQuery SQLQuery]_ *`table`* ( _string_ `$table` ) ====
-  add tabel
+add tabel
  ==== *public* _[DOCCore#SQLQuery SQLQuery]_ *`where`* ( _string_ `$field`, _`*`_ `$value`, _string_ `$comparison`, _string_ `$orAnd` ) ====
-  add where statement
+add where statement
  ==== *public* _[DOCCore#SQLQuery SQLQuery]_ *`whereWhenSet`* ( _string_ `$field`, _`*`_ `$value`, _string_ `$comparison`, _string_ `$orAnd` ) ====
-  add where statement, only when the value is set
+add where statement, only when the value is set
  ==== *public* _[DOCCore#SQLQuery SQLQuery]_ *`groupBy`* ( _string_ `$field` ) ====
-  add group statement
+add group statement
  ==== *public* _[DOCCore#SQLQuery SQLQuery]_ *`orderBy`* ( _string_ `$field`, _string_ `$sort` ) ====
-  add order statement
+add order statement
  ==== *public* _[DOCCore#SQLQuery SQLQuery]_ *`limit`* ( _int_ `$amount`, _in_ `$start` ) ====
-  add limit statement
+add limit statement
  ==== *public* _[DOCCore#SQLQuery SQLQuery]_ *`join`* ( _string_ `$table`, _string_ `$local`, _string_ `$forign`, _string_ `$type` ) ====
-  add join statement
+add join statement
  ==== *public* *static* _bool_ *`isEmpty`* ( _string_ `$value` ) ====
-  Check if a value is empty
+Check if a value is empty
  ==== *public* _[DOCCore#SQLRecord SQLRecord]_ *`exec`* (  ) ====
-  execute the statement
+execute the statement
  ==== *public* _string_ *`getSQL`* (  ) ====
-  Get the SQL statement as a string formed by this query
+Get the SQL statement as a string formed by this query
  ==== *public* _array_ *`getTables`* (  ) ====
-  Get a list of all table objects
+Get a list of all table objects
  ==== *private* _string_ *`getTablesString`* (  ) ====
-  Get a string containing the table names
+Get a string containing the table names
  ==== *private* _string_ *`getSelectSQL`* (  ) ====
-  Get the SQL statement for an select
+Get the SQL statement for an select
  ==== *private* _string_ *`getInsertSQL`* (  ) ====
-  Get the SQL statement for an insert
+Get the SQL statement for an insert
  ==== *private* _string_ *`getMInsertSQL`* (  ) ====
-  Get the SQL statement for an multiple insert
+Get the SQL statement for an multiple insert
  ==== *private* _string_ *`getUpdateSQL`* (  ) ====
-  Get the SQL statement for an update
+Get the SQL statement for an update
  ==== *private* _string_ *`getDeleteSQL`* (  ) ====
-  Get the SQL statement for an Delete
+Get the SQL statement for an Delete
  ==== *public* _void_ *`getRequest`* (  ) ====
 == SQLRecord ==
 ===== ,,class,, SQLRecord =====
 SQLRecord that is a wrapper for all data generated from the queries
  ==== *public* _void_ *`__construct`* (  ) ====
  ==== *public* _`*`_ *`getRows`* (  ) ====
-  Get all the rows that were returned by the query
+Get all the rows that were returned by the query
  ==== *public* _object_ *`getRow`* (  ) ====
-  Get a row and move the interal point one place ahead. returns false when there are no more rows
+Get a row and move the interal point one place ahead. returns false when there are no more rows
  ==== *public* _void_ *`reset`* (  ) ====
-  reset the internal pointer
+reset the internal pointer
  ==== *public* _int_ *`count`* (  ) ====
-  Get the amount of rows returned by the query
+Get the amount of rows returned by the query
  ==== *public* _int_ *`insertID`* (  ) ====
-  Get the latest ID from the last insert. This is 0 when there was no insert done
+Get the latest ID from the last insert. This is 0 when there was no insert done
 == SQL ==
 ===== ,,class,, SQL =====
 SQL class that handels the connection to the database
  ==== *public* *static* _[DOCCore#SQL SQL]_ *`getInstance`* (  ) ====
-  Get a SQL instance
+Get a SQL instance
  ==== *private* _void_ *`__construct`* (  ) ====
  ==== *public* _void_ *`reconnect`* (  ) ====
-  Reconnect with the database
+Reconnect with the database
  ==== *public* _PDO_ *`getPDOInstance`* (  ) ====
-  Get the PDO instance that this SQL class uses
+Get the PDO instance that this SQL class uses
  ==== *public* _[DOCCore#SQLRecord SQLRecord]_ *`query`* ( _[DOCCore#SQLQuery SQLQuery]_ `$query` ) ====
-  Execute a query
+Execute a query
  ==== *public* _array_ *`multi_query`* ( _string_ `$queries` ) ====
-  Execute multiple queries
+Execute multiple queries
  ==== *private* _void_ *`triggerSQLError`* ( _string_ `$error`, _int_ `$type` ) ====
-  Trigger a SQL exception and throws it
+Trigger a SQL exception and throws it
 == PageNotFoundExeption ==
 ===== ,,class,, PageNotFoundExeption ,,extends,, Exception =====
 Exception thrown when a page could not be found
@@ -389,97 +389,97 @@ Exception to be triggered when the framework is not properly installed (No compo
 ===== ,,class,, DataContainer =====
 Container for dynamic data, this always returnes NULL when a propertie is not found
  ==== *public* _`*`_ *`__get`* ( _`*`_ `$key` ) ====
-  Getter
+Getter
  ==== *public* _void_ *`__set`* ( _`*`_ `$key`, _`*`_ `$value` ) ====
-  Setter
+Setter
  ==== *public* *static* _`*`_ *`init`* ( _object_ `$data` ) ====
-  Wrap an object or an array containing object in the DataContainer
+Wrap an object or an array containing object in the DataContainer
 == Table ==
 ===== _abstract_ ,,class,, Table =====
 Abstract class that handels all the information about a table
  ==== *public* *static* _[DOCCore#Table Table]_ *`init`* ( _string_ `$table` ) ====
-  Static function to get a table object
+Static function to get a table object
  ==== *protected* _[DOCCore#Table Table]_ *`setURLs`* ( _string_ `$admin`, _string_ `$add`, _string_ `$edit`, _string_ `$delete` ) ====
-  Set the urls the Table needs to have for redirection on errors
+Set the urls the Table needs to have for redirection on errors
  ==== *public* _[DOCCore#Table Table]_ *`__construct`* ( _string_ `$name` ) ====
-  Constructor for Table
+Constructor for Table
  ==== *public* _[DOCCore#Table Table]_ *`setExternal`* ( _bool_ `$fromExternal` ) ====
-  Set if the table is being accessed from an external source.
+Set if the table is being accessed from an external source.
  ==== *public* _bool_ *`getExternal`* (  ) ====
-  Check if the table is being accessed from an external source.
+Check if the table is being accessed from an external source.
  ==== *public* _[DOCCore#Table Table]_ *`setMultipart`* ( _bool_ `$multipart` ) ====
-  Set the multipart so the forms are send with that field
+Set the multipart so the forms are send with that field
  ==== *public* _[DOCCore#Table Table]_ *`assign`* ( _string_ `$component`, _string_ `$action` ) ====
-  Assign the table to a component with an action.
+Assign the table to a component with an action.
  ==== *public* _[DOCCore#Table Table]_ *`addField`* ( _[DOCCoreFields#Field Field]_ `$field`, _int_ `$sort` ) ====
-  Add Field to the table
+Add Field to the table
  ==== *public* _string_ *`__get`* ( _string_ `$name` ) ====
-  This is designed to give fast acces to the toHTML functions
+This is designed to give fast acces to the toHTML functions
  ==== *public* _[DOCCoreFields#Field Field]_ *`getField`* ( _string_ `$name` ) ====
-  Get a field based on it's name, NULL when there was no field found
+Get a field based on it's name, NULL when there was no field found
  ==== *public* _array_ *`getFields`* (  ) ====
-  Get all the fields in this table
+Get all the fields in this table
  ==== *public* _array_ *`getKeys`* (  ) ====
-  Get all the fields in this table which are keys
+Get all the fields in this table which are keys
  ==== *public* _string_ *`getName`* (  ) ====
-  Get the name of this tabel.
+Get the name of this tabel.
  ==== *public* _string_ *`getTitle`* (  ) ====
-  Get the title of this tabel record. This is a pre-parsed string with the values from the record
+Get the title of this tabel record. This is a pre-parsed string with the values from the record
  ==== *public* _[DOCCore#Table Table]_ *`setTitle`* ( __ `$titleString` ) ====
-  Set the title of this tabel record. This is a string with the field names between [ and ]
+Set the title of this tabel record. This is a string with the field names between [ and ]
  ==== *public* _[DOCCore#Table Table]_ *`setRecord`* ( _object_ `$data` ) ====
-  Set the current record of the table
+Set the current record of the table
  ==== *public* _[DOCCore#Table Table]_ *`setRequest`* ( _object_ `$data` ) ====
-  Set the request data for this table
+Set the request data for this table
  ==== *public* _void_ *`getRecord`* (  ) ====
  ==== *public* _void_ *`getRequest`* (  ) ====
  ==== *public* _[DOCCore#Table Table]_ *`setError`* ( _[DOCCore#InvalidFormException InvalidFormException]_ `$error` ) ====
-  Set the current error record of the table, this has priority over the current one
+Set the current error record of the table, this has priority over the current one
  ==== *public* _void_ *`toHTML`* ( _int_ `$mode` ) ====
-  Get the HTML representation of this field.
+Get the HTML representation of this field.
 NOTE:Do not overwrite this function. Use the toHTML_add/edit/view instaid if you want to change the way the HTML looks
  ==== *public* _string_ *`__toString`* (  ) ====
-  Convert this table to a string
+Convert this table to a string
  ==== *protected* _void_ *`sortFields`* (  ) ====
-  Sort the fields by their sort values
+Sort the fields by their sort values
  ==== *protected* _int_ *`handleSort`* ( _[DOCCoreFields#Field Field]_ `$a`, _[DOCCoreFields#Field Field]_ `$b` ) ====
-  Sorthing algorithem
+Sorthing algorithem
  ==== *protected* _string_ *`toHTML_add`* (  ) ====
-  HTML representation for add Form
+HTML representation for add Form
  ==== *protected* _string_ *`toHTML_edit`* (  ) ====
-  HTML representation for edit Form
+HTML representation for edit Form
  ==== *protected* _string_ *`toHTML_view`* (  ) ====
-  HTML representation for view Form
+HTML representation for view Form
  ==== *protected* _string_ *`toHTML_delete`* (  ) ====
-  HTML representation for delete Form
+HTML representation for delete Form
  ==== *protected* _string_ *`parseTitle`* ( _string_ `$title`, _array_ `$data` ) ====
-  A way to parse the title string.
+A way to parse the title string.
  ==== *public* _[DOCCore#SQLRecord SQLRecord]_ *`doSelect`* (  ) ====
-  Preform a select on the table
+Preform a select on the table
  ==== *public* _[DOCCore#SQLRecord SQLRecord]_ *`doInsert`* (  ) ====
-  Preform an insert on the table
+Preform an insert on the table
  ==== *public* _[DOCCore#SQLRecord SQLRecord]_ *`doUpdate`* (  ) ====
-  Preform an update on the table
+Preform an update on the table
  ==== *public* _[DOCCore#SQLRecord SQLRecord]_ *`doDelete`* (  ) ====
-  Preform a delete on the table
+Preform a delete on the table
  ==== *protected* _string_ *`getJavascript`* (  ) ====
-  Get the JavaScript for this table
+Get the JavaScript for this table
  ==== *protected* _string_ *`getErrors`* (  ) ====
-  Get the HTML for if there were any errors
+Get the HTML for if there were any errors
  ==== *protected* _string_ *`getAssignment`* ( _int_ `$mode` ) ====
-  Assignment field which containt the componentn and action values
+Assignment field which containt the componentn and action values
  ==== *public* _string_ *`getAction`* ( _int_ `$mode` ) ====
-  Mapping of the action to the actuly hidden field content.
+Mapping of the action to the actuly hidden field content.
 When in need of custom mapping, like if you have two tables for one component, override this method
  ==== *protected* _int_ *`string2action`* ( _string_ `$string` ) ====
-  String to an action that the table can understand
+String to an action that the table can understand
  ==== *public* _void_ *`validate`* ( _[DOCCore#SQLQuery SQLQuery]_ `$query`, _object_ `$data`, _[DOCCore#SQLQuery SQLQuery]_ `$query`, _object_ `$data`, _[DOCCore#SQLQuery SQLQuery]_ `$query`, _object_ `$data`, _[DOCCore#SQLQuery SQLQuery]_ `$query`, _object_ `$data`, _int_ `$mode` ) ====
-  Validate the data with the fields in this table. If not valid a InvalidFormException is thrown
+Validate the data with the fields in this table. If not valid a InvalidFormException is thrown
  ==== *public* _int_ *`getInsertedID`* (  ) ====
-  Get the last inserted ID for this table.
+Get the last inserted ID for this table.
 Note: this is not fetched, only kept if there was an insert. So only use
 this if you are sure there was an insert.
  ==== *public* _array_ *`db2value`* ( _array_ `$record` ) ====
-  Parse the record, this allows for data conversions or deserialization
+Parse the record, this allows for data conversions or deserialization
  ==== *private* _void_ *`callPreFields`* (  ) ====
  ==== *private* _void_ *`callPostFields`* (  ) ====

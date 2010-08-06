@@ -14,29 +14,29 @@ The following classes are located in this package
 The News component provides a simple news system that allows for new messages.
 News items can be grouped using a tag if needed.
  ==== *public* _void_ *`__construct`* (  ) ====
-  Constructor
+Constructor
  ==== *public* _void_ *`action_index`* ( _Smarty_ `$smarty`, _[DOCDefault#SmartyPageLoader SmartyPageLoader]_ `$smartyLoader`, _array_ `$request` ) ====
-  Index action, this is used when a page is shown by the cms
+Index action, this is used when a page is shown by the cms
  ==== *public* _void_ *`action_add`* ( _Smarty_ `$smarty`, _[DOCDefault#SmartyPageLoader SmartyPageLoader]_ `$smartyLoader`, _array_ `$request` ) ====
-  Action for adding a news item
+Action for adding a news item
  ==== *public* _void_ *`action_edit`* ( _Smarty_ `$smarty`, _[DOCDefault#SmartyPageLoader SmartyPageLoader]_ `$smartyLoader`, _array_ `$request` ) ====
-  Action for editing a news item
+Action for editing a news item
  ==== *public* _void_ *`action_delete`* ( _Smarty_ `$smarty`, _[DOCDefault#SmartyPageLoader SmartyPageLoader]_ `$smartyLoader`, _array_ `$request` ) ====
-  Action for deleting a news item
+Action for deleting a news item
  ==== *public* _void_ *`registerTreeItems`* ( _[DOCComponentsPageUtil#Tree Tree]_ `$tree` ) ====
-  Register tree items for this component
+Register tree items for this component
  ==== *public* _void_ *`registerURLMap`* (  ) ====
-  (non-PHPdoc)
+(non-PHPdoc)
 == NewsTable ==
 ===== ,,class,, NewsTable ,,extends,, [DOCCore#Table Table] =====
 News table, this handels all interaction with the news table in the database
  ==== *public* _void_ *`__construct`* (  ) ====
-  constructor
+constructor
  ==== *protected* _void_ *`select`* (  ) ====
-  (non-PHPdoc)
+(non-PHPdoc)
  ==== *protected* _void_ *`update`* (  ) ====
-  (non-PHPdoc)
+(non-PHPdoc)
  ==== *protected* _void_ *`insert`* (  ) ====
-  (non-PHPdoc)
+(non-PHPdoc)
  ==== *protected* _void_ *`delete`* (  ) ====
-  (non-PHPdoc)
+(non-PHPdoc)

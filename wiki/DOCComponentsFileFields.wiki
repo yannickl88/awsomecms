@@ -13,30 +13,30 @@ The following classes are located in this package
 ===== ,,class,, FileSelectField ,,extends,, [DOCCoreFields#Field Field] =====
 Field for uploading files
  ==== *public* _void_ *`__construct`* ( _string_ `$name`, _int_ `$style` ) ====
-  Constructor
+Constructor
  ==== *protected* _string_ *`toHTML_add`* (  ) ====
-  Create a HTML representation of add field
+Create a HTML representation of add field
  ==== *protected* _string_ *`toHTML_edit`* (  ) ====
-  Create a HTML representation of edit field
+Create a HTML representation of edit field
  ==== *public* _`*`_ *`db2value`* ( __ `$value` ) ====
-  Convert the dbvalue of the param to what the field expects
+Convert the dbvalue of the param to what the field expects
  ==== *public* _string_ *`value2db`* ( __ `$value` ) ====
-  Convert the value of the param to that what the DB expects
+Convert the value of the param to that what the DB expects
 == UploadField ==
 ===== ,,class,, UploadField ,,extends,, [DOCCoreFields#Field Field] =====
 Field for uploading files
  ==== *public* _void_ *`__construct`* ( _string_ `$name`, _int_ `$style` ) ====
-  Constructor
+Constructor
  ==== *protected* _string_ *`toHTML_add`* (  ) ====
-  Create a HTML representation of add field
+Create a HTML representation of add field
  ==== *protected* _string_ *`toHTML_edit`* (  ) ====
-  Create a HTML representation of edit field
+Create a HTML representation of edit field
  ==== *public* _`*`_ *`db2value`* ( __ `$value` ) ====
-  Convert the dbvalue of the param to what the field expects
+Convert the dbvalue of the param to what the field expects
  ==== *public* _string_ *`value2db`* ( __ `$value` ) ====
-  Convert the value of the param to that what the DB expects
+Convert the value of the param to that what the DB expects
  ==== *public* _void_ *`preSQL`* ( _[DOCCore#SQLRecord SQLRecord]_ `$record`, _[DOCCore#SQLQuery SQLQuery]_ `$query` ) ====
-  upload the file on edit
+upload the file on edit
  ==== *private* _void_ *`handleFileUpload`* (  ) ====
  ==== *private* _void_ *`createThumb`* (  ) ====
  ==== *public* _void_ *`validate`* (  ) ====
