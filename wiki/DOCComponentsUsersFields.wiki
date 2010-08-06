@@ -9,8 +9,8 @@ included in the distribution.
 == Contents: ==
 The following classes are located in this package
 === Classes: ===
-== !PrivlilegesField ==
-===== ,,class,, !PrivlilegesField ,,extends,, [DOC_CoreFields#IntField IntField] =====
+== PrivlilegesField ==
+===== ,,class,, PrivlilegesField ,,extends,, [DOCCoreFields#IntField IntField] =====
 Privileges list of check boxes
  ==== *protected* _string_ *`toHTML_add`* (  ) ====
   Create a HTML representation of add field
@@ -18,8 +18,8 @@ Privileges list of check boxes
   Create a HTML representation of edit field
  ==== *public* _string_ *`value2db`* ( __ `$value` ) ====
   Convert the value of the param to that what the DB expects
-== !UsersField ==
-===== ,,class,, !UsersField ,,extends,, [DOC_CoreFields#Field Field] =====
+== UsersField ==
+===== ,,class,, UsersField ,,extends,, [DOCCoreFields#Field Field] =====
 Selection list of all the users
  ==== *public* _Field_ *`setData`* ( _object_ `$value` ) ====
   Set the Value of this field with an result object
@@ -33,8 +33,8 @@ Selection list of all the users
   Create a HTML representation of view field
  ==== *public* _void_ *`select`* ( __ `$query`, __ `$data` ) ====
   Add select data for this field to a query
-== !UsersselectField ==
-===== ,,class,, !UsersselectField ,,extends,, [DOC_CoreFields#Field Field] =====
+== UsersselectField ==
+===== ,,class,, UsersselectField ,,extends,, [DOCCoreFields#Field Field] =====
 Selection list of all the users, do note you may want to use this as a dummy
 field and so something with it yourself. There is currently no relation
 option or something.

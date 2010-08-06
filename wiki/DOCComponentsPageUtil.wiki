@@ -9,8 +9,8 @@ included in the distribution.
 == Contents: ==
 The following classes are located in this package
 === Classes: ===
-== !MenuItem ==
-===== ,,class,, !MenuItem =====
+== MenuItem ==
+===== ,,class,, MenuItem =====
 Menu item that is used in the admin menu
  ==== *public* _void_ *`__construct`* ( _string_ `$name`, _string_ `$text`, _string_ `$page`, _string_ `$parent` ) ====
   Constructor
@@ -20,8 +20,8 @@ Menu item that is used in the admin menu
   sort the items in this MenuItem
  ==== *public* _string_ *`toHTML`* (  ) ====
   Create a HTML represenation of this MenuItem
-== !Menu ==
-===== ,,class,, !Menu =====
+== Menu ==
+===== ,,class,, Menu =====
 Menu class, this is the root element of the menu
  ==== *public* *static* _Menu_ *`getInstance`* (  ) ====
   Singelton
@@ -33,8 +33,8 @@ Menu class, this is the root element of the menu
   Create HTML representation of this menu
  ==== *private* _int_ *`sort`* ( _MenuItem_ `$child1`, _MenuItem_ `$child2` ) ====
   Sort the items in the menu
-== !Tree ==
-===== ,,class,, !Tree =====
+== Tree ==
+===== ,,class,, Tree =====
 Tree class for the page admin tree
  ==== *public* *static* _void_ *`getInstance`* (  ) ====
  ==== *private* _void_ *`__construct`* ( _string_ `$name`, _string_ `$element` ) ====
@@ -46,8 +46,8 @@ Tree class for the page admin tree
   get the name of the javascript element
  ==== *public* _string_ *`toJavascript`* (  ) ====
   Create the javascript code for the tree
-== !TreeNode ==
-===== _abstract_ ,,class,, !TreeNode =====
+== TreeNode ==
+===== _abstract_ ,,class,, TreeNode =====
 Abstract class for the nodes of the tree
  ==== *public* _void_ *`setParent`* ( _Tree_ `$parent` ) ====
   Set the parent, which is the tree
@@ -57,22 +57,22 @@ Abstract class for the nodes of the tree
   Get the type of this node
  ==== *public* _string_ *`registerIcons`* (  ) ====
   function that is called once on each type of node, you can add icons to the tree here
-== !PageItem ==
-===== ,,class,, !PageItem ,,extends,, [DOC_ComponentsPageUtil#TreeNode TreeNode] =====
+== PageItem ==
+===== ,,class,, PageItem ,,extends,, [DOCComponentsPageUtil#TreeNode TreeNode] =====
 The node for the page items
  ==== *public* _void_ *`__construct`* ( _object_ `$record` ) ====
   Constructor
  ==== *public* _string_ *`toJavascript`* (  ) ====
   Create the javascript code for the tree
-== !Folder ==
-===== ,,class,, !Folder ,,extends,, [DOC_ComponentsPageUtil#TreeNode TreeNode] =====
+== Folder ==
+===== ,,class,, Folder ,,extends,, [DOCComponentsPageUtil#TreeNode TreeNode] =====
 
  ==== *public* _void_ *`__construct`* ( _object_ `$record` ) ====
   Constructor
  ==== *public* _string_ *`toJavascript`* (  ) ====
   Create the javascript code for the tree
-== !RootFolder ==
-===== ,,class,, !RootFolder ,,extends,, [DOC_ComponentsPageUtil#Folder Folder] =====
+== RootFolder ==
+===== ,,class,, RootFolder ,,extends,, [DOCComponentsPageUtil#Folder Folder] =====
 
  ==== *public* _string_ *`toJavascript`* (  ) ====
   Create the javascript code for the tree

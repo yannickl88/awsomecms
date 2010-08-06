@@ -9,8 +9,8 @@ included in the distribution.
 == Contents: ==
 The following classes are located in this package
 === Classes: ===
-== !BooleanField ==
-===== ,,class,, !BooleanField ,,extends,, [DOC_CoreFields#IntField IntField] =====
+== BooleanField ==
+===== ,,class,, BooleanField ,,extends,, [DOCCoreFields#IntField IntField] =====
 Boolean field.
  ==== *protected* _string_ *`toHTML_add`* (  ) ====
   Create a HTML representation of add field
@@ -18,8 +18,8 @@ Boolean field.
   Create a HTML representation of edit field
  ==== *protected* _string_ *`toHTML_view`* (  ) ====
   Create a HTML representation of view field
-== !CaptchaField ==
-===== ,,class,, !CaptchaField ,,extends,, [DOC_CoreFields#Field Field] =====
+== CaptchaField ==
+===== ,,class,, CaptchaField ,,extends,, [DOCCoreFields#Field Field] =====
 Captcha field to prevent bots.
  ==== *public* _void_ *`__construct`* ( _string_ `$name`, _string_ `$displayName`, _int_ `$style` ) ====
   Constructor
@@ -29,8 +29,8 @@ Captcha field to prevent bots.
   Create a HTML representation of edit field
  ==== *public* _void_ *`validate`* ( _int_ `$mode` ) ====
   Validate the data for this field. This throws a FormException when not valid
-== !DateField ==
-===== ,,class,, !DateField ,,extends,, [DOC_CoreFields#Field Field] =====
+== DateField ==
+===== ,,class,, DateField ,,extends,, [DOCCoreFields#Field Field] =====
 Date field, this shows a date selection field
  ==== *public* _string_ *`value2db`* ( __ `$value` ) ====
   Convert the value of the param to that what the DB expects
@@ -46,8 +46,8 @@ Date field, this shows a date selection field
   Create a HTML representation of view field
  ==== *public* _string_ *`getJavascript`* (  ) ====
   get the javascript for this field
-== !Field ==
-===== ,,class,, !Field =====
+== Field ==
+===== ,,class,, Field =====
 Superclass for a Field.
  ==== *public* _Field_ *`__construct`* ( _string_ `$name`, _`*`_ `$value` ) ====
   Constructor of the field
@@ -132,8 +132,8 @@ NOTE:Do not overwrite this function. Use the toHTML_add/edit/view instaid if you
   preform this action prior to the SQL execution that uses this field
  ==== *public* _void_ *`postSQL`* ( _SQLRecord_ `$sqlrecord`, _array_ `$record`, _SQLQuery_ `$query` ) ====
   preform this action prior to the SQL execution that uses this field
-== !IntField ==
-===== ,,class,, !IntField ,,extends,, [DOC_CoreFields#Field Field] =====
+== IntField ==
+===== ,,class,, IntField ,,extends,, [DOCCoreFields#Field Field] =====
 Integer field
  ==== *protected* _string_ *`toHTML_add`* (  ) ====
   Create a HTML representation of add field
@@ -144,8 +144,8 @@ Integer field
  ==== _void_ *`form_IntField_handleKey`* (  ) ====
  ==== *public* _void_ *`validate`* ( _int_ `$mode` ) ====
   Validate the data for this field. This throws a FormException when not valid
-== !PasswordField ==
-===== ,,class,, !PasswordField ,,extends,, [DOC_CoreFields#Field Field] =====
+== PasswordField ==
+===== ,,class,, PasswordField ,,extends,, [DOCCoreFields#Field Field] =====
 Password field
  ==== *public* _void_ *`__construct`* ( _string_ `$name`, _string_ `$displayName`, _int_ `$style` ) ====
   Constructor
@@ -155,8 +155,8 @@ Password field
   Create a HTML representation of edit field
  ==== *public* _void_ *`value2db`* (  ) ====
  ==== *public* _void_ *`db2value`* (  ) ====
-== !TagField ==
-===== ,,class,, !TagField ,,extends,, [DOC_CoreFields#Field Field] =====
+== TagField ==
+===== ,,class,, TagField ,,extends,, [DOCCoreFields#Field Field] =====
 Tag field, this allows for quick search and assignment of tags
  ==== *public* _void_ *`preSQL`* ( _`*`_ `Array record that was used`, _SQLQuery_ `$query` ) ====
   preform this action prior to the SQL execution that uses this field
@@ -171,8 +171,8 @@ Tag field, this allows for quick search and assignment of tags
  ==== *public* _string_ *`getJavascript`* (  ) ====
   get the javascript for this field
  ==== *private* _void_ *`getAllTags`* (  ) ====
-== !TextField ==
-===== ,,class,, !TextField ,,extends,, [DOC_CoreFields#Field Field] =====
+== TextField ==
+===== ,,class,, TextField ,,extends,, [DOCCoreFields#Field Field] =====
 Textarea field
  ==== *public* _void_ *`__construct`* ( _string_ `$name`, _string_ `$displayName`, _int_ `$style` ) ====
   Constructor
