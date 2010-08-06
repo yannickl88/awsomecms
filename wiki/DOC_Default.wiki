@@ -12,24 +12,15 @@ The following functions are located in this package
   
 The following classes are located in this package
 === Classes: ===
-== FileItem ==
-===== ,,class,, !FileItem ,,extends,, `[DOC_ComponentsPageUtil#TreeNode TreeNode]` =====
+== !FileItem ==
+===== ,,class,, !FileItem ,,extends,, [DOC_ComponentsPageUtil#TreeNode TreeNode] =====
 
  ==== *public* _void_ *`__construct`* ( _object_ `$record` ) ====
   Constructor
  ==== *public* _string_ *`toJavascript`* (  ) ====
   Create the javascript code for the tree
-== ImageFolder ==
-===== ,,class,, !ImageFolder ,,extends,, `[DOC_ComponentsPageUtil#Folder Folder]` =====
-
- ==== *public* _void_ *`__construct`* ( _object_ `$record` ) ====
-  Constructor
- ==== *public* _void_ *`registerIcons`* (  ) ====
-  See parent
- ==== *public* _string_ *`toJavascript`* (  ) ====
-  Create the javascript code for the tree
-== UploadFolder ==
-===== ,,class,, !UploadFolder ,,extends,, `[DOC_ComponentsPageUtil#Folder Folder]` =====
+== !ImageFolder ==
+===== ,,class,, !ImageFolder ,,extends,, [DOC_ComponentsPageUtil#Folder Folder] =====
 
  ==== *public* _void_ *`__construct`* ( _object_ `$record` ) ====
   Constructor
@@ -37,8 +28,17 @@ The following classes are located in this package
   See parent
  ==== *public* _string_ *`toJavascript`* (  ) ====
   Create the javascript code for the tree
-== NewsItem ==
-===== ,,class,, !NewsItem ,,extends,, `[DOC_ComponentsPageUtil#TreeNode TreeNode]` =====
+== !UploadFolder ==
+===== ,,class,, !UploadFolder ,,extends,, [DOC_ComponentsPageUtil#Folder Folder] =====
+
+ ==== *public* _void_ *`__construct`* ( _object_ `$record` ) ====
+  Constructor
+ ==== *public* _void_ *`registerIcons`* (  ) ====
+  See parent
+ ==== *public* _string_ *`toJavascript`* (  ) ====
+  Create the javascript code for the tree
+== !NewsItem ==
+===== ,,class,, !NewsItem ,,extends,, [DOC_ComponentsPageUtil#TreeNode TreeNode] =====
 The node for the page items
  ==== *public* _void_ *`__construct`* ( _object_ `$record` ) ====
   Constructor
@@ -46,8 +46,8 @@ The node for the page items
   See parent
  ==== *public* _string_ *`toJavascript`* (  ) ====
   Create the javascript code for the tree
-== NewsFolder ==
-===== ,,class,, !NewsFolder ,,extends,, `[DOC_ComponentsPageUtil#TreeNode TreeNode]` =====
+== !NewsFolder ==
+===== ,,class,, !NewsFolder ,,extends,, [DOC_ComponentsPageUtil#TreeNode TreeNode] =====
 
  ==== *public* _void_ *`__construct`* ( _object_ `$record` ) ====
   Constructor
@@ -55,7 +55,7 @@ The node for the page items
   See parent
  ==== *public* _string_ *`toJavascript`* (  ) ====
   Create the javascript code for the tree
-== Twitter ==
+== !Twitter ==
 ===== ,,class,, !Twitter =====
 Twitter class
 
@@ -219,13 +219,13 @@ This method requires the authenticated user to already be friends with the speci
   Returns an array of numeric user ids the authenticating user is blocking.
  ==== *public* _bool_ *`test`* (  ) ====
   Test the connection to Twitter
-== TwitterException ==
-===== ,,class,, !TwitterException ,,extends,, `Exception` =====
+== !TwitterException ==
+===== ,,class,, !TwitterException ,,extends,, Exception =====
 Twitter Exception class
  ==== *public* _void_ *`__construct`* ( _`*`_ `string[optional] $message`, _`*`_ `int[optional] $code` ) ====
   Default constructor
-== DeployAction ==
-===== _abstract_ ,,class,, !DeployAction ,,extends,, `[DOC_Libs#CLIAction CLIAction]` =====
+== !DeployAction ==
+===== _abstract_ ,,class,, !DeployAction ,,extends,, [DOC_Libs#CLIAction CLIAction] =====
 This file is part of the A.W.S.O.M.E.cms distribution.
 Detailed copyright and licensing information can be found
 in the doc/COPYRIGHT and doc/LICENSE files which should be
@@ -238,28 +238,28 @@ called before the exec
  ==== _void_ *`cleanup`* ( _CLI_ `$cli` ) ====
   Cleanup function, you can override this to add cleanup stuff. This is
 called after the exec
-== Usage ==
-===== ,,class,, !Usage ,,extends,, `[DOC_Libs#CLIAction CLIAction]` =====
+== !Usage ==
+===== ,,class,, !Usage ,,extends,, [DOC_Libs#CLIAction CLIAction] =====
 
  ==== *public* _void_ *`exec`* ( _CLI_ `$cli`, _string_ `$action` ) ====
   (non-PHPdoc)
-== Pack ==
-===== ,,class,, !Pack ,,extends,, `[DOC_Default#DeployAction DeployAction]` =====
+== !Pack ==
+===== ,,class,, !Pack ,,extends,, [DOC_Default#DeployAction DeployAction] =====
 
  ==== *public* _void_ *`exec`* ( _CLI_ `$cli`, _string_ `$action` ) ====
   (non-PHPdoc)
-== Update ==
-===== ,,class,, !Update ,,extends,, `[DOC_Default#DeployAction DeployAction]` =====
+== !Update ==
+===== ,,class,, !Update ,,extends,, [DOC_Default#DeployAction DeployAction] =====
 
  ==== *public* _void_ *`exec`* ( _CLI_ `$cli`, _string_ `$action` ) ====
   (non-PHPdoc)
-== Release ==
-===== ,,class,, !Release ,,extends,, `[DOC_Default#DeployAction DeployAction]` =====
+== !Release ==
+===== ,,class,, !Release ,,extends,, [DOC_Default#DeployAction DeployAction] =====
 
  ==== *public* _void_ *`exec`* ( _CLI_ `$cli`, _string_ `$action` ) ====
   (non-PHPdoc)
-== Patch ==
-===== ,,class,, !Patch ,,extends,, `[DOC_Libs#CLIAction CLIAction]` =====
+== !Patch ==
+===== ,,class,, !Patch ,,extends,, [DOC_Libs#CLIAction CLIAction] =====
 
  ==== *public* _void_ *`exec`* ( _CLI_ `$cli`, _string_ `$action` ) ====
   (non-PHPdoc)

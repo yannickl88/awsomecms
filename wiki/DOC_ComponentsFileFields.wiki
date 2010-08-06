@@ -9,8 +9,8 @@ included in the distribution.
 == Contents: ==
 The following classes are located in this package
 === Classes: ===
-== FileSelectField ==
-===== ,,class,, !FileSelectField ,,extends,, `[DOC_CoreFields#Field Field]` =====
+== !FileSelectField ==
+===== ,,class,, !FileSelectField ,,extends,, [DOC_CoreFields#Field Field] =====
 Field for uploading files
  ==== *public* _void_ *`__construct`* ( _string_ `$name`, _int_ `$style` ) ====
   Constructor
@@ -22,8 +22,8 @@ Field for uploading files
   Convert the dbvalue of the param to what the field expects
  ==== *public* _string_ *`value2db`* ( __ `$value` ) ====
   Convert the value of the param to that what the DB expects
-== UploadField ==
-===== ,,class,, !UploadField ,,extends,, `[DOC_CoreFields#Field Field]` =====
+== !UploadField ==
+===== ,,class,, !UploadField ,,extends,, [DOC_CoreFields#Field Field] =====
 Field for uploading files
  ==== *public* _void_ *`__construct`* ( _string_ `$name`, _int_ `$style` ) ====
   Constructor

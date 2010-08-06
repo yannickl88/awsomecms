@@ -36,14 +36,14 @@ You can use <FieldName> for core fields and <component>.<FieldName> for componen
   Generate a random string
 The following classes are located in this package
 === Classes: ===
-== Authentication ==
+== !Authentication ==
 ===== ,,class,, !Authentication =====
 Authentication class that is a facade for loggin in and out
  ==== *public* *static* _bool_ *`login`* ( _string_ `$user_name`, _string_ `$user_pass` ) ====
   Login, and setting the user session. This calls the component set in the config
  ==== *public* *static* _bool_ *`logout`* (  ) ====
   Logout, and clearing the user session. This calls the component set in the config
-== Cache ==
+== !Cache ==
 ===== ,,class,, !Cache =====
 Cache class which handels quick caching of data
 NOTE: data is serialized using the build-in PHP serialize and unserialize
@@ -59,7 +59,7 @@ More info: http://php.net/manual/en/language.oop5.serialization.php
   Set cached data
  ==== *public* *static* _void_ *`clear`* ( _string_ `$key` ) ====
   Clear cached data
-== Component ==
+== !Component ==
 ===== ,,class,, !Component =====
 Superclass for all the components
  ==== *public* _void_ *`__construct`* ( _string_ `$component` ) ====
@@ -89,7 +89,7 @@ Only use this to resolve ciclur reference from the register manager
   Register actions/hooks/mappings to the framework
  ==== *public* _void_ *`execCron`* (  ) ====
   Execute a task for the cron. This called in the interval secified in the config files.
-== Config ==
+== !Config ==
 ===== ,,class,, !Config =====
 Configuration class, this is used to retrive all the data from seperate config files
  ==== *public* *static* _Config_ *`getInstance`* (  ) ====
@@ -112,19 +112,19 @@ config while there is no config file to read yet.
 Note that the value is not saved in a config.
  ==== *public* *static* _bool_ *`hasFlag`* ( _int_ `$int`, _int_ `$flag` ) ====
   Check if a value contains another value. This is done using bitwise comparison
-== ComponentNotFoundException ==
-===== ,,class,, !ComponentNotFoundException ,,extends,, `Exception` =====
+== !ComponentNotFoundException ==
+===== ,,class,, !ComponentNotFoundException ,,extends,, Exception =====
 Exception thrown if the given component is not installed or found
-== ActionNotFoundException ==
-===== ,,class,, !ActionNotFoundException ,,extends,, `Exception` =====
+== !ActionNotFoundException ==
+===== ,,class,, !ActionNotFoundException ,,extends,, Exception =====
 Exception thrown if the given action for an component could not be found
-== NotInstanciatedException ==
-===== ,,class,, !NotInstanciatedException ,,extends,, `Exception` =====
+== !NotInstanciatedException ==
+===== ,,class,, !NotInstanciatedException ,,extends,, Exception =====
 Exception thrown if controller is waiting for the setData to be called
-== UnauthException ==
-===== ,,class,, !UnauthException ,,extends,, `Exception` =====
+== !UnauthException ==
+===== ,,class,, !UnauthException ,,extends,, Exception =====
 Exception to be triggered when the current user does not have the proper authorization
-== Notifications ==
+== !Notifications ==
 ===== ,,class,, !Notifications =====
 Manager for handeling notifications
  ==== *public* *static* _Notifications_ *`getInstance`* (  ) ====
@@ -143,7 +143,7 @@ Manager for handeling notifications
 Note: This is also called when changes happen inside this object
  ==== *public* _void_ *`removeNotification`* ( _string_ `$url` ) ====
   remove the notifications for an URL
-== Controller ==
+== !Controller ==
 ===== ,,class,, !Controller =====
 Controller class that handels all the incomming data requests
  ==== *public* *static* _Controller_ *`getInstance`* (  ) ====
@@ -172,7 +172,7 @@ redirecting there is no content.
   Check if the page will be redirecting once done
  ==== *public* _void_ *`setRedirect`* ( _string_ `$url` ) ====
   Set the redirect, this can be used to prospone the redirect till everything is done executing
-== Debugger ==
+== !Debugger ==
 ===== ,,class,, !Debugger =====
 Debugger class that handels all debug messages generated from the CMS
  ==== *public* *static* _Debugger_ *`getInstance`* (  ) ====
@@ -196,14 +196,14 @@ Debugger class that handels all debug messages generated from the CMS
  ==== _void_ *`debug_hadCookie`* (  ) ====
  ==== _void_ *`debug_toggleDebug`* (  ) ====
  ==== *public* _void_ *`setType`* (  ) ====
-== FormException ==
-===== ,,class,, !FormException ,,extends,, `Exception` =====
+== !FormException ==
+===== ,,class,, !FormException ,,extends,, Exception =====
 Exception to be triggered when a field is not validly filled in
  ==== *public* _void_ *`__construct`* (  ) ====
  ==== *public* _string_ *`getField`* (  ) ====
   Get the field that were not valid
-== InvalidFormException ==
-===== ,,class,, !InvalidFormException ,,extends,, `Exception` =====
+== !InvalidFormException ==
+===== ,,class,, !InvalidFormException ,,extends,, Exception =====
 Exception class when a form is not valid
  ==== *public* _void_ *`__construct`* (  ) ====
  ==== *public* _void_ *`addInvalidField`* ( _string_ `$field`, _string_ `$message` ) ====
@@ -221,7 +221,7 @@ Exception class when a form is not valid
  ==== *public* _void_ *`setRedirectData`* ( _array_ `$redirectData` ) ====
   Set the data that should be passed when redirecting
  ==== *public* _void_ *`__toString`* (  ) ====
-== Language ==
+== !Language ==
 ===== ,,class,, !Language =====
 Multilanguage class which handels translation
  ==== *public* *static* _Language_ *`getInstance`* (  ) ====
@@ -234,7 +234,7 @@ Multilanguage class which handels translation
   Get mapped keys to string for a given language
  ==== *private* _void_ *`loadLang`* ( _string_ `$lang` ) ====
   Load a language file based on the language key
-== RegisterManager ==
+== !RegisterManager ==
 ===== ,,class,, !RegisterManager =====
 Manager for registering components, hooks, mappings and pages dynamicly
  ==== *public* *static* _RegisterManager_ *`getInstance`* (  ) ====
@@ -267,10 +267,10 @@ Manager for registering components, hooks, mappings and pages dynamicly
   Check if a page is rgistered
  ==== *public* _bool_ *`hasHook`* ( _string_ `$component`, _string_ `$action`, _string_ `$prepost` ) ====
   Check if a hook is rgistered
-== ForbiddenException ==
-===== ,,class,, !ForbiddenException ,,extends,, `Exception` =====
+== !ForbiddenException ==
+===== ,,class,, !ForbiddenException ,,extends,, Exception =====
 Exception thrown when you cannot make an call to that action
-== Request ==
+== !Request ==
 ===== ,,class,, !Request =====
 request object, datawrapper for an request call
  ==== *public* _void_ *`__construct`* (  ) ====
@@ -279,13 +279,13 @@ request object, datawrapper for an request call
   Check if the request is made through the proxy url
  ==== *public* _string_ *`translateAction`* (  ) ====
   translate the HTTP method to SQL method
-== SQLExeption ==
-===== ,,class,, !SQLExeption ,,extends,, `Exception` =====
+== !SQLExeption ==
+===== ,,class,, !SQLExeption ,,extends,, Exception =====
 SQLException when there was an error in executing a given Query
-== SQLConnenectionExeption ==
-===== ,,class,, !SQLConnenectionExeption ,,extends,, `[DOC_Core#SQLExeption SQLExeption]` =====
+== !SQLConnenectionExeption ==
+===== ,,class,, !SQLConnenectionExeption ,,extends,, [DOC_Core#SQLExeption SQLExeption] =====
 SQLException when there was a problem connecting to the database
-== SQLQuery ==
+== !SQLQuery ==
 ===== ,,class,, !SQLQuery =====
 Abstraction of a SQL query
  ==== *private* _void_ *`__construct`* ( _string_ `$action` ) ====
@@ -349,7 +349,7 @@ Abstraction of a SQL query
  ==== *private* _string_ *`getDeleteSQL`* (  ) ====
   Get the SQL statement for an Delete
  ==== *public* _void_ *`getRequest`* (  ) ====
-== SQLRecord ==
+== !SQLRecord ==
 ===== ,,class,, !SQLRecord =====
 SQLRecord that is a wrapper for all data generated from the queries
  ==== *public* _void_ *`__construct`* (  ) ====
@@ -363,7 +363,7 @@ SQLRecord that is a wrapper for all data generated from the queries
   Get the amount of rows returned by the query
  ==== *public* _int_ *`insertID`* (  ) ====
   Get the latest ID from the last insert. This is 0 when there was no insert done
-== SQL ==
+== !SQL ==
 ===== ,,class,, !SQL =====
 SQL class that handels the connection to the database
  ==== *public* *static* _SQL_ *`getInstance`* (  ) ====
@@ -379,13 +379,13 @@ SQL class that handels the connection to the database
   Execute multiple queries
  ==== *private* _void_ *`triggerSQLError`* ( _string_ `$error`, _int_ `$type` ) ====
   Trigger a SQL exception and throws it
-== PageNotFoundExeption ==
-===== ,,class,, !PageNotFoundExeption ,,extends,, `Exception` =====
+== !PageNotFoundExeption ==
+===== ,,class,, !PageNotFoundExeption ,,extends,, Exception =====
 Exception thrown when a page could not be found
-== NotInstalledException ==
-===== ,,class,, !NotInstalledException ,,extends,, `Exception` =====
+== !NotInstalledException ==
+===== ,,class,, !NotInstalledException ,,extends,, Exception =====
 Exception to be triggered when the framework is not properly installed (No components)
-== DataContainer ==
+== !DataContainer ==
 ===== ,,class,, !DataContainer =====
 Container for dynamic data, this always returnes NULL when a propertie is not found
  ==== *public* _`*`_ *`__get`* ( _`*`_ `$key` ) ====
@@ -394,7 +394,7 @@ Container for dynamic data, this always returnes NULL when a propertie is not fo
   Setter
  ==== *public* *static* _`*`_ *`init`* ( _object_ `$data` ) ====
   Wrap an object or an array containing object in the DataContainer
-== Table ==
+== !Table ==
 ===== _abstract_ ,,class,, !Table =====
 Abstract class that handels all the information about a table
  ==== *public* *static* _Table_ *`init`* ( _string_ `$table` ) ====

@@ -9,8 +9,8 @@ included in the distribution.
 == Contents: ==
 The following classes are located in this package
 === Classes: ===
-== HyvesComponent ==
-===== ,,class,, !HyvesComponent ,,extends,, `[DOC_Core#Component Component]` =====
+== !HyvesComponent ==
+===== ,,class,, !HyvesComponent ,,extends,, [DOC_Core#Component Component] =====
 This is more of an link to hyves, via a cron job blog post can be imported and added to the news component
  ==== *public* _void_ *`__construct`* (  ) ====
   Constructor

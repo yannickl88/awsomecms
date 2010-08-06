@@ -9,8 +9,8 @@ included in the distribution.
 == Contents: ==
 The following classes are located in this package
 === Classes: ===
-== FilesTable ==
-===== ,,class,, !FilesTable ,,extends,, `[DOC_Core#Table Table]` =====
+== !FilesTable ==
+===== ,,class,, !FilesTable ,,extends,, [DOC_Core#Table Table] =====
 Core table, this handels all interaction with the core table in the database
  ==== *public* _void_ *`__construct`* (  ) ====
   Constructor
@@ -22,8 +22,8 @@ Core table, this handels all interaction with the core table in the database
   (non-PHPdoc)
  ==== *protected* _void_ *`delete`* (  ) ====
   (non-PHPdoc)
-== GalleryComponent ==
-===== ,,class,, !GalleryComponent ,,extends,, `[DOC_Core#Component Component]` =====
+== !GalleryComponent ==
+===== ,,class,, !GalleryComponent ,,extends,, [DOC_Core#Component Component] =====
 A simple component to manage and show a series of images on a page. Using a tag, images can be grouped together
  ==== *public* _`*`_ *`__construct`* (  ) ====
   Constructor
@@ -35,8 +35,8 @@ A simple component to manage and show a series of images on a page. Using a tag,
   Action to delete an image
  ==== *public* _void_ *`registerMenuItems`* ( _Menu_ `$menu` ) ====
   Function for registering menu items to the admin menu
-== GalleryTable ==
-===== ,,class,, !GalleryTable ,,extends,, `[DOC_Core#Table Table]` =====
+== !GalleryTable ==
+===== ,,class,, !GalleryTable ,,extends,, [DOC_Core#Table Table] =====
 Core table, this handels all interaction with the core table in the database
  ==== *public* _void_ *`__construct`* (  ) ====
   Constructor

@@ -9,8 +9,8 @@ included in the distribution.
 == Contents: ==
 The following classes are located in this package
 === Classes: ===
-== ContactComponent ==
-===== ,,class,, !ContactComponent ,,extends,, `[DOC_Core#Component Component]` =====
+== !ContactComponent ==
+===== ,,class,, !ContactComponent ,,extends,, [DOC_Core#Component Component] =====
 Contact component class, this holds all the logic for the contact component
  ==== *public* _void_ *`__construct`* (  ) ====
   Constructor class for the contact component
@@ -24,8 +24,8 @@ Contact component class, this holds all the logic for the contact component
   Send action, this is called when a form is submitted
  ==== *public* _void_ *`registerMenuItems`* ( _Menu_ `$menu` ) ====
   Function for registering menu items to the admin menu
-== FormfieldsTable ==
-===== ,,class,, !FormfieldsTable ,,extends,, `[DOC_Core#Table Table]` =====
+== !FormfieldsTable ==
+===== ,,class,, !FormfieldsTable ,,extends,, [DOC_Core#Table Table] =====
 Form table, this is where all the forms are stored
  ==== *public* _void_ *`__construct`* (  ) ====
   Constructor
@@ -37,8 +37,8 @@ Form table, this is where all the forms are stored
   (non-PHPdoc)
  ==== *protected* _void_ *`delete`* (  ) ====
   (non-PHPdoc)
-== FormsTable ==
-===== ,,class,, !FormsTable ,,extends,, `[DOC_Core#Table Table]` =====
+== !FormsTable ==
+===== ,,class,, !FormsTable ,,extends,, [DOC_Core#Table Table] =====
 Form table, this is where all the forms are stored
  ==== *public* _void_ *`__construct`* (  ) ====
   Constructor

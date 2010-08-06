@@ -9,8 +9,8 @@ included in the distribution.
 == Contents: ==
 The following classes are located in this package
 === Classes: ===
-== GroupsComponent ==
-===== ,,class,, !GroupsComponent ,,extends,, `[DOC_Core#Component Component]` =====
+== !GroupsComponent ==
+===== ,,class,, !GroupsComponent ,,extends,, [DOC_Core#Component Component] =====
 Component that allowes for group based authentication, rather then user based
  ==== *public* _`*`_ *`__construct`* (  ) ====
   Constructor
@@ -34,8 +34,8 @@ Component that allowes for group based authentication, rather then user based
   Hook to delete a reference of a user when it is deleted in the user component
  ==== *public* _void_ *`registerMenuItems`* ( _Menu_ `$menu` ) ====
   Register menu items for this component
-== GroupsTable ==
-===== ,,class,, !GroupsTable ,,extends,, `[DOC_Core#Table Table]` =====
+== !GroupsTable ==
+===== ,,class,, !GroupsTable ,,extends,, [DOC_Core#Table Table] =====
 User table, this handels all interaction with the user table in the database
  ==== *public* _void_ *`__construct`* (  ) ====
   Constructor
@@ -47,8 +47,8 @@ User table, this handels all interaction with the user table in the database
   (non-PHPdoc)
  ==== *protected* _void_ *`delete`* (  ) ====
   (non-PHPdoc)
-== UsersgroupsTable ==
-===== ,,class,, !UsersgroupsTable ,,extends,, `[DOC_Core#Table Table]` =====
+== !UsersgroupsTable ==
+===== ,,class,, !UsersgroupsTable ,,extends,, [DOC_Core#Table Table] =====
 Usersgroups table, this is a raltional table to keep track of what users are in which groups
  ==== *public* _void_ *`__construct`* (  ) ====
   Constructor

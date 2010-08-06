@@ -9,8 +9,8 @@ included in the distribution.
 == Contents: ==
 The following classes are located in this package
 === Classes: ===
-== PrivilegesTable ==
-===== ,,class,, !PrivilegesTable ,,extends,, `[DOC_Core#Table Table]` =====
+== !PrivilegesTable ==
+===== ,,class,, !PrivilegesTable ,,extends,, [DOC_Core#Table Table] =====
 Privileges tabel.
  ==== *public* _Table_ *`__construct`* ( _string_ `$name` ) ====
   Constructor for Table
@@ -27,8 +27,8 @@ Privileges tabel.
  ==== *public* _string_ *`getAction`* ( _int_ `$mode` ) ====
   Mapping of the action to the actuly hidden field content.
 When in need of custom mapping, like if you have two tables for one component, override this method
-== UsersComponent ==
-===== ,,class,, !UsersComponent ,,extends,, `[DOC_Core#Component Component]` =====
+== !UsersComponent ==
+===== ,,class,, !UsersComponent ,,extends,, [DOC_Core#Component Component] =====
 User component and the actions that it can do.
 This components gives you the option to create different users inside a
 system, these users can be assigned a name and password and privilages. If
@@ -61,8 +61,8 @@ if they are filled in or throws and FormException otherwise.
   Log a user out
  ==== *public* _void_ *`registerMenuItems`* ( _Menu_ `$menu` ) ====
   Register menu items for this component
-== UsersTable ==
-===== ,,class,, !UsersTable ,,extends,, `[DOC_Core#Table Table]` =====
+== !UsersTable ==
+===== ,,class,, !UsersTable ,,extends,, [DOC_Core#Table Table] =====
 User table, this handels all interaction with the user table in the database
  ==== *public* _void_ *`__construct`* (  ) ====
   Constructor
