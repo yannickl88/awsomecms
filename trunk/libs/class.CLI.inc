@@ -1,5 +1,23 @@
 <?php
+/**
+ * This file is part of the A.W.S.O.M.E.cms distribution.
+ * Detailed copyright and licensing information can be found
+ * in the doc/COPYRIGHT and doc/LICENSE files which should be
+ * included in the distribution.
+ *
+ * @package libs
+ *
+ * @copyright (c) 2009-2010 Yannick de Lange
+ * @license http://www.gnu.org/licenses/gpl.txt
+ *
+ * @version $Revision$
+ */
 
+/**
+ * CliAction interface
+ * 
+ * @author Yannick de Lange <yannick.l.88@gmail.com>
+ */
 abstract class CLIAction
 {
     /**
@@ -24,7 +42,11 @@ abstract class CLIAction
      */
     abstract function exec($cli, $action);
 }
-
+/**
+ * OS abstraction, this provides a way to easiely join a path
+ * 
+ * @author Yannick de Lange <yannick.l.88@gmail.com>
+ */
 class OS
 {
     /**
@@ -44,7 +66,11 @@ class OS
         return implode(DIRECTORY_SEPARATOR, $items);
     }
 }
-
+/**
+ * Cli main class
+ * 
+ * @author Yannick de Lange <yannick.l.88@gmail.com>
+ */
 class CLI
 {
     public $os;
@@ -53,7 +79,11 @@ class CLI
     private $file;
     private $actions;
     private $action;
-    
+    /**
+     * Constructor
+     * 
+     * @param array $argv
+     */
     public function __construct($argv)
     {
         $this->actions = array();
@@ -61,6 +91,12 @@ class CLI
         $this->verbose = in_array('v', $argv);
         $this->os = new OS();
     }
+    /**
+     * Parse the argument variables
+     * 
+     * @param Array $argv
+     * @return Array
+     */
     private function parseArgv($argv)
     {
         $data = array();
@@ -80,14 +116,30 @@ class CLI
         }
         return $data;
     }
+    /**
+     * Set the CLI interface to verbose, all output will not be shown.
+     * 
+     * @param boolean $verbose
+     */
     public function setVerbose($verbose = true)
     {
         $this->verbose = $verbose;
     }
+    /**
+     * Check if the CLI interface is verbose
+     * 
+     * @return boolean
+     */
     public function isVerbose()
     {
         return $this->verbose;
     }
+    /**
+     * Get a value from the arguments
+     * 
+     * @param String $key
+     * @return String
+     */
     public function getArg($key)
     {
         if(isset($this->argv[$key]))
@@ -96,6 +148,14 @@ class CLI
         }
         return false;
     }
+    /**
+     * Show a question, if the pattern is not valid, the question will be 
+     * asked again.
+     * 
+     * @param String $question
+     * @param String $pattern       regex pattern to match
+     * @return String
+     */
     public function prompt($question, $pattern = false)
     {
         fwrite(STDOUT, trim($question)." ");
@@ -109,6 +169,12 @@ class CLI
         
         return $result;
     }
+    /**
+     * Show a Confirm (yes/no).
+     * 
+     * @param String $question
+     * @return boolean
+     */
     public function confirm($question)
     {
         $awnser = strtolower($this->prompt(trim($question)." [Y/N]"));
@@ -121,6 +187,12 @@ class CLI
         
         return ($awnser == "y");
     }
+    /**
+     * Output something in the CLI interface
+     * 
+     * @param String $message
+     * @param boolean $sameline     keep the input on the previous line
+     */
     public function output($message, $sameline = false)
     {
         $lb = '';
@@ -133,15 +205,14 @@ class CLI
         if(!$this->verbose)
             fwrite(STDOUT, $message.$lb);
     }
+    /**
+     * Do an action
+     */
     public function doAction()
     {
         if(isset($this->actions[$this->action]))
         {
-            $className = $this->actions[$this->action];
-            $actionObj = new $className();
-            $actionObj->setup($this);
-            $actionObj->exec($this, $this->action);
-            $actionObj->cleanup($this);
+            $this->callAction($this->action);
         }
         else
         {
@@ -152,11 +223,47 @@ class CLI
             }
         }
     }
+    /**
+     * Call an action
+     * 
+     * @param String $action
+     */
+    private function callAction($action)
+    {
+        $className = $this->actions[$action];
+        $actionObj = new $className();
+        $actionObj->setup($this);
+        $actionObj->exec($this, $action);
+        $actionObj->cleanup($this);
+    }
+    /**
+     * Register an action
+     * 
+     * @param String $action
+     * @param String $class
+     */
     public function registerAction($action, $class)
     {
         $this->actions[$action] = $class;
     }
+    /**
+     * Show the header info
+     */
     public function header()
+    {
+        if(isset($this->actions["header"]))
+        {
+            $this->callAction("header");
+        }
+        else
+        {
+            $this->_header();
+        }
+    }
+    /**
+     * Fallback when there was no header
+     */
+    private function _header()
     {
         $this->output("===============================================");
         $this->output("A.W.S.O.M.E. cms commandline script");

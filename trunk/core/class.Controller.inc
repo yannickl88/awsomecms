@@ -222,7 +222,9 @@ class Controller
         
         if($request->isMadeByProxy())
         {
-            $this->setOutput($this->callTable($request->component, $request->translateAction(), $request));
+            header('Cache-Control: no-cache, must-revalidate');
+            header('Content-type: application/json');
+            echo $this->callTable($request->component, $request->translateAction(), $request);
         }
         else
         {
