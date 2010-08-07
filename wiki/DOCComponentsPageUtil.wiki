@@ -6,6 +6,16 @@ This file is part of the A.W.S.O.M.E.cms distribution.
 Detailed copyright and licensing information can be found
 in the doc/COPYRIGHT and doc/LICENSE files which should be
 included in the distribution.
+== Index: ==
+*functions*:
+*classes*:
+ * [DOCComponentsPageUtil#MenuItem MenuItem]
+ * [DOCComponentsPageUtil#Menu Menu]
+ * [DOCComponentsPageUtil#Tree Tree]
+ * [DOCComponentsPageUtil#TreeNode TreeNode]
+ * [DOCComponentsPageUtil#PageItem PageItem]
+ * [DOCComponentsPageUtil#Folder Folder]
+ * [DOCComponentsPageUtil#RootFolder RootFolder]
 == Contents: ==
 The following classes are located in this package
 === Classes: ===

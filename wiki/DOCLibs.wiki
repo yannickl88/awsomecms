@@ -6,6 +6,41 @@ This file is part of the A.W.S.O.M.E.cms distribution.
 Detailed copyright and licensing information can be found
 in the doc/COPYRIGHT and doc/LICENSE files which should be
 included in the distribution.
+== Index: ==
+*functions*:
+*classes*:
+ * [DOCLibs#BElement BElement]
+ * [DOCLibs#UElement UElement]
+ * [DOCLibs#IElement IElement]
+ * [DOCLibs#H1Element H1Element]
+ * [DOCLibs#H2Element H2Element]
+ * [DOCLibs#H3Element H3Element]
+ * [DOCLibs#ImgElement ImgElement]
+ * [DOCLibs#YoutubeElement YoutubeElement]
+ * [DOCLibs#UrlElement UrlElement]
+ * [DOCLibs#EmailElement EmailElement]
+ * [DOCLibs#LeftElement LeftElement]
+ * [DOCLibs#RightElement RightElement]
+ * [DOCLibs#CenterElement CenterElement]
+ * [DOCLibs#ListElement ListElement]
+ * [DOCLibs#ItemElement ItemElement]
+ * [DOCLibs#BBCodeException BBCodeException]
+ * [DOCLibs#BBCodeElement BBCodeElement]
+ * [DOCLibs#BBCodeDocument BBCodeDocument]
+ * [DOCLibs#BBCodeDummyElement BBCodeDummyElement]
+ * [DOCLibs#BBCodeText BBCodeText]
+ * [DOCLibs#BBCodeNewLine BBCodeNewLine]
+ * [DOCLibs#BBCodeParagraph BBCodeParagraph]
+ * [DOCLibs#BBCodeUnknownElement BBCodeUnknownElement]
+ * [DOCLibs#BBCodeParser BBCodeParser]
+ * [DOCLibs#CLIAction CLIAction]
+ * [DOCLibs#OS OS]
+ * [DOCLibs#CLI CLI]
+ * [DOCLibs#CronParser CronParser]
+ * [DOCLibs#FTP FTP]
+ * [DOCLibs#TableInfo TableInfo]
+ * [DOCLibs#InstallHelper InstallHelper]
+ * [DOCLibs#TextSpider TextSpider]
 == Contents: ==
 The following classes are located in this package
 === Classes: ===

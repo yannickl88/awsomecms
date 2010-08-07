@@ -6,6 +6,12 @@ This file is part of the A.W.S.O.M.E.cms distribution.
 Detailed copyright and licensing information can be found
 in the doc/COPYRIGHT and doc/LICENSE files which should be
 included in the distribution.
+== Index: ==
+*functions*:
+*classes*:
+ * [DOCComponentsGallery#FilesTable FilesTable]
+ * [DOCComponentsGallery#GalleryComponent GalleryComponent]
+ * [DOCComponentsGallery#GalleryTable GalleryTable]
 == Contents: ==
 The following classes are located in this package
 === Classes: ===

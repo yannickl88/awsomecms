@@ -3,6 +3,22 @@
 _Package: 'default'_ 
 
 
+== Index: ==
+*functions*:
+ * generateTranslateable
+ * generateNewLangFile
+*classes*:
+ * [DOCDefault#FileItem FileItem]
+ * [DOCDefault#ImageFolder ImageFolder]
+ * [DOCDefault#UploadFolder UploadFolder]
+ * [DOCDefault#NewsItem NewsItem]
+ * [DOCDefault#NewsFolder NewsFolder]
+ * [DOCDefault#DeployAction DeployAction]
+ * [DOCDefault#Usage Usage]
+ * [DOCDefault#Pack Pack]
+ * [DOCDefault#Update Update]
+ * [DOCDefault#Release Release]
+ * [DOCDefault#Patch Patch]
 == Contents: ==
 The following functions are located in this package
 === Functions: ===

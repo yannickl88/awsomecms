@@ -6,6 +6,45 @@ This file is part of the A.W.S.O.M.E.cms distribution.
 Detailed copyright and licensing information can be found
 in the doc/COPYRIGHT and doc/LICENSE files which should be
 included in the distribution.
+== Index: ==
+*functions*:
+ * import
+ * importField
+ * getFrameworkRoot
+ * handleError
+ * parseInfoFile
+ * addSlashesConfig
+ * getActions
+ * urlEscape
+ * str_rand
+*classes*:
+ * [DOCCore#Authentication Authentication]
+ * [DOCCore#Cache Cache]
+ * [DOCCore#Component Component]
+ * [DOCCore#Config Config]
+ * [DOCCore#ComponentNotFoundException ComponentNotFoundException]
+ * [DOCCore#ActionNotFoundException ActionNotFoundException]
+ * [DOCCore#NotInstanciatedException NotInstanciatedException]
+ * [DOCCore#UnauthException UnauthException]
+ * [DOCCore#Notifications Notifications]
+ * [DOCCore#Controller Controller]
+ * [DOCCore#Debugger Debugger]
+ * [DOCCore#FormException FormException]
+ * [DOCCore#InvalidFormException InvalidFormException]
+ * [DOCCore#Language Language]
+ * [DOCCore#RegisterManager RegisterManager]
+ * [DOCCore#ForbiddenException ForbiddenException]
+ * [DOCCore#Request Request]
+ * [DOCCore#SQLExeption SQLExeption]
+ * [DOCCore#SQLConnenectionExeption SQLConnenectionExeption]
+ * [DOCCore#SQLQuery SQLQuery]
+ * [DOCCore#SQLRecord SQLRecord]
+ * [DOCCore#SQL SQL]
+ * [DOCCore#PageNotFoundExeption PageNotFoundExeption]
+ * [DOCCore#NotInstalledException NotInstalledException]
+ * [DOCCore#SmartyPageLoader SmartyPageLoader]
+ * [DOCCore#DataContainer DataContainer]
+ * [DOCCore#Table Table]
 == Contents: ==
 The following functions are located in this package
 === Functions: ===
