@@ -112,6 +112,12 @@ function installComponents()
             
             $version = $info["atlines"]["version"];
             
+            //copy the install files
+            if(file_exists($dir.'/install'))
+            {
+                $h->rcopy($dir.'/install', $websiteroot);
+            }
+            
             $db->query(
                 "INSERT INTO 
                     `components` 
