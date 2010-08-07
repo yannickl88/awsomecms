@@ -9,7 +9,6 @@ included in the distribution.
 == Index: ==
 *functions*:
  * smarty_function_twitter
-*classes*:
 == Contents: ==
 The following functions are located in this package
 === Functions: ===

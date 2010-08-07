@@ -15,7 +15,6 @@ included in the distribution.
  * smarty_modifier_notin
  * smarty_modifier_text
  * smarty_modifier_ucfirst
-*classes*:
 == Contents: ==
 The following functions are located in this package
 === Functions: ===
