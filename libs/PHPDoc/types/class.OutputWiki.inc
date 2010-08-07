@@ -123,8 +123,15 @@ class OutputWiki
             {
                 $text = htmlentities($function->header->text->__toString());
             }
-
-            $pageContent .= " ==== {$accessor}{$static}_{$return}_ *`{$function->name}`* ( {$params} ) ====\n";
+            if($function->header->deprecated->__toString() != "")
+            {
+                $pageContent .= " ==== {$accessor}{$static}_{$return}_ ~~*`{$function->name}`*~~ ( {$params} ) ====\n";
+                $pageContent .= " Deprecated: {$function->header->deprecated}\n";
+            }
+            else
+            {
+                $pageContent .= " ==== {$accessor}{$static}_{$return}_ *`{$function->name}`* ( {$params} ) ====\n";
+            }
             if(!empty($text))
             {
                 if($functionOrig != $function)
