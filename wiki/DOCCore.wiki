@@ -116,9 +116,11 @@ Set the default request that is linked to the component, default is the same as 
 Do an redirect
  ==== *protected* _void_ *`ajax`* ( _`*`_ `$data` ) ====
 Do an ajax return (just data, no HTML) in json format
- ==== *protected* _array_ *`getFields`* (  ) ====
+ ==== *protected* _array_ ~~*`getFields`*~~ (  ) ====
+ Deprecated: Use tables
 Get the fields for this component
- ==== *protected* _void_ *`setCurrentTable`* ( _string_ `$table` ) ====
+ ==== *protected* _void_ ~~*`setCurrentTable`*~~ ( _string_ `$table` ) ====
+ Deprecated: Use tables
 Set the current table to be validated against
  ==== *public* _void_ *`registerMenuItems`* ( _[DOCComponentsPageUtil#Menu Menu]_ `$menu` ) ====
 Register menu items for this component
