@@ -92,7 +92,7 @@ class OutputWiki
                         $params .= ", ";
                     }                    $type = $param['type']->__toString();
                     if($type == "*") $type = "`*`";
-                    
+
                     $type = $this->getRef($type);
                     $params .= "_{$type}_ `{$param->field}`";
                 }
@@ -192,8 +192,27 @@ class OutputWiki
         //name
         $pageContent .= "_Package: '{$packageName}'_ \n\n";
         $pageContent .= htmlentities($infoXML->header->text->__toString())."\n";
+        //create index
+        $pageContent .= "== Index: ==\n";
+        if($infoXML->classes->function->count() > 0)
+        {
+            $pageContent .= "*functions*:\n";
+            foreach($infoXML->classes->function as $function)
+            {
+                $pageContent .= " * {$function->name}\n";
+            }
+        }
+        if($infoXML->classes->class->count() > 0)
+        {
+            $pageContent .= "*classes*:\n";
+            foreach($infoXML->classes->class as $function)
+            {
+                $docName = $this->translatePackageLocalName($infoXML->header->package->__toString(), false);
+                $pageContent .= " * [{$docName}#{$function->name} {$function->name}]\n";
+            }
+        }
         $pageContent .= "== Contents: ==\n";
-
+        //create blocks
         $pageContent .= $this->formatFunctions($infoXML);
         $pageContent .= $this->formatClasses($infoXML);
 
