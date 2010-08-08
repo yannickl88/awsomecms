@@ -33,8 +33,18 @@ function smarty_function_news($params, &$smarty)
     {
         $params['news_tag'] = $params['tag'];
     }
-
-    $smarty->assign("news", $newsComponent->setRequest((object) $params)->doSelect()->getRows());
+    
+    $items = array();
+    $rows = $newsComponent->setRequest((object) $params)->doSelect();
+    
+    while($row = $rows->getRow())
+    {
+        
+        $row->news_text = BBCodeParser::parse($row->news_text);
+        $items[] = $row;
+    }
+    
+    $smarty->assign("news", $items);
 
     return $smarty->fetch($template);
 }

@@ -103,8 +103,14 @@ class YoutubeElement extends BBCodeElement
         $matches = array();
         if(preg_match('/^http:\/\/(www\.)?youtube\.com\/watch\?v=([a-zA-Z0-9]*)$/', $text, $matches) === 1)
         {
+            $width = 480;
+            $height = 385;
+            
+            if($this->hasAttr("width")) $width = $this->getAttr("width");
+            if($this->hasAttr("height")) $height = $this->getAttr("height");
+            
             $url = "http://www.youtube.com/v/{$matches[2]}&amp;fs=1";
-            return "<object width=\"480\" height=\"385\"><param name=\"movie\" value=\"{$url}\"></param><param name=\"allowFullScreen\" value=\"true\"></param><param name=\"allowscriptaccess\" value=\"always\"></param><embed src=\"{$url}\" type=\"application/x-shockwave-flash\" allowscriptaccess=\"always\" allowfullscreen=\"true\" width=\"480\" height=\"385\"></embed></object>";
+            return "<object width=\"{$width}\" height=\"{$height}\"><param name=\"movie\" value=\"{$url}\"></param><param name=\"allowFullScreen\" value=\"true\"></param><param name=\"allowscriptaccess\" value=\"always\"></param><embed src=\"{$url}\" type=\"application/x-shockwave-flash\" allowscriptaccess=\"always\" allowfullscreen=\"true\" width=\"{$width}\" height=\"{$height}\"></embed></object>";
         }
         else
         {

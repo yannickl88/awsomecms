@@ -107,8 +107,8 @@ class UploadFolder extends Folder
         $linkView = "/".Config::get("fileadmin", "fileadmin", "admin");
         
         $html = "uploadFolder = new TreeFolder(\"{$this->name}\", \"{$this->location}\", {$this->parent->getName()}, \"folder\", [new TreeAction(\"overview\", \"{$linkView}\", {$this->parent->getName()}), new TreeAction(\"add\", \"{$linkAdd}\", {$this->parent->getName()})], {$this->getType()});\n";
-        $html .= "file_bindListeners(uploadFolder.html.get(0));\n";
         $html .= "uploadFolder.nodes = ".stripslashes(json_encode($this->nodeMap))."\n";
+        $html .= "$().ready(function(e) {new FileUpload(uploadFolder.html.get(0)); });\n";
         $html .= "{$this->parent->getName()}.addChild(uploadFolder);\n";
         
         return $html;
