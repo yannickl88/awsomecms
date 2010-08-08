@@ -21,6 +21,9 @@ var Editor = function(element, options)
 {
     this.element = null;
     this.toolbar = null;
+    this.resizebar = null;
+    
+    this.resizing = false;
     /**
      * Constructor
      * 
@@ -35,14 +38,20 @@ var Editor = function(element, options)
         {
             this.element.wrap("<div class='toolbar' />");
             this.toolbar = $("<div class='toolbarButtons' />");
+            this.resizebar = $("<div class='toolbarresize'><div class='resize'></div></div>");
             this.element.parent().prepend(this.toolbar);
+            this.element.parent().append(this.resizebar);
+            
+            //bind the resize
+            this.resizebar.bind("selectstart", function(e) { return false });
+            this.resizebar.bind("mousedown", {editor: this}, function(e) { console.log(e); e.data.editor.resize(e); return false });
         }
         
         if(options != undefined)
         {
             if(options.width != undefined) 
                 this.element.parent().width(options.width);
-                this.element.width(options.width);
+                this.element.css({width: options.width - 5, resize: "none"});
             if(options.height != undefined) 
                 this.element.height(options.height);
         }
@@ -63,6 +72,28 @@ var Editor = function(element, options)
         this._addSpacer();
         this._addButton("Image", "[img]", "[/img]", 21);
         this._addButton("Youtube", "[youtube]", "[/youtube]", 30);
+    };
+    /**
+     * Handel the resize for the editor
+     * NOTE: do not bind this, but pass the event
+     * 
+     * @param Event e
+     */
+    this.resize = function(e) {
+        console.log("RESIZE START");
+        var editor = this; //local var for refering in listeners
+        var originalY = e.pageY;
+        var prevHeight = this.element.height();
+        var moveHandler = function(e) {
+            editor.element.height(prevHeight + (e.pageY - originalY));
+            console.log("MOVEING");
+        };
+        
+        $("body").mousemove(moveHandler);
+        $("body").mouseup(function(e) {
+            $("body").unbind("mousemove", moveHandler);
+            $(this).unbind(e);
+        });
     };
     /**
      * Insert a tag into the textbox

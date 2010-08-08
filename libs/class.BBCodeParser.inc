@@ -536,8 +536,12 @@ class BBCodeParser
      */
     public static function parse($text)
     {
-        $parser = new BBCodeParser($text);
-        return $parser->process();
+        if(Config::get("type", "wysiwig", "input") == "bbcode")
+        {
+            $parser = new BBCodeParser($text);
+            return $parser->process();
+        }
+        return $text;
     }
     /**
      * Constructor

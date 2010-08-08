@@ -26,11 +26,12 @@ function smarty_function_twitter($params, &$smarty)
 
     $twitter = new Twitter(Config::get("username", "", "twitter"), Config::get("password", "", "twitter"));
 
-    if(!$_SESSION['twitter']['statuses'])
+    if(!isset($_SESSION['twitter']['statuses']))
     {
         try
         {
             $_SESSION['twitter']['statuses'] = $twitter->getUserTimeline();
+            $statuses = $_SESSION['twitter']['statuses'];
         }
         catch(Exception $e)
         {
@@ -40,8 +41,10 @@ function smarty_function_twitter($params, &$smarty)
             ));
         }
     }
-
-    $statuses = $_SESSION['twitter']['statuses'];
+    else 
+    {
+        $statuses = $_SESSION['twitter']['statuses'];
+    }
 
     $text = $statuses[0]['text'];
 
