@@ -29,6 +29,23 @@ class UsersComponent extends Component implements AuthComponent
         parent::__construct('users');
     }
     /**
+     * (non-PHPdoc)
+     * @see core/Component::register()
+     *
+     * @param RegisterManager $registerManager
+     */
+    public function register($registerManager)
+    {
+        $registerManager->registerPage('add', '/admin/users/', '{form table="users.users" form="add"}');
+        $registerManager->registerPage('edit', '/admin/users/', '{form table="users.users" form="edit"}');
+        $registerManager->registerPage('delete', '/admin/users/', '{form table="users.users" form="delete"}');
+        $registerManager->registerPage('admin', '/admin/users/', '{form table="users.users" form="admin"}');
+        $registerManager->registerPage('privadmin', '/admin/users/', '{form table="users.privileges" form="admin"}');
+        $registerManager->registerPage('privadd', '/admin/users/', '{form table="users.privileges" form="add"}<br />');
+        $registerManager->registerPage('privedit', '/admin/users/', '{form table="users.privileges" form="edit"}');
+        $registerManager->registerPage('privdelete', '/admin/users/', '{form table="users.privileges" form="delete"}');
+    }
+    /**
      * Internal function to handle login. This checks user and password and
      * if they are filled in or throws and FormException otherwise.
      * 

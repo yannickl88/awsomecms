@@ -32,6 +32,19 @@ class GalleryComponent extends Component
         parent::__construct('gallery');
     }
     /**
+     * (non-PHPdoc)
+     * @see core/Component::register()
+     *
+     * @param RegisterManager $registerManager
+     */
+    public function register($registerManager)
+    {
+        $registerManager->registerPage('add', '/admin/gallery/', '{form table="gallery.gallery" form="add"}');
+        $registerManager->registerPage('edit', '/admin/gallery/', '{form table="gallery.gallery" form="edit"}');
+        $registerManager->registerPage('delete', '/admin/gallery/', '{form table="gallery.gallery" form="delete"}');
+        $registerManager->registerPage('admin', '/admin/gallery/', '{form table="gallery.gallery" form="admin"}');
+    }
+    /**
      * Action to add an image
      * 
      * @param Smarty $smarty
