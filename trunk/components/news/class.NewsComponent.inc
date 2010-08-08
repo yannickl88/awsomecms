@@ -14,6 +14,7 @@
  */
 import('/core/class.Component.inc');
 import('/components/news/util/class.NewsTree.inc');
+import('/libs/class.TextSpider.inc');
 
 /**
  * The News component provides a simple news system that allows for new messages. 
@@ -134,7 +135,7 @@ class NewsComponent extends Component
             $id = Table::init("news.news")
                 ->setRecord((object) $request)
                 ->doInsert()
-                ->insertID;
+                ->insertID();
             
             $indexer = new TextSpider();
             $indexer->index($request['news_text'], $request['news_titleurl']."/".date("Y/m/", strtotime($request['news_date'])), $request['news_title'], "news.{$id}");

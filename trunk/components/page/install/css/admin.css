@@ -1,25 +1,28 @@
 /* ADMIN CSS FILE */
-
-html, body {
+html,body {
     font-family: Verdana;
     font-size: 11px;
-    height:100%;
-    margin:0;
-    padding:0;
+    height: 100%;
+    margin: 0;
+    padding: 0;
 }
+
 body {
     background-image: url(/img/admin/carbon2.gif);
     background-color: #ffffff;
     background-repeat: repeat-y;
 }
+
 body.login {
     background-image: url(/img/admin/carbon.gif);
     background-color: transparent;
     background-repeat: repeat;
 }
+
 img {
     border: 0;
 }
+
 h1 {
     font-size: 30px;
     margin: 0;
@@ -27,48 +30,53 @@ h1 {
     font-family: Verdana;
     font-weight: normal;
 }
+
 /* ADMIN LAYOUT */
-#siteWrapper
-{
-    height:auto !important;
+#siteWrapper {
+    height: auto !important;
     min-height: 100%;
     background-color: #ffffff;
 }
+
 #sidebarWrapper {
     width: 250px;
-    position: absolute; 
+    position: absolute;
 }
+
 #sidebarHeader {
     color: #747474;
     height: 100px;
 }
+
 #sidebarHeader #headerLink {
     padding: 10px 0 0 10px;
     display: block;
 }
+
 #headerLinks {
     text-align: right;
     padding-right: 10px;
 }
+
 #sidebarHeader a {
     color: #ededed;
     text-decoration: none;
 }
+
 #sidebarHeader a:HOVER {
     color: #ffffff;
     text-decoration: underline;
 }
-#adminMenuWrapper ul,
-#adminTreeWrapper ul.title
-{
+
+#adminMenuWrapper ul,#adminTreeWrapper ul.title {
     list-style: none;
     padding: 0;
     margin: 0;
     text-align: right;
 }
-#adminMenuWrapper ul li a,
-#adminTreeWrapper .title a.title
-{
+
+#adminMenuWrapper ul li a,#adminTreeWrapper .title a.title
+    {
     background-image: url(/img/admin/menu.gif);
     background-repeat: no-repeat;
     background-position: 100% -48px;
@@ -80,92 +88,108 @@ h1 {
     color: #ffffff;
     text-decoration: none;
 }
-#adminMenuWrapper ul li.active a
-{
+
+#adminMenuWrapper ul li.active a {
     color: #000000;
     background-position: top right;
 }
-#adminMenuWrapper ul li ul li a
-{
+
+#adminMenuWrapper ul li ul li a {
     background-image: none;
     height: 18px;
     font-size: 13px;
     color: #bbbbbb;
 }
-#adminMenuWrapper ul li.active ul li a
-{
+
+#adminMenuWrapper ul li.active ul li a {
     color: #bbbbbb;
 }
+
 #adminMenuWrapper ul li ul li a:HOVER {
     background-position: 100% -72px;
     background-image: url(/img/admin/menu.gif);
     color: #ffffff;
 }
-#adminMenuWrapper ul li ul li.selected a
-{
+
+#adminMenuWrapper ul li ul li.selected a {
     background-position: 100% -24px;
     background-image: url(/img/admin/menu.gif);
     color: #ffffff;
     font-weight: bold;
 }
+
 #copyright {
     color: #bbbbbb;
 }
-#copyright hr{
+
+#copyright hr {
     width: 120px;
     border: 0;
     border-top: 1px solid #bbbbbb;
     float: left;
 }
-#copyright a{
+
+#copyright a {
     color: #909090;
 }
-#copyright a:hover{
+
+#copyright a:hover {
     color: #333333;
     text-decoration: none;
 }
+
 /* MAIN SITE*/
 #mainWrapper {
     margin-left: 250px;
     padding: 0 10px 0 20px;
     height: 100%;
 }
-#contentWrapper{
+
+#contentWrapper {
     min-height: 300px;
 }
+
 #mainHeader {
     padding-top: 10px;
     padding-bottom: 10px;
 }
+
 #mainHeader .header {
     font-size: 30px;
     font-weight: bold;
 }
+
 /* ADMIN TREE */
 #treeWrapper {
     margin: 0 0 50px 20px;
     width: 230px;
     overflow: auto;
 }
+
 .fileOver {
     background-color: #233c51;
 }
+
 .treeNode {
     text-align: left;
     padding-left: 10px;
 }
+
 .treeNode img {
     border: 0;
 }
+
 .treeNode a {
     padding-left: 20px;
     text-decoration: none;
     color: #bbbbbb;
-    white-space:nowrap;
+    white-space: nowrap;
 }
+
 .admin_form .treeNode a {
     color: #000000;
 }
+
 .treeNode a.folder {
     height: 16px;
     display: block;
@@ -173,41 +197,50 @@ h1 {
     background-image: url(/img/icons/selection.png);
     background-repeat: no-repeat;
 }
+
 .focus {
     background-position: left -32px;
 }
+
 .open {
     background-position: left -48px;
 }
+
 .open.focus {
     background-position: left -16px;
 }
+
 .hidden {
     display: none;
 }
+
 .hideIcons .treeIcon {
     display: none;
 }
+
 .treeIcon {
     float: right;
     display: block;
     height: 16px;
     width: 16px;
-    
     padding: 0 !important;
 }
+
 .viewIcon {
     background-image: url();
 }
+
 .fileFocus {
     background-color: #313e46;
 }
+
 /* ADMIN TABLES */
 .admin_table {
     border-collapse: collapse;
     width: 100%;
     height: 100px;
 }
+
 .admin_table th {
     background-image: url(/img/admin/tableheader.png);
     background-position: bottom;
@@ -217,76 +250,142 @@ h1 {
     font-family: Arial;
     font-size: 15px;
 }
+
 .admin_table .admin_table_cell {
     text-align: center;
 }
+
 .admin_table .admin_table_actions {
     width: 40px;
 }
+
 .admin_table .admin_table_row {
     border-top: 1px solid #a9c8e1;
 }
+
 .admin_table .highlighted {
     background-color: #dfebf4;
 }
+
 .admin_table .admin_table_actions_row {
     height: 20px;
     border-top: 2px solid #337db7;
 }
-.admin_table .admin_table_actions_row .admin_table_actions {
+
+.admin_table .admin_table_actions_row .admin_table_actions
+    {
     text-align: right;
     padding-right: 10px;
 }
-.admin_table .admin_table_actions_row .admin_table_actions a {
+
+.admin_table .admin_table_actions_row .admin_table_actions a
+    {
     text-decoration: none;
 }
+
 /* ADMIN FORMS */
 .admin_form_label {
     float: left;
     width: 120px;
 }
+
 .admin_form_field {
     margin-left: 120px;
 }
-.admin_form_field input[type="text"].cmsfield,
-.admin_form_field input[type="password"].cmsfield {
+
+.admin_form_field input[type="text"].cmsfield,.admin_form_field input[type="password"].cmsfield
+    {
     width: 300px;
 }
+
 .admin_form_field textarea.cmsfield {
     width: 500px;
 }
+
 .admin_form_field select.cmsfield {
     width: 306px;
+}
+
+.admin_form_field select.cmsfield[multiple=multiple]
+    {
     height: 100px;
 }
-.admin_form_row.admin_form_submit
-{
+
+.admin_form_row.admin_form_submit {
     text-align: center;
     margin-top: 10px;
 }
-.admin_form_row.form_error
-{
+
+.admin_form_row.form_error {
     background: #ffe6e6;
     color: #632525;
 }
+
 .smallfield {
     width: 75px !important;
 }
+
 .tinyfield {
     width: 25px !important;
 }
+
 /* CORE COMPONENT */
 .admin_component_access {
-    display: block; 
-    float: left; 
-    width: 16px; 
-    height: 16px; 
+    display: block;
+    float: left;
+    width: 16px;
+    height: 16px;
     background-image: url(/img/admin/access.png);
 }
-.admin_component_access.s { background-position: 0 -16px; } .admin_component_access.s.selected { background-position: 0 0; } .admin_component_access.s:hover { background-position: 0 -32px; }
-.admin_component_access.i { background-position: -16px -16px; } .admin_component_access.i.selected { background-position: -16px 0; } .admin_component_access.i:hover { background-position: -16px -32px; }
-.admin_component_access.u { background-position: -32px -16px; } .admin_component_access.u.selected { background-position: -32px 0; } .admin_component_access.u:hover { background-position: -32px -32px; }
-.admin_component_access.d { background-position: -48px -16px; } .admin_component_access.d.selected { background-position: -48px 0; } .admin_component_access.d:hover { background-position: -48px -32px; }
+
+.admin_component_access.s {
+    background-position: 0 -16px;
+}
+
+.admin_component_access.s.selected {
+    background-position: 0 0;
+}
+
+.admin_component_access.s:hover {
+    background-position: 0 -32px;
+}
+
+.admin_component_access.i {
+    background-position: -16px -16px;
+}
+
+.admin_component_access.i.selected {
+    background-position: -16px 0;
+}
+
+.admin_component_access.i:hover {
+    background-position: -16px -32px;
+}
+
+.admin_component_access.u {
+    background-position: -32px -16px;
+}
+
+.admin_component_access.u.selected {
+    background-position: -32px 0;
+}
+
+.admin_component_access.u:hover {
+    background-position: -32px -32px;
+}
+
+.admin_component_access.d {
+    background-position: -48px -16px;
+}
+
+.admin_component_access.d.selected {
+    background-position: -48px 0;
+}
+
+.admin_component_access.d:hover {
+    background-position: -48px -32px;
+}
+
 /* LOGIN */
 #loginWrapper {
     background-color: #ffffff;
@@ -298,34 +397,42 @@ h1 {
     padding: 10px 30px 30px 30px;
     left: 50%;
 }
+
 #loginWrapper .header {
     font-size: 20px;
     font-weight: bold;
     padding-bottom: 10px;
     display: block;
 }
+
 /* CORE AUTH */
 #core_auth .component {
     font-weight: bold;
 }
+
 #core_auth .actionItem {
     list-style: none;
 }
+
 #core_auth .action {
     float: left;
     width: 160px;
     font-style: italic;
 }
+
 #core_auth .privsWrapper {
     margin-left: 160px;
 }
+
 #core_auth .priv {
     float: left;
     width: 100px;
 }
+
 #core_auth .clearSpacer {
     clear: both;
 }
+
 /* NOTIFICATIONS */
 .notification {
     border: 1px dashed #fedd00;
@@ -337,9 +444,11 @@ h1 {
     -moz-border-radius: 10px;
     -webkit-border-radius: 10px;
 }
+
 .notification a {
     color: #7c5a00;
 }
+
 /* POPUP */
 #formWrapperBackground {
     height: 100%;
@@ -351,6 +460,7 @@ h1 {
     z-index: 1000;
     display: none;
 }
+
 #formWrapperBorder {
     background: url(/img/admin/dialog-bg.png);
     width: 650px;
@@ -359,6 +469,7 @@ h1 {
     -moz-border-radius: 10px;
     -webkit-border-radius: 10px;
 }
+
 #formInnerWrapper {
     background-color: #ffffff;
     min-height: 300px;
@@ -366,10 +477,57 @@ h1 {
     overflow: auto;
     padding: 10px;
 }
+
 #formHeaderWrapper {
     float: right;
 }
-#formHeaderWrapper a{
+
+#formHeaderWrapper a {
     text-decoration: none;
     color: #333333;
+}
+
+/* BBCODE Editor */
+.admin_form_field .toolbar {
+    border: 1px solid #BBB;
+}
+
+.admin_form_field .toolbar .toolbarButtons {
+    background: url(/img/tinyeditor/header-bg.gif)
+        repeat-x;
+    height: 32px;
+    margin: 0 1px 0 1px;
+    border-bottom: 1px solid #BBB;
+}
+
+.admin_form_field .toolbar textarea {
+    border: 0;
+}
+
+.admin_form_field .toolbar .toolbarButtons span.spacer {
+    border-left: 1px solid #BBB;
+    margin-top: 1px;
+    display: block;
+    float: left;
+    height: 30px;
+}
+.admin_form_field .toolbar .toolbarButtons a {
+    background: url(/img/tinyeditor/icons.png);
+    display: block;
+    height: 30px;
+    width: 32px;
+    float: left;
+    margin-top: 1px;
+}
+.admin_form_field .toolbar .toolbarButtons a:hover {
+    background: url(/img/tinyeditor/icons.png) #fff;
+}
+.admin_form_field .toolbar .toolbarresize {
+    border-top: 1px solid #BBB;
+    background-color: #F5F5F5;
+    height: 31px;
+    margin: 0 1px 1px 1px;
+}
+.admin_form_field .toolbar .toolbarresize .resize {
+    background: url(/img/tinyeditor/resize.gif) no-repeat 15px 15px;
 }
