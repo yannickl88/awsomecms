@@ -28,6 +28,19 @@ class ContactComponent extends Component
         parent::__construct('contact');
     }
     /**
+     * (non-PHPdoc)
+     * @see core/Component::register()
+     *
+     * @param RegisterManager $registerManager
+     */
+    public function register($registerManager)
+    {
+        $registerManager->registerPage('admin', '/admin/contact/', '{form table="contact.forms" form="admin"}');
+        $registerManager->registerPage('add', '/admin/contact/', '{form table="contact.forms" form="add"}');
+        $registerManager->registerPage('edit', '/admin/contact/', '{form table="contact.forms" form="edit"}');
+        $registerManager->registerPage('delete', '/admin/contact/', '{form table="contact.forms" form="delete"}');
+    }
+    /**
      * Add action, this is called when a contact form is added
      *
      * @param Smarty $smarty

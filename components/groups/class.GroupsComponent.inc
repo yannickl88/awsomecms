@@ -42,10 +42,10 @@ class GroupsComponent extends Component implements AuthComponent
         $registerManager->registerHook($this->component, "users", "post", "delete", "userdel");
         
         //admin pages
-        $registerManager->registerPage("index", "/admin/", '{"welcomeadmin"|text}');
-        $registerManager->registerPage("index", "/admin/core/", '{form component="core" form="layout"}');
-        $registerManager->registerPage("index", "/admin/core/", '{form component="core" form="components"}');
-        $registerManager->registerPage("index", "/admin/core/", '{form component="core" form="auth"}');
+        $registerManager->registerPage('admin', '/admin/groups/', '{form table="groups.groups" form="admin"}');
+        $registerManager->registerPage('add', '/admin/groups/', '{form table="groups.groups" form="add"}');
+        $registerManager->registerPage('edit', '/admin/groups/', '{form table="groups.groups" form="edit"}');
+        $registerManager->registerPage('delete', '/admin/groups/', '{form table="groups.groups" form="delete"}');
     }
     /**
      * Action to add an group

@@ -30,6 +30,18 @@ class PageComponent extends Component
         parent::__construct('page');
     }
     /**
+     * (non-PHPdoc)
+     * @see core/Component::register()
+     *
+     * @param RegisterManager $registerManager
+     */
+    public function register($registerManager)
+    {
+        $registerManager->registerPage('edit', '/admin/page/', '{form table="page.pages" form="edit"}');
+        $registerManager->registerPage('add', '/admin/page/', '{form table="page.pages" form="add"}');
+        $registerManager->registerPage('delete', '/admin/page/', '{form table="page.pages" form="delete"}');
+    }
+    /**
      * Action for adding a page
      * 
      * @param Smarty $smarty

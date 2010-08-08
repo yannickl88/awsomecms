@@ -30,7 +30,19 @@ class NewsComponent extends Component
     {
         parent::__construct('news');
     }
-    
+    /**
+     * (non-PHPdoc)
+     * @see core/Component::register()
+     *
+     * @param RegisterManager $registerManager
+     */
+    public function register($registerManager)
+    {
+        $registerManager->registerPage('admin', '/admin/news/', '{form table="news.news" form="admin"}');
+        $registerManager->registerPage('add', '/admin/news/', '{form table="news.news" form="add"}');
+        $registerManager->registerPage('delete', '/admin/news/', '{form table="news.news" form="delete"}');
+        $registerManager->registerPage('edit', '/admin/news/', '{form table="news.news" form="edit"}');
+    }
     /**
      * Index action, this is used when a page is shown by the cms
      *

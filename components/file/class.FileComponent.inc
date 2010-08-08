@@ -31,6 +31,19 @@ class FileComponent extends Component
     {
         parent::__construct('file');
     }
+    /**
+     * (non-PHPdoc)
+     * @see core/Component::register()
+     *
+     * @param RegisterManager $registerManager
+     */
+    public function register($registerManager)
+    {
+        $registerManager->registerPage('add', '/admin/file/', '{form table="file.files" form="add"}');
+        $registerManager->registerPage('edit', '/admin/file/', '{form table="file.files" form="edit"}');
+        $registerManager->registerPage('delete', '/admin/file/', '{form table="file.files" form="delete"}');
+        $registerManager->registerPage('admin', '/admin/file/', '{form table="file.files" form="admin"}');
+    }
     public function action_add($smarty, $smartyLoader, $request)
     {
         if($request['method'] == 'post')

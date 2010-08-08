@@ -27,6 +27,15 @@ class CommentsComponent extends Component
         parent::__construct('comments');
     }
     /**
+     * (non-PHPdoc)
+     * @see core/Component::register()
+     *
+     * @param RegisterManager $registerManager
+     */
+    public function register($registerManager)
+    {
+    }
+    /**
     * Repley action, this is called when a reply is posted
     * 
     * @param Smarty $smarty
