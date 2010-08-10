@@ -24,8 +24,8 @@
     {/foreach}
     <div class="form_row fieldtypecaptcha">
         <div class="form_field">
-            <img src="/securimage_show.php?sid=d28544701be50bc66afb925278e38059" alt="captcha"/>
-            <span onclick="$(this).siblings('img').attr('src', '/securimage_show.php?sid=' + Math.random()); return false" class="captcha">
+            <img src="/securimage_show.php?sid=d28544701be50bc66afb925278e38059" alt="captcha" class="captchaImage"/>
+            <span onclick="$(this).siblings('img').attr('src', '/securimage_show.php?sid=' + Math.random()); return false" class="captchaRelead">
                 <img onclick="this.blur()" alt="Reload Image" src="/img/refresh.gif" />
             </span>
          </div>

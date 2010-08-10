@@ -9,7 +9,7 @@
     "compoverview":         "Onderdelen overzicht",
     "installedcomp":        "Geinstaleerde Componenten",
     "framework":            "Framework",
-    "status":               "Status",
+    "actions":              "Acties",
     "component":            "Component",
     "pubaccess":            "Publieke Toegang",
     "description":          "Beschrijving",
@@ -25,5 +25,17 @@
     "url":                  "URL",
     "layout":               "Layout",
     "svnfound":             "SVN gevonden",
-    "svnfoundexp":          "SVN mappen is aangetroffen in uw distributie. Daarom is updaten uitgeschakeld en het is aanbevolen SVN te gebruiken voor het up-to-date houden van uw components. OPMERKING: vergeet niet om eventuele patches bij updaten draaien."
+    "svnfoundexp":          "SVN mappen is aangetroffen in uw distributie. Daarom is updaten uitgeschakeld en het is aanbevolen SVN te gebruiken voor het up-to-date houden van uw components. OPMERKING: vergeet niet om eventuele patches bij updaten draaien.",
+    "january":              "januari",
+    "february":             "februari",
+    "march":                "maart",
+    "april":                "april",
+    "may":                  "kunnen",
+    "june":                 "juni",
+    "july":                 "juli",
+    "august":               "augustus",
+    "september":            "september",
+    "october":              "oktober",
+    "november":             "november",
+    "december":             "december"
 }
