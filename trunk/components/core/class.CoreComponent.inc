@@ -35,6 +35,12 @@ class CoreComponent extends Component
      */
     public function register($registerManager)
     {
+        $registerManager->registerAuth("core.action_components", "admin");
+        $registerManager->registerAuth("core.action_deleteinstall", "admin");
+        $registerManager->registerAuth("core.action_getform", "admin");
+        $registerManager->registerAuth("core.action_install", "admin");
+        $registerManager->registerAuth("core.action_update", "admin");
+        
         $registerManager->registerURLMap('\/(.*)', 'core.index', 0);
         
         //admin pages
@@ -381,67 +387,6 @@ class CoreComponent extends Component
                 "auth_insert" => Config::get("auth_insert", 4, "core"),
                 "auth_update" => Config::get("auth_update", 8, "core"),
             ));
-        }
-    }
-    public function action_auth($smarty, $smartyLoader, $request)
-    {
-        $components = RegisterManager::getInstance()->getComponenets();
-        
-        if($request['method'] == 'post')
-        {
-            Table::init("core.auth")
-                ->doDelete();
-            
-            foreach($components as $component)
-            {
-                $actions = getActions($component->component_name);
-                
-                foreach($actions as $key => $action)
-                {
-                    $key = str_replace(".", "_", $key);
-                    
-                    if($request[$key])
-                    {
-                        foreach($request[$key] as $priv)
-                        {
-                            Table::init("core.auth")
-                                ->setRecord((object) array("auth_component" => $component->component_name, "auth_action" => $action, "auth_privilage" => $priv))
-                                ->doInsert();
-                        }
-                    }
-                }
-            }
-            $this->redirect("/".Config::get('coreauth', 'coreauth', 'admin'));
-        }
-        else
-        {
-            $exceptions = Controller::getInstance()->getActionAuthExceptions();
-            
-            $values = array();
-            $auths = Table::init("core.auth")
-                ->doSelect()
-                ->getRows();
-            
-            foreach($auths as $auth)
-            {
-                if(!isset($values[$auth->auth_component.".".$auth->auth_action]))
-                {
-                    $values[$auth->auth_component.".".$auth->auth_action] = array();
-                }
-                
-                $values[$auth->auth_component.".".$auth->auth_action][] = $auth->auth_privilage;
-            }
-            foreach($components as $component)
-            {
-                $component->actions = getActions($component->component_name);
-                $component->actions_length = count($component->actions);
-            }
-            
-            //TODO: fix depedancie
-            $smarty->assign("privileges", Table::init('users.privileges')->doSelect()->getRows());
-            $smarty->assign("exceptions", $exceptions);
-            $smarty->assign("components", $components);
-            $smarty->assign("record", $values);
         }
     }
     public function action_deleteinstall($smarty, $smartyLoader, $request)

@@ -8,6 +8,7 @@
     "field_user_pass":      "Wachtwoord",
     "field_user_pass2":     "Opnieuw",
     "field_user_privileges":"Privliveges",
+    "field_privilege_auths":"Auth groepen",
     "login":                "inloggen",
     "error_nomatch":        "Gebruikersnaam en wachtwoord komen niet overeen",
     "error_passwordsnomatch":"Wachtwoorden komen niet overeen",

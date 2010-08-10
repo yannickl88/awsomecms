@@ -39,6 +39,10 @@ class NewsComponent extends Component
      */
     public function register($registerManager)
     {
+        $registerManager->registerAuth("news.action_add", "admin");
+        $registerManager->registerAuth("news.action_edit", "admin");
+        $registerManager->registerAuth("news.action_delete", "admin");
+        
         $registerManager->registerPage('admin', '/admin/news/', '{form table="news.news" form="admin"}');
         $registerManager->registerPage('add', '/admin/news/', '{form table="news.news" form="add"}');
         $registerManager->registerPage('delete', '/admin/news/', '{form table="news.news" form="delete"}');

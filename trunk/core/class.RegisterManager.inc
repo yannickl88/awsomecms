@@ -26,6 +26,7 @@ class RegisterManager
     private $hooks;
     private $pages;
     private $components;
+    private $auth;
     private $max;
 
     /**
@@ -51,7 +52,7 @@ class RegisterManager
      */
     public function needsRevalidation()
     {
-        if(Cache::has("components") && Cache::has("mappings") && Cache::has("hooks") && Cache::has("pages"))
+        if(Cache::has("components") && Cache::has("mappings") && Cache::has("hooks") && Cache::has("pages") && Cache::has("auth"))
         {
             if(Config::get("debug", 0, "debug") >= 1)
             {
@@ -95,6 +96,7 @@ class RegisterManager
             $this->hooks = array();
             $this->pages = array();
             $this->mappings = array();
+            $this->auth = array();
 
             $result = SQLQuery::doSelect()
             ->table('components')
@@ -136,6 +138,7 @@ class RegisterManager
             $this->mappings = Cache::get("mappings");
             $this->hooks = Cache::get("hooks");
             $this->pages = Cache::get("pages");
+            $this->auth = Cache::get("auth");
         }
     }
     /**
@@ -147,6 +150,7 @@ class RegisterManager
         Cache::set("mappings", $this->mappings);
         Cache::set("hooks", $this->hooks);
         Cache::set("pages", $this->pages);
+        Cache::set("auth", $this->auth);
     }
     /**
      * Register a Hook
@@ -173,6 +177,19 @@ class RegisterManager
     public function registerPage($pageName, $pageLocation, $content)
     {
         $this->pages[$pageLocation."/".$pageName] = array($content, time());
+    }
+    /**
+     * Register an auth group to which this action belongs
+     * 
+     * @param String $action
+     * @param String $group
+     */
+    public function registerAuth($action, $group)
+    {
+        if(!isset($this->auth[$group]))
+            $this->auth[$group] = array();
+            
+        $this->auth[$group][] = $action;
     }
     /**
      * Register an urlmapping
@@ -265,6 +282,15 @@ class RegisterManager
         return $this->componenets;
     }
     /**
+     * Get all registered Auth groups
+     * 
+     * @return array
+     */
+    public function getAuths()
+    {
+        return $this->auth;
+    }
+    /**
      * Check if a component is installed
      * 
      * @param String $component
@@ -298,5 +324,28 @@ class RegisterManager
         $key = "{$component}-{$target}-{$prepost}";
 
         return isset($this->hooks[$key]);
+    }
+    /**
+     * Check if an user can execute the given action
+     * NOTE: if there is no information on the action, valid is assumed
+     * 
+     * @param String $action
+     * @param Array $user
+     */
+    public function hasAuth($action, $user = null)
+    {
+        if($user == null && isset($_SESSION['usr']))
+            $user = $_SESSION['usr'];
+        
+        $group = false;
+        foreach($this->auth as $authGroup => $actions)
+        {
+            if(in_array($action, $actions))
+            {
+                $group = $authGroup;
+            }
+        }
+        //$_SESSION['usr']['privs']
+        return ($user && $group && in_array($group, $user['privs']) || $group == null);
     }
 }

@@ -8,6 +8,7 @@
     "field_user_pass":      "Password",
     "field_user_pass2":     "Again",
     "field_user_privileges":"Privliveges",
+    "field_privilege_auths":"Auth groups",
     "login":                "login",
     "error_nomatch":        "Username and Password do not match",
     "error_passwordsnomatch": "Passwords do not match",
