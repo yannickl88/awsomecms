@@ -83,6 +83,7 @@ class NewsComponent extends Component
                 if(date("m", $data) === $request['urlmapmatch'][2] && date("Y", $data) === $request['urlmapmatch'][1])
                 {
                     $template = "news/news_item.tpl";
+                    $news->news_text = BBCodeParser::parse($news->news_text);
                     $smarty->assign("news", $news);
                     
                     if(Cache::has("newslist"))
