@@ -42,6 +42,10 @@ class NewsComponent extends Component
         $registerManager->registerAuth("news.action_add", "admin");
         $registerManager->registerAuth("news.action_edit", "admin");
         $registerManager->registerAuth("news.action_delete", "admin");
+        $newsRoot = Config::get("newsroot", "/", "news");
+        $newsName = strtolower(Language::get("news"));
+        
+        $registerManager->registerURLMap(preg_quote("{$newsRoot}{$newsName}", "/").'\/([0-9]{4}?)\/([0-9]{2}?)\/(.*?)', 'news.index', 10);
         
         $registerManager->registerPage('admin', '/admin/news/', '{form table="news.news" form="admin"}');
         $registerManager->registerPage('add', '/admin/news/', '{form table="news.news" form="add"}');
@@ -240,16 +244,5 @@ class NewsComponent extends Component
             
             $tree->addChild(new NewsItem($row));
         }
-    }
-    /**
-     * (non-PHPdoc)
-     * @see core/Component#registerURLMap($map)
-     */
-    public function registerURLMap($map)
-    {
-        $newsRoot = Config::get("newsroot", "/", "news");
-        $newsName = strtolower(Language::get("news"));
-        
-        $map->addMap(preg_quote("{$newsRoot}{$newsName}", "/").'\/([0-9]{4}?)\/([0-9]{2}?)\/(.*?)', 'news.index', 10);
     }
 }
