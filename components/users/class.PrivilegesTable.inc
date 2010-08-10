@@ -14,6 +14,7 @@
  */
 importField("Field");
 importField("IntField");
+importField("users.AuthsField");
 
 /**
  * Privileges tabel.
@@ -31,7 +32,8 @@ class PrivilegesTable extends Table
         $this->assign("users");
         
         $this->addField(new IntField("privilege_id", Field::INDEX|Field::AUTOKEY));
-        $this->addField(new Field("privilege_name"));
+        $this->addField(new Field("privilege_name"), 1);
+        $this->addField(new AuthsField("privilege_auths", Field::HIDE_VIEW|Field::OPTIONAL|Field::FORCEUPDATE), 2);
         $this->addField(new IntField("privilege_int", Field::HIDE|Field::OPTIONAL));
         $this->addField(new IntField("privilege_locked", Field::HIDE|Field::OPTIONAL));
         $this->setTitle("[privilege_name]");

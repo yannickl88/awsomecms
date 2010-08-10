@@ -36,6 +36,13 @@ class UsersComponent extends Component implements AuthComponent
      */
     public function register($registerManager)
     {
+        $registerManager->registerAuth("users.action_add", "admin");
+        $registerManager->registerAuth("users.action_edit", "admin");
+        $registerManager->registerAuth("users.action_delete", "admin");
+        $registerManager->registerAuth("users.action_privadd", "admin");
+        $registerManager->registerAuth("users.action_privedit", "admin");
+        $registerManager->registerAuth("users.action_privdelete", "admin");
+        
         $registerManager->registerPage('add', '/admin/users/', '{form table="users.users" form="add"}');
         $registerManager->registerPage('edit', '/admin/users/', '{form table="users.users" form="edit"}');
         $registerManager->registerPage('delete', '/admin/users/', '{form table="users.users" form="delete"}');
@@ -296,20 +303,25 @@ class UsersComponent extends Component implements AuthComponent
     /**
      * Get the privileges the user has
      * 
-     * @param int $privileges       Privlige field from the user record
+     * @param int $userPrivs        Privlige field from the user record
      * @return array
      */
-    public function getPrivilageMapping($privileges)
+    public function getPrivilageMapping($userPrivs)
     {
         $privilages = Table::init('users.privileges')->doSelect()->getRows();
         $rights = array();
+        $authGroups = array();
         
         foreach($privilages as $privilage)
         {
-            $rights[$privilage->privilege_name] = Config::hasFlag($privileges, $privilage->privilege_int);
+            $rights[$privilage->privilege_name] = Config::hasFlag($userPrivs, $privilage->privilege_int);
+            if($rights[$privilage->privilege_name])
+            {
+                $authGroups = array_merge($authGroups, $privilage->privilege_auths);
+            }
         }
         
-        return $rights;
+        return array($rights, $authGroups);
     }
     /**
      * Authenticate a user
@@ -331,7 +343,8 @@ class UsersComponent extends Component implements AuthComponent
             $_SESSION['usr'] = array();
             $_SESSION['usr']['user_name'] = $user_name;
             $_SESSION['usr']['user_pass'] = $user_pass;
-            $_SESSION['usr']['auth'] = $this->getPrivilageMapping($record->user_privileges);
+            list($_SESSION['usr']['auth'], $_SESSION['usr']['privs']) = 
+                $this->getPrivilageMapping($record->user_privileges);
             
             return true;
         }

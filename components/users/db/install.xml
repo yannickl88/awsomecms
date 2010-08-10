@@ -53,6 +53,12 @@
       <extra></extra>
     </field>
     <field>
+      <name>privilege_auths</name>
+      <type>text</type>
+      <value null="0"></value>
+      <extra></extra>
+    </field>
+    <field>
       <name>privilege_locked</name>
       <type>tinyint(4)</type>
       <value null="0"></value>
@@ -62,6 +68,7 @@
       <entry>
         <privilege_name>admin</privilege_name>
         <privilege_int>1</privilege_int>
+        <privilege_auths>admin</privilege_auths>
         <privilege_locked>1</privilege_locked>
       </entry>
     </data>

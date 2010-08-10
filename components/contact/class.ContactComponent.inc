@@ -35,6 +35,10 @@ class ContactComponent extends Component
      */
     public function register($registerManager)
     {
+        $registerManager->registerAuth("contact.action_add", "admin");
+        $registerManager->registerAuth("contact.action_edit", "admin");
+        $registerManager->registerAuth("contact.action_delete", "admin");
+        
         $registerManager->registerPage('admin', '/admin/contact/', '{form table="contact.forms" form="admin"}');
         $registerManager->registerPage('add', '/admin/contact/', '{form table="contact.forms" form="add"}');
         $registerManager->registerPage('edit', '/admin/contact/', '{form table="contact.forms" form="edit"}');

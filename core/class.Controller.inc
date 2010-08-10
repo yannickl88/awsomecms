@@ -332,6 +332,12 @@ class Controller
      */
     public function callAction($component, $action, $request)
     {
+        //check if auth
+        if(!RegisterManager::getInstance()->hasAuth($component.".".$action))
+        {
+            throw new UnauthException("No auth found for '{$component}.{$action}'");
+        }
+        
         $prehook = RegisterManager::getInstance()->getHook($component, $action, "pre");
         $posthook = RegisterManager::getInstance()->getHook($component, $action, "post");
         

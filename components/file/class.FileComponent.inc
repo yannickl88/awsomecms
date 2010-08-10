@@ -39,6 +39,11 @@ class FileComponent extends Component
      */
     public function register($registerManager)
     {
+        $registerManager->registerAuth("file.action_add", "admin");
+        $registerManager->registerAuth("file.action_edit", "admin");
+        $registerManager->registerAuth("file.action_delete", "admin");
+        $registerManager->registerAuth("file.action_upload", "admin");
+        
         $registerManager->registerPage('add', '/admin/file/', '{form table="file.files" form="add"}');
         $registerManager->registerPage('edit', '/admin/file/', '{form table="file.files" form="edit"}');
         $registerManager->registerPage('delete', '/admin/file/', '{form table="file.files" form="delete"}');

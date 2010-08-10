@@ -38,6 +38,10 @@ class GroupsComponent extends Component implements AuthComponent
      */
     public function register($registerManager)
     {
+        $registerManager->registerAuth("groups.action_add", "admin");
+        $registerManager->registerAuth("groups.action_edit", "admin");
+        $registerManager->registerAuth("groups.action_delete", "admin");
+        
         $registerManager->registerHook($this->component, "users", "post", "add", "useradd");
         $registerManager->registerHook($this->component, "users", "post", "delete", "userdel");
         
@@ -160,16 +164,17 @@ class GroupsComponent extends Component implements AuthComponent
     /**
      * Request a list of privilages a given groups has
      *
-     * @param int $privileges
+     * @param int $userPriv
      * @param array $preset     Set of privilages already assigned
      * @return array
      */
-    public function getPrivilageMapping($privileges, $preset = array())
+    public function getPrivilageMapping($userPriv, $preset = array())
     {
         $privilages = Table::init('users.privileges')
         ->doSelect()
         ->getRows();
         $rights = $preset;
+        $authGroups = array();
 
         foreach($privilages as $privilage)
         {
@@ -177,9 +182,13 @@ class GroupsComponent extends Component implements AuthComponent
             {
                 $rights[$privilage->privilege_name] = Config::hasFlag((int) $privileges, $privilage->privilege_int);
             }
+            if(Config::hasFlag($userPriv, $privilage->privilege_int))
+            {
+                $authGroups[] = $privilage->privilege_auths;
+            }
         }
 
-        return $rights;
+        return array($rights, $authGroups);
     }
     /**
      * Log a user in with crendtials
@@ -202,15 +211,18 @@ class GroupsComponent extends Component implements AuthComponent
             $_SESSION['usr']['user_name'] = $user_name;
             $_SESSION['usr']['user_pass'] = $user_pass;
             $_SESSION['usr']['auth'] = array();
+            $_SESSION['usr']['privs'] = array();
 
             $records = Table::init('groups.groups')
             ->setRequest((object) array("user_id" => $record->user_id))
             ->doSelect()
             ->getRows();
-
+            
             foreach($records as $record)
             {
-                $_SESSION['usr']['auth'] = $this->getPrivilageMapping($record->group_privileges, $_SESSION['usr']['auth']);
+                list($rights, $authGroups) = $this->getPrivilageMapping($record->group_privileges, $_SESSION['usr']['auth']);
+                $_SESSION['usr']['auth'] = $rights;
+                $_SESSION['usr']['privs'] = array_merge($_SESSION['usr']['privs'], $authGroups);
             }
             return true;
         }

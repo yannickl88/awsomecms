@@ -37,6 +37,10 @@ class PageComponent extends Component
      */
     public function register($registerManager)
     {
+        $registerManager->registerAuth("page.action_add", "admin");
+        $registerManager->registerAuth("page.action_edit", "admin");
+        $registerManager->registerAuth("page.action_delete", "admin");
+        
         $registerManager->registerPage('edit', '/admin/page/', '{form table="page.pages" form="edit"}');
         $registerManager->registerPage('add', '/admin/page/', '{form table="page.pages" form="add"}');
         $registerManager->registerPage('delete', '/admin/page/', '{form table="page.pages" form="delete"}');

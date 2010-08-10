@@ -39,6 +39,10 @@ class GalleryComponent extends Component
      */
     public function register($registerManager)
     {
+        $registerManager->registerAuth("gallery.action_add", "admin");
+        $registerManager->registerAuth("gallery.action_edit", "admin");
+        $registerManager->registerAuth("gallery.action_delete", "admin");
+        
         $registerManager->registerPage('add', '/admin/gallery/', '{form table="gallery.gallery" form="add"}');
         $registerManager->registerPage('edit', '/admin/gallery/', '{form table="gallery.gallery" form="edit"}');
         $registerManager->registerPage('delete', '/admin/gallery/', '{form table="gallery.gallery" form="delete"}');
