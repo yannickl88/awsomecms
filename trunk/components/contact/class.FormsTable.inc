@@ -35,7 +35,7 @@ class FormsTable extends Table
         $this->addField(new IntField("form_id", Field::AUTOKEY|Field::INDEX));
         $this->addField(new Field("form_name"), 1);
         $this->addField(new Field("form_to", Field::HIDE_VIEW), 2);
-        $this->addField(new Field("form_bcc", Field::HIDE_VIEW), 3);
+        $this->addField(new Field("form_bcc", Field::HIDE_VIEW|Field::OPTIONAL), 3);
         $this->addField(new Field("form_subject"), 4);
         $this->addField(new LocationField("form_thanks", Field::HIDE_VIEW, true), 5);
         $this->addField(new FieldsField("form_fields", Field::DUMMY), 6);

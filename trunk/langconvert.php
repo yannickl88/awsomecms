@@ -48,7 +48,7 @@ function generateNewLangFile($from, $to)
             $url = "http://ajax.googleapis.com/ajax/services/language/translate?v=1.0&q=".rawurlencode($value)."&langpair=en|nl";
             $result = json_decode(file_get_contents($url));
             
-            echo "getting data '{$key}' <br />";
+            echo "getting data '{$key}'\n";
             
             $newValue = $result->responseData->translatedText;
         }

@@ -53,7 +53,8 @@ class ContactComponent extends Component
         {
             $id = Table::init("contact.forms")
                 ->setRecord((object) $request)
-                ->doInsert();
+                ->doInsert()
+                ->insertID();
             
             $fields;
             parse_str($request['form_fields'], $fields);

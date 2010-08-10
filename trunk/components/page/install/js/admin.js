@@ -44,7 +44,7 @@ var Editor = function(element, options)
             
             //bind the resize
             this.resizebar.bind("selectstart", function(e) { return false });
-            this.resizebar.bind("mousedown", {editor: this}, function(e) { console.log(e); e.data.editor.resize(e); return false });
+            this.resizebar.bind("mousedown", {editor: this}, function(e) { e.data.editor.resize(e); return false });
         }
         
         if(options != undefined)
@@ -74,13 +74,11 @@ var Editor = function(element, options)
         this._addButton("Youtube", "[youtube]", "[/youtube]", 30);
     };
     this.resize = function(e) {
-        console.log("RESIZE START");
         var editor = this; //local var for refering in listeners
         var originalY = e.pageY;
         var prevHeight = this.element.height();
         var moveHandler = function(e) {
             editor.element.height(prevHeight + (e.pageY - originalY));
-            console.log("MOVEING");
         };
         
         $("body").mousemove(moveHandler);
@@ -505,9 +503,18 @@ var TreeItem = function(name, location, url, root, icon, actions, contentType)
      */
     this.init = function()
     {
+        var ref = this;
         this.html = $("<div class='hideIcons'></div>");
         this.html[0].object = this;
         this.link = $("<a href='"+this.url+"'>"+this.name+"</a>");
+        this.link.click(function(e) {
+            if(ref.root.javascript)
+            {
+                $("#"+ref.root.javascript).val(ref.parent.getLocPath() + ref.name);
+                
+                return false;
+            }
+        });
         this.link.prepend(this.icon);
         this.html.append(this.link);
         if(this.actions)
@@ -517,12 +524,15 @@ var TreeItem = function(name, location, url, root, icon, actions, contentType)
                 this.addAction(this.actions[x]);
             }
         }
-        this.html.mouseover(function(e){
-            $(this).removeClass("hideIcons");
-        });
-        this.html.mouseout(function(e){
-            $(this).addClass("hideIcons");
-        });
+        if(!ref.root.javascript)
+        {
+            this.html.mouseover(function(e){
+                $(this).removeClass("hideIcons");
+            });
+            this.html.mouseout(function(e){
+                $(this).addClass("hideIcons");
+            });
+        }
     };
     this.addAction = function(action)
     {
@@ -617,7 +627,7 @@ var TreeFolder = function(name, location, root, icon, actions, contentType, isRo
             e.preventDefault();
             return false;
         });
-        if(!this.root.foldersOnly)
+        if(!this.root.foldersOnly && !ref.root.javascript)
         {
             this.html.mouseover(function(e){
                 $(this).removeClass("hideIcons");

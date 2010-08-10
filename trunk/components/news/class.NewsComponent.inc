@@ -138,7 +138,7 @@ class NewsComponent extends Component
                 ->insertID();
             
             $indexer = new TextSpider();
-            $indexer->index($request['news_text'], $request['news_titleurl']."/".date("Y/m/", strtotime($request['news_date'])), $request['news_title'], "news.{$id}");
+            $indexer->index($request['news_text'], urlEscape($request['news_title'])."/".date("Y/m/", strtotime($request['news_date'])), $request['news_title'], "news.{$id}");
             
             $this->redirect("/".Config::get('newsadmin', 'newsadmin', 'admin'));
         }
@@ -159,7 +159,7 @@ class NewsComponent extends Component
                 ->doUpdate();
             
             $indexer = new TextSpider();
-            $indexer->index($request['news_text'], $request['news_titleurl']."/".date("Y/m/", strtotime($request['news_date'])), $request['news_title'], "news.{$request['news_id']}");
+            $indexer->index($request['news_text'], urlEscape($request['news_title'])."/".date("Y/m/", strtotime($request['news_date'])), $request['news_title'], "news.{$request['news_id']}");
             
             $this->redirect("/".Config::get('newsadmin', 'newsadmin', 'admin'));
         }
