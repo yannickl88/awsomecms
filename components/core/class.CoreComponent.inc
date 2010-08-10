@@ -47,7 +47,6 @@ class CoreComponent extends Component
         $registerManager->registerPage("index", "/".Config::get("location", "admin/", "admin"), '{"welcomeadmin"|text}');
         $registerManager->registerPage("layout", "/".Config::get("location", "admin/", "admin").'core/', '{form component="core" form="layout"}');
         $registerManager->registerPage("components", "/".Config::get("location", "admin/", "admin").'core/', '{form component="core" form="components"}');
-        $registerManager->registerPage("auth", "/".Config::get("location", "admin/", "admin").'core/', '{form component="core" form="auth"}');
         $loginURL = explode("/", Config::get("login", "admin/", "admin"));
         $loginPage = array_pop($loginURL);
         $registerManager->registerPage($loginPage, "/".implode("/", $loginURL)."/", '{form component="users" form="admin_login"}');
@@ -416,6 +415,5 @@ class CoreComponent extends Component
         $menu->addChild(new MenuItem("system", ""));
         $menu->addChild(new MenuItem("layoutmaps", Config::get('corelayout', 'corelayout', 'admin'), "system"));
         $menu->addChild(new MenuItem("components", Config::get('corecomponents', 'corecomponents', 'admin'), "system"));
-        $menu->addChild(new MenuItem("auth", Config::get('coreauth', 'coreauth', 'admin'), "system"));
     }
 }

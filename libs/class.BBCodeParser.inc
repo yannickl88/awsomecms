@@ -538,7 +538,7 @@ class BBCodeParser
     {
         if(Config::get("type", "wysiwig", "input") == "bbcode")
         {
-            $parser = new BBCodeParser(htmlentities($text));
+            $parser = new BBCodeParser(htmlentities($text, ENT_NOQUOTES));
             return $parser->process();
         }
         return $text;
