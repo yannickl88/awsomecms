@@ -33,27 +33,6 @@
     </field>
     <data/>
   </table>
-  <table name="auth">
-    <field>
-      <name>auth_component</name>
-      <type>varchar(50)</type>
-      <value null="0"></value>
-      <extra></extra>
-    </field>
-    <field>
-      <name>auth_action</name>
-      <type>varchar(50)</type>
-      <value null="0"></value>
-      <extra></extra>
-    </field>
-    <field>
-      <name>auth_privilage</name>
-      <type>varchar(50)</type>
-      <value null="0"></value>
-      <extra></extra>
-    </field>
-    <data/>
-  </table>
   <table name="search_items">
     <field pk="1">
       <name>item_id</name>
