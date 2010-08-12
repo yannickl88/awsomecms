@@ -13,6 +13,7 @@
  * @version $Revision$
  */
 import('/core/class.Component.inc');
+import('/core/class.Language.inc');
 import('/components/news/util/class.NewsTree.inc');
 import('/libs/class.TextSpider.inc');
 
