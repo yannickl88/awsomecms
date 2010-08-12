@@ -12,6 +12,7 @@
  *
  * @version $Revision$
  */
+import("core/class.Extention.inc");
 import("libs/class.BBCodeParser.inc");
 
 /**
@@ -330,7 +331,8 @@ class SmartyPageLoader
         {
             throw new NotInstalledException();
         }
-
+        
+        //Load components
         foreach($modules as $module => $component)
         {
             $pluginDir = $component->component_path.'/plugins/';
@@ -384,6 +386,23 @@ class SmartyPageLoader
                         $smarty_obj->register->resource($matches[1], "smarty_resource_".$matches[1]);
                     }
                 }
+            }
+        }
+        
+        //Load the extentions
+        $extentions = scandir(getFrameworkRoot()."/extentions/");
+        
+        foreach($extentions as $extention)
+        {
+            $matches = array();
+            if($extention != "." && $extention != ".." && preg_match('/^(.*)\.ext\.inc$/', $extention, $matches) === 1)
+            {
+                try
+                {
+                    $ext = Extention::init($matches[1]);
+                    $ext->extend($smarty_obj);
+                }
+                catch(Exception $e) { throw $e; }
             }
         }
     }

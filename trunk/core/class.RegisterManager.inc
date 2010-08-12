@@ -13,6 +13,8 @@
  * @version $Revision$
  */
 import("core/class.Cache.inc");
+import("core/class.Component.inc");
+import("core/class.Extention.inc");
 /**
  * Manager for registering components, hooks, mappings and pages dynamicly
  * 
@@ -98,6 +100,7 @@ class RegisterManager
             $this->mappings = array();
             $this->auth = array();
 
+            //Load the components
             $result = SQLQuery::doSelect()
             ->table('components')
             ->orderBy("component_name")
@@ -128,6 +131,23 @@ class RegisterManager
                     $component->register($this);
                 }
                 catch(Exception $e) { }
+            }
+            
+            //Load the extentions
+            $extentions = scandir(getFrameworkRoot()."/extentions/");
+            
+            foreach($extentions as $extention)
+            {
+                $matches = array();
+                if($extention != "." && $extention != ".." && preg_match('/^(.*)\.ext\.inc$/', $extention, $matches) === 1)
+                {
+                    try
+                    {
+                        $ext = Extention::init($matches[1]);
+                        $ext->register($this);
+                    }
+                    catch(Exception $e) { throw $e; }
+                }
             }
 
             $this->save();

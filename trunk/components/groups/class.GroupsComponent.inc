@@ -13,6 +13,7 @@
  * @version $Revision$
  */
 import('/core/class.Component.inc');
+import('/core/class.Authentication.inc');
 
 /**
  * Component that allowes for group based authentication, rather then user based
@@ -180,7 +181,7 @@ class GroupsComponent extends Component implements AuthComponent
         {
             if(!isset($preset[$privilage->privilege_name]) || !$preset[$privilage->privilege_name])
             {
-                $rights[$privilage->privilege_name] = Config::hasFlag((int) $privileges, $privilage->privilege_int);
+                $rights[$privilage->privilege_name] = Config::hasFlag((int) $userPriv, $privilage->privilege_int);
             }
             if(Config::hasFlag($userPriv, $privilage->privilege_int))
             {
