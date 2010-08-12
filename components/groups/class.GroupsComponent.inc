@@ -185,7 +185,7 @@ class GroupsComponent extends Component implements AuthComponent
             }
             if(Config::hasFlag($userPriv, $privilage->privilege_int))
             {
-                $authGroups[] = $privilage->privilege_auths;
+                $authGroups = array_merge($authGroups, $privilage->privilege_auths);
             }
         }
 
