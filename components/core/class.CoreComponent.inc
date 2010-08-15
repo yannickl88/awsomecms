@@ -85,10 +85,7 @@ class CoreComponent extends Component
      */
     public function action_session($smarty, $smartyLoader, $request)
     {
-        if(!isset($_GET['url']))
-        {
-            $_GET['url'] = "";
-        }
+        $loggedIn = false;
         $smarty->assign("URL", $_GET['url']);
         $smarty->assign("isADMIN", (preg_match('/^'.preg_quote(Config::get('location', 'admin/', 'admin'), '/').'(.*?)/si', $_GET['url'])) === 1);
         if(!isset($_SESSION['usr']))
@@ -98,7 +95,9 @@ class CoreComponent extends Component
         else
         {
             $smarty->assign("USR", $_SESSION['usr']);
+            $loggedIn = true;
         }
+        $smarty->assign("LOGINPAGE", ($_GET['url'] == Config::get("login", "admin/login", "admin") || !$loggedIn));
         $smarty->assign("HASDOC", file_exists(Config::get("websiteroot", "/")."/doc.php"));
     }
     /**
