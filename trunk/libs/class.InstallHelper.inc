@@ -135,23 +135,13 @@ class InstallHelper
         try
         {
             //run install sql
-            $file = $dir.'/db/install.sql';
-            
+            $file = $dir.'/db/install.xml';
             if(file_exists($file) && is_readable($file))
             {
-                $sql = file_get_contents($file);
-                if($sql != '')
-                {
-                    $db->multi_query($sql);
-                }
+                $this->loadTable(file_get_contents($file));
             }
             
             //insert component into the database
-            $info = parse_ini_file($dir.'/info.ini', true);
-            $patchlevel = $this->getHighestPatchLevel($dir.'/db');
-            
-            $dir = addslashes($dir);
-            
             $version = (int) $componentInfo['atlines']['version'];
             
             $db->query(
@@ -161,7 +151,6 @@ class InstallHelper
                     `component_name`, 
                     `component_path`, 
                     `component_auth`,
-                    `component_patchlevel`,
                     `component_version`
                 )
                 VALUES
@@ -169,73 +158,14 @@ class InstallHelper
                     '{$component}',
                     '',
                     15,
-                    {$patchlevel},
                     {$version}
                 );"
             );
-            
-            //install the hooks
-            if($info['hooks'])
-            {
-                foreach($info['hooks'] as $hook)
-                {
-                    $hook_function = explode("->", $hook);
-                    $hook_target = explode(":", $hook_function[0]);
-                    
-                    //insert
-                    $db->query(
-                        "INSERT INTO 
-                            `hooks` 
-                        (
-                            `hook_component`, 
-                            `hook_target`, 
-                            `hook_prepost`, 
-                            `hook_action`,
-                            `hook_function`
-                        )
-                        VALUES
-                        (
-                            '{$component}',
-                            '{$hook_target[0]}',
-                            '{$hook_target[1]}',
-                            '{$hook_target[2]}',
-                            '{$hook_function[1]}'
-                        );"
-                    );
-                }
-            }
             
             //copy the install files
             if(file_exists($dir.'/install'))
             {
                 $this->rcopy($dir.'/install', $websiteroot);
-            }
-            
-            //run default sql
-            $file = $dir.'/db/default.sql';
-            if(file_exists($file) && is_readable($file))
-            {
-            
-                $sql = file_get_contents($file);
-                if($sql != '')
-                {
-                    $db->multi_query($sql);
-                }
-            }
-            
-            if($installAdmin)
-            {
-                //run admin sql
-                $file = $dir.'/db/admin.sql';
-                if(file_exists($file) && is_readable($file))
-                {
-                
-                    $sql = file_get_contents($file);
-                    if($sql != '')
-                    {
-                        $db->multi_query($sql);
-                    }
-                }
             }
         }
         catch(Exception $e)

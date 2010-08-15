@@ -152,7 +152,8 @@ class CoreComponent extends Component
                 
                 echo json_decode($result);
                 
-                Config::getInstance()->reloadComponenets();
+                Config::getInstance()->reload();
+                RegisterManager::getInstance()->reload();
                 
                 return;
             }

@@ -191,8 +191,7 @@
         data = {
             component: "core",
             action: "install",
-            installComponent: name,
-            installAdmin: confirm("Would you like to install the admin pages too?")
+            installComponent: name
         };
         
         $.post("/{$smarty.get.url}", data, function(data) {
