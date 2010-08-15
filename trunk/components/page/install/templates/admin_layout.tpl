@@ -10,7 +10,6 @@
         <meta name="geo.country" content="GB" />
         <link type="text/css" rel="stylesheet" href="/css/admin.css" media="screen" />
         <link type="text/css" rel="stylesheet" href="/css/lightbox.css" media="screen" />
-        <link type="text/css" rel="stylesheet" href="/css/jHtmlArea.css" media="screen" />
         <link type="text/css" rel="stylesheet" href="/css/datePicker.css" media="screen" />
         <link type="text/css" rel="stylesheet" href="/css/style.css" media="screen" />
         <script type="text/javascript" src="http://www.google.com/jsapi"></script>
@@ -18,25 +17,17 @@
             {literal}
             // <![CDATA[ 
             // Load jQuery
-            google.load("jquery", "1.4.1", {uncompressed:false});
+            google.load("jquery", "1.4.2", {uncompressed:false});
             google.load("jqueryui", "1.7.2");
             // ]]> 
             {/literal}
         </script>
         <script type="text/javascript" src="/js/site.js"></script>
         <script type="text/javascript" src="/js/admin.js"></script>
-        <script type="text/javascript" src="/js/jquery.lightbox.js"></script>
-        <script type="text/javascript" src="/js/ajaxupload.3.5.js"></script>
         <script type="text/javascript" src="/js/tinyeditor.js"></script>
         <script type="text/javascript">
             {literal}
             $(document).ready(function(){
-                // load lightbox
-                $(".lightbox").lightbox({
-                    fitToScreen: true,
-                    imageClickClose: false,
-                    disableNavbarLinks: true
-                });
                 $('#doc').click(function(e) {
                     window.open("/doc.php", "_blank", "width=500,height=600");
                     return false;
