@@ -55,7 +55,7 @@ $components = RegisterManager::getInstance()->getComponenets();
                 </ul>
             </div>
         </div>
-        <div style="margin-left: 150px; height: 100%; overflow: auto;">
+        <div style="height: 100%; overflow: auto;">
             <h1>Documentation</h1>
             The following content is targeted mainly for the web designers that will be using the CMS. The content here describes each component and what functionalty they offer in the form of tags and modifiers.<br />
             <br />

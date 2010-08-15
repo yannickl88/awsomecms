@@ -53,18 +53,18 @@
                 <td style="vertical-align: top;" class="updateCell">
                     {if $component->disable}
                         {if $component->SVN}
-                            <a href="#">
+                            <a href="#" onclick="return false;">
                                 <img src="/img/icons/plugin_disabled.png" alt="{"svnfound"|text|ucfirst}" title="{"svnfound"|text|ucfirst}"/>
                             </a>
                         {else}
-                            <a href="#">
+                            <a href="#" onclick="return false;">
                                 <img src="/img/icons/plugin_disabled.png" alt="{"update"|text|ucfirst}" title="{"update"|text|ucfirst}"/>
                             </a>
                         {/if}
                     {else}
                         <img src="/img/admin/{if $component->U2D === "???"}unknown{elseif $component->U2D}ok{else}fail{/if}-icon.png" alt="status"/> 
                         {if $component->U2D === "???"}
-                            <a href="#">
+                            <a href="#" onclick="return false;">
                                 <img src="/img/icons/plugin_error.png" alt="{"unknown"|text|ucfirst}" title="{"unknown"|text|ucfirst}"/>
                             </a>
                         {else}
@@ -73,8 +73,10 @@
                             </a>
                         {/if}
                     {/if}
-                    {if $component->component_patchlevel < $component->highestPatch}
-                        <a href="#"><img src="/img/icons/script_gear.png" alt="Run patches" title="Run patches"/></a>
+                    {if $component->needsPatch}
+                        <a href="#" onclick="patchComponent('{$component->component_name}'); return false;">
+                            <img src="/img/icons/script_gear.png" alt="Run patches" title="Run patches"/>
+                        </a>
                     {/if}
                 </td>
                 <td style="vertical-align: top;">
@@ -116,7 +118,7 @@
             <td style="vertical-align: top;">
                 <i>{$component->component_name|ucfirst}</i>
             </td>
-            <td style="vertical-align: top; padding-left: 17px;" class="updateCell">
+            <td style="vertical-align: top;" class="updateCell">
                 <a href="#" onclick="installComponent('{$component->component_name}'); return false;">
                     <img src="/img/icons/plugin_go.png" alt="{"install"|text}" title="{"install"|text}"/>
                 </a>
@@ -155,6 +157,24 @@
             component: "core",
             action: "update",
             updateComponent: name
+        };
+        
+        $.post("/{$smarty.get.url}", data, function(data) {
+            $("#row_"+name+" .updateCell").html("<img src='/img/admin/ok-icon.png' /> Up-to-date");
+        }, "json");
+
+        return false;
+    }
+    function patchComponent(name)
+    {
+        //update the cell so it show loading
+        $("#row_"+name+" .updateCell").html("<img src='/img/admin/loader.gif' /> Updating...");
+        
+        data = {
+            component: "core",
+            action: "update",
+            updateComponent: name,
+            patchOnly: true
         };
         
         $.post("/{$smarty.get.url}", data, function(data) {

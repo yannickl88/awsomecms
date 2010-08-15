@@ -8,8 +8,11 @@ GALLERY:
 Create a collection of images that can be displayed in a fancy gallery.
 
 TAGS:
-gallery
+gallery, Render the gallery with the images
     'name' Name of the gallery you want to display
         String
     'max' Maximum number of images to show
         Int, optional
+galleryindex, Show a list of all galleries
+    'withImages' Also load the images
+        Boolean, optional

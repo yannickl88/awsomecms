@@ -15,9 +15,20 @@ form
     'component'
         String
 MODIFIERS:
+bbcode, render a string with BBCode
+count, count elements in an array
+data, parse a string (with strtotime) and format a date string (usinge data syntax)
+    'format'
+        String, optional
+explode, split a string into a array
+    'delimiter'
+        String, optional
 hasflag
     'flag'
         Int
+installed, Check if a component is installed
 notin
     'array'
         Array
+text, Localize a string
+ucfirst, Capitalize the first letter of a string

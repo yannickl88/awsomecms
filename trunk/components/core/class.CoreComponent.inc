@@ -171,77 +171,99 @@ class CoreComponent extends Component
     {
         if($request['method'] == 'post')
         {
-            $updateURL = Config::get("updateurl", "", "update");
-            $versions = json_decode(file_get_contents("{$updateURL}/version.json"));
             $installer = new InstallHelper();
-            
-            if($request['framework'] == 1)
+            if(!isset($request['patchOnly']) || $request['patchOnly'] == false)
             {
-                //framework?
-                if(!(file_exists(getFrameworkRoot()."/version.info") && trim(file_get_contents(Config::get("websiteroot")."/version.info")) == trim($versions->framework)))
-                {
-                    $installer->downloadAndInstall("{$updateURL}/framework.zip");
-                    file_put_contents(getFrameworkRoot()."/version.info", trim($versions->framework));
-                }
+                $updateURL = Config::get("updateurl", "", "update");
+                $versions = json_decode(file_get_contents("{$updateURL}/version.json"));
                 
-                echo "true";
-                return;
-            }
-            
-            if(isset($request['updateComponent']))
-            {
-                //components
-                $components = RegisterManager::getInstance()->getComponenets();
-                $component = $components[$request['updateComponent']];
-                $component_name = $component->component_name;
-                
-                if(!empty($component->component_updateurl))
+                if($request['framework'] == 1)
                 {
-                    $extVersions = json_decode(file_get_contents("{$component->component_updateurl}/version.json"));
+                    //framework?
+                    if(!(file_exists(getFrameworkRoot()."/version.info") && trim(file_get_contents(Config::get("websiteroot")."/version.info")) == trim($versions->framework)))
+                    {
+                        $installer->downloadAndInstall("{$updateURL}/framework.zip");
+                        file_put_contents(getFrameworkRoot()."/version.info", trim($versions->framework));
+                    }
                     
-                    $version = trim($extVersions->$component_name);
-                }
-                else
-                {
-                    $version = trim($versions->components->$component_name);
+                    echo "true";
+                    return;
                 }
                 
-                if($version > $component->component_version)
+                if(isset($request['updateComponent']))
                 {
-                    //is there an update URL set?
+                    //components
+                    $components = RegisterManager::getInstance()->getComponenets();
+                    $component = $components[$request['updateComponent']];
+                    $component_name = $component->component_name;
+                    
                     if(!empty($component->component_updateurl))
                     {
-                        if(!$installer->downloadAndInstall("{$component->component_updateurl}/{$component_name}.zip", $component->component_path))
-                        {
-                            die("false");
-                        }
+                        $extVersions = json_decode(file_get_contents("{$component->component_updateurl}/version.json"));
+                        
+                        $version = trim($extVersions->$component_name);
                     }
                     else
                     {
-                        if(!$installer->downloadAndInstall("{$updateURL}/components/{$component_name}.zip", $component->component_path))
-                        {
-                            die("false");
-                        }
+                        $version = trim($versions->components->$component_name);
                     }
                     
-                    Table::init('core.components')->setRecord(array(
-                        'component_version'=> trim($version),
-                        'component_name' => $component->component_name
-                    ))
-                    ->doUpdate();
+                    if($version > $component->component_version)
+                    {
+                        //is there an update URL set?
+                        if(!empty($component->component_updateurl))
+                        {
+                            if(!$installer->downloadAndInstall("{$component->component_updateurl}/{$component_name}.zip", $component->component_path))
+                            {
+                                die("false");
+                            }
+                        }
+                        else
+                        {
+                            if(!$installer->downloadAndInstall("{$updateURL}/components/{$component_name}.zip", $component->component_path))
+                            {
+                                die("false");
+                            }
+                        }
+                        
+                        Table::init('core.components')->setRecord(array(
+                            'component_version'=> trim($version),
+                            'component_name' => $component->component_name
+                        ))
+                        ->doUpdate();
+                    }
+                    
+                    //update DB
+                    if(file_exists($component->component_path.'/db/install.xml'))
+                    {
+                        $installer->loadTable(file_get_contents($component->component_path.'/db/install.xml'));
+                    }
+                    
+                    //copy any new stuff from the install folder
+                    $installer->rcopy($component->component_path."/install", Config::get('websiteroot'), false);
+                    
+                    echo "true";
+                    
+                    Config::getInstance()->reload();
+                    RegisterManager::getInstance()->reload();
+                    
+                    return;
                 }
-                
-                //we want to run this no matter what, this will allow us to manually update the files and run this anyways
-                //now to run the patches
-                $installer->runPatches($component_name);
+            }
+            else
+            {
+                if(file_exists($component->component_path.'/db/install.xml'))
+                {
+                    $installer->loadTable(file_get_contents($component->component_path.'/db/install.xml'));
+                }
                 
                 //copy any new stuff from the install folder
                 $installer->rcopy($component->component_path."/install", Config::get('websiteroot'), false);
                 
+                Config::getInstance()->reload();
+                RegisterManager::getInstance()->reload();
+                
                 echo "true";
-                
-                Config::getInstance()->reloadComponenets();
-                
                 return;
             }
         }
@@ -318,15 +340,15 @@ class CoreComponent extends Component
                 $component->disable = $component->SVN;
                 $component->U2D = "???";
                 $component->info = array();
-                $component->highestPatch = 0;
+                $component->needsPatch = false;
                 
                 $component_name = $component->component_name;
                 
                 //check if there are patches to be run
-                if(file_exists($component->component_path."db/"))
+                if(file_exists($component->component_path."db/install.xml"))
                 {
                     $ih = new InstallHelper();
-                    $component->highestPatch = $ih->getHighestPatchLevel($component->component_path."db/");
+                    $component->needsPatch = $ih->needsLoad(file_get_contents($component->component_path."db/install.xml"));
                 }
                 
                 //is there an update URL set?

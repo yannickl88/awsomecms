@@ -173,6 +173,19 @@ class RegisterManager
         Cache::set("auth", $this->auth);
     }
     /**
+     * Reload the content of the RegisterManager
+     */
+    private function reload()
+    {
+        Cache::clear("components");
+        Cache::clear("mappings");
+        Cache::clear("hooks");
+        Cache::clear("pages");
+        Cache::clear("auth");
+        
+        $this->load();
+    }
+    /**
      * Register a Hook
      *
      *

@@ -101,7 +101,7 @@ class YoutubeElement extends BBCodeElement
     {
         //http://www.youtube.com/watch?v={key} -> http://www.youtube.com/v/{key}&amp;fs=1
         $matches = array();
-        if(preg_match('/^http:\/\/(www\.)?youtube\.com\/watch\?v=([a-zA-Z0-9]*)$/', $text, $matches) === 1)
+        if(preg_match('/^http:\/\/(www\.)?youtube\.com\/watch\?v=([a-zA-Z0-9\-]*)$/', $text, $matches) === 1)
         {
             $width = 480;
             $height = 385;

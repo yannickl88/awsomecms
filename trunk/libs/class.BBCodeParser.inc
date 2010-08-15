@@ -534,9 +534,9 @@ class BBCodeParser
      * @param String $text
      * @return String
      */
-    public static function parse($text)
+    public static function parse($text, $force = false)
     {
-        if(Config::get("type", "wysiwig", "input") == "bbcode")
+        if(Config::get("type", "wysiwig", "input") == "bbcode" || $force)
         {
             $parser = new BBCodeParser(htmlentities($text, ENT_NOQUOTES));
             return $parser->process();

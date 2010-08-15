@@ -27,6 +27,7 @@
     "layout":               "Layout",
     "svnfound":             "SVN found",
     "svnfoundexp":          "SVN folders has been detected in your distribution. Therefore updating has been disabled and it is recommended that SVN will be used for keeping your components up to date. NOTE: do not forget to run any patched when updateing.",
+    "status":               "Status",
     "january":              "january",
     "february":             "february",
     "march":                "march",

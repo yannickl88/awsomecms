@@ -5,7 +5,7 @@
  * in the doc/COPYRIGHT and doc/LICENSE files which should be
  * included in the distribution.
  *
- * @package components.hyves
+ * @package components.aggregator
  *
  * @copyright (c) 2009-2010 Yannick de Lange
  * @license http://www.gnu.org/licenses/gpl.txt
@@ -15,18 +15,18 @@
 import('/core/class.Component.inc');
 
 /**
- * This is more of an link to hyves, via a cron job blog post can be imported and added to the news component
+ * Aggregates News form RSS feeds and imports them into the news component
  * 
  * @author Yannick <yannick.l.88@gmail.com>
  */
-class HyvesComponent extends Component
+class AggregatorComponent extends Component
 {
     /**
      * Constructor
      */
     public function __construct()
     {
-        parent::__construct('hyves');
+        parent::__construct('aggregator');
     }
     /**
      * (non-PHPdoc)
@@ -34,7 +34,7 @@ class HyvesComponent extends Component
      */
     public function execCron()
     {
-        $xml = new SimpleXMLElement(file_get_contents(Config::get("blogurl", false, "hyves")));
+        $xml = new SimpleXMLElement(file_get_contents(Config::get("blogurl", false, "aggregator")));
         
         $lastElement = Table::init("news.news")
             ->setRequest((object) array("news_external" => 1, "news_extsite" => "hyves"))
@@ -52,9 +52,9 @@ class HyvesComponent extends Component
             $data['news_user'] = Config::get("bloguser", 0, "hyves");
             $data['news_text'] = $msg;
             $data['news_date'] = date("c", $date);
-            $data['news_tag'] = "hyves";
+            $data['news_tag'] = "external";
             $data['news_external'] = 1;
-            $data['news_extsite'] = "hyves";
+            $data['news_extsite'] = "aggragator";
             $data['news_extlink'] = trim($item->link[0]);
             
             if($lastElement != null && $lastElement->news_title == $data['news_title'])
