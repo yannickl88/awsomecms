@@ -181,25 +181,20 @@ class SmartyPageLoader
      */
     public function getTemplate($tpl_name, $tpl_source, $smarty_obj)
     {
-        $pageArray = explode('/', $tpl_name);
-        $pageName = array_pop($pageArray);
-        $pageLocation = implode('/', $pageArray);
-
-        if($pageLocation != '')
-        {
-            $pageLocation .= '/';
-        }
-        
         //check registered pages first
-        if(RegisterManager::getInstance()->hasPage($pageName, '/'.$pageLocation))
+        if(RegisterManager::getInstance()->hasPage($tpl_name))
         {
-            $page = RegisterManager::getInstance()->getPage($pageName, '/'.$pageLocation);
+            $page = RegisterManager::getInstance()->getPage($tpl_name);
             
             $tpl_source = $page[0];
             return true;
         }
         else
         {
+            $pageArray = explode('/', $tpl_name);
+            $pageName = array_pop($pageArray);
+            $pageLocation = implode('/', $pageArray);
+            
             $result = SQLQuery::doSelect()
             ->table('pages')
             ->where('page_name', $pageName)
@@ -245,25 +240,20 @@ class SmartyPageLoader
         }
         else
         {
-            $pageArray = explode('/', $tpl_name);
-            $pageName = array_pop($pageArray);
-            $pageLocation = implode('/', $pageArray);
-
-            if($pageLocation != '')
-            {
-                $pageLocation .= '/';
-            }
-            
             //check registered pages first
-            if(RegisterManager::getInstance()->hasPage($pageName, '/'.$pageLocation))
+            if(RegisterManager::getInstance()->hasPage($tpl_name))
             {
-                $page = RegisterManager::getInstance()->getPage($pageName, '/'.$pageLocation);
+                $page = RegisterManager::getInstance()->getPage($tpl_name);
 
                 $tpl_timestamp = $page[1];
                 return true;
             }
             else
             {
+                $pageArray = explode('/', $tpl_name);
+                $pageName = array_pop($pageArray);
+                $pageLocation = implode('/', $pageArray);
+                
                 $result = SQLQuery::doSelect()
                 ->table('pages')
                 ->where('page_name', $pageName)

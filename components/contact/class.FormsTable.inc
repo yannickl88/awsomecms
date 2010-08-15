@@ -40,13 +40,6 @@ class FormsTable extends Table
         $this->addField(new LocationField("form_thanks", Field::HIDE_VIEW, true), 5);
         $this->addField(new FieldsField("form_fields", Field::DUMMY), 6);
         $this->setTitle("[form_name]");
-        
-        $this->setURLs(
-            Config::get('contactadmin', 'contactadmin', 'admin'),
-            Config::get('contactadd', 'contactadd', 'admin'),
-            Config::get('contactedit', 'contactedit', 'admin'),
-            Config::get('contactdelete', 'contactdelete', 'admin')
-        );
     }
     /**
      * (non-PHPdoc)

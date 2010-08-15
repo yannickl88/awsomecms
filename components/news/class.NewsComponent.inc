@@ -48,10 +48,10 @@ class NewsComponent extends Component
         
         $registerManager->registerURLMap(preg_quote("{$newsRoot}{$newsName}", "/").'\/([0-9]{4}?)\/([0-9]{2}?)\/(.*?)', 'news.index', 10);
         
-        $registerManager->registerPage('admin', '/admin/news/', '{form table="news.news" form="admin"}');
-        $registerManager->registerPage('add', '/admin/news/', '{form table="news.news" form="add"}');
-        $registerManager->registerPage('delete', '/admin/news/', '{form table="news.news" form="delete"}');
-        $registerManager->registerPage('edit', '/admin/news/', '{form table="news.news" form="edit"}');
+        $registerManager->registerPage(array($this, 'admin'), '{form table="news.news" form="admin"}');
+        $registerManager->registerPage(array($this, 'add'), '{form table="news.news" form="add"}');
+        $registerManager->registerPage(array($this, 'delete'), '{form table="news.news" form="delete"}');
+        $registerManager->registerPage(array($this, 'edit'), '{form table="news.news" form="edit"}');
     }
     /**
      * Index action, this is used when a page is shown by the cms
@@ -150,7 +150,7 @@ class NewsComponent extends Component
             $indexer = new TextSpider();
             $indexer->index($request['news_text'], urlEscape($request['news_title'])."/".date("Y/m/", strtotime($request['news_date'])), $request['news_title'], "news.{$id}");
             
-            $this->redirect("/".Config::get('newsadmin', 'newsadmin', 'admin'));
+            $this->redirect(array($this, "admin"));
         }
     }
     /**
@@ -171,7 +171,7 @@ class NewsComponent extends Component
             $indexer = new TextSpider();
             $indexer->index($request['news_text'], urlEscape($request['news_title'])."/".date("Y/m/", strtotime($request['news_date'])), $request['news_title'], "news.{$request['news_id']}");
             
-            $this->redirect("/".Config::get('newsadmin', 'newsadmin', 'admin'));
+            $this->redirect(array($this, "admin"));
         }
         else
         {
@@ -183,7 +183,7 @@ class NewsComponent extends Component
             }
             else
             {
-                $this->redirect("/".Config::get('newsadd', 'newsadd', 'admin'));
+                $this->redirect(array($this, "admin"));
             }
         }
     }
@@ -205,7 +205,7 @@ class NewsComponent extends Component
             $indexer = new TextSpider();
             $indexer->clearByHook("news.{$request['news_id']}");
             
-            $this->redirect("/".Config::get('newsadmin', 'newsadmin', 'admin'));
+            $this->redirect(array($this, "admin"));
         }
         else
         {
@@ -216,7 +216,7 @@ class NewsComponent extends Component
             }
             else
             {
-                $this->redirect("/".Config::get('newsadd', 'newsadd', 'admin'));
+                $this->redirect(array($this, "admin"));
             }
         }
     }

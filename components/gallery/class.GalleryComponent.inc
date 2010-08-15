@@ -43,10 +43,10 @@ class GalleryComponent extends Component
         $registerManager->registerAuth("gallery.action_edit", "admin");
         $registerManager->registerAuth("gallery.action_delete", "admin");
         
-        $registerManager->registerPage('add', '/admin/gallery/', '{form table="gallery.gallery" form="add"}');
-        $registerManager->registerPage('edit', '/admin/gallery/', '{form table="gallery.gallery" form="edit"}');
-        $registerManager->registerPage('delete', '/admin/gallery/', '{form table="gallery.gallery" form="delete"}');
-        $registerManager->registerPage('admin', '/admin/gallery/', '{form table="gallery.gallery" form="admin"}');
+        $registerManager->registerPage(array($this, 'add'), '{form table="gallery.gallery" form="add"}');
+        $registerManager->registerPage(array($this, 'edit'), '{form table="gallery.gallery" form="edit"}');
+        $registerManager->registerPage(array($this, 'delete'), '{form table="gallery.gallery" form="delete"}');
+        $registerManager->registerPage(array($this, 'admin'), '{form table="gallery.gallery" form="admin"}');
     }
     /**
      * Action to add an image
@@ -62,7 +62,7 @@ class GalleryComponent extends Component
             Table::init("gallery.gallery")
                 ->setRecord((object) $request)
                 ->doInsert();
-            $this->redirect("/".Config::get('galleryadmin', 'galleryadmin', 'admin'));
+            $this->redirect(array($this, "admin"));
         }
     }
     /**
@@ -80,7 +80,7 @@ class GalleryComponent extends Component
                 ->setRecord((object) $request)
                 ->doUpdate();
             
-            $this->redirect("/".Config::get('galleryadmin', 'galleryadmin', 'admin'));
+            $this->redirect(array($this, "admin"));
         }
         else
         {
@@ -95,7 +95,7 @@ class GalleryComponent extends Component
             }
             else
             {
-                $this->redirect("/".Config::get('galleryadmin', 'galleryadmin', 'admin'));
+                $this->redirect(array($this, "admin"));
             }
         }
     }
@@ -114,7 +114,7 @@ class GalleryComponent extends Component
                 ->setRequest((object) $request)
                 ->doDelete();
             
-            $this->redirect("/".Config::get('galleryadmin', 'galleryadmin', 'admin'));
+            $this->redirect(array($this, "admin"));
         }
         else
         {
@@ -129,7 +129,7 @@ class GalleryComponent extends Component
             }
             else
             {
-                $this->redirect("/".Config::get('galleryadmin', 'galleryadmin', 'admin'));
+                $this->redirect(array($this, "admin"));
             }
         }
     }
@@ -140,7 +140,7 @@ class GalleryComponent extends Component
      */
     public function registerMenuItems($menu)
     {
-        $menu->addChild(new MenuItem("gallery", Config::get('galleryadmin', 'galleryadmin', 'admin')));
-        $menu->addChild(new MenuItem("galleries", Config::get('galleryadmin', 'galleryadmin', 'admin'), "gallery"));
+        $menu->addChild(new MenuItem("gallery", array($this, 'admin')));
+        $menu->addChild(new MenuItem("galleries", array($this, 'admin'), "gallery"));
     }
 }

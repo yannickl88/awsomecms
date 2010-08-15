@@ -142,6 +142,8 @@ class Config
             }
             else
             {
+                if($section == "") $section = "GLOBAL";
+                Debugger::getInstance()->notice("Missing Config key, '{$section}::{$key}'");
                 return $default;
             }
         }
@@ -153,6 +155,8 @@ class Config
             }
             else
             {
+                if($section == "") $section = "GLOBAL";
+                Debugger::getInstance()->notice("Missing Config key, '{$section}::{$key}'");
                 return $default;
             }
         }

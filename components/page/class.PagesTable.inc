@@ -41,13 +41,6 @@ class PagesTable extends Table
         $this->addField(new DateField("page_timestamp", Field::HIDE));
         $this->addField(new BooleanField("page_html", Field::HIDE|Field::OPTIONAL));
         $this->setTitle("[page_name]");
-        
-        $this->setURLs(
-            Config::get('pageadmin', 'pageadmin', 'admin'),
-            Config::get('pageadd', 'pageadd', 'admin'),
-            Config::get('pageedit', 'pageedit', 'admin'),
-            Config::get('pagedelete', 'pagedelete', 'admin')
-        );
     }
     /**
      * (non-PHPdoc)

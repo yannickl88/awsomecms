@@ -47,10 +47,10 @@ class GroupsComponent extends Component implements AuthComponent
         $registerManager->registerHook($this->component, "users", "post", "delete", "userdel");
         
         //admin pages
-        $registerManager->registerPage('admin', '/admin/groups/', '{form table="groups.groups" form="admin"}');
-        $registerManager->registerPage('add', '/admin/groups/', '{form table="groups.groups" form="add"}');
-        $registerManager->registerPage('edit', '/admin/groups/', '{form table="groups.groups" form="edit"}');
-        $registerManager->registerPage('delete', '/admin/groups/', '{form table="groups.groups" form="delete"}');
+        $registerManager->registerPage(array($this, 'admin'), '{form table="groups.groups" form="admin"}');
+        $registerManager->registerPage(array($this, 'add'), '{form table="groups.groups" form="add"}');
+        $registerManager->registerPage(array($this, 'edit'), '{form table="groups.groups" form="edit"}');
+        $registerManager->registerPage(array($this, 'delete'), '{form table="groups.groups" form="delete"}');
     }
     /**
      * Action to add an group
@@ -72,7 +72,7 @@ class GroupsComponent extends Component implements AuthComponent
                 Table::init('groups.usersgroups')->setRecord((object) array("user_id" => $user, "group_id" => $id))->doInsert();
             }
 
-            $this->redirect("/".Config::get('groupsadmin', 'groupsadmin', 'admin'));
+            $this->redirect(array($this, "admin"));
         }
     }
     /**
@@ -102,7 +102,7 @@ class GroupsComponent extends Component implements AuthComponent
                 ->doInsert();
             }
 
-            $this->redirect("/".Config::get('groupsadmin', 'groupsadmin', 'admin'));
+            $this->redirect(array($this, "admin"));
         }
         else
         {
@@ -124,7 +124,7 @@ class GroupsComponent extends Component implements AuthComponent
             }
             else
             {
-                $this->redirect("/".Config::get('groupsadmin', 'groupsadmin', 'admin'));
+                $this->redirect(array($this, "admin"));
             }
         }
     }
@@ -147,7 +147,7 @@ class GroupsComponent extends Component implements AuthComponent
             ->setRequest((object) (object) array("group_id" => $request["group_id"]))
             ->doDelete();
 
-            $this->redirect("/".Config::get('groupsadmin', 'groupsadmin', 'admin'));
+            $this->redirect(array($this, "admin"));
         }
         else
         {
@@ -158,7 +158,7 @@ class GroupsComponent extends Component implements AuthComponent
             }
             else
             {
-                $this->redirect("/".Config::get('groupsadmin', 'groupsadmin', 'admin'));
+                $this->redirect(array($this, "admin"));
             }
         }
     }
@@ -283,6 +283,6 @@ class GroupsComponent extends Component implements AuthComponent
      */
     public function registerMenuItems($menu)
     {
-        $menu->addChild(new MenuItem("groupsadmin", Config::get('groupsadmin', 'groupsadmin', 'admin'), "users"));
+        $menu->addChild(new MenuItem("groupsadmin", array($this, "admin"), "users"));
     }
 }

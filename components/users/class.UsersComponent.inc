@@ -43,14 +43,14 @@ class UsersComponent extends Component implements AuthComponent
         $registerManager->registerAuth("users.action_privedit", "admin");
         $registerManager->registerAuth("users.action_privdelete", "admin");
         
-        $registerManager->registerPage('add', '/admin/users/', '{form table="users.users" form="add"}');
-        $registerManager->registerPage('edit', '/admin/users/', '{form table="users.users" form="edit"}');
-        $registerManager->registerPage('delete', '/admin/users/', '{form table="users.users" form="delete"}');
-        $registerManager->registerPage('admin', '/admin/users/', '{form table="users.users" form="admin"}');
-        $registerManager->registerPage('privadmin', '/admin/users/', '{form table="users.privileges" form="admin"}');
-        $registerManager->registerPage('privadd', '/admin/users/', '{form table="users.privileges" form="add"}<br />');
-        $registerManager->registerPage('privedit', '/admin/users/', '{form table="users.privileges" form="edit"}');
-        $registerManager->registerPage('privdelete', '/admin/users/', '{form table="users.privileges" form="delete"}');
+        $registerManager->registerPage(array($this, 'add'), '{form table="users.users" form="add"}');
+        $registerManager->registerPage(array($this, 'edit'), '{form table="users.users" form="edit"}');
+        $registerManager->registerPage(array($this, 'delete'), '{form table="users.users" form="delete"}');
+        $registerManager->registerPage(array($this, 'admin'), '{form table="users.users" form="admin"}');
+        $registerManager->registerPage(array($this, 'privadmin'), '{form table="users.privileges" form="admin"}');
+        $registerManager->registerPage(array($this, 'privadd'), '{form table="users.privileges" form="add"}<br />');
+        $registerManager->registerPage(array($this, 'privedit'), '{form table="users.privileges" form="edit"}');
+        $registerManager->registerPage(array($this, 'privdelete'), '{form table="users.privileges" form="delete"}');
     }
     /**
      * Internal function to handle login. This checks user and password and
@@ -106,7 +106,7 @@ class UsersComponent extends Component implements AuthComponent
     {
         if($request['method'] == 'post')
         {
-            $this->login($request, "/".$_GET['url']);
+            $this->login($request, $_GET['url']);
         }
     }
     /**
@@ -120,7 +120,7 @@ class UsersComponent extends Component implements AuthComponent
     {
         if($request['method'] == 'post')
         {
-            $this->login($request, "/".Config::get('location', 'location', 'admin'));
+            $this->login($request, Config::get('location', 'location', 'admin'));
         }
     }
     /**
@@ -137,7 +137,7 @@ class UsersComponent extends Component implements AuthComponent
             //extra custom validation
             if($request['user_pass'] != $request['user_pass2'])
             {
-                $e = new InvalidFormException((object) $request, "/".Config::get('usersadd', 'usersadd', 'admin'), "users.users", "Password do not match");
+                $e = new InvalidFormException((object) $request, makeLink(array($this, "add")), "users.users", "Password do not match");
                 
                 $e->addInvalidField('user_pass', "Passwords do not match");
                 $e->addInvalidField('user_pass2', "");
@@ -151,7 +151,7 @@ class UsersComponent extends Component implements AuthComponent
                     ->doInsert();
             }
             
-            $this->redirect("/".Config::get('usersadmin', 'usersadmin', 'admin'));
+            $this->redirect(array($this, "admin"));
         }
     }
     /**
@@ -168,7 +168,7 @@ class UsersComponent extends Component implements AuthComponent
             //extra custom validation
             if(!empty($request['user_pass']) && $request['user_pass'] != $request['user_pass2'])
             {
-                $e = new InvalidFormException((object) $request, "/".Config::get('usersedit', 'usersedit', 'admin'), "users.users", "Password do not match");
+                $e = new InvalidFormException((object) $request, makeLink(array($this, "edit")), "users.users", "Password do not match");
                 
                 $e->setRedirectData(array("user_id" => $request["user_id"]));
                 $e->addInvalidField('user_pass', Language::get("error_passwordsnomatch"));
@@ -182,7 +182,7 @@ class UsersComponent extends Component implements AuthComponent
                     ->setRecord((object) $request)
                     ->doUpdate();
                 
-                $this->redirect("/".Config::get('usersadmin', 'usersadmin', 'admin'));
+                $this->redirect(array($this, "admin"));
             }
         }
         else
@@ -194,7 +194,7 @@ class UsersComponent extends Component implements AuthComponent
             }
             else
             {
-                $this->redirect("/".Config::get('usersadmin', 'usersadmin', 'admin'));
+                $this->redirect(array($this, "admin"));
             }
         }
     }
@@ -213,7 +213,7 @@ class UsersComponent extends Component implements AuthComponent
                 ->setRecord((object) $request)
                 ->doDelete();
             
-            $this->redirect("/".Config::get('usersadmin', 'usersadmin', 'admin'));
+            $this->redirect(array($this, "admin"));
         }
         else
         {
@@ -224,7 +224,7 @@ class UsersComponent extends Component implements AuthComponent
             }
             else
             {
-                $this->redirect("/".Config::get('usersadmin', 'usersadmin', 'admin'));
+                $this->redirect(array($this, "admin"));
             }
         }
     }
@@ -249,13 +249,13 @@ class UsersComponent extends Component implements AuthComponent
             }
             else
             {
-                $e = new InvalidFormException((object) $request, "/".Config::get('privadd', 'privadd', 'admin'), "users.privileges", "Privilage already exists");
+                $e = new InvalidFormException((object) $request, makeLink(array($this, "privadd")), "users.privileges", "Privilage already exists");
                 $e->addInvalidField('privilege_name', Language::get("error_selectothername"));
                 
                 throw $e;
             }
             
-            $this->redirect("/".Config::get('privadmin', 'privadmin', 'admin'));
+            $this->redirect(makeLink(array($this, "privadmin")));
         }
     }
     /**
@@ -274,7 +274,7 @@ class UsersComponent extends Component implements AuthComponent
         {
             $table->doUpdate();
             
-            $this->redirect("/".Config::get('privadmin', 'privadmin', 'admin'));
+            $this->redirect(makeLink(array($this, "privadmin")));
         }
     }
     /**
@@ -293,11 +293,11 @@ class UsersComponent extends Component implements AuthComponent
         {
             $table->doDelete($request);
             
-            $this->redirect("/".Config::get('privadmin', 'privadmin', 'admin'));
+            $this->redirect(makeLink(array($this, "privadmin")));
         }
         elseif(!$request['privilege_id'])
         {
-            $this->redirect("/".Config::get('privadmin', 'privadmin', 'admin'));
+            $this->redirect(makeLink(array($this, "privadmin")));
         }
     }
     /**
@@ -366,8 +366,8 @@ class UsersComponent extends Component implements AuthComponent
      */
     public function registerMenuItems($menu)
     {
-        $menu->addChild(new MenuItem("users", Config::get('usersadmin', 'usersadmin', 'admin')));
-        $menu->addChild(new MenuItem("usersadmin", Config::get('usersadmin', 'usersadmin', 'admin'), "users"));
-        $menu->addChild(new MenuItem("privadmin", Config::get('privadmin', 'privadmin', 'admin'), "users"));
+        $menu->addChild(new MenuItem("users", array($this, 'admin')));
+        $menu->addChild(new MenuItem("usersadmin", array($this, 'admin'), "users"));
+        $menu->addChild(new MenuItem("privadmin", array($this, 'privadmin'), "users"));
     }
 }

@@ -49,13 +49,6 @@ class NewsTable extends Table
         $this->addField($extField);
         $this->addField(new Field("news_extsite", Field::HIDE|Field::OPTIONAL));
         $this->addField(new BooleanField("news_extlink", Field::HIDE|Field::OPTIONAL));
-        
-        $this->setURLs(
-            Config::get('newsadmin', 'newsadmin', 'admin'),
-            Config::get('newsadd', 'newsadd', 'admin'),
-            Config::get('newsedit', 'newsedit', 'admin'),
-            Config::get('newsdelete', 'newsdelete', 'admin')
-        );
     }
     /**
      * (non-PHPdoc)

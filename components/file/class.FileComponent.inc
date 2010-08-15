@@ -44,10 +44,10 @@ class FileComponent extends Component
         $registerManager->registerAuth("file.action_delete", "admin");
         $registerManager->registerAuth("file.action_upload", "admin");
         
-        $registerManager->registerPage('add', '/admin/file/', '{form table="file.files" form="add"}');
-        $registerManager->registerPage('edit', '/admin/file/', '{form table="file.files" form="edit"}');
-        $registerManager->registerPage('delete', '/admin/file/', '{form table="file.files" form="delete"}');
-        $registerManager->registerPage('admin', '/admin/file/', '{form table="file.files" form="admin"}');
+        $registerManager->registerPage(array($this, 'add'), '{form table="file.files" form="add"}');
+        $registerManager->registerPage(array($this, 'edit'), '{form table="file.files" form="edit"}');
+        $registerManager->registerPage(array($this, 'delete'), '{form table="file.files" form="delete"}');
+        $registerManager->registerPage(array($this, 'admin'), '{form table="file.files" form="admin"}');
     }
     public function action_add($smarty, $smartyLoader, $request)
     {
@@ -57,7 +57,7 @@ class FileComponent extends Component
                 ->setRecord((object) $request)
                 ->doInsert();
             
-            $this->redirect("/".Config::get('fileadmin', 'fileadmin', 'admin'));
+            $this->redirect(array($this, 'admin'));
         }
     }
     public function action_upload($smarty, $smartyLoader, $request)
@@ -71,8 +71,8 @@ class FileComponent extends Component
                 ->setRecord((object) $request)
                 ->doInsert();
             
-            $linkEdit = "/".Config::get("fileedit", "fileedit", "admin")."?file_id={$return->insertID()}";
-            $linkDelete = "/".Config::get("filedelete", "filedelete", "admin")."?file_id={$return->insertID()}";
+            $linkEdit = makeLink(array($this, "edit"))."?file_id={$return->insertID()}";
+            $linkDelete = makeLink(array($this, "delete"))."?file_id={$return->insertID()}";
             $row = $return->getRow();
             
             $this->ajax(array("succes" => true, "id" => $return->insertID(), "editLink" => $linkEdit, "deleteLink" => $linkDelete, "viewLink" => $row->file_data->url, "type" => $row->file_data->type));
@@ -91,7 +91,7 @@ class FileComponent extends Component
                 ->setRecord((object) $request)
                 ->doUpdate();
             
-            $this->redirect("/".Config::get('fileadmin', 'fileadmin', 'admin'));
+            $this->redirect(array($this, "admin"));
         }
         else
         {
@@ -102,7 +102,7 @@ class FileComponent extends Component
             }
             else
             {
-                $this->redirect("/".Config::get('fileadd', 'fileadd', 'admin'));
+                $this->redirect(array($this, "admin"));
             }
         }
     }
@@ -114,7 +114,7 @@ class FileComponent extends Component
                 ->setRequest((object) $request)
                 ->doDelete();
             
-            $this->redirect("/".Config::get('fileadmin', 'fileadmin', 'admin'));
+            $this->redirect(array($this, "admin"));
         }
         else
         {
@@ -125,7 +125,7 @@ class FileComponent extends Component
             }
             else
             {
-                $this->redirect("/".Config::get('fileadmin', 'fileadmin', 'admin'));
+                $this->redirect(array($this, "admin"));
             }
         }
     }

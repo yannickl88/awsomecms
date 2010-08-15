@@ -39,13 +39,6 @@ class GroupsTable extends Table
         $this->addField($privField, 2);
         $this->addField(new UsersselectField("group_users", Field::DUMMY|Field::HIDE_VIEW), 3);
         $this->setTitle("[group_name]");
-        
-        $this->setURLs(
-            Config::get('groupsadmin', 'groupsadmin', 'admin'),
-            Config::get('groupsadd', 'groupsadd', 'admin'),
-            Config::get('groupsedit', 'groupsedit', 'admin'),
-            Config::get('groupsdelete', 'groupsdelete', 'admin')
-        );
     }
     /**
      * (non-PHPdoc)

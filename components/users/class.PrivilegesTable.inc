@@ -37,13 +37,6 @@ class PrivilegesTable extends Table
         $this->addField(new IntField("privilege_int", Field::HIDE|Field::OPTIONAL));
         $this->addField(new IntField("privilege_locked", Field::HIDE|Field::OPTIONAL));
         $this->setTitle("[privilege_name]");
-        
-        $this->setURLs(
-            Config::get('privadmin', 'privadmin', 'admin'),
-            Config::get('privadd', 'privadd', 'admin'),
-            Config::get('privedit', 'privedit', 'admin'),
-            Config::get('privdelete', 'privdelete', 'admin')
-        );
     }
     /**
      * (non-PHPdoc)
