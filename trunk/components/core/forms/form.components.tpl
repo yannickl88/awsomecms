@@ -16,9 +16,9 @@
         <td style="vertical-align: top;" class="updateCell">
             {if $framework->disable}
                 {if $framework->SVN}
-                    <a href="#"><img src="/img/icons/package_disabled.png" alt="{"svnfound"|text|ucfirst}" title="{"svnfound"|text|ucfirst}"/></a>
+                    <img src="/img/icons/package_disabled.png" alt="{"svnfound"|text|ucfirst}" title="{"svnfound"|text|ucfirst}"/>
                 {else}
-                    <a href="#"><img src="/img/icons/package_disabled.png" alt="{"update"|text|ucfirst}" title="{"update"|text|ucfirst}"/></a>
+                    <img src="/img/icons/package_disabled.png" alt="{"update"|text|ucfirst}" title="{"update"|text|ucfirst}"/>
                 {/if}
             {else}
                 <img src="/img/admin/{if $framework->U2D}ok{else}fail{/if}-icon.png" alt="status"/> 
@@ -53,20 +53,14 @@
                 <td style="vertical-align: top;" class="updateCell">
                     {if $component->disable}
                         {if $component->SVN}
-                            <a href="#" onclick="return false;">
-                                <img src="/img/icons/plugin_disabled.png" alt="{"svnfound"|text|ucfirst}" title="{"svnfound"|text|ucfirst}"/>
-                            </a>
+                            <img src="/img/icons/plugin_disabled.png" alt="{"svnfound"|text|ucfirst}" title="{"svnfound"|text|ucfirst}"/>
                         {else}
-                            <a href="#" onclick="return false;">
-                                <img src="/img/icons/plugin_disabled.png" alt="{"update"|text|ucfirst}" title="{"update"|text|ucfirst}"/>
-                            </a>
+                            <img src="/img/icons/plugin_disabled.png" alt="{"update"|text|ucfirst}" title="{"update"|text|ucfirst}"/>
                         {/if}
                     {else}
                         <img src="/img/admin/{if $component->U2D === "???"}unknown{elseif $component->U2D}ok{else}fail{/if}-icon.png" alt="status"/> 
                         {if $component->U2D === "???"}
-                            <a href="#" onclick="return false;">
-                                <img src="/img/icons/plugin_error.png" alt="{"unknown"|text|ucfirst}" title="{"unknown"|text|ucfirst}"/>
-                            </a>
+                            <img src="/img/icons/plugin_error.png" alt="{"unknown"|text|ucfirst}" title="{"unknown"|text|ucfirst}"/>
                         {else}
                             <a href="#" onclick="updateComponent('{$component->component_name}'); return false;">
                                 <img src="/img/icons/plugin_go.png" alt="{"update"|text|ucfirst}" title="{"update"|text|ucfirst}"/>
