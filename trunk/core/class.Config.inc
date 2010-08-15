@@ -99,11 +99,13 @@ class Config
             }
         }
         
+        $this->data['layoutmap'] = array();
+        $this->data['layoutmap'][] = array(preg_quote($this->data['admin']['location'], "/")."(.*)", "admin_layout.tpl");
+        
         //parse the layout map
         if(file_exists($frameworkroot.'/core/layoutmap.conf'))
         {
             $data = file($frameworkroot.'/core/layoutmap.conf');
-            $this->data['layoutmap'] = array();
             
             foreach($data as $line)
             {

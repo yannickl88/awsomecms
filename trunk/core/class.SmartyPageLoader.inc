@@ -157,7 +157,7 @@ class SmartyPageLoader
 
             foreach($layoutmap as $map)
             {
-                if(preg_match("/^".$map[0]."$/", "/".$url) > 0)
+                if(preg_match("/^".$map[0]."$/", $url) > 0)
                 {
                     return $smarty_obj->fetch($map[1]);
                 }
