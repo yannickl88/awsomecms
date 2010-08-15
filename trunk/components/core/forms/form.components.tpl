@@ -41,7 +41,7 @@
     <table class="admin_table">
         <tr class="header">
             <th style="width: 100px;">{"component"|text}</th>
-            <th style="width: 100px;">{"actions"|text}</th>
+            <th style="width: 100px;">{"status"|text}</th>
             <th>{"description"|text}</th>
             <th style="width: 100px;">{"pubaccess"|text}</th>
         </tr>
