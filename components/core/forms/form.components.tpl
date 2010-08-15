@@ -74,9 +74,7 @@
                         {/if}
                     {/if}
                     {if $component->needsPatch}
-                        <a href="#" onclick="patchComponent('{$component->component_name}'); return false;">
-                            <img src="/img/icons/script_gear.png" alt="Run patches" title="Run patches"/>
-                        </a>
+                        <img src="/img/icons/script_gear.png" alt="You need to run patches" title="You need to run patches"/>
                     {/if}
                 </td>
                 <td style="vertical-align: top;">
@@ -157,24 +155,6 @@
             component: "core",
             action: "update",
             updateComponent: name
-        };
-        
-        $.post("/{$smarty.get.url}", data, function(data) {
-            $("#row_"+name+" .updateCell").html("<img src='/img/admin/ok-icon.png' /> Up-to-date");
-        }, "json");
-
-        return false;
-    }
-    function patchComponent(name)
-    {
-        //update the cell so it show loading
-        $("#row_"+name+" .updateCell").html("<img src='/img/admin/loader.gif' /> Updating...");
-        
-        data = {
-            component: "core",
-            action: "update",
-            updateComponent: name,
-            patchOnly: true
         };
         
         $.post("/{$smarty.get.url}", data, function(data) {
