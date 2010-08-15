@@ -246,57 +246,6 @@ class InstallHelper
         return array(true);
     }
     /**
-     * Run the patches for a given component
-     * 
-     * @param string $component
-     */
-    public function runPatches($component)
-    {
-        $components = RegisterManager::getInstance()->getComponenets();
-        $component = $components[$component];
-        
-        $current = $component->component_patchlevel;
-        $highest = $this->getHighestPatchLevel($component->component_path."/db");
-        
-        while($current < $highest)
-        {
-            $current++;
-            
-            $patch = file_get_contents($component->component_path."/db/patch-{$current}.sql");
-            SQL::getInstance()->multi_query($patch);
-            
-            Table::init('core.components')
-                ->setRecord((object) array("component_name" => $component->component_name, "component_patchlevel" => $highest))
-                ->doUpdate();
-        }
-    }
-    /**
-     * Get the highest patch number for a given folder
-     * 
-     * @param string $installDir
-     * @return int
-     */
-    public function getHighestPatchLevel($installDir)
-    {
-        $files = scandir($installDir);
-        $patchlevel = 0;
-        
-        foreach($files as $file)
-        {
-            $matches = array();
-            
-            if(preg_match('/^patch-([0-9]+)\.sql$/', $file, $matches) == 1)
-            {
-                if($patchlevel < (int) $matches[1])
-                {
-                    $patchlevel = (int) $matches[1];
-                }
-            }
-        }
-        
-        return $patchlevel;
-    }
-    /**
      * Check if an array has numeric keys
      * 
      * @param array $array
@@ -610,9 +559,32 @@ class InstallHelper
      */
     public function loadTable($content)
     {
+        $queries = $this->makeSQL($content);
+        $execQuery = false;
+        
+        foreach($queries as $query)
+        {
+            SQL::getInstance()->query($query);
+            $execQuery = true;
+        }
+        return $execQuery;
+    }
+    public function needsLoad($content)
+    {
+        $queries = $this->makeSQL($content);
+        return (count($queries) > 0);
+    }
+    /**
+     * Create the SQL queries needed to load the database
+     * 
+     * @param $content
+     * @return 
+     */
+    private function makeSQL($content)
+    {
         $dom = new DOMDocument();
         $dom->loadXML($content);
-        $execQuery = false;
+        $queries = array();
         
         //check the tables
         foreach($dom->getElementsByTagName("table") as $table)
@@ -658,8 +630,7 @@ class InstallHelper
                 }
                 $query .= ")";
                 
-                SQL::getInstance()->query($query);
-                $execQuery = true;
+                $queries[] = $query;
                 
                 //insert data too :D
                 foreach($table->getElementsByTagName("data")->item(0)->getElementsByTagName("entry") as $data)
@@ -671,8 +642,7 @@ class InstallHelper
                         $value = $data->getElementsByTagName($field)->item(0)->nodeValue;
                         $query->insert($field, $value);
                     }
-                    $query->exec();
-                    $execQuery = true;
+                    $queries[] = $query;
                 }
             }
             else
@@ -707,8 +677,7 @@ class InstallHelper
                             if(!empty($fieldExtra)) $query .= " {$fieldExtra}";
                             $query .= ";";
                             
-                            SQL::getInstance()->query($query);
-                            $execQuery = true;
+                            $queries[] = $query;
                         }
                     }
                     else
@@ -724,8 +693,7 @@ class InstallHelper
                         if(!empty($fieldExtra)) $query .= " {$fieldExtra}";
                         $query .= ";";
                         
-                        SQL::getInstance()->query($query);
-                        $execQuery = true;
+                        $queries[] = $query;
                     }
                     
                     $fieldsDB[$fieldName] = $field;
@@ -734,13 +702,12 @@ class InstallHelper
                 foreach(array_diff(array_keys($fieldsSQL), array_keys($fieldsDB)) as $fieldName)
                 {
                     $query = "ALTER TABLE `{$tableName}` DROP `{$fieldName}`;";
-                    SQL::getInstance()->query($query);
-                    $execQuery = true;
+                    $queries[] = $query;
                 }
             }
         }
         
-        return $execQuery;
+        return $queries;
     }
     /**
      * Check if a DOMElement and the field row from the DB have the same values

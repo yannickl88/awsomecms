@@ -135,7 +135,8 @@ class InvalidFormException extends Exception
         $html .= "    </ul>\n";
         $html .= "</div>\n";
         $html .= "<script type=\"text/javascript\">\n";
-        $html .= "        $().ready(function(e) {\n";
+        $html .= "        $(\"#errorlist\").ready(function(e) {\n";
+        $html .= "            $('html, body').animate({scrollTop: $(\"#errorlist\").position().top}, \"slow\");\n";
         $html .= "            $(\"#errorlist\").empty();\n";
         foreach($this->fields as $field => $error)
         {

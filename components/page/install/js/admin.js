@@ -972,24 +972,26 @@ var FileUpload = function(element) {
                 
                 // create a new xhr object
                 var xhr = new XMLHttpRequest();
+                xhr.node = loaderNode;
                 // add listeners
                 var u = this;
                 xhr.onload = function(event) {
                     /* If we got an error display it. */
                     if (event.currentTarget.responseText)
                     {
+                        var node = event.currentTarget.node;
                         var data = $.parseJSON(event.currentTarget.responseText);
                         
                         if(data.error)
                         {
-                            loaderNode.parent.removeChild(loaderNode);
+                            node.parent.removeChild(node);
                         }
                         else
                         {
-                            loaderNode.icon.attr("src", loaderNode.root.getIcon(u.getType(data.type)));
-                            loaderNode.link.attr("href", data.editLink)
-                            loaderNode.addAction(new TreeAction("view", data.viewLink, loaderNode.root));
-                            loaderNode.addAction(new TreeAction("delete", data.deleteLink, loaderNode.root));
+                            node.icon.attr("src", node.root.getIcon(u.getType(data.type)));
+                            node.link.attr("href", data.editLink)
+                            node.addAction(new TreeAction("view", data.viewLink, node.root));
+                            node.addAction(new TreeAction("delete", data.deleteLink, node.root));
                         }
                     }
                 };

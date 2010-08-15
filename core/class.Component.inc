@@ -57,11 +57,6 @@ class Component
         }
         else
         {
-            if(!isset(Component::$components))
-            {
-                Component::$components = array();
-            }
-
             $components = RegisterManager::getInstance()->getComponenets();
             if(array_key_exists($component, $components))
             {
@@ -104,6 +99,12 @@ class Component
             include_once $loc;
 
             $obj = new $className();
+            
+            if(!isset(Component::$components))
+            {
+                Component::$components = array();
+            }
+            
             Component::$components[$name] = $obj;
 
             return $obj;

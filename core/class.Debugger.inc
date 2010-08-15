@@ -223,6 +223,7 @@ class Debugger
         //JAVASCRIPT
         $html .= <<<STR
 <script type="text/javascript">
+//<![CDATA[
     function debug_hadCookie() {
         var nameEQ = "debugHide=";
         var ca = document.cookie.split(';');
@@ -255,6 +256,7 @@ class Debugger
             document.cookie = "debugHide=true; path=/";
         }
     }
+//]]>
 </script>
 STR;
         
