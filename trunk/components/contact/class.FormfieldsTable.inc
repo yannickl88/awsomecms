@@ -37,13 +37,6 @@ class FormfieldsTable extends Table
         $this->addField(new Field("field_code"));
         $this->addField(new IntField("field_type"));
         $this->addField(new BooleanField("field_required"));
-        
-        $this->setURLs(
-            Config::get('contactadmin', 'contactadmin', 'admin'),
-            Config::get('contactadd', 'contactadd', 'admin'),
-            Config::get('contactedit', 'contactedit', 'admin'),
-            Config::get('contactdelete', 'contactdelete', 'admin')
-        );
     }
     /**
      * (non-PHPdoc)

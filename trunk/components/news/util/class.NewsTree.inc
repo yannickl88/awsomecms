@@ -41,8 +41,10 @@ class NewsItem extends TreeNode
      */
     public function toJavascript()
     {
-        $linkEdit = "/".Config::get("newsedit", "newsedit", "admin")."?news_id={$this->id}";
-        $linkDelete = "/".Config::get("newsdelete", "newsdelete", "admin")."?news_id={$this->id}";
+        $component = Component::init("news");
+        
+        $linkEdit = makeLink(array($component, "edit"))."?news_id={$this->id}";
+        $linkDelete = makeLink(array($component, "delete"))."?news_id={$this->id}";
         $icon = "news";
         
         $html = "{$this->parent->getName()}.addChild(new TreeItem(\"{$this->name}\", \"{$this->location}\", \"{$linkEdit}\", {$this->parent->getName()}, \"{$icon}\", [new TreeAction(\"view\", \"{$this->viewURL}\", {$this->parent->getName()}), new TreeAction(\"delete\", \"{$linkDelete}\", {$this->parent->getName()})], {$this->getType()}));\n";
@@ -83,8 +85,10 @@ class NewsFolder extends TreeNode
      */
     public function toJavascript()
     {
-        $linkAdd = "/".Config::get("newsadd", "newsadd", "admin");
-        $linkView = "/".Config::get("newsadmin", "newsadmin", "admin");
+        $component = Component::init("news");
+        
+        $linkAdd = makeLink(array($component, "add"));
+        $linkView = makeLink(array($component, "admin"));
         
         $html = "{$this->parent->getName()}.addChild(new TreeFolder(\"{$this->name}\", \"{$this->location}\", {$this->parent->getName()}, \"news_folder\", [new TreeAction(\"overview\", \"{$linkView}\", {$this->parent->getName()}), new TreeAction(\"add\", \"{$linkAdd}\", {$this->parent->getName()})], {$this->getType()}));\n";
         

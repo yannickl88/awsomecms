@@ -124,6 +124,15 @@ class Component
         $this->request = $request;
     }
     /**
+     * Get the name of the component
+     * 
+     * @return String;
+     */
+    public function getName()
+    {
+        return $this->component;
+    }
+    /**
      * Do an redirect
      *
      * @param string $url
@@ -147,9 +156,9 @@ class Component
             $query .= $key.'='.$item;
         }
 
-        $url .= $query;
+        $link = makeLink($url).$query;
 
-        Controller::getInstance()->setRedirect($url);
+        Controller::getInstance()->setRedirect($link);
     }
     /**
      * Do an ajax return (just data, no HTML) in json format

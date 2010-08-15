@@ -160,24 +160,6 @@ abstract class Table
         }
     }
     /**
-    * Set the urls the Table needs to have for redirection on errors
-    * 
-    * @param string $admin
-    * @param string $add
-    * @param string $edit
-    * @param string $delete
-    * @return Table
-    */
-    protected function setURLs($admin, $add, $edit, $delete)
-    {
-        $this->adminURL = $admin;
-        $this->addURL = $add;
-        $this->editURL = $edit;
-        $this->deleteURL = $delete;
-        
-        return $this;
-    }
-    /**
     * Constructor for Table
     * 
     * @param string $name
@@ -229,13 +211,19 @@ abstract class Table
     * Assign the table to a component with an action. 
     * 
     * @param string $component
-    * @param string $action
     * @return Table
     */
     public function assign($component = null, $action = null)
     {
         $this->component = $component;
         $this->action = $action;
+        
+        $componentObj = Component::init($this->component);
+        //set the links
+        $this->adminURL = makeLink(array($componentObj, "admin"));
+        $this->addURL = makeLink(array($componentObj, "add"));
+        $this->editURL = makeLink(array($componentObj, "edit"));
+        $this->deleteURL = makeLink(array($componentObj, "delete"));
         
         return $this;
     }

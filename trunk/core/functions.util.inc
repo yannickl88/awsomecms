@@ -362,3 +362,18 @@ function str_rand($chars)
     
     return $str;
 }
+/**
+ * Create a link, based on if the $url is a String or an Array with <Component, String>
+ * 
+ * @param * $url
+ * @return String
+ */
+function makeLink($url)
+{
+    if(is_array($url)) // check if we got an component instaid of a string
+    {
+        $url = Config::get("location", "admin/", "admin").$url[0]->getName()."/".$url[1];
+    }
+    
+    return $url;
+}

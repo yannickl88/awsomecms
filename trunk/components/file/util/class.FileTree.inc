@@ -30,9 +30,10 @@ class FileItem extends TreeNode
      */
     public function toJavascript()
     {
-        $linkEdit = "/".Config::get("fileedit", "fileedit", "admin")."?file_id={$this->id}";
-        $linkDelete = "/".Config::get("filedelete", "filedelete", "admin")."?file_id={$this->id}";
-        $icon = Component::init("file")->getType($this->fileType);
+        $component = Component::init("file");
+        $linkEdit = makeLink(array($component, "edit"))."?file_id={$this->id}";
+        $linkDelete = makeLink(array($component, "delete"))."?file_id={$this->id}";
+        $icon = $component->getType($this->fileType);
         
         $html = "{$this->parent->getName()}.addChild(new TreeItem(\"{$this->name}\", \"{$this->location}\", \"{$linkEdit}\", {$this->parent->getName()}, \"{$icon}\", [new TreeAction(\"view\", \"{$this->viewURL}\", {$this->parent->getName()}), new TreeAction(\"delete\", \"{$linkDelete}\", {$this->parent->getName()})], {$this->getType()}));\n";
         
@@ -103,8 +104,10 @@ class UploadFolder extends Folder
      */
     public function toJavascript()
     {
-        $linkAdd = "/".Config::get("fileadd", "fileadd", "admin");
-        $linkView = "/".Config::get("fileadmin", "fileadmin", "admin");
+        $component = Component::init("file");
+        
+        $linkAdd = makeLink(array($component, "add"));
+        $linkView = makeLink(array($component, "admin"));
         
         $html = "uploadFolder = new TreeFolder(\"{$this->name}\", \"{$this->location}\", {$this->parent->getName()}, \"folder\", [new TreeAction(\"overview\", \"{$linkView}\", {$this->parent->getName()}), new TreeAction(\"add\", \"{$linkAdd}\", {$this->parent->getName()})], {$this->getType()});\n";
         $html .= "uploadFolder.nodes = ".stripslashes(json_encode($this->nodeMap))."\n";

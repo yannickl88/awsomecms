@@ -175,7 +175,7 @@ class RegisterManager
     /**
      * Reload the content of the RegisterManager
      */
-    private function reload()
+    public function reload()
     {
         Cache::clear("components");
         Cache::clear("mappings");
@@ -204,12 +204,12 @@ class RegisterManager
     /**
      * Register a page
      *
-     * @param String $location
+     * @param * $url
      * @param mixed $content    Either a string or a callback
      */
-    public function registerPage($pageName, $pageLocation, $content)
+    public function registerPage($url, $content)
     {
-        $this->pages[$pageLocation."/".$pageName] = array($content, time());
+        $this->pages[makeLink($url)] = array($content, time());
     }
     /**
      * Register an auth group to which this action belongs
@@ -266,11 +266,13 @@ class RegisterManager
     }
     /**
      * Get a page
-     *
+     * 
+     * @param * $url
+     * @return String
      */
-    public function getPage($pageName, $pageLocation)
+    public function getPage($url)
     {
-        $page = $this->pages[$pageLocation."/".$pageName];
+        $page = $this->pages[makeLink($url)];
 
         if(is_array($page[0]) && is_callable($page[0]))
         {
@@ -340,9 +342,9 @@ class RegisterManager
      * @param String $pageLocation
      * @return boolean
      */
-    public function hasPage($pageName, $pageLocation)
+    public function hasPage($url)
     {
-        return isset($this->pages[$pageLocation."/".$pageName]);
+        return isset($this->pages[makeLink($url)]);
     }
     /**
      * Check if a hook is rgistered

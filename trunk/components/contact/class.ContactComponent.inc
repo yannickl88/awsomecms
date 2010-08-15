@@ -38,11 +38,11 @@ class ContactComponent extends Component
         $registerManager->registerAuth("contact.action_add", "admin");
         $registerManager->registerAuth("contact.action_edit", "admin");
         $registerManager->registerAuth("contact.action_delete", "admin");
-        
-        $registerManager->registerPage('admin', '/admin/contact/', '{form table="contact.forms" form="admin"}');
-        $registerManager->registerPage('add', '/admin/contact/', '{form table="contact.forms" form="add"}');
-        $registerManager->registerPage('edit', '/admin/contact/', '{form table="contact.forms" form="edit"}');
-        $registerManager->registerPage('delete', '/admin/contact/', '{form table="contact.forms" form="delete"}');
+         
+        $registerManager->registerPage(array($this, 'admin'), '{form table="contact.forms" form="admin"}');
+        $registerManager->registerPage(array($this, 'add'), '{form table="contact.forms" form="add"}');
+        $registerManager->registerPage(array($this, 'edit'), '{form table="contact.forms" form="edit"}');
+        $registerManager->registerPage(array($this, 'delete'), '{form table="contact.forms" form="delete"}');
     }
     /**
      * Add action, this is called when a contact form is added
@@ -83,7 +83,7 @@ class ContactComponent extends Component
                 }
             }
             
-            $this->redirect("/".Config::get('contactadmin', 'contactadmin', 'admin'));
+            $this->redirect(array($this, 'admin'));
         }
     }
     /**
@@ -129,7 +129,7 @@ class ContactComponent extends Component
                 }
             }
             
-            $this->redirect("/".Config::get('contactadmin', 'contactadmin', 'admin'), array("form_id" => $request['form_id']));
+            $this->redirect(array($this, 'admin'), array("form_id" => $request['form_id']));
         }
         else
         {
@@ -145,7 +145,7 @@ class ContactComponent extends Component
             }
             else
             {
-                $this->redirect("/".Config::get('contactadd', 'contactadd', 'admin'));
+                $this->redirect(array($this, 'admin'));
             }
         }
     }
@@ -168,7 +168,7 @@ class ContactComponent extends Component
                 ->setRequest((object) $request)
                 ->doDelete();
             
-            $this->redirect("/".Config::get('contactadmin', 'contactadmin', 'admin'));
+            $this->redirect(array($this, 'admin'));
         }
         else
         {
@@ -179,7 +179,7 @@ class ContactComponent extends Component
             }
             else
             {
-                $this->redirect("/".Config::get('contactadd', 'contactadd', 'admin'));
+                $this->redirect(array($this, 'admin'));
             }
         }
     }
@@ -263,7 +263,7 @@ class ContactComponent extends Component
      */
     public function registerMenuItems($menu)
     {
-        $menu->addChild(new MenuItem("contact", Config::get('contactadmin', 'contactadmin', 'admin')));
-        $menu->addChild(new MenuItem("forms", Config::get('contactadmin', 'contactadmin', 'admin'), "contact"));
+        $menu->addChild(new MenuItem("contact", array($this, 'admin')));
+        $menu->addChild(new MenuItem("forms", array($this, "admin"), "contact"));
     }
 }

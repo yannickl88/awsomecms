@@ -238,8 +238,10 @@ class PageItem extends TreeNode
      */
     public function toJavascript()
     {
-        $linkEdit = "/".Config::get("pageedit", "pageedit", "admin")."?page_id={$this->id}";
-        $linkDelete = "/".Config::get("pagedelete", "pagedelete", "admin")."?page_id={$this->id}";
+        $component = Component::init("page");
+        
+        $linkEdit = makeLink(array($component, "edit"))."?page_id={$this->id}";
+        $linkDelete = makeLink(array($component, "delete"))."?page_id={$this->id}";
         $icon = ($this->name == "index")? "index" : "page";
         
         $html = "{$this->parent->getName()}.addChild(new TreeItem(\"{$this->name}\", \"{$this->location}\", \"{$linkEdit}\", {$this->parent->getName()}, \"{$icon}\", [new TreeAction(\"view\", \"{$this->viewURL}\", {$this->parent->getName()}), new TreeAction(\"delete\", \"{$linkDelete}\", {$this->parent->getName()})], {$this->getType()}));\n";

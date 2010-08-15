@@ -45,13 +45,6 @@ class UsersTable extends Table
         $privField->setDefaultValue(0);
         $this->addField($privField);
         $this->setTitle("[user_name]");
-        
-        $this->setURLs(
-            Config::get('usersadmin', 'usersadmin', 'admin'),
-            Config::get('usersadd', 'usersadd', 'admin'),
-            Config::get('usersedit', 'usersedit', 'admin'),
-            Config::get('usersdelete', 'usersdelete', 'admin')
-        );
     }
     /**
      * (non-PHPdoc)

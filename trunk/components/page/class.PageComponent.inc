@@ -41,9 +41,9 @@ class PageComponent extends Component
         $registerManager->registerAuth("page.action_edit", "admin");
         $registerManager->registerAuth("page.action_delete", "admin");
         
-        $registerManager->registerPage('edit', '/admin/page/', '{form table="page.pages" form="edit"}');
-        $registerManager->registerPage('add', '/admin/page/', '{form table="page.pages" form="add"}');
-        $registerManager->registerPage('delete', '/admin/page/', '{form table="page.pages" form="delete"}');
+        $registerManager->registerPage(array($this, 'edit'), '{form table="page.pages" form="edit"}');
+        $registerManager->registerPage(array($this, 'add'), '{form table="page.pages" form="add"}');
+        $registerManager->registerPage(array($this, 'delete'), '{form table="page.pages" form="delete"}');
     }
     /**
      * Action for adding a page
@@ -64,7 +64,7 @@ class PageComponent extends Component
             $indexer = new TextSpider();
             $indexer->index($request['page_template'], $request['page_location'].$request['page_name'], $request['page_name'], "page.{$id}");
             
-            $this->redirect("/".Config::get('pageedit', 'pageedit', 'admin'), array("page_id" => $id));
+            $this->redirect(array($this, "edit"), array("page_id" => $id));
         }
     }
     /**
@@ -85,7 +85,7 @@ class PageComponent extends Component
             $indexer = new TextSpider();
             $indexer->index($request['page_template'], $request['page_location'].$request['page_name'], $request['page_name'], "page.{$request['page_id']}");
             
-            $this->redirect("/".Config::get('pageedit', 'pageedit', 'admin'), array("page_id" => $request['page_id']));
+            $this->redirect(array($this, "edit"), array("page_id" => $request['page_id']));
         }
         else
         {
@@ -96,7 +96,7 @@ class PageComponent extends Component
             }
             else
             {
-                $this->redirect("/".Config::get('pageadd', 'pageadd', 'admin'));
+                $this->redirect(array($this, "add"));
             }
         }
     }
@@ -118,7 +118,7 @@ class PageComponent extends Component
             $indexer = new TextSpider();
             $indexer->clearByHook("page.{$request['page_id']}");
 
-            $this->redirect("/admin/");
+            $this->redirect(Config::get("location", "admin/", "admin"));
         }
         else
         {
@@ -129,7 +129,7 @@ class PageComponent extends Component
             }
             else
             {
-                $this->redirect("/".Config::get('pageadd', 'pageadd', 'admin'));
+                $this->redirect(array($this, "add"));
             }
         }
     }
@@ -140,7 +140,7 @@ class PageComponent extends Component
     public function registerMenuItems($menu)
     {
         $menu->addChild(new MenuItem("page", ""));
-        $menu->addChild(new MenuItem("addpage", Config::get('pageadd', 'pageadd', 'admin'), "page"));
+        $menu->addChild(new MenuItem("addpage", array($this, 'add'), "page"));
     }
     /**
      * (non-PHPdoc)

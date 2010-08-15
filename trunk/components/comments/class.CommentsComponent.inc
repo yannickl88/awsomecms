@@ -50,7 +50,7 @@ class CommentsComponent extends Component
                 ->setRecord((object) $request)
                 ->doInsert();
             
-            $this->redirect('/'.$request['comment_hook']);
+            $this->redirect($request['comment_hook']);
         }
     }
 }

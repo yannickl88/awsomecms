@@ -44,12 +44,10 @@ class CoreComponent extends Component
         $registerManager->registerURLMap('\/(.*)', 'core.index', 0);
         
         //admin pages
-        $registerManager->registerPage("index", "/".Config::get("location", "admin/", "admin"), '{"welcomeadmin"|text}');
-        $registerManager->registerPage("layout", "/".Config::get("location", "admin/", "admin").'core/', '{form component="core" form="layout"}');
-        $registerManager->registerPage("components", "/".Config::get("location", "admin/", "admin").'core/', '{form component="core" form="components"}');
-        $loginURL = explode("/", Config::get("login", "admin/", "admin"));
-        $loginPage = array_pop($loginURL);
-        $registerManager->registerPage($loginPage, "/".implode("/", $loginURL)."/", '{form component="users" form="admin_login"}');
+        $registerManager->registerPage(Config::get("location", "admin/", "admin")."index", '{"welcomeadmin"|text}');
+        $registerManager->registerPage(Config::get("login", "admin/login", "admin"), '{form component="users" form="admin_login"}');
+        $registerManager->registerPage(array($this, "layout"), '{form component="core" form="layout"}');
+        $registerManager->registerPage(array($this, "components"), '{form component="core" form="components"}');
     }
     /**
      * Index action, this is used when a page is shown by the cms
@@ -126,7 +124,7 @@ class CoreComponent extends Component
             }
             
             file_put_contents(getFrameworkRoot().'/core/layoutmap.conf', $data);
-            $this->redirect("/".Config::get('corelayout', 'corelayout', 'admin'));
+            $this->redirect(array($this, 'corelayout'));
         }
         else
         {
@@ -308,7 +306,7 @@ class CoreComponent extends Component
             }
             
             Config::getInstance()->reloadComponenets();
-            $this->redirect("/".Config::get('corecomponents', 'corecomponents', 'admin'));
+            $this->redirect(array($this, 'components'));
         }
         else
         {
@@ -436,7 +434,7 @@ class CoreComponent extends Component
     public function registerMenuItems($menu)
     {
         $menu->addChild(new MenuItem("system", ""));
-        $menu->addChild(new MenuItem("layoutmaps", Config::get('corelayout', 'corelayout', 'admin'), "system"));
-        $menu->addChild(new MenuItem("components", Config::get('corecomponents', 'corecomponents', 'admin'), "system"));
+        $menu->addChild(new MenuItem("layoutmaps", array($this, 'layout'), "system"));
+        $menu->addChild(new MenuItem("components", array($this, 'components'), "system"));
     }
 }
