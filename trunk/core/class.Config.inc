@@ -98,6 +98,12 @@ class Config
                 }
             }
         }
+        //is the config changed?
+        if($this->data["debug"]["debug"] >= 1)
+        {
+            $this->data["checksum"] = md5(serialize($this->data));
+        }
+        
         
         $this->data['layoutmap'] = array();
         $this->data['layoutmap'][] = array(preg_quote($this->data['admin']['location'], "/")."(.*)", "admin_layout.tpl");

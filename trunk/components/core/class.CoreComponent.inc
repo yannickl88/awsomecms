@@ -74,7 +74,8 @@ class CoreComponent extends Component
         ));
 
         //Handle URL
-        Controller::getInstance()->setOutput($smartyLoader->getPage($_GET['url'], $smarty));
+        $url = (isset($_GET['url']))? $_GET['url'] : "";
+        Controller::getInstance()->setOutput($smartyLoader->getPage($url, $smarty));
     }
     /**
      * Session action, this is used to set some data for the templates, like if a user is logged in or if the page is part of the admin section.
@@ -86,8 +87,9 @@ class CoreComponent extends Component
     public function action_session($smarty, $smartyLoader, $request)
     {
         $loggedIn = false;
-        $smarty->assign("URL", $_GET['url']);
-        $smarty->assign("isADMIN", (preg_match('/^'.preg_quote(Config::get('location', 'admin/', 'admin'), '/').'(.*?)/si', $_GET['url'])) === 1);
+        $url = (isset($_GET['url']))? $_GET['url'] : "";
+        $smarty->assign("URL", $url);
+        $smarty->assign("isADMIN", (preg_match('/^'.preg_quote(Config::get('location', 'admin/', 'admin'), '/').'(.*?)/si', $url)) === 1);
         if(!isset($_SESSION['usr']))
         {
             $smarty->assign("USR", null);
@@ -97,7 +99,7 @@ class CoreComponent extends Component
             $smarty->assign("USR", $_SESSION['usr']);
             $loggedIn = true;
         }
-        $smarty->assign("LOGINPAGE", ($_GET['url'] == Config::get("login", "admin/login", "admin") || !$loggedIn));
+        $smarty->assign("LOGINPAGE", ($url == Config::get("login", "admin/login", "admin") || !$loggedIn));
         $smarty->assign("HASDOC", file_exists(Config::get("websiteroot", "/")."/doc.php"));
     }
     /**
