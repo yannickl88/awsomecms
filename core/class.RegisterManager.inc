@@ -71,6 +71,17 @@ class RegisterManager
                         }
                     }
                 }
+                
+                //check if the config has changed
+                if(Cache::has("configCheck") && Cache::get("configCheck") != Config::get("checksum", ""))
+                {
+                    Cache::set("configCheck", Config::get("checksum", ""));
+                    return true;
+                }
+                else if(!Cache::has("configCheck"))
+                {
+                    Cache::set("configCheck", Config::get("checksum", ""));
+                }
 
                 return false;
             }
@@ -174,6 +185,8 @@ class RegisterManager
     }
     /**
      * Reload the content of the RegisterManager
+     * 
+     * @param Bool $noload      Prevent Registermanager from already loading new data
      */
     public function reload()
     {
