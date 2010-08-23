@@ -57,7 +57,7 @@ class Component
         }
         else
         {
-            $components = RegisterManager::getInstance()->getComponenets();
+            $components = RegisterManager::getInstance()->getComponents();
             if(array_key_exists($component, $components))
             {
                 try

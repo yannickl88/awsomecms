@@ -79,7 +79,7 @@ function generateNewLangFile($from, $to)
 
 generateNewLangFile(getFrameworkRoot()."/core/lang/en.lang", getFrameworkRoot()."/core/lang/nl.lang");
 
-$components = RegisterManager::getInstance()->getComponenets();
+$components = RegisterManager::getInstance()->getComponents();
 
 foreach($components as $component)
 {

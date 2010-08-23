@@ -24,7 +24,7 @@ function smarty_function_adminmenu($params, &$smarty)
 {
     import('components/page/util/class.Menu.inc');
 
-    $components = RegisterManager::getInstance()->getComponenets();
+    $components = RegisterManager::getInstance()->getComponents();
     $menu = Menu::getInstance();
 
     foreach($components as $componentArray)

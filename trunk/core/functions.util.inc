@@ -26,14 +26,49 @@ function import($file)
 {
     $frameworkRoot = getFrameworkRoot();
     
-    if(file_exists($frameworkRoot.'/'.$file))
+    if(file_exists($frameworkRoot.DIRECTORY_SEPARATOR.$file))
     {
-        require_once realpath($frameworkRoot.'/'.$file);
+        require_once realpath($frameworkRoot.DIRECTORY_SEPARATOR.$file);
+        return;
     }
     else
     {
-        echo "cannot find file {$frameworkRoot}/{$file}";
+        //see if we can parse it
+        $loc = explode(".", $file);
+        if(class_exists("RegisterManager") && RegisterManager::getInstance()->hasComponent($loc[0]))
+        {
+            $component = RegisterManager::getInstance()->getComponent($loc[0]);
+            $fileName = "class.".array_pop($loc).".inc";
+            array_shift($loc);
+            
+            $path = $component->component_path.DIRECTORY_SEPARATOR.implode(DIRECTORY_SEPARATOR, $loc);
+            
+            if(file_exists($path.'/'.$fileName))
+            {
+                require_once realpath($path.'/'.$fileName);
+                return;
+            }
+        }
+        else
+        {
+            $fileor = array_pop($loc);
+            array_unshift($loc, "core"); //make the start at the core folder
+            $path = $frameworkRoot.DIRECTORY_SEPARATOR.implode(DIRECTORY_SEPARATOR, $loc);
+            
+            if(file_exists($path.'/'.$fileor))
+            {
+                require_once realpath($path.'/'.$fileor);
+                return;
+            }
+            $fileName = "class.".$fileor.".inc";
+            if(file_exists(realpath($path.'/'.$fileName)))
+            {
+                require_once realpath($path.'/'.$fileName);
+                return;
+            }
+        }
     }
+    echo "cannot find file {$frameworkRoot}/{$file}\n";
 }
 /**
  * Import a field.
@@ -49,7 +84,7 @@ function importField($field)
     if(!empty($field) && strpos($field, ".") !== false)
     {
         $loc = explode(".", $field);
-        $components = RegisterManager::getInstance()->getComponenets();
+        $components = RegisterManager::getInstance()->getComponents();
         
         require_once realpath($components[$loc[0]]->component_path.'/fields/class.'.$loc[1].".inc");
     }

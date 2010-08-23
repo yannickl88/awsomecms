@@ -397,7 +397,7 @@ class Controller
     public function callTable($component, $action, $request)
     {
         $config = Config::getInstance();
-        $components = RegisterManager::getInstance()->getComponenets();
+        $components = RegisterManager::getInstance()->getComponents();
         $needsAuth = true;
         
         switch(strtoupper($request->translateAction()))
