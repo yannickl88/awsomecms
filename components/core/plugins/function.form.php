@@ -25,7 +25,7 @@ function smarty_function_form($params, &$smarty)
     $html = '';
 
     $config = Config::getInstance();
-    $components = RegisterManager::getInstance()->getComponenets();
+    $components = RegisterManager::getInstance()->getComponents();
     $component;
     $table;
     

@@ -95,7 +95,7 @@ class Language
     {
         $this->lang[$lang] = (array) json_decode(file_get_contents(getFrameworkRoot()."/core/lang/{$lang}.lang"));
         
-        $components = RegisterManager::getInstance()->getComponenets();
+        $components = RegisterManager::getInstance()->getComponents();
         
         foreach($components as $component)
         {

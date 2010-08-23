@@ -309,7 +309,7 @@ class SmartyPageLoader
     {
         try
         {
-            $modules = RegisterManager::getInstance()->getComponenets();
+            $modules = RegisterManager::getInstance()->getComponents();
         }
         catch(SQLExeption $e)
         {

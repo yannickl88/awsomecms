@@ -325,9 +325,19 @@ class RegisterManager
      * 
      * @return array
      */
-    public function getComponenets()
+    public function getComponents()
     {
         return $this->componenets;
+    }
+    /**
+     * Get a component
+     * 
+     * @param String $name
+     * @return array
+     */
+    public function getComponent($name)
+    {
+        return $this->componenets[$name];
     }
     /**
      * Get all registered Auth groups

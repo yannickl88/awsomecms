@@ -193,7 +193,7 @@ class CoreComponent extends Component
                 if(isset($request['updateComponent']))
                 {
                     //components
-                    $components = RegisterManager::getInstance()->getComponenets();
+                    $components = RegisterManager::getInstance()->getComponents();
                     $component = $components[$request['updateComponent']];
                     $component_name = $component->component_name;
                     
@@ -280,7 +280,7 @@ class CoreComponent extends Component
     {
         if($request['method'] == 'post')
         {
-            $components = RegisterManager::getComponenets();
+            $components = RegisterManager::getComponents();
             
             foreach($components as $component)
             {
@@ -330,7 +330,7 @@ class CoreComponent extends Component
             
             $smarty->assign("framework", $framework);
             
-            $components = RegisterManager::getInstance()->getComponenets();
+            $components = RegisterManager::getInstance()->getComponents();
             
             foreach($components as $component)
             {

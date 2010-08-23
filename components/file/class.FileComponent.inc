@@ -13,7 +13,7 @@
  * @version $Revision$
  */
 import('/core/class.Component.inc');
-import('/components/file/util/class.FileTree.inc');
+import('file.util.FileTree');
 
 /**
  * 

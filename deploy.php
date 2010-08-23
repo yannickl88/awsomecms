@@ -364,7 +364,7 @@ class Patch extends CLIAction
         
         $h = new InstallHelper();
         $count = array();
-        $components = RegisterManager::getInstance()->getComponenets();
+        $components = RegisterManager::getInstance()->getComponents();
         
         foreach($components as $component)
         {
