@@ -179,14 +179,16 @@ h1 {
     border: 0;
 }
 
-.treeNode a {
+.treeNode a,
+.treeNode span.treeItem {
     padding-left: 20px;
     text-decoration: none;
     color: #bbbbbb;
     white-space: nowrap;
 }
 
-.admin_form .treeNode a {
+.admin_form .treeNode a,
+.admin_form .treeNode span.treeItem {
     color: #000000;
 }
 
@@ -261,6 +263,7 @@ h1 {
 
 .admin_table .admin_table_row {
     border-top: 1px solid #a9c8e1;
+    height: 20px;
 }
 
 .admin_table .highlighted {

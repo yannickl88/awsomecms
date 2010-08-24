@@ -17,6 +17,7 @@ importField("IntField");
 importField("TagField");
 importField("DateField");
 importField("TextField");
+importField("TablePermissionField");
 importField("file.UploadField");
 
 /**
@@ -40,6 +41,8 @@ class FilesTable extends Table
         $this->addField(new UploadField("file_data", Config::get("uploaddir", "/", "file")), 3);
         $this->addField(new TagField("file_tag", Field::OPTIONAL|Field::FORCEUPDATE), 4);
         $this->addField(new TextField("file_description", Field::HIDE_VIEW|Field::OPTIONAL), 5);
+        $this->addField(new Field("file_reference", Field::HIDE|Field::OPTIONAL));
+        $this->addField(new TablePermissionField(array(Component::init("file"), "permissions")));
         $this->setTitle("[file_name]");
     }
     /**
@@ -57,6 +60,7 @@ class FilesTable extends Table
                 $query->limit($data->max);
             }
             $query->whereWhenSet("file_tag", $data->image_tag);
+            $query->whereWhenSet("file_reference", $data->file_reference);
         }
     }
     /**

@@ -489,7 +489,7 @@ var TreeItem = function(name, location, url, root, icon, actions, contentType)
     this.name = name;
     this.location = location;
     this.parent = null;
-    this.url = url;
+    if(url && url.substr(0, 1) != "/") this.url = "/"+url; else this.url = url;
     this.type = Tree.PAGE;
     this.contentType = contentType;
     this.html = null;
@@ -506,15 +506,19 @@ var TreeItem = function(name, location, url, root, icon, actions, contentType)
         var ref = this;
         this.html = $("<div class='hideIcons'></div>");
         this.html[0].object = this;
-        this.link = $("<a href='"+this.url+"'>"+this.name+"</a>");
-        this.link.click(function(e) {
-            if(ref.root.javascript)
-            {
-                $("#"+ref.root.javascript).val(ref.parent.getLocPath() + ref.name);
-                
-                return false;
-            }
-        });
+        if(this.url && this.url != "") {
+            this.link = $("<a href='"+this.url+"'>"+this.name+"</a>");
+            this.link.click(function(e) {
+                if(ref.root.javascript)
+                {
+                    $("#"+ref.root.javascript).val(ref.parent.getLocPath() + ref.name);
+                    
+                    return false;
+                }
+            });
+        } else {
+            this.link = $("<span class='treeItem'>"+this.name+"</span>");
+        }
         this.link.prepend(this.icon);
         this.html.append(this.link);
         if(this.actions)
@@ -859,13 +863,16 @@ var TreeFolder = function(name, location, root, icon, actions, contentType, isRo
 var TreeAction = function(icon, url, root)
 {
     this.icon = icon;
-    this.url = url;
+    if(url.substr(0, 1) != "/" && url.substr(0, 7) != "http://")
+        this.url = "/"+url;
+    else
+        this.url = url;
     this.html = null;
     this.root = root;
     
     this.init = function()
     {
-        this.html = $("<a class='treeIcon' href='"+this.url+"'><img src='"+this.root.getIcon(this.icon)+"' alt='tree action'/></a>");
+        this.html = $("<a class='treeIcon "+this.icon+"' href='"+this.url+"'><img src='"+this.root.getIcon(this.icon)+"' alt='tree action'/></a>");
     }
     
     this.init();
@@ -946,6 +953,25 @@ var FileUpload = function(element) {
             this.element.addEventListener('dragleave', function(e) {
                 upload.dragout(e);
             }, false);
+            $(this.element).find("a.reload").click(function(e) {
+                var img = $(this).find("img");
+                img.attr("src", upload.element.object.root.getIcon("loader"));
+                $.getJSON("/", {"component": "file", "action": "update"}, function(data) {
+                    for(var i in data) {
+                        var childData = data[i];
+                        
+                        var actions = [];
+                        for(var i in childData.actions) {
+                            actions.push(new TreeAction(childData.actions[i].icon, childData.actions[i].link, upload.element.object.root));
+                        }
+                        var node = new TreeItem(childData.name, childData.location, childData.editLink, upload.element.object.root, childData.icon, actions, childData.type);
+                        upload.element.object.root.addChild(node);
+                    }
+                    
+                    img.attr("src", upload.element.object.root.getIcon("reload"));
+                });
+                return false;
+            });
         }
     };
     this.upload = function(e) {

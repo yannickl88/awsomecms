@@ -35,8 +35,9 @@ class NewsItem extends TreeNode
         $this->parent->addIcon("news", "/img/icons/news.png");
     }
     /**
-     * Create the javascript code for the tree
-     * 
+     * (non-PHPdoc)
+     * @see components/page/util/TreeNode::toJavascript()
+     *
      * @return String
      */
     public function toJavascript()
@@ -51,8 +52,35 @@ class NewsItem extends TreeNode
         
         return $html;
     }
+    /**
+     * (non-PHPdoc)
+     * @see components/page/util/TreeNode::toJSON()
+     *
+     * @return String
+     */
+    public function toData()
+    {
+        $component = Component::init("news");
+        $actions = array(
+            array("icon" =>"view", "link" => $this->viewURL),
+            array("icon" =>"delete", "link" => makeLink(array($component, "delete"))."?news_id={$this->id}")
+        );
+            
+        return array(
+            "name" => $this->name,
+            "location" => $this->location,
+            "editLink" => makeLink(array($component, "edit"))."?news_id={$this->id}",
+            "icon" => "news",
+            "actions" => $actions,
+            "type" => $this->type
+        );
+    }
 }
-
+/**
+ * News root folder which contains all the news items
+ * 
+ * @author Yannick de Lange <yannick.l.88@gmail.com>
+ */
 class NewsFolder extends TreeNode
 {
     private $name;
@@ -79,8 +107,9 @@ class NewsFolder extends TreeNode
         $this->parent->addIcon("news_folder", "/img/icons/news_folder.png");
     }
     /**
-     * Create the javascript code for the tree
-     * 
+     * (non-PHPdoc)
+     * @see components/page/util/TreeNode::toJavascript()
+     *
      * @return String
      */
     public function toJavascript()
@@ -93,5 +122,21 @@ class NewsFolder extends TreeNode
         $html = "{$this->parent->getName()}.addChild(new TreeFolder(\"{$this->name}\", \"{$this->location}\", {$this->parent->getName()}, \"news_folder\", [new TreeAction(\"overview\", \"{$linkView}\", {$this->parent->getName()}), new TreeAction(\"add\", \"{$linkAdd}\", {$this->parent->getName()})], {$this->getType()}));\n";
         
         return $html;
+    }
+    /**
+     * (non-PHPdoc)
+     * @see components/page/util/TreeNode::toJSON()
+     *
+     * @return String
+     */
+    public function toData()
+    {
+        return array(
+            "name" => $this->name,
+            "location" => $this->location,
+            "icon" => "news_folder",
+            "actions" => array(),
+            "type" => $this->type
+        );
     }
 }

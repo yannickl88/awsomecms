@@ -16,7 +16,7 @@ import('/core/class.Component.inc');
 import('file.util.FileTree');
 
 /**
- * 
+ * A way to create a centeral file repository to upload files.
  * 
  * @author Yannick <yannick.l.88@gmail.com>
  */
@@ -49,6 +49,33 @@ class FileComponent extends Component
         $registerManager->registerPage(array($this, 'delete'), '{form table="file.files" form="delete"}');
         $registerManager->registerPage(array($this, 'admin'), '{form table="file.files" form="admin"}');
     }
+    /**
+     * Get a connector object based on the type
+     * 
+     * @param String $name
+     * @return FileConnector
+     */
+    public function getConnector($name)
+    {
+        $className = ucfirst($name)."Connector";
+        $conn = "class.".$className.".inc";
+        $obj = null;
+        
+        if(file_exists($this->location."connectors/".$conn))
+        {
+            import($this->location."connectors/".$conn);
+            $obj = new $className();
+        }
+        
+        return $obj;
+    }
+    /**
+     * Add action
+     * 
+     * @param Smarty $smarty
+     * @param SmartyPageLoader $smartyLoader
+     * @param array $request
+     */
     public function action_add($smarty, $smartyLoader, $request)
     {
         if($request['method'] == 'post')
@@ -60,6 +87,39 @@ class FileComponent extends Component
             $this->redirect(array($this, 'admin'));
         }
     }
+    /**
+     * update the references made by the connectors
+     * 
+     * @param Smarty $smarty
+     * @param SmartyPageLoader $smartyLoader
+     * @param Array $request
+     */
+    public function action_update($smarty, $smartyLoader, $request)
+    {
+        $connectors = scandir($this->location."/connectors");
+        $rows = array();
+        
+        foreach($connectors as $connectorFile)
+        {
+            $matches = array();
+            if($connectorFile != "." && $connectorFile != ".." && preg_match('/class\.([a-zA-Z]*)Connector\.inc/', $connectorFile, $matches))
+            {
+                $connector = $this->getConnector(strtolower($matches[1]));
+                if($connector && $connector->isActive())
+                {
+                    $rows = array_merge($rows, $connector->fetch());
+                }
+            }
+        }
+        $this->ajax($rows);
+    }
+    /**
+     * Upload a file action
+     * 
+     * @param Smarty $smarty
+     * @param SmartyPageLoader $smartyLoader
+     * @param array $request
+     */
     public function action_upload($smarty, $smartyLoader, $request)
     {
         $request["file_name"] = basename($_FILES['file_data']['name'], substr($_FILES['file_data']['name'], strrpos($_FILES['file_data']['name'], ".")));
@@ -83,6 +143,13 @@ class FileComponent extends Component
             $this->ajax(array("error" => true, "exception" => $fields["file_data"]));
         }
     }
+    /**
+     * Edit action
+     * 
+     * @param Smarty $smarty
+     * @param SmartyPageLoader $smartyLoader
+     * @param array $request
+     */
     public function action_edit($smarty, $smartyLoader, $request)
     {
         if($request['method'] == 'post')
@@ -106,6 +173,13 @@ class FileComponent extends Component
             }
         }
     }
+    /**
+     * Delete action
+     * 
+     * @param Smarty $smarty
+     * @param SmartyPageLoader $smartyLoader
+     * @param array $request
+     */
     public function action_delete($smarty, $smartyLoader, $request)
     {
         if($request['method'] == 'post')
@@ -147,12 +221,7 @@ class FileComponent extends Component
         $vidName = strtolower(Language::get("videos"));
         $otherName = strtolower(Language::get("other"));
         
-        $mapping = array(
-            "images"    => "/[contentroot]/{$filesName}/{$imageName}/",
-            "docs"      => "/[contentroot]/{$filesName}/{$docName}/",
-            "vid"       => "/[contentroot]/{$filesName}/{$vidName}/",
-            "other"     => "/[contentroot]/{$filesName}/{$otherName}/",
-        );
+        $mapping = $this->getLocationMap();
         
         $tree->addChild(new UploadFolder($filesName, "/", $mapping));
         $tree->addChild(new ImageFolder($imageName, "/{$filesName}/"));
@@ -163,10 +232,32 @@ class FileComponent extends Component
         foreach($result as $row)
         {
             $row->file_location = $mapping[$this->getType($row->file_data->type)];
-            $tree->addChild(new FileItem($row));
+            
+            $item = new FileItem($row);
+            $tree->addChild($item);
         }
     }
-    
+    public function getLocationMap()
+    {
+        $filesName = strtolower(Language::get("files"));
+        $imageName = strtolower(Language::get("images"));
+        $docName = strtolower(Language::get("documents"));
+        $vidName = strtolower(Language::get("videos"));
+        $otherName = strtolower(Language::get("other"));
+        
+        return array(
+            "images"    => "/[contentroot]/{$filesName}/{$imageName}/",
+            "docs"      => "/[contentroot]/{$filesName}/{$docName}/",
+            "vid"       => "/[contentroot]/{$filesName}/{$vidName}/",
+            "other"     => "/[contentroot]/{$filesName}/{$otherName}/",
+        );
+    }
+    /**
+     * Get the type of a file based on the mimetype
+     * 
+     * @param String $fileType      mimetype like image/jpg
+     * @return String               [images|vid|docs|other]
+     */
     public function getType($fileType)
     {
         if(preg_match('/^image\/.*$/i', $fileType))
@@ -205,5 +296,21 @@ class FileComponent extends Component
         {
             return "other";
         }
+    }
+    /**
+     * Set the permissions for a row using the Table
+     * 
+     * @param Object $row
+     */
+    public function permissions($row)
+    {
+        $conn = $this->getConnector($row->file_reference);
+        if($conn)
+        {
+            $conn->walk($row);
+            return true;
+        }
+        
+        return false;
     }
 }
