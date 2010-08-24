@@ -46,7 +46,10 @@ class TagField extends Field
     }
     /**
      * (non-PHPdoc)
-     * @see core/fields/Field#insert()
+     * @see core/fields/Field::select()
+     *
+     * @param SQLQuery $query
+     * @param Array $data
      */
     public function select($query, $data = array())
     {
@@ -56,6 +59,12 @@ class TagField extends Field
         {
             $ids = array();
             $tags = $this->getAllTags();
+            $andOr = "AND";
+            if(is_array($value))
+            {
+                $andOr = $value[1];
+                $value = $value[0];
+            }
             $requestTags = explode(",", $value);
             
             foreach($requestTags as $tag)
@@ -70,7 +79,7 @@ class TagField extends Field
             
             if(count($ids) > 0)
             {
-                $query->where("file_id", $ids);
+                $query->where("file_id", $ids, "=", $andOr);
             }
         }
         

@@ -261,6 +261,24 @@ class CLI
         }
     }
     /**
+     * Set the action manualy
+     * 
+     * @param String $action
+     */
+    public function setAction($action)
+    {
+        $this->action = $action;
+    }
+    /**
+     * Set the action manualy
+     * 
+     * @param String $action
+     */
+    public function getAction()
+    {
+        return $this->action;
+    }
+    /**
      * Fallback when there was no header
      */
     private function _header()

@@ -313,4 +313,13 @@ class FileComponent extends Component
         
         return false;
     }
+    /**
+     * (non-PHPdoc)
+     * @see core/Component::execCron()
+     *
+     */
+    public function execCron()
+    {
+        $this->action_update(null, null, null);
+    }
 }

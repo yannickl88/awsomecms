@@ -170,8 +170,7 @@ class Component
     protected function ajax($data = true)
     {
         header('Content-type: application/json');
-        echo json_encode($data);
-        exit;
+        Controller::getInstance()->setOutput(json_encode($data));
     }
     /**
      * Get the fields for this component
