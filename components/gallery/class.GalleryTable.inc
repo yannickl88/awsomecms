@@ -34,6 +34,7 @@ class GalleryTable extends Table
         $this->addField(new IntField("gallery_id", Field::INDEX|Field::AUTOKEY));
         $this->addField(new Field("gallery_name"), 1);
         $this->addField(new FileSelectField("gallery_images", array("gif", "jpg", "png", "bmp")), 2);
+        $this->addField(new Field("gallery_tags"), 3);
         $this->setTitle("[gallery_name]");
     }
     /**
