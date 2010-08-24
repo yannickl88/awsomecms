@@ -91,6 +91,8 @@ class UploadField extends Field
     {
         if($query->getAction() == "update" || $query->getAction() == "insert")
         {
+            if(is_object($this->getValue())) return;
+            
             if(!empty($_FILES[$this->getName()]['name']))
             {
                 $record2 = $this->parent->getRecord();

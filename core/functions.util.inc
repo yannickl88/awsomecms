@@ -31,6 +31,11 @@ function import($file)
         require_once realpath($frameworkRoot.DIRECTORY_SEPARATOR.$file);
         return;
     }
+    else if(file_exists($file))
+    {
+        require_once realpath($file);
+        return;
+    }
     else
     {
         //see if we can parse it

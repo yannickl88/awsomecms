@@ -59,6 +59,7 @@ class Tree
             array("folder",         "/img/icons/folder.png"),
             array("add",            "/img/icons/add.png"),
             array("overview",       "/img/icons/overview.png"),
+            array("reload",         "/img/icons/arrow_refresh_small.png"),
             array("loader",         "/img/admin/loader.gif"),
         );
         $this->hideAdmin = Config::get("hideadmintree", true, "admin");
@@ -197,6 +198,12 @@ abstract class TreeNode
      */
     abstract function toJavascript();
     /**
+     * Create a JSON representation of this node
+     * 
+     * @return String
+     */
+    abstract function toData();
+    /**
      * function that is called once on each type of node, you can add icons to the tree here
      * 
      * @return String
@@ -232,8 +239,9 @@ class PageItem extends TreeNode
         $this->setType(Tree::PAGE);
     }
     /**
-     * Create the javascript code for the tree
-     * 
+     * (non-PHPdoc)
+     * @see components/page/util/TreeNode::toJavascript()
+     *
      * @return String
      */
     public function toJavascript()
@@ -247,6 +255,29 @@ class PageItem extends TreeNode
         $html = "{$this->parent->getName()}.addChild(new TreeItem(\"{$this->name}\", \"{$this->location}\", \"{$linkEdit}\", {$this->parent->getName()}, \"{$icon}\", [new TreeAction(\"view\", \"{$this->viewURL}\", {$this->parent->getName()}), new TreeAction(\"delete\", \"{$linkDelete}\", {$this->parent->getName()})], {$this->getType()}));\n";
         
         return $html;
+    }
+    /**
+     * (non-PHPdoc)
+     * @see components/page/util/TreeNode::toJSON()
+     *
+     * @return String
+     */
+    public function toData()
+    {
+        $component = Component::init("page");
+        $actions = array(
+            array("icon" =>"view", "link" => $this->viewURL),
+            array("icon" =>"delete", "link" => makeLink(array($component, "delete"))."?page_id={$this->id}")
+        );
+            
+        return array(
+            "name" => $this->name,
+            "location" => $this->location,
+            "editLink" => makeLink(array($component, "edit"))."?page_id={$this->id}",
+            "icon" => ($this->name == "index")? "index" : "page",
+            "actions" => $actions,
+            "type" => $this->type
+        );
     }
 }
 
@@ -276,6 +307,22 @@ class Folder extends TreeNode
         $html = "{$this->parent->getName()}.addChild(new TreeFolder(\"{$this->name}\", \"{$this->location}\", {$this->parent->getName()}, \"folder\", [], {$this->getType()}));\n";
         
         return $html;
+    }
+    /**
+     * (non-PHPdoc)
+     * @see components/page/util/TreeNode::toJSON()
+     *
+     * @return String
+     */
+    public function toData()
+    {
+        return array(
+            "name" => $this->name,
+            "location" => $this->location,
+            "icon" => "folder",
+            "actions" => array(),
+            "type" => $this->type
+        );
     }
 }
 class RootFolder extends Folder

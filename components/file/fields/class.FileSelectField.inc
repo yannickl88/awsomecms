@@ -47,7 +47,7 @@ class FileSelectField extends Field
         $html = "<select id=\"{$this->getName()}\" name=\"{$this->getName()}[]\" multiple=\"multiple\">";
         while($row = $files->getRow())
         {
-            if(in_array(array_pop(explode(".", $row->file_data->filename)), $this->types))
+            if(in_array(array_pop(explode("/", $row->file_data->type)), $this->types))
             {
                 $html .= "<option value=\"{$row->file_id}\">{$row->file_name}</option>";
             }
@@ -68,7 +68,7 @@ class FileSelectField extends Field
         $html = "<select id=\"{$this->getName()}\" name=\"{$this->getName()}[]\" multiple=\"multiple\">";
         while($row = $files->getRow())
         {
-            if(in_array(array_pop(explode(".", $row->file_data->filename)), $this->types))
+            if(in_array(array_pop(explode("/", $row->file_data->type)), $this->types))
             {
                 if(in_array($row->file_id, $this->getValue()))
                 {

@@ -26,6 +26,7 @@ class Component
     protected $component;
     protected $request;
     protected $currentTable;
+    protected $location;
 
     /**
      * constructor
@@ -106,6 +107,7 @@ class Component
             }
             
             Component::$components[$name] = $obj;
+            $obj->location = $path;
 
             return $obj;
         }
@@ -167,7 +169,7 @@ class Component
      */
     protected function ajax($data = true)
     {
-        //header('Content-type: application/json');
+        header('Content-type: application/json');
         echo json_encode($data);
         exit;
     }

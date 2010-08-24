@@ -9,6 +9,10 @@ class FileItem extends TreeNode
     private $viewURL;
     private $fileType;
     
+    public $canView = true;
+    public $canEdit = true;
+    public $canDelete = true;
+    
     /**
      * Constructor
      * 
@@ -22,22 +26,63 @@ class FileItem extends TreeNode
         $this->viewURL = $record->file_data->url;
         $this->fileType = $record->file_data->type;
         $this->type = Tree::CONTENT;
+        
+        $this->canView = $record->permissions['view'];
+        $this->canEdit = $record->permissions['edit'];
+        $this->canDelete = $record->permissions['delete'];
     }
     /**
-     * Create the javascript code for the tree
-     * 
+     * (non-PHPdoc)
+     * @see components/page/util/TreeNode::toJavascript()
+     *
      * @return String
      */
     public function toJavascript()
     {
         $component = Component::init("file");
-        $linkEdit = makeLink(array($component, "edit"))."?file_id={$this->id}";
-        $linkDelete = makeLink(array($component, "delete"))."?file_id={$this->id}";
+        $linkEdit = "";
+        $actions = array();
+        if($this->canEdit)
+            $linkEdit = makeLink(array($component, "edit"))."?file_id={$this->id}";
+        if($this->canView)
+            $actions[] = "new TreeAction(\"view\", \"{$this->viewURL}\", {$this->parent->getName()})";;
+        if($this->canDelete)
+            $actions[] = "new TreeAction(\"delete\", \"".makeLink(array($component, "delete"))."?file_id={$this->id}"."\", {$this->parent->getName()})";
+            
         $icon = $component->getType($this->fileType);
         
-        $html = "{$this->parent->getName()}.addChild(new TreeItem(\"{$this->name}\", \"{$this->location}\", \"{$linkEdit}\", {$this->parent->getName()}, \"{$icon}\", [new TreeAction(\"view\", \"{$this->viewURL}\", {$this->parent->getName()}), new TreeAction(\"delete\", \"{$linkDelete}\", {$this->parent->getName()})], {$this->getType()}));\n";
+        $html = "{$this->parent->getName()}.addChild(new TreeItem(\"{$this->name}\", \"{$this->location}\", \"{$linkEdit}\", {$this->parent->getName()}, \"{$icon}\", [".implode(",", $actions)."], {$this->getType()}));\n";
         
         return $html;
+    }
+    /**
+     * (non-PHPdoc)
+     * @see components/page/util/TreeNode::toJSON()
+     *
+     * @return String
+     */
+    public function toData()
+    {
+        $component = Component::init("file");
+        $linkEdit = "";
+        $actions = array();
+        if($this->canEdit)
+            $linkEdit = makeLink(array($component, "edit"))."?file_id={$this->id}";
+        if($this->canView)
+            $actions[] = array("icon" =>"view", "link" => $this->viewURL);
+        if($this->canDelete)
+            $actions[] = array("icon" =>"delete", "link" => makeLink(array($component, "delete"))."?file_id={$this->id}");
+            
+        $icon = $component->getType($this->fileType);
+        
+        return array(
+            "name" => $this->name,
+            "location" => $this->location,
+            "editLink" => $linkEdit,
+            "icon" => $icon,
+            "actions" => $actions,
+            "type" => $this->type
+        );
     }
 }
 class ImageFolder extends Folder
@@ -109,7 +154,7 @@ class UploadFolder extends Folder
         $linkAdd = makeLink(array($component, "add"));
         $linkView = makeLink(array($component, "admin"));
         
-        $html = "uploadFolder = new TreeFolder(\"{$this->name}\", \"{$this->location}\", {$this->parent->getName()}, \"folder\", [new TreeAction(\"overview\", \"{$linkView}\", {$this->parent->getName()}), new TreeAction(\"add\", \"{$linkAdd}\", {$this->parent->getName()})], {$this->getType()});\n";
+        $html = "uploadFolder = new TreeFolder(\"{$this->name}\", \"{$this->location}\", {$this->parent->getName()}, \"folder\", [new TreeAction(\"reload\", \"\", {$this->parent->getName()}), new TreeAction(\"overview\", \"{$linkView}\", {$this->parent->getName()}), new TreeAction(\"add\", \"{$linkAdd}\", {$this->parent->getName()})], {$this->getType()});\n";
         $html .= "uploadFolder.nodes = ".stripslashes(json_encode($this->nodeMap))."\n";
         $html .= "$().ready(function(e) {new FileUpload(uploadFolder.html.get(0)); });\n";
         $html .= "{$this->parent->getName()}.addChild(uploadFolder);\n";

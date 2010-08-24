@@ -37,6 +37,12 @@
       <value null="0"></value>
       <extra></extra>
     </field>
+    <field>
+      <name>file_reference</name>
+      <type>varchar(100)</type>
+      <value null="0">internal</value>
+      <extra></extra>
+    </field>
     <data/>
   </table>
 </sqldata>

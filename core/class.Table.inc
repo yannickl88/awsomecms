@@ -649,10 +649,13 @@ abstract class Table
             
             //actions
             $html .= "        <td class=\"admin_table_cell admin_table_actions\">\n";
+            if(!isset($row->permissions) || $row->permissions['edit'])
             $html .= "            <a href='/{$this->editURL}{$queryString}'><img src=\"/img/icons/edit.png\" alt=\"".Language::get("edit")."\" /></a>";
+            if(!isset($row->permissions) || $row->permissions['delete'])
             $html .= "            <a href='/{$this->deleteURL}{$queryString}'><img src=\"/img/icons/delete.png\" alt=\"".Language::get("delete")."\" /></a>\n";
             $html .= "        </td>\n";
             $html .= "        <td class=\"admin_table_cell admin_table_actions\">\n";
+            if(!isset($row->permissions) || $row->permissions['delete'])
             $html .= "            <input type=\"checkbox\" value=\"".$this->keys[0]->getValue($row)."\" name=\"action[]\" class=\"actioncheckbox\" />\n";
             $html .= "        </td>\n";
             
@@ -789,7 +792,7 @@ abstract class Table
         $this->select($query, $data);
         
         $result = $query->exec();
-        $this->callPostFields($data, $query);
+        $this->callPostFields($result, $query);
         
         return $result;
     }
@@ -815,7 +818,7 @@ abstract class Table
         $this->insert($query, $data);
         
         $result = $query->exec();
-        $this->callPostFields($data, $query);
+        $this->callPostFields($result, $query);
         
         $this->lastInsertedID = $result->insertID();
         
@@ -843,7 +846,7 @@ abstract class Table
         $this->update($query, $data);
         
         $result = $query->exec();
-        $this->callPostFields($data, $query);
+        $this->callPostFields($result, $query);
         
         return $result;
     }
@@ -869,7 +872,7 @@ abstract class Table
         $this->delete($query, $data);
         
         $result = $query->exec();
-        $this->callPostFields($data, $query);
+        $this->callPostFields($result, $query);
         
         return $result;
     }
