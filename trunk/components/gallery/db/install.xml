@@ -19,6 +19,12 @@
       <value null="0"></value>
       <extra></extra>
     </field>
+    <field>
+      <name>gallery_tags</name>
+      <type>text</type>
+      <value null="0"></value>
+      <extra></extra>
+    </field>
     <data/>
   </table>
 </sqldata>

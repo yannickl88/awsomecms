@@ -3,5 +3,6 @@
     "menu_gallery":         "Galerij",
     "menu_galleries":       "Galerijen",
     "field_gallery_name":   "Naam",
-    "field_gallery_images": "Afbeeldingen"
+    "field_gallery_images": "Afbeeldingen",
+    "field_gallery_tags":   "Afbeelding tags"
 }

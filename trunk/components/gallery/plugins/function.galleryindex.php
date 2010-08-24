@@ -33,7 +33,7 @@ function smarty_function_galleryindex($params, &$smarty)
         foreach($galleries as &$gallery)
         {
             $images = Table::init("file.files")
-                ->setRequest((object) array_merge($data, array("file_id" => $gallery->gallery_images)))
+                ->setRequest((object) array_merge($data, array("file_id" => $gallery->gallery_images, "file_tag" => array($gallery->gallery_tags, "OR"))))
                 ->doSelect()
                 ->getRows();
             

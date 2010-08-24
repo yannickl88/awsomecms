@@ -28,6 +28,7 @@ class TwitpicConnector implements FileConnector
         $foundImages = array();
         $locMapping = $component->getLocationMap();
         
+        
         foreach($data->images as $image)
         {
             if(!isset($mapping[$image->id]))
@@ -43,7 +44,7 @@ class TwitpicConnector implements FileConnector
                     "thumb" => "http://twitpic.com/show/thumb/".$image->short_id
                 );
                 $row->file_date = $image->timestamp;
-                $row->file_tag = "";
+                $row->file_tag = implode(", ", $this->getTags($image->message));
                 $row->file_description = $image->message;
                 $row->file_reference = "twitpic";
                 
@@ -79,5 +80,12 @@ class TwitpicConnector implements FileConnector
     public function isActive()
     {
         return Config::get("twitpic_user", "", "connectors") !== "";
+    }
+    private function getTags($tweet)
+    {
+        $matches = array();
+        
+        preg_match_all('/#([\w]*)/', $tweet, $matches);
+        return $matches[1];
     }
 }

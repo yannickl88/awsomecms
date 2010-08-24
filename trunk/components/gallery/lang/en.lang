@@ -3,5 +3,6 @@
     "menu_gallery":         "Gallery",
     "menu_galleries":       "Galleries",
     "field_gallery_name":   "Name",
-    "field_gallery_images": "Images"
+    "field_gallery_images": "Images",
+    "field_gallery_tags":   "Image tags"
 }
