@@ -28,11 +28,26 @@ class TwitpicConnector implements FileConnector
         $foundImages = array();
         $locMapping = $component->getLocationMap();
         
+        $loc = Config::get("websiteroot", "/")."/";
+        $folder = Config::get("uploaddir", "/", "file")."files/twitpic/";
         
         foreach($data->images as $image)
         {
             if(!isset($mapping[$image->id]))
             {
+                //download the file and thumb
+                $filename = $folder.$image->short_id.".".$image->type;
+                $filenameThumb = $folder.$image->short_id."_thumb.".$image->type;
+                
+                //is there an upload folder?
+                if(!file_exists($loc.$folder))
+                {
+                    mkdir($loc.$folder, 0777, true);
+                }
+                
+                file_put_contents($loc.$filename, file_get_contents("http://twitpic.com/show/full/".$image->short_id));
+                file_put_contents($loc.$filenameThumb, file_get_contents("http://twitpic.com/show/thumb/".$image->short_id));
+                
                 $row = new stdClass();
                 $row->file_name = $image->short_id;
                 $row->file_data = (object) array(
@@ -40,8 +55,8 @@ class TwitpicConnector implements FileConnector
                     "name" => $image->short_id,
                     "type" => "image/".$image->type,
                     "size" => $image->size,
-                    "url" =>  "http://twitpic.com/show/full/".$image->short_id,
-                    "thumb" => "http://twitpic.com/show/thumb/".$image->short_id
+                    "url" => $filename,
+                    "thumb" => $filenameThumb
                 );
                 $row->file_date = $image->timestamp;
                 $row->file_tag = implode(", ", $this->getTags($image->message));
@@ -59,6 +74,7 @@ class TwitpicConnector implements FileConnector
                 array_push($return, $node->toData());
             }
             array_push($foundImages, $image->id);
+            set_time_limit(60);
         }
         
         $diff = array_diff(array_keys($mapping), $foundImages);
@@ -66,6 +82,12 @@ class TwitpicConnector implements FileConnector
         foreach($diff as $deleted)
         {
             $table->setRequest($mapping[$deleted])->doDelete();
+            
+            //remove the images
+            if(file_exists($loc.$mapping[$deleted]->file_data->url))
+                unlink($loc.$mapping[$deleted]->file_data->url);
+            if(file_exists($loc.$mapping[$deleted]->file_data->thumb))
+                unlink($loc.$mapping[$deleted]->file_data->thumb);
         }
         return $return;
     }

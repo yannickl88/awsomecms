@@ -70,7 +70,7 @@ class FileSelectField extends Field
         {
             if(in_array(array_pop(explode("/", $row->file_data->type)), $this->types))
             {
-                if(in_array($row->file_id, $this->getValue()))
+                if($this->getValue() != "" && in_array($row->file_id, $this->getValue()))
                 {
                     $html .= "<option selected=\"selected\" value=\"{$row->file_id}\">{$row->file_name}</option>";
                 }
