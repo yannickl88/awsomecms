@@ -54,23 +54,25 @@ function import($file)
                 return;
             }
         }
-        else
+        
+        $fileor = array_pop($loc);
+        $fileName = "class.".$fileor.".inc";
+        
+        $path = $frameworkRoot.DIRECTORY_SEPARATOR.implode(DIRECTORY_SEPARATOR, $loc);
+        
+        if(file_exists(realpath($path.'/'.$fileName)))
         {
-            $fileor = array_pop($loc);
-            array_unshift($loc, "core"); //make the start at the core folder
-            $path = $frameworkRoot.DIRECTORY_SEPARATOR.implode(DIRECTORY_SEPARATOR, $loc);
-            
-            if(file_exists($path.'/'.$fileor))
-            {
-                require_once realpath($path.'/'.$fileor);
-                return;
-            }
-            $fileName = "class.".$fileor.".inc";
-            if(file_exists(realpath($path.'/'.$fileName)))
-            {
-                require_once realpath($path.'/'.$fileName);
-                return;
-            }
+            require_once realpath($path.'/'.$fileName);
+            return;
+        }
+        
+        array_unshift($loc, "core"); //make the start at the core folder
+        $path = $frameworkRoot.DIRECTORY_SEPARATOR.implode(DIRECTORY_SEPARATOR, $loc);
+        
+        if(file_exists(realpath($path.'/'.$fileName)))
+        {
+            require_once realpath($path.'/'.$fileName);
+            return;
         }
     }
     echo "cannot find file {$frameworkRoot}/{$file}\n";

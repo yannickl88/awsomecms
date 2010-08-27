@@ -131,6 +131,8 @@ class Config
         }
         
         $this->data['websiteroot'] = $websiteroot;
+        if(isset($_SERVER['HTTP_HOST']))
+            $this->data['baseurl'] = "http://".$_SERVER['HTTP_HOST'];
     }
     /**
      * Get something from the config
