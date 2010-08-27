@@ -1,6 +1,23 @@
 <?php
+/**
+ * This file is part of the A.W.S.O.M.E.cms distribution.
+ * Detailed copyright and licensing information can be found
+ * in the doc/COPYRIGHT and doc/LICENSE files which should be
+ * included in the distribution.
+ *
+ * @package components.file.util
+ *
+ * @copyright (c) 2009-2010 Yannick de Lange
+ * @license http://www.gnu.org/licenses/gpl.txt
+ *
+ * @version $Revision$
+ */
 import('/components/page/util/class.Tree.inc');
-
+/**
+ * Tree item which contains a file
+ * 
+ * @author Yannick de Lange <yannick.l.88@gmail.com>
+ */
 class FileItem extends TreeNode
 {
     private $name;
@@ -85,6 +102,11 @@ class FileItem extends TreeNode
         );
     }
 }
+/**
+ * Tree items which contains the images
+ * 
+ * @author Yannick de Lange <yannick.l.88@gmail.com>
+ */
 class ImageFolder extends Folder
 {
     /**
@@ -117,6 +139,11 @@ class ImageFolder extends Folder
         return $html;
     }
 }
+/**
+ * Tree items to which can be uploaded by drag and drop
+ * 
+ * @author Yannick de Lange <yannick.l.88@gmail.com>
+ */
 class UploadFolder extends Folder
 {
     private $nodeMap;

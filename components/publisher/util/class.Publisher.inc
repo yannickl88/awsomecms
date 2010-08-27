@@ -5,7 +5,7 @@
  * in the doc/COPYRIGHT and doc/LICENSE files which should be
  * included in the distribution.
  *
- * @package components.file.util
+ * @package components.publish.util
  *
  * @copyright (c) 2009-2010 Yannick de Lange
  * @license http://www.gnu.org/licenses/gpl.txt
@@ -13,28 +13,31 @@
  * @version $Revision$
  */
 /**
- * Connector class so files can be imported from external sources
+ * Publisher interface
  * 
  * @author Yannick de Lange <yannick.l.88@gmail.com>
  */
-interface FileConnector
+interface Publisher
 {
     /**
-     * Fetch the new images and add them to the database
+     * Publish an item
      * 
-     * @return array    List of new elements as inserted into the db
+     * @param array $request
+     * @param PublishItem $item
      */
-    function fetch();
+    function publish($request, $item);
     /**
-     * Modify a record for the tree, this usally includes adding tree premissions
+     * Check if an type can be published by this publisher
      * 
-     * @param object $row
-     */
-    function walk($row);
-    /**
-     * Check if the connector is active so we can use it
-     * 
+     * @param String $type
      * @return bool
      */
-    function isActive();
+    function canPublish($type);
+    /**
+     * Authenticated if needed to post the request
+     * 
+     * @param String $id
+     * @return String       redirect url to auth page
+     */
+    function auth($id);
 }

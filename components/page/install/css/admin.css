@@ -31,6 +31,10 @@ h1 {
     font-weight: normal;
 }
 
+.clear {
+    clear: both;
+}
+
 /* ADMIN LAYOUT */
 #siteWrapper {
     height: auto !important;
@@ -179,16 +183,15 @@ h1 {
     border: 0;
 }
 
-.treeNode a,
-.treeNode span.treeItem {
+.treeNode a,.treeNode span.treeItem {
     padding-left: 20px;
     text-decoration: none;
     color: #bbbbbb;
     white-space: nowrap;
 }
 
-.admin_form .treeNode a,
-.admin_form .treeNode span.treeItem {
+.admin_form .treeNode a,.admin_form .treeNode span.treeItem
+    {
     color: #000000;
 }
 
@@ -451,6 +454,7 @@ h1 {
 .notification a {
     color: #7c5a00;
 }
+
 /* POPUP */
 #formWrapperBackground {
     height: 100%;
@@ -506,13 +510,15 @@ h1 {
     border: 0;
 }
 
-.admin_form_field .toolbar .toolbarButtons span.spacer {
+.admin_form_field .toolbar .toolbarButtons span.spacer
+    {
     border-left: 1px solid #BBB;
     margin-top: 1px;
     display: block;
     float: left;
     height: 30px;
 }
+
 .admin_form_field .toolbar .toolbarButtons a {
     background: url(/img/tinyeditor/icons.png);
     display: block;
@@ -521,15 +527,85 @@ h1 {
     float: left;
     margin-top: 1px;
 }
-.admin_form_field .toolbar .toolbarButtons a:hover {
+
+.admin_form_field .toolbar .toolbarButtons a:hover
+    {
     background: url(/img/tinyeditor/icons.png) #fff;
 }
+
 .admin_form_field .toolbar .toolbarresize {
     border-top: 1px solid #BBB;
     background-color: #F5F5F5;
     height: 31px;
     margin: 0 1px 1px 1px;
 }
-.admin_form_field .toolbar .toolbarresize .resize {
-    background: url(/img/tinyeditor/resize.gif) no-repeat 15px 15px;
+
+.admin_form_field .toolbar .toolbarresize .resize
+    {
+    background: url(/img/tinyeditor/resize.gif)
+        no-repeat 15px 15px;
+}
+
+/* PUBLISHER */
+.publishItem {
+    border-top: 1px solid #337DB7;
+}
+
+.publishItem.highlighted {
+    background-color: #dfebf4;
+}
+
+.publishItem .publishTitle {
+    background: #fff
+        url(http://yannickl88.dev/img/admin/tableheader.png)
+        repeat-x;
+    background-position: 50% 100%;
+    border-bottom: 1px solid #c0c0c0;
+}
+
+.publishItem .publishTitle .title {
+    font-size: 20px;
+}
+
+.publishItem .publishTitle .title .type {
+    display: block;
+    float: left;
+    width: 70px;
+    font-size: 10px;
+}
+
+.publishItem .publishTitle .options {
+    float: right;
+    padding-right: 10px;
+}
+
+.publishItem .publishTitle .options img {
+    vertical-align: middle;
+}
+
+.publishItem .publishBody {
+    display: none;
+    height: 120px;
+    overflow: auto;
+}
+
+.publishItem .publishBody.selected {
+    display: block;
+}
+
+.publishItem .publishBody .image {
+    width: 120px;
+    float: left;
+}
+
+.publishItem .publishBody .image img {
+    margin: 10px 0 0 10px;
+}
+
+.publishItem .publishBody .content {
+    margin-left: 120px;
+}
+
+.publishItem .publishBody .content .message {
+    padding: 5px;
 }
