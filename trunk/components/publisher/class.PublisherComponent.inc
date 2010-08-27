@@ -107,19 +107,25 @@ class PublisherComponent extends Component
         
         $publishers = $this->getPublishers();
         $item = $this->wrap($idInfo[1], $result);
-        $publishers[$request['to']]->publish($request, $item);
+        $succes = $publishers[$request['to']]->publish($request, $item);
         
-        //insert record
-        Table::init("publisher.published")
-            ->setRecord((object) array(
-                "publish_link" => $item->id,
-                "publish_to" => $request['to'],
-                "publish_date" => date('c')
-            ))
-            ->doInsert();
-        
-        $html = '<html><head><script type="text/javascript"> window.opener.publish_done(window, "'.$item->id.'"); </script></head><body></body></html>';
-        
+        if($succes)
+        {
+            //insert record
+            Table::init("publisher.published")
+                ->setRecord((object) array(
+                    "publish_link" => $item->id,
+                    "publish_to" => $request['to'],
+                    "publish_date" => date('c')
+                ))
+                ->doInsert();
+            
+            $html = '<html><head><script type="text/javascript"> window.opener.publish_done(window, "'.$item->id.'"); </script></head><body></body></html>';
+        }
+        else 
+        {
+            $html = '<html><head><script type="text/javascript"> window.close(); </script></head><body></body></html>';
+        }
         Controller::getInstance()->setOutput($html);
     }
     /**

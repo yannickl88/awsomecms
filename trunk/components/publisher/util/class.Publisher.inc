@@ -24,6 +24,7 @@ interface Publisher
      * 
      * @param array $request
      * @param PublishItem $item
+     * @return bool                 succes
      */
     function publish($request, $item);
     /**

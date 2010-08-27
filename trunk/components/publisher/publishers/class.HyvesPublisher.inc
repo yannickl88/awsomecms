@@ -32,6 +32,12 @@ class HyvesPublisher implements Publisher
     {
         $xml = $this->makeRequest("GET", "auth.accesstoken", array(), array($request['oauth_token'], $_SESSION['oauth_token_secret']));
         
+        //check if there went something wrong or the user canceled
+        if($xml->getName() == "error_result")
+        {
+            return false;
+        }
+        
         $oauth_token = $xml->oauth_token->__toString();
         $oauth_token_secret = $xml->oauth_token_secret->__toString();
         
