@@ -6,6 +6,7 @@
     "field_file_tag":       "Tag",
     "field_file_description": "Description",
     "images":               "images",
+    "image":                "image",
     "files":                "files",
     "documents":            "documents",
     "videos":               "videos",

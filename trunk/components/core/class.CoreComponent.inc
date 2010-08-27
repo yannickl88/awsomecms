@@ -44,7 +44,7 @@ class CoreComponent extends Component
         $registerManager->registerURLMap('\/(.*)', 'core.index', 0);
         
         //admin pages
-        $registerManager->registerPage(Config::get("location", "admin/", "admin")."index", '{"welcomeadmin"|text}');
+        $registerManager->registerPage(Config::get("location", "admin/", "admin")."index", '<h1>{"welcome"|text} {$USR.user_name|ucfirst}</h1>{"welcomeadmin"|text}');
         $registerManager->registerPage(Config::get("login", "admin/login", "admin"), '{form component="users" form="admin_login"}');
         $registerManager->registerPage(array($this, "layout"), '{form component="core" form="layout"}');
         $registerManager->registerPage(array($this, "components"), '{form component="core" form="components"}');

@@ -1,8 +1,31 @@
 <?php
+/**
+ * This file is part of the A.W.S.O.M.E.cms distribution.
+ * Detailed copyright and licensing information can be found
+ * in the doc/COPYRIGHT and doc/LICENSE files which should be
+ * included in the distribution.
+ *
+ * @package components.file.connectors
+ *
+ * @copyright (c) 2009-2010 Yannick de Lange
+ * @license http://www.gnu.org/licenses/gpl.txt
+ *
+ * @version $Revision$
+ */
 import("file.util.FileConnector");
-
+/**
+ * Connector for twitpic.com
+ * 
+ * @author Yannick de Lange <yannick.l.88@gmail.com>
+ */
 class TwitpicConnector implements FileConnector
 {
+    /**
+     * (non-PHPdoc)
+     * @see components/file/util/FileConnector::fetch()
+     * 
+     * @return array
+     */
     public function fetch()
     {
         $mapping = array();
@@ -91,6 +114,12 @@ class TwitpicConnector implements FileConnector
         }
         return $return;
     }
+    /**
+     * (non-PHPdoc)
+     * @see components/file/util/FileConnector::walk()
+     *
+     * @param $row
+     */
     public function walk($row)
     {
         $row->permissions = array(
@@ -99,10 +128,22 @@ class TwitpicConnector implements FileConnector
             "delete" => false
         );
     }
+    /**
+     * (non-PHPdoc)
+     * @see components/file/util/FileConnector::isActive()
+     *
+     * @return bool
+     */
     public function isActive()
     {
         return Config::get("twitpic_user", "", "connectors") !== "";
     }
+    /**
+     * Parse a post for tags
+     * 
+     * @param $tweet
+     * @return array
+     */
     private function getTags($tweet)
     {
         $matches = array();

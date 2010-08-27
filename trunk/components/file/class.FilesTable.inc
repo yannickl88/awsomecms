@@ -5,7 +5,7 @@
  * in the doc/COPYRIGHT and doc/LICENSE files which should be
  * included in the distribution.
  *
- * @package components.gallery
+ * @package components.file
  *
  * @copyright (c) 2009-2010 Yannick de Lange
  * @license http://www.gnu.org/licenses/gpl.txt
