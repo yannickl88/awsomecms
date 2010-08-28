@@ -147,7 +147,7 @@ class PublisherComponent extends Component
      */
     private function getPublishedItems()
     {
-        if(!$this->published)
+        if($this->published === null)
         {
             $this->published = array();
             $items = Table::init("publisher.published")->doSelect()->getRows();
