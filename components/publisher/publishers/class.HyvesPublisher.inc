@@ -66,11 +66,12 @@ class HyvesPublisher implements Publisher
      * (non-PHPdoc)
      * @see components/publisher/util/Publisher::auth()
      *
-     * @param String $id
+     * @param Array $request
      * @return String       redirect url to auth page
      */
-    public function auth($id)
+    public function auth($request)
     {
+        $id = $request['id'];
         $idInfo = explode("::", $id);
         $sVar = array(
             "methods" => $this->actionMap($idInfo[0])
