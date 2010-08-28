@@ -29,7 +29,7 @@ class TwitterPublisher implements Publisher
      */
     public function publish($request, $item)
     {
-        $result = $this->makeRequest("GET", "oauth/access_token", array(/*"oauth_verifier" => $request['oauth_verifier']*/), array($request['oauth_token'], $_SESSION['oauth_token_secret']), "auto");
+        $result = $this->makeRequest("GET", "oauth/access_token", array("oauth_verifier" => $request['oauth_verifier']), array($request['oauth_token'], $_SESSION['oauth_token_secret']), "auto");
         
         if(isset($result['error'])) return false;
         
