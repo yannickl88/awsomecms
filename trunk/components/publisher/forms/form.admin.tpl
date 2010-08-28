@@ -50,7 +50,7 @@
         icon.get(0).to = to;
         
         $(this).replaceWith(icon);
-        var win = window.open("/?component=publisher&action=auth&id="+id+"&to="+to, "publish", "menubar=no,width=640,height=480,toobar=no");
+        var win = window.open("/?component=publisher&action=auth&id="+id+"&to="+to, "publish", "menubar=no,width=800,height=440,toobar=no");
         var timerID = window.setInterval(function() {
             publish_checkPopup(win, id, timerID);
         }, 1000);

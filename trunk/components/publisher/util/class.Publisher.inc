@@ -37,8 +37,8 @@ interface Publisher
     /**
      * Authenticated if needed to post the request
      * 
-     * @param String $id
+     * @param Array $request
      * @return String       redirect url to auth page
      */
-    function auth($id);
+    function auth($request);
 }

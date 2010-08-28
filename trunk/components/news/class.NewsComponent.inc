@@ -242,9 +242,20 @@ class NewsComponent extends Component
             {
                 $row->news_title = substr($row->news_title, 0, 15)."...";
             }
-            $row->news_location = $newsName."/".date("Y/m/", strtotime($row->news_date));
+            $row->news_location = $this->makeURL($row);
             
             $tree->addChild(new NewsItem($row));
         }
+    }
+    /**
+     * Create a url for the news record
+     * 
+     * @param Object $record
+     * @return String
+     */
+    public function makeURL($record)
+    {
+        $newsName = strtolower(Language::get("news"));
+        return $newsName."/".date("Y/m/", strtotime($record->news_date));
     }
 }

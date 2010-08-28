@@ -138,7 +138,7 @@ class PublisherComponent extends Component
     public function action_auth($smarty, $smartyLoader, $request)
     {
         $publishers = $this->getPublishers();
-        $this->redirect($publishers[$request['to']]->auth($request['id']));
+        $this->redirect($publishers[$request['to']]->auth($request));
     }
     /**
      * Get all published items
@@ -174,10 +174,27 @@ class PublisherComponent extends Component
         switch($table)
         {
             case "news.news":
-                $item = new PublishItem($table.'::'.$row->news_id, $row->news_title, $row->news_text, $row->news_titleurl, strtotime($row->news_date), "", PublishItem::NEWS);
+                $newsComponent = Component::init("news");
+                $item = new PublishItem(
+                    $table.'::'.$row->news_id, 
+                    $row->news_title, 
+                    $row->news_text, 
+                    Config::get("baseurl", "http://google.com")."/".$newsComponent->makeURL($row).$row->news_titleurl, 
+                    strtotime($row->news_date), 
+                    "", 
+                    PublishItem::NEWS
+                );
                 break;
             case "file.files":
-                $item = new PublishItem($table.'::'.$row->file_id, $row->file_name, $row->file_description." ".Config::get("baseurl", "http://www.google.com").$row->file_data->url, $row->file_data->url, strtotime($row->file_date), $row->file_data->thumb, PublishItem::IMAGE);
+                $item = new PublishItem(
+                    $table.'::'.$row->file_id, 
+                    $row->file_name, 
+                    $row->file_description." ".Config::get("baseurl", "http://www.google.com").$row->file_data->url, 
+                    Config::get("baseurl", "http://google.com").$row->file_data->url, 
+                    strtotime($row->file_date), 
+                    Config::get("baseurl", "http://google.com").$row->file_data->thumb, 
+                    PublishItem::IMAGE
+                );
                 break;
             default:
                 return false;
