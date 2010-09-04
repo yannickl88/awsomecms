@@ -40,7 +40,7 @@ class OutputWiki
                     {
                         if($key > 0)
                             $classHeader .= ", ";
-                        $classHeader .= "`{$interface}`";
+                        $classHeader .= $this->getRef($interface);
                     }
                 }
 
