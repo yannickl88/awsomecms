@@ -13,7 +13,7 @@ included in the distribution.
 The following classes are located in this package
 === Classes: ===
 == `TwitpicConnector` ==
-===== ,,class,, TwitpicConnector ^File: components/file/connectors/class.TwitpicConnector.inc^ =====
+===== ,,class,, TwitpicConnector ,,implements,, `FileConnector` ^File: components/file/connectors/class.TwitpicConnector.inc^ =====
 Connector for twitpic.com
  ==== *public* _array_ *`fetch`* (  ) ====
  Inherited from: [DOCComponentsFileUtil#FileConnector FileConnector]

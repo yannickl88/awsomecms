@@ -15,7 +15,7 @@ included in the distribution.
 The following classes are located in this package
 === Classes: ===
 == `FacebookPublisher` ==
-===== ,,class,, FacebookPublisher ^File: components/publisher/publishers/class.FacebookPublisher.inc^ =====
+===== ,,class,, FacebookPublisher ,,implements,, `Publisher` ^File: components/publisher/publishers/class.FacebookPublisher.inc^ =====
 Publisher for facebook.com
  ==== *public* _bool_ *`publish`* ( _array_ `$request`, _[DOCComponentsPublishUtil#PublishItem PublishItem]_ `$item` ) ====
  Inherited from: [DOCComponentsPublishUtil#Publisher Publisher]
@@ -31,7 +31,7 @@ Make an oAuth request
  ==== *public* _string_ *`actionMap`* ( _string_ `$type` ) ====
 Map types to actions
 == `HyvesPublisher` ==
-===== ,,class,, HyvesPublisher ^File: components/publisher/publishers/class.HyvesPublisher.inc^ =====
+===== ,,class,, HyvesPublisher ,,implements,, `Publisher` ^File: components/publisher/publishers/class.HyvesPublisher.inc^ =====
 Publisher for hyves.nl
  ==== *public* _bool_ *`publish`* ( _array_ `$request`, _[DOCComponentsPublishUtil#PublishItem PublishItem]_ `$item` ) ====
  Inherited from: [DOCComponentsPublishUtil#Publisher Publisher]
@@ -47,7 +47,7 @@ Make an oAuth request
  ==== *public* _string_ *`actionMap`* ( _string_ `$type` ) ====
 Map types to actions
 == `TwitterPublisher` ==
-===== ,,class,, TwitterPublisher ^File: components/publisher/publishers/class.TwitterPublisher.inc^ =====
+===== ,,class,, TwitterPublisher ,,implements,, `Publisher` ^File: components/publisher/publishers/class.TwitterPublisher.inc^ =====
 Publisher for twitter.com
  ==== *public* _bool_ *`publish`* ( _array_ `$request`, _[DOCComponentsPublishUtil#PublishItem PublishItem]_ `$item` ) ====
  Inherited from: [DOCComponentsPublishUtil#Publisher Publisher]

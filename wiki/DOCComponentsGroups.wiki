@@ -15,7 +15,7 @@ included in the distribution.
 The following classes are located in this package
 === Classes: ===
 == `GroupsComponent` ==
-===== ,,class,, GroupsComponent ,,extends,, [DOCCore#Component Component] ^File: components/groups/class.GroupsComponent.inc^ =====
+===== ,,class,, GroupsComponent ,,extends,, [DOCCore#Component Component] ,,implements,, `AuthComponent` ^File: components/groups/class.GroupsComponent.inc^ =====
 Component that allowes for group based authentication, rather then user based
  ==== *public* _`*`_ *`__construct`* (  ) ====
 Constructor
