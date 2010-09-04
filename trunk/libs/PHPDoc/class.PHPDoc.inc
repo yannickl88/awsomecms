@@ -321,6 +321,7 @@ class PHPDocFile extends PHPDocBlock
 class PHPDocClass extends PHPDocBlock
 {
     public $abstract;
+    public $interface;
     public $name;
     public $extends;
     public $implements;
@@ -339,6 +340,7 @@ class PHPDocClass extends PHPDocBlock
         $xml .= "<name>".htmlentities($this->name)."</name>";
         $xml .= "<file>".htmlentities($this->getFile())."</file>";
         $xml .= "<abstract>{$this->abstract}</abstract>";
+        $xml .= "<interface>{$this->interface}</interface>";
         $xml .= "<extends>{$this->extends}</extends>";
         $xml .= "<implements>";
         if($this->implements != null)
@@ -472,6 +474,20 @@ class PHPFileDoc
                     $commentBlock = "";
                 }
                 elseif(preg_match('/^(abstract)?[ ]*class (.*)$/', $line) === 1) //comment open
+                {
+                    if($currentClass != null)
+                    {
+                        $fileInfo->append($currentClass);
+                    }
+                    $e = new PHPDocClass();
+                    $e->header = $currentItem;
+                    $this->parseClassHeader($e, $line);
+                    $refs["items"][$e->getID()] = $e;
+
+                    $currentItem = new PHPDocComment($fileInfo);
+                    $currentClass = $e;
+                }
+                elseif(preg_match('/^interface (.*)$/', $line) === 1) //comment open
                 {
                     if($currentClass != null)
                     {
@@ -631,27 +647,40 @@ class PHPFileDoc
 
         $refDom->save($refFile);
     }
-
+    /**
+     * parse the class header
+     * 
+     * @param PHPDocClass $classInfo
+     * @param string $line
+     */
     private function parseClassHeader($classInfo, $line)
     {
         $classInfo->abstract = (preg_match('/^abstract/', $line) === 1);
         $matches = array();
-        preg_match('/^(abstract)? ?class ([a-zA-Z1-9_]*)/', $line, $matches);
-        $classInfo->name = trim($matches[2]);
-
-        $matches = array();
-        preg_match('/extends ([a-zA-Z1-9_]*)/', $line, $matches);
-        if(count($matches) > 0)
+        if(preg_match('/^(abstract)? ?class ([a-zA-Z1-9_]*)/', $line, $matches) > 0)
         {
-            $classInfo->extends = trim($matches[1]);
+            $classInfo->name = trim($matches[2]);
+            $classInfo->interface = false;
+    
+            $matches = array();
+            preg_match('/extends ([a-zA-Z1-9_]*)/', $line, $matches);
+            if(count($matches) > 0)
+            {
+                $classInfo->extends = trim($matches[1]);
+            }
+    
+            $matches = array();
+            preg_match('/implements ([a-zA-Z1-9_, ]*)/', $line, $matches);
+            if(count($matches) > 0)
+            {
+                $classInfo->implements = explode(",", trim($matches[1]));
+                array_walk($classInfo->implements, create_function('&$a', '$a = trim($a);'));
+            }
         }
-
-        $matches = array();
-        preg_match('/implements ([a-zA-Z1-9_, ]*)/', $line, $matches);
-        if(count($matches) > 0)
+        else if(preg_match('/^interface ([a-zA-Z1-9_]*)/', $line, $matches) > 0)
         {
-            $classInfo->interfaces = explode(",", trim($matches[1]));
-            array_walk($classInfo->interfaces, create_function('&$a', '$a = trim($a);'));
+            $classInfo->name = trim($matches[1]);
+            $classInfo->interface = true;
         }
     }
     /**
