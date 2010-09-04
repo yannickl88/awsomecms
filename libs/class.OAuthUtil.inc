@@ -186,4 +186,29 @@ class OAuthUtil
         $signature = self::calculateHMACSHA1Signature($basestring, $consumersecret, $oauth_token_secret);
         return $signature;
     }
+    /**
+     * Convert an XML to an array, this will lose attribute info
+     * 
+     * @param SimpleXMLElement $xml
+     * @return *        Array or a String
+     */
+    public static function xml2array($xml)
+    {
+        if($xml->count() > 0)
+        {
+            $arr = array();
+            
+            $children = $xml->children();
+            foreach ($children as $elementName => $node)
+            {
+                $arr[$elementName] = self::xml2array($node);
+            }
+            
+            return $arr;
+        }
+        else
+        {
+            return $xml->__toString();
+        }
+    }
 }

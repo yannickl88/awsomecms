@@ -19,20 +19,27 @@ class OutputWiki
                 {
                     $classHeader .= "_abstract_ ";
                 }
-                $classHeader .= ",,class,, {$class->name}";
+                if($class->interface->__toString() != "")
+                {
+                    $classHeader .= ",,interface,, {$class->name}";
+                }
+                else
+                {
+                    $classHeader .= ",,class,, {$class->name}";
+                }
 
                 if($class->extends->__toString() != "")
                 {
                     $extends = $this->getRef($class->extends->__toString());
                     $classHeader .= " ,,extends,, {$extends}";
                 }
-                if($class->implements->interface)
+                if($class->implements->interface->count() > 0)
                 {
-                    $classHeader .= " ";
+                    $classHeader .= " ,,implements,, ";
                     foreach($class->implements->interface as $key => $interface)
                     {
                         if($key > 0)
-                        $classHeader .= ", ";
+                            $classHeader .= ", ";
                         $classHeader .= "`{$interface}`";
                     }
                 }

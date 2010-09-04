@@ -17,9 +17,10 @@ class Usage extends CLIAction
         $cli->output("php -f phpdoc.php [action]");
         $cli->output("");
         $cli->output("Options:");
-        $cli->output("action       help, doc");
+        $cli->output("action       help, doc, render");
         $cli->output("  help       This text");
         $cli->output("  doc        Create xml doc files");
+        $cli->output("  render     Create doc pages");
         $cli->output("");
     }
 }
