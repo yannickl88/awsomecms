@@ -66,6 +66,8 @@ Set the type of this node
 Get the type of this node
  ==== *abstract* _string_ *`toJavascript`* (  ) ====
 Create the javascript code for the node
+ ==== *abstract* _string_ *`toData`* (  ) ====
+Create a JSON representation of this node
  ==== *public* _string_ *`registerIcons`* (  ) ====
 function that is called once on each type of node, you can add icons to the tree here
 == `PageItem` ==
@@ -74,7 +76,10 @@ The node for the page items
  ==== *public* _void_ *`__construct`* ( _object_ `$record` ) ====
 Constructor
  ==== *public* _string_ *`toJavascript`* (  ) ====
-Create the javascript code for the tree
+ Inherited from: [DOCComponentsPageUtil#TreeNode TreeNode]
+Create the javascript code for the node
+ ==== *public* _string_ *`toData`* (  ) ====
+(non-PHPdoc)
 == `Folder` ==
 ===== ,,class,, Folder ,,extends,, [DOCComponentsPageUtil#TreeNode TreeNode] ^File: components/page/util/class.Tree.inc^ =====
 
@@ -82,6 +87,8 @@ Create the javascript code for the tree
 Constructor
  ==== *public* _string_ *`toJavascript`* (  ) ====
 Create the javascript code for the tree
+ ==== *public* _string_ *`toData`* (  ) ====
+(non-PHPdoc)
 == `RootFolder` ==
 ===== ,,class,, RootFolder ,,extends,, [DOCComponentsPageUtil#Folder Folder] ^File: components/page/util/class.Tree.inc^ =====
 

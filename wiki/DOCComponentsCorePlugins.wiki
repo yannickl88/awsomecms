@@ -9,7 +9,10 @@ included in the distribution.
 == Index: ==
 *functions*:
  * smarty_function_form
+ * smarty_modifier_bbcode
  * smarty_modifier_count
+ * smarty_modifier_date
+ * smarty_modifier_explode
  * smarty_modifier_hasflag
  * smarty_modifier_installed
  * smarty_modifier_notin
@@ -20,8 +23,14 @@ The following functions are located in this package
 === Functions: ===
  ==== _void_ *`smarty_function_form`* ( _array_ `$params`, _Smarty_ `$smarty` ) ^File: components/core/plugins/function.form.php^====
 Form tag, this is used to add a form from a component to a page. This will call the action and hooks related to the action of the form
+ ==== _bool_ *`smarty_modifier_bbcode`* ( _array_ `$array` ) ^File: components/core/plugins/modifier.bbcode.php^====
+Modifier to count the number of elements
  ==== _bool_ *`smarty_modifier_count`* ( _array_ `$array` ) ^File: components/core/plugins/modifier.count.php^====
 Modifier to count the number of elements
+ ==== _string_ *`smarty_modifier_date`* ( _string_ `$string` ) ^File: components/core/plugins/modifier.date.php^====
+Make the first letter of a string uppercase
+ ==== _string_ *`smarty_modifier_explode`* ( _string_ `$string` ) ^File: components/core/plugins/modifier.explode.php^====
+Make the first letter of a string uppercase
  ==== _bool_ *`smarty_modifier_hasflag`* ( _int_ `$int`, _int_ `$flag` ) ^File: components/core/plugins/modifier.hasflag.php^====
 Modifier to binary check if a flag is in a value
  ==== _bool_ *`smarty_modifier_installed`* ( _string_ `$element` ) ^File: components/core/plugins/modifier.installed.php^====

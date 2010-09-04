@@ -39,6 +39,7 @@ included in the distribution.
  * [DOCLibs#FTP FTP]
  * [DOCLibs#TableInfo TableInfo]
  * [DOCLibs#InstallHelper InstallHelper]
+ * [DOCLibs#OAuthUtil OAuthUtil]
  * [DOCLibs#TextSpider TextSpider]
 == Contents: ==
 The following classes are located in this package
@@ -269,6 +270,10 @@ Call an action
 Register an action
  ==== *public* _void_ *`header`* (  ) ====
 Show the header info
+ ==== *public* _void_ *`setAction`* ( _string_ `$action` ) ====
+Set the action manualy
+ ==== *public* _void_ *`getAction`* ( _string_ `$action` ) ====
+Set the action manualy
  ==== *private* _void_ *`_header`* (  ) ====
 Fallback when there was no header
 == `CronParser` ==
@@ -315,10 +320,6 @@ Helper class for installing and managing components
 Download and install a component. Returns True on success and False on error
  ==== *public* _array_ *`installComponent`* ( _string_ `$component`, _bool_ `$installAdmin` ) ====
 Install a component
- ==== *public* _void_ *`runPatches`* ( _string_ `$component` ) ====
-Run the patches for a given component
- ==== *public* _int_ *`getHighestPatchLevel`* ( _string_ `$installDir` ) ====
-Get the highest patch number for a given folder
  ==== *public* _bool_ *`is_numeric_keys`* ( _array_ `$array` ) ====
 Check if an array has numeric keys
  ==== *public* _string_ *`arrayToIni`* ( _array_ `$array` ) ====
@@ -344,6 +345,9 @@ from the XML and the $tables field
  ==== *public* _bool_ *`loadTable`* ( _string_ `$content` ) ====
 Sync a database file with the database, returns true if there was
 anything to sync, else false
+ ==== *public* _void_ *`needsLoad`* (  ) ====
+ ==== *private* _void_ *`makeSQL`* ( __ `$content` ) ====
+Create the SQL queries needed to load the database
  ==== *public* _bool_ *`isNotChanged`* ( _DOMElement_ `$field`, _object_ `$row` ) ====
 Check if a DOMElement and the field row from the DB have the same values
  ==== *public* _void_ *`raddFileToZip`* ( _string_ `$source`, _string_ `$dest`, _string_ `$zip` ) ====
@@ -356,6 +360,32 @@ Pack a directory into a zip file
 Get the highest revsion number
  ==== *public* _void_ *`generateInstallFiles`* ( _string_ `$components` ) ====
 Generate the install XML's for each given component
+== `OAuthUtil` ==
+===== ,,class,, OAuthUtil ^File: libs/class.OAuthUtil.inc^ =====
+OAuth helper class
+
+NOTE: most of the code comes from the developer pages of hyves
+ ==== *public* *static* _string_ *`urlencodeRFC3986`* ( _string_ `$string` ) ====
+URLEncode a string RFC3986
+ ==== *public* *static* _string_ *`urlencodeRFC3986_UTF8`* ( _string_ `$string` ) ====
+URLEncode a string RFC3986 and UTF8
+ ==== *public* *static* _string_ *`urldecodeRFC3986`* ( _string_ `$string` ) ====
+URLDecode a string RFC3986
+ ==== *public* *static* _string_ *`urldecodeRFC3986_UTF8`* ( _string_ `$string` ) ====
+URLDecode a string RFC3986 and UTF8
+ ==== *public* *static* _array_ *`prepData`* ( _array_ `$sVar` ) ====
+Prep the data into a multidementional array
+ ==== *public* *static* _string_ *`normalizeParameters`* ( _array_ `$aParam` ) ====
+Normalize data and sort in alphabatic order
+ ==== *public* *static* _void_ *`generateBaseString`* ( _string_ `$http_method`, _string_ `$uri`, _string_ `$params` ) ====
+Generate Base String for signature
+ ==== *public* *static* _string_ *`calculateHMACSHA1Signature`* ( _string_ `$basestring`, _string_ `$consumersecret`, _string_ `$tokensecret` ) ====
+Calculate the signature HASH
+ ==== *public* *static* _string_ *`calculateOAuthSignature`* ( _string_ `$key`, _string_ `$data`, _string_ `$http_method`, _string_ `$uri`, _array_ `$sVar`, _string_ `$consumersecret`, _string_ `$oauth_token_secret` ) ====
+HMAC-SHA1 not dependent on php compile flags
+
+*/
+Calculate the OAuth Signature Hash
 == `TextSpider` ==
 ===== ,,class,, TextSpider ^File: libs/class.TextSpider.inc^ =====
 Spider class for indexing and searching in the text items

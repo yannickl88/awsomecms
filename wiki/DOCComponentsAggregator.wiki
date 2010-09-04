@@ -1,0 +1,22 @@
+#labels Documentation
+#summary Documentation for content in the components.aggregator package.
+_Package: 'components.aggregator'_ 
+
+This file is part of the A.W.S.O.M.E.cms distribution.
+Detailed copyright and licensing information can be found
+in the doc/COPYRIGHT and doc/LICENSE files which should be
+included in the distribution.
+== Index: ==
+*classes*:
+ * [DOCComponentsAggregator#AggregatorComponent AggregatorComponent]
+== Contents: ==
+The following classes are located in this package
+=== Classes: ===
+== `AggregatorComponent` ==
+===== ,,class,, AggregatorComponent ,,extends,, [DOCCore#Component Component] ^File: components/aggregator/class.AggregatorComponent.inc^ =====
+Aggregates News form RSS feeds and imports them into the news component
+ ==== *public* _void_ *`__construct`* (  ) ====
+Constructor
+ ==== *public* _void_ *`execCron`* (  ) ====
+ Inherited from: [DOCCore#Component Component]
+Execute a task for the cron. This called in the interval secified in the config files.

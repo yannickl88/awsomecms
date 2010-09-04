@@ -28,7 +28,7 @@ Action to add an group
 Action to edit an group
  ==== *public* _void_ *`action_delete`* ( _Smarty_ `$smarty`, _[DOCCore#SmartyPageLoader SmartyPageLoader]_ `$smartyLoader`, _array_ `$request` ) ====
 Action to delete an group
- ==== *public* _array_ *`getPrivilageMapping`* ( _int_ `$privileges`, _array_ `$preset` ) ====
+ ==== *public* _array_ *`getPrivilageMapping`* ( _int_ `$userPriv`, _array_ `$preset` ) ====
 Request a list of privilages a given groups has
  ==== *public* _bool_ *`auth_login`* ( _string_ `$user_name`, _string_ `$user_pass` ) ====
 Log a user in with crendtials

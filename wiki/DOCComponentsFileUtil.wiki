@@ -1,0 +1,54 @@
+#labels Documentation
+#summary Documentation for content in the components.file.util package.
+_Package: 'components.file.util'_ 
+
+This file is part of the A.W.S.O.M.E.cms distribution.
+Detailed copyright and licensing information can be found
+in the doc/COPYRIGHT and doc/LICENSE files which should be
+included in the distribution.
+== Index: ==
+*classes*:
+ * [DOCComponentsFileUtil#FileConnector FileConnector]
+ * [DOCComponentsFileUtil#FileItem FileItem]
+ * [DOCComponentsFileUtil#ImageFolder ImageFolder]
+ * [DOCComponentsFileUtil#UploadFolder UploadFolder]
+== Contents: ==
+The following classes are located in this package
+=== Classes: ===
+== `FileConnector` ==
+===== ,,interface,, FileConnector ^File: components/file/util/class.FileConnector.inc^ =====
+Connector class so files can be imported from external sources
+ ==== _array_ *`fetch`* (  ) ====
+Fetch the new images and add them to the database
+ ==== _void_ *`walk`* ( _object_ `$row` ) ====
+Modify a record for the tree, this usally includes adding tree premissions
+ ==== _bool_ *`isActive`* (  ) ====
+Check if the connector is active so we can use it
+== `FileItem` ==
+===== ,,class,, FileItem ,,extends,, [DOCComponentsPageUtil#TreeNode TreeNode] ^File: components/file/util/class.FileTree.inc^ =====
+Tree item which contains a file
+ ==== *public* _void_ *`__construct`* ( _object_ `$record` ) ====
+Constructor
+ ==== *public* _string_ *`toJavascript`* (  ) ====
+ Inherited from: [DOCComponentsPageUtil#TreeNode TreeNode]
+Create the javascript code for the node
+ ==== *public* _string_ *`toData`* (  ) ====
+(non-PHPdoc)
+== `ImageFolder` ==
+===== ,,class,, ImageFolder ,,extends,, [DOCComponentsPageUtil#Folder Folder] ^File: components/file/util/class.FileTree.inc^ =====
+Tree items which contains the images
+ ==== *public* _void_ *`__construct`* ( _object_ `$record` ) ====
+Constructor
+ ==== *public* _void_ *`registerIcons`* (  ) ====
+See parent
+ ==== *public* _string_ *`toJavascript`* (  ) ====
+Create the javascript code for the tree
+== `UploadFolder` ==
+===== ,,class,, UploadFolder ,,extends,, [DOCComponentsPageUtil#Folder Folder] ^File: components/file/util/class.FileTree.inc^ =====
+Tree items to which can be uploaded by drag and drop
+ ==== *public* _void_ *`__construct`* ( _object_ `$record` ) ====
+Constructor
+ ==== *public* _void_ *`registerIcons`* (  ) ====
+See parent
+ ==== *public* _string_ *`toJavascript`* (  ) ====
+Create the javascript code for the tree

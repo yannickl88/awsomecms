@@ -8,34 +8,19 @@ in the doc/COPYRIGHT and doc/LICENSE files which should be
 included in the distribution.
 == Index: ==
 *classes*:
- * [DOCComponentsGallery#FilesTable FilesTable]
  * [DOCComponentsGallery#GalleryComponent GalleryComponent]
  * [DOCComponentsGallery#GalleryTable GalleryTable]
 == Contents: ==
 The following classes are located in this package
 === Classes: ===
-== `FilesTable` ==
-===== ,,class,, FilesTable ,,extends,, [DOCCore#Table Table] ^File: components/file/class.FilesTable.inc^ =====
-Core table, this handels all interaction with the core table in the database
- ==== *public* _void_ *`__construct`* (  ) ====
-Constructor
- ==== *protected* _void_ *`select`* ( _[DOCCore#SQLQuery SQLQuery]_ `$query`, _object_ `$data` ) ====
- Inherited from: [DOCCore#Table Table]
-Additional Select data
- ==== *protected* _void_ *`insert`* ( _[DOCCore#SQLQuery SQLQuery]_ `$query`, _object_ `$data` ) ====
- Inherited from: [DOCCore#Table Table]
-Additional Insert data
- ==== *protected* _void_ *`update`* ( _[DOCCore#SQLQuery SQLQuery]_ `$query`, _object_ `$data` ) ====
- Inherited from: [DOCCore#Table Table]
-Additional Update data
- ==== *protected* _void_ *`delete`* ( _[DOCCore#SQLQuery SQLQuery]_ `$query`, _object_ `$data` ) ====
- Inherited from: [DOCCore#Table Table]
-Additional Delete data
 == `GalleryComponent` ==
 ===== ,,class,, GalleryComponent ,,extends,, [DOCCore#Component Component] ^File: components/gallery/class.GalleryComponent.inc^ =====
 A simple component to manage and show a series of images on a page. Using a tag, images can be grouped together
  ==== *public* _`*`_ *`__construct`* (  ) ====
 Constructor
+ ==== *public* _void_ *`register`* ( _[DOCCore#RegisterManager RegisterManager]_ `$registerManager` ) ====
+ Inherited from: [DOCCore#Component Component]
+Register actions/hooks/mappings to the framework
  ==== *public* _void_ *`action_add`* ( _Smarty_ `$smarty`, _[DOCCore#SmartyPageLoader SmartyPageLoader]_ `$smartyLoader`, _array_ `$request` ) ====
 Action to add an image
  ==== *public* _void_ *`action_edit`* ( _Smarty_ `$smarty`, _[DOCCore#SmartyPageLoader SmartyPageLoader]_ `$smartyLoader`, _array_ `$request` ) ====

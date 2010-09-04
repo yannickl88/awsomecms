@@ -46,6 +46,9 @@ This components gives you the option to create different users inside a
 system, these users can be assigned a name and password and privilages. If
 the group component is installed, privilages will be delegated there
  ==== *public* _void_ *`__construct`* (  ) ====
+ ==== *public* _void_ *`register`* ( _[DOCCore#RegisterManager RegisterManager]_ `$registerManager` ) ====
+ Inherited from: [DOCCore#Component Component]
+Register actions/hooks/mappings to the framework
  ==== *private* _void_ *`login`* ( _array_ `$request`, _string_ `$redirect` ) ====
 Internal function to handle login. This checks user and password and
 if they are filled in or throws and FormException otherwise.
@@ -65,7 +68,7 @@ Add a privilege
 Edit a privilege
  ==== *public* _void_ *`action_privdelete`* ( _Smarty_ `$smarty`, _[DOCCore#SmartyPageLoader SmartyPageLoader]_ `$smartyLoader`, _array_ `$request` ) ====
 Delete a privilege
- ==== *public* _array_ *`getPrivilageMapping`* ( _int_ `$privileges` ) ====
+ ==== *public* _array_ *`getPrivilageMapping`* ( _int_ `$userPrivs` ) ====
 Get the privileges the user has
  ==== *public* _bool_ *`auth_login`* ( _string_ `$user_name`, _string_ `$user_pass` ) ====
 Authenticate a user

@@ -18,6 +18,9 @@ The following classes are located in this package
 The Page component, together with the core component, is this used to show pages and manage them
  ==== *public* _void_ *`__construct`* (  ) ====
 Constructor
+ ==== *public* _void_ *`register`* ( _[DOCCore#RegisterManager RegisterManager]_ `$registerManager` ) ====
+ Inherited from: [DOCCore#Component Component]
+Register actions/hooks/mappings to the framework
  ==== *public* _void_ *`action_add`* ( _Smarty_ `$smarty`, _[DOCCore#SmartyPageLoader SmartyPageLoader]_ `$smartyLoader`, _array_ `$request` ) ====
 Action for adding a page
  ==== *public* _void_ *`action_edit`* ( _Smarty_ `$smarty`, _[DOCCore#SmartyPageLoader SmartyPageLoader]_ `$smartyLoader`, _array_ `$request` ) ====

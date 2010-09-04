@@ -14,6 +14,7 @@ included in the distribution.
  * [DOCCoreFields#Field Field]
  * [DOCCoreFields#IntField IntField]
  * [DOCCoreFields#PasswordField PasswordField]
+ * [DOCCoreFields#TablePermissionField TablePermissionField]
  * [DOCCoreFields#TagField TagField]
  * [DOCCoreFields#TextField TextField]
 == Contents: ==
@@ -184,15 +185,26 @@ Create a HTML representation of add field
 Create a HTML representation of edit field
  ==== *public* _void_ *`value2db`* (  ) ====
  ==== *public* _void_ *`db2value`* (  ) ====
+== `TablePermissionField` ==
+===== ,,class,, TablePermissionField ,,extends,, [DOCCoreFields#Field Field] ^File: core/fields/class.TablePermissionField.inc^ =====
+TablePermissionField field, with this field you can add a callback to each
+row which will hide icons
+ ==== *public* _void_ *`__construct`* ( _string_ `$name`, _string_ `$displayName`, _int_ `$style` ) ====
+Constructor
+ ==== *public* _void_ *`postSQL`* ( _[DOCCore#SQLRecord SQLRecord]_ `$sqlrecord`, _array_ `$record`, _[DOCCore#SQLQuery SQLQuery]_ `$query` ) ====
+ Inherited from: [DOCCoreFields#Field Field]
+preform this action prior to the SQL execution that uses this field
+ ==== *private* _void_ *`premissions`* ( _object_ `$row` ) ====
+Set the premissions for this row if the callback was not valid
 == `TagField` ==
 ===== ,,class,, TagField ,,extends,, [DOCCoreFields#Field Field] ^File: core/fields/class.TagField.inc^ =====
 Tag field, this allows for quick search and assignment of tags
  ==== *public* _void_ *`preSQL`* ( _`*`_ `Array record that was used`, _[DOCCore#SQLQuery SQLQuery]_ `$query` ) ====
  Inherited from: [DOCCoreFields#Field Field]
 preform this action prior to the SQL execution that uses this field
- ==== *public* _void_ *`insert`* ( __ `$query`, __ `$data` ) ====
+ ==== *public* _void_ *`select`* ( __ `$query`, __ `$data` ) ====
  Inherited from: [DOCCoreFields#Field Field]
-Add insert data for this field to a query
+Add select data for this field to a query
  ==== *public* _void_ *`insert`* ( __ `$query`, __ `$data` ) ====
  Inherited from: [DOCCoreFields#Field Field]
 Add insert data for this field to a query

@@ -8,12 +8,28 @@ in the doc/COPYRIGHT and doc/LICENSE files which should be
 included in the distribution.
 == Index: ==
 *classes*:
+ * [DOCComponentsUsersFields#AuthsField AuthsField]
  * [DOCComponentsUsersFields#PrivlilegesField PrivlilegesField]
  * [DOCComponentsUsersFields#UsersField UsersField]
  * [DOCComponentsUsersFields#UsersselectField UsersselectField]
 == Contents: ==
 The following classes are located in this package
 === Classes: ===
+== `AuthsField` ==
+===== ,,class,, AuthsField ,,extends,, [DOCCoreFields#Field Field] ^File: components/users/fields/class.AuthsField.inc^ =====
+AuthsField list of check boxes
+ ==== *protected* _string_ *`toHTML_add`* (  ) ====
+ Inherited from: [DOCCoreFields#Field Field]
+Create a HTML representation of add field
+ ==== *protected* _string_ *`toHTML_edit`* (  ) ====
+ Inherited from: [DOCCoreFields#Field Field]
+Create a HTML representation of edit field
+ ==== *public* _string_ *`value2db`* ( __ `$value` ) ====
+ Inherited from: [DOCCoreFields#Field Field]
+Convert the value of the param to that what the DB expects
+ ==== *public* _`*`_ *`db2value`* ( __ `$value` ) ====
+ Inherited from: [DOCCoreFields#Field Field]
+Convert the dbvalue of the param to what the field expects
 == `PrivlilegesField` ==
 ===== ,,class,, PrivlilegesField ,,extends,, [DOCCoreFields#IntField IntField] ^File: components/users/fields/class.PrivlilegesField.inc^ =====
 Privileges list of check boxes

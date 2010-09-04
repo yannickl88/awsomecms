@@ -8,30 +8,12 @@ in the doc/COPYRIGHT and doc/LICENSE files which should be
 included in the distribution.
 == Index: ==
 *classes*:
- * [DOCComponentsCore#AuthTable AuthTable]
  * [DOCComponentsCore#ComponentsTable ComponentsTable]
  * [DOCComponentsCore#CoreComponent CoreComponent]
  * [DOCComponentsCore#TagsTable TagsTable]
 == Contents: ==
 The following classes are located in this package
 === Classes: ===
-== `AuthTable` ==
-===== ,,class,, AuthTable ,,extends,, [DOCCore#Table Table] ^File: components/core/class.AuthTable.inc^ =====
-Auth table, this handels all interaction with the auth table in the database
- ==== *public* _void_ *`__construct`* (  ) ====
-Constructor
- ==== *protected* _void_ *`select`* ( _[DOCCore#SQLQuery SQLQuery]_ `$query`, _object_ `$data` ) ====
- Inherited from: [DOCCore#Table Table]
-Additional Select data
- ==== *protected* _void_ *`insert`* ( _[DOCCore#SQLQuery SQLQuery]_ `$query`, _object_ `$data` ) ====
- Inherited from: [DOCCore#Table Table]
-Additional Insert data
- ==== *protected* _void_ *`update`* ( _[DOCCore#SQLQuery SQLQuery]_ `$query`, _object_ `$data` ) ====
- Inherited from: [DOCCore#Table Table]
-Additional Update data
- ==== *protected* _void_ *`delete`* ( _[DOCCore#SQLQuery SQLQuery]_ `$query`, _object_ `$data` ) ====
- Inherited from: [DOCCore#Table Table]
-Additional Delete data
 == `ComponentsTable` ==
 ===== ,,class,, ComponentsTable ,,extends,, [DOCCore#Table Table] ^File: components/core/class.ComponentsTable.inc^ =====
 Core table, this handels all interaction with the core table in the database
@@ -69,7 +51,6 @@ Install action, this is used for the update manager.
 Update action, this is used for the update manager.
  ==== *public* _void_ *`action_components`* ( _Smarty_ `$smarty`, _[DOCCore#SmartyPageLoader SmartyPageLoader]_ `$smartyLoader`, _array_ `$request` ) ====
 Components action, this is used for the compontent settings page
- ==== *public* _void_ *`action_auth`* (  ) ====
  ==== *public* _void_ *`action_deleteinstall`* (  ) ====
  ==== *public* _void_ *`action_getform`* (  ) ====
  ==== *public* _void_ *`registerMenuItems`* ( _[DOCComponentsPageUtil#Menu Menu]_ `$menu` ) ====

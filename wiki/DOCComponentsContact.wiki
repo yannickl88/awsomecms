@@ -19,6 +19,9 @@ The following classes are located in this package
 Contact component class, this holds all the logic for the contact component
  ==== *public* _void_ *`__construct`* (  ) ====
 Constructor class for the contact component
+ ==== *public* _void_ *`register`* ( _[DOCCore#RegisterManager RegisterManager]_ `$registerManager` ) ====
+ Inherited from: [DOCCore#Component Component]
+Register actions/hooks/mappings to the framework
  ==== *public* _void_ *`action_add`* ( _Smarty_ `$smarty`, _[DOCCore#SmartyPageLoader SmartyPageLoader]_ `$smartyLoader`, _array_ `$request` ) ====
 Add action, this is called when a contact form is added
  ==== *public* _void_ *`action_edit`* ( _Smarty_ `$smarty`, _[DOCCore#SmartyPageLoader SmartyPageLoader]_ `$smartyLoader`, _array_ `$request` ) ====

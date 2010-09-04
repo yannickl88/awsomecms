@@ -1,0 +1,64 @@
+#labels Documentation
+#summary Documentation for content in the components.publish.publishers package.
+_Package: 'components.publish.publishers'_ 
+
+This file is part of the A.W.S.O.M.E.cms distribution.
+Detailed copyright and licensing information can be found
+in the doc/COPYRIGHT and doc/LICENSE files which should be
+included in the distribution.
+== Index: ==
+*classes*:
+ * [DOCComponentsPublishPublishers#FacebookPublisher FacebookPublisher]
+ * [DOCComponentsPublishPublishers#HyvesPublisher HyvesPublisher]
+ * [DOCComponentsPublishPublishers#TwitterPublisher TwitterPublisher]
+== Contents: ==
+The following classes are located in this package
+=== Classes: ===
+== `FacebookPublisher` ==
+===== ,,class,, FacebookPublisher ^File: components/publisher/publishers/class.FacebookPublisher.inc^ =====
+Publisher for facebook.com
+ ==== *public* _bool_ *`publish`* ( _array_ `$request`, _[DOCComponentsPublishUtil#PublishItem PublishItem]_ `$item` ) ====
+ Inherited from: [DOCComponentsPublishUtil#Publisher Publisher]
+Publish an item
+ ==== *public* _string_ *`auth`* ( _array_ `$request` ) ====
+ Inherited from: [DOCComponentsPublishUtil#Publisher Publisher]
+Authenticated if needed to post the request
+ ==== *public* _bool_ *`canPublish`* ( _string_ `$type` ) ====
+ Inherited from: [DOCComponentsPublishUtil#Publisher Publisher]
+Check if an type can be published by this publisher
+ ==== *private* _SimpleXMLElement_ *`makeRequest`* ( _string_ `$method`, _string_ `$action`, _array_ `$data`, _array_ `$oauth_token` ) ====
+Make an oAuth request
+ ==== *public* _string_ *`actionMap`* ( _string_ `$type` ) ====
+Map types to actions
+== `HyvesPublisher` ==
+===== ,,class,, HyvesPublisher ^File: components/publisher/publishers/class.HyvesPublisher.inc^ =====
+Publisher for hyves.nl
+ ==== *public* _bool_ *`publish`* ( _array_ `$request`, _[DOCComponentsPublishUtil#PublishItem PublishItem]_ `$item` ) ====
+ Inherited from: [DOCComponentsPublishUtil#Publisher Publisher]
+Publish an item
+ ==== *public* _string_ *`auth`* ( _array_ `$request` ) ====
+ Inherited from: [DOCComponentsPublishUtil#Publisher Publisher]
+Authenticated if needed to post the request
+ ==== *public* _bool_ *`canPublish`* ( _string_ `$type` ) ====
+ Inherited from: [DOCComponentsPublishUtil#Publisher Publisher]
+Check if an type can be published by this publisher
+ ==== *private* _SimpleXMLElement_ *`makeRequest`* ( _string_ `$method`, _string_ `$action`, _array_ `$data`, _array_ `$oauth_token` ) ====
+Make an oAuth request
+ ==== *public* _string_ *`actionMap`* ( _string_ `$type` ) ====
+Map types to actions
+== `TwitterPublisher` ==
+===== ,,class,, TwitterPublisher ^File: components/publisher/publishers/class.TwitterPublisher.inc^ =====
+Publisher for twitter.com
+ ==== *public* _bool_ *`publish`* ( _array_ `$request`, _[DOCComponentsPublishUtil#PublishItem PublishItem]_ `$item` ) ====
+ Inherited from: [DOCComponentsPublishUtil#Publisher Publisher]
+Publish an item
+ ==== *public* _string_ *`auth`* ( _array_ `$request` ) ====
+ Inherited from: [DOCComponentsPublishUtil#Publisher Publisher]
+Authenticated if needed to post the request
+ ==== *public* _bool_ *`canPublish`* ( _string_ `$type` ) ====
+ Inherited from: [DOCComponentsPublishUtil#Publisher Publisher]
+Check if an type can be published by this publisher
+ ==== *private* _SimpleXMLElement_ *`makeRequest`* ( _string_ `$method`, _string_ `$action`, _array_ `$data`, _array_ `$oauth_token` ) ====
+Make an oAuth request
+ ==== *public* _string_ *`actionMap`* ( _string_ `$type` ) ====
+Map types to actions

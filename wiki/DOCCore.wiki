@@ -17,8 +17,10 @@ included in the distribution.
  * getActions
  * urlEscape
  * str_rand
+ * makeLink
 *classes*:
  * [DOCCore#Authentication Authentication]
+ * [DOCCore#AuthComponent AuthComponent]
  * [DOCCore#Cache Cache]
  * [DOCCore#Component Component]
  * [DOCCore#Config Config]
@@ -29,6 +31,7 @@ included in the distribution.
  * [DOCCore#Notifications Notifications]
  * [DOCCore#Controller Controller]
  * [DOCCore#Debugger Debugger]
+ * [DOCCore#Extention Extention]
  * [DOCCore#FormException FormException]
  * [DOCCore#InvalidFormException InvalidFormException]
  * [DOCCore#Language Language]
@@ -67,6 +70,8 @@ Get the actions of a give component
 Clean up a string so it can be validly passed in the url
  ==== _void_ *`str_rand`* ( _int_ `$p` ) ^File: core/functions.util.inc^====
 Generate a random string
+ ==== _string_ *`makeLink`* ( _`*`_ `* $url` ) ^File: core/functions.util.inc^====
+Create a link, based on if the $url is a String or an Array with <Component, String>
 The following classes are located in this package
 === Classes: ===
 == `Authentication` ==
@@ -76,6 +81,9 @@ Authentication class that is a facade for loggin in and out
 Login, and setting the user session. This calls the component set in the config
  ==== *public* *static* _bool_ *`logout`* (  ) ====
 Logout, and clearing the user session. This calls the component set in the config
+== `AuthComponent` ==
+===== ,,interface,, AuthComponent ^File: core/class.Authentication.inc^ =====
+Interface class for componentn that want to provide login service
  ==== *public* _array_ *`getPrivilageMapping`* ( __ `$privileges` ) ====
 Get the mapping of all privilages and if the user has it
  ==== *public* _bool_ *`auth_login`* ( _string_ `$user_name`, _string_ `$user_pass` ) ====
@@ -112,6 +120,8 @@ NOTE: do not use this, use Component::init().
 Only use this to resolve ciclur reference from the register manager
  ==== *protected* _void_ *`setDefaultRequest`* ( _string_ `$request` ) ====
 Set the default request that is linked to the component, default is the same as the component name
+ ==== *public* _string_ *`getName`* (  ) ====
+Get the name of the component
  ==== *protected* _void_ *`redirect`* ( _string_ `$url`, _array_ `$data` ) ====
 Do an redirect
  ==== *protected* _void_ *`ajax`* ( _`*`_ `$data` ) ====
@@ -237,6 +247,16 @@ Render the debug list as HTML
  ==== _void_ *`debug_hadCookie`* (  ) ====
  ==== _void_ *`debug_toggleDebug`* (  ) ====
  ==== *public* _void_ *`setType`* (  ) ====
+== `Extention` ==
+===== _abstract_ ,,class,, Extention ^File: core/class.Extention.inc^ =====
+Abstract class for extentions, these are small files which can extend the
+framework with smarty plugins or url Hooks
+ ==== *public* *static* _[DOCCore#Extention Extention]_ *`init`* ( _string_ `$name` ) ====
+Create an extention
+ ==== *abstract* _void_ *`register`* ( _[DOCCore#RegisterManager RegisterManager]_ `$registerManager` ) ====
+Register items to the registerManager
+ ==== *abstract* _void_ *`extend`* ( _Smarty_ `$smarty` ) ====
+Register items to Smarty
 == `FormException` ==
 ===== ,,class,, FormException ,,extends,, Exception ^File: core/class.InvalidFormException.inc^ =====
 Exception to be triggered when a field is not validly filled in
@@ -288,26 +308,37 @@ Check if the cache is avalible and usable
 Load the content for the RegisterManager, either from cache or from the components
  ==== *private* _void_ *`save`* (  ) ====
 Cache the content of the RegisterManager
+ ==== *public* _void_ *`reload`* ( _Bool_ `$noload` ) ====
+Reload the content of the RegisterManager
  ==== *public* _void_ *`registerHook`* (  ) ====
 Register a Hook
- ==== *public* _void_ *`registerPage`* ( _string_ `$location`, _`*`_ `$content` ) ====
+ ==== *public* _void_ *`registerPage`* ( _`*`_ `* $url`, _`*`_ `$content` ) ====
 Register a page
+ ==== *public* _void_ *`registerAuth`* ( _string_ `$action`, _string_ `$group` ) ====
+Register an auth group to which this action belongs
  ==== *public* _void_ *`registerURLMap`* ( _string_ `$pattern`, _string_ `$action`, _int_ `$sort` ) ====
 Register an urlmapping
  ==== *public* _void_ *`getHook`* (  ) ====
 Get a Hook
- ==== *public* _void_ *`getPage`* (  ) ====
+ ==== *public* _string_ *`getPage`* ( _`*`_ `* $url` ) ====
 Get a page
  ==== *public* _void_ *`getURLMap`* ( _string_ `$url`, _array_ `$request` ) ====
 Get the mapping for an URL
- ==== *public* _array_ *`getComponenets`* (  ) ====
+ ==== *public* _array_ *`getComponents`* (  ) ====
 Get all components
+ ==== *public* _array_ *`getComponent`* ( _string_ `$name` ) ====
+Get a component
+ ==== *public* _array_ *`getAuths`* (  ) ====
+Get all registered Auth groups
  ==== *public* _bool_ *`hasComponent`* ( _string_ `$component` ) ====
 Check if a component is installed
  ==== *public* _bool_ *`hasPage`* ( _string_ `$pageName`, _string_ `$pageLocation` ) ====
 Check if a page is rgistered
  ==== *public* _bool_ *`hasHook`* ( _string_ `$component`, _string_ `$action`, _string_ `$prepost` ) ====
 Check if a hook is rgistered
+ ==== *public* _void_ *`hasAuth`* ( _string_ `$action`, _array_ `$user` ) ====
+Check if an user can execute the given action
+NOTE: if there is no information on the action, valid is assumed
 == `ForbiddenException` ==
 ===== ,,class,, ForbiddenException ,,extends,, Exception ^File: core/class.Request.inc^ =====
 Exception thrown when you cannot make an call to that action
@@ -461,8 +492,6 @@ Wrap an object or an array containing object in the DataContainer
 Abstract class that handels all the information about a table
  ==== *public* *static* _[DOCCore#Table Table]_ *`init`* ( _string_ `$table` ) ====
 Static function to get a table object
- ==== *protected* _[DOCCore#Table Table]_ *`setURLs`* ( _string_ `$admin`, _string_ `$add`, _string_ `$edit`, _string_ `$delete` ) ====
-Set the urls the Table needs to have for redirection on errors
  ==== *public* _[DOCCore#Table Table]_ *`__construct`* ( _string_ `$name` ) ====
 Constructor for Table
  ==== *public* _[DOCCore#Table Table]_ *`setExternal`* ( _bool_ `$fromExternal` ) ====
@@ -471,7 +500,7 @@ Set if the table is being accessed from an external source.
 Check if the table is being accessed from an external source.
  ==== *public* _[DOCCore#Table Table]_ *`setMultipart`* ( _bool_ `$multipart` ) ====
 Set the multipart so the forms are send with that field
- ==== *public* _[DOCCore#Table Table]_ *`assign`* ( _string_ `$component`, _string_ `$action` ) ====
+ ==== *public* _[DOCCore#Table Table]_ *`assign`* ( _string_ `$component` ) ====
 Assign the table to a component with an action.
  ==== *public* _[DOCCore#Table Table]_ *`addField`* ( _[DOCCoreFields#Field Field]_ `$field`, _int_ `$sort` ) ====
 Add Field to the table

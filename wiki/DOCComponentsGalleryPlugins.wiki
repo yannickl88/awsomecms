@@ -9,8 +9,11 @@ included in the distribution.
 == Index: ==
 *functions*:
  * smarty_function_gallery
+ * smarty_function_galleryindex
 == Contents: ==
 The following functions are located in this package
 === Functions: ===
  ==== _string_ *`smarty_function_gallery`* ( _array_ `$params`, _Smarty_ `$smarty` ) ^File: components/gallery/plugins/function.gallery.php^====
 Show the gallery on the page
+ ==== _string_ *`smarty_function_galleryindex`* ( _array_ `$params`, _Smarty_ `$smarty` ) ^File: components/gallery/plugins/function.galleryindex.php^====
+Show a list of galleries

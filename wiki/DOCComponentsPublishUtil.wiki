@@ -1,0 +1,29 @@
+#labels Documentation
+#summary Documentation for content in the components.publish.util package.
+_Package: 'components.publish.util'_ 
+
+This file is part of the A.W.S.O.M.E.cms distribution.
+Detailed copyright and licensing information can be found
+in the doc/COPYRIGHT and doc/LICENSE files which should be
+included in the distribution.
+== Index: ==
+*classes*:
+ * [DOCComponentsPublishUtil#PublishItem PublishItem]
+ * [DOCComponentsPublishUtil#Publisher Publisher]
+== Contents: ==
+The following classes are located in this package
+=== Classes: ===
+== `PublishItem` ==
+===== ,,class,, PublishItem ^File: components/publisher/util/class.PublishItem.inc^ =====
+Item which is used to standardize input for different tables
+ ==== *public* _void_ *`__construct`* ( _string_ `$id`, _string_ `$title`, _string_ `$message`, _string_ `$linkback`, _int_ `$date`, _string_ `$picture`, _string_ `$type` ) ====
+Constructor
+== `Publisher` ==
+===== ,,interface,, Publisher ^File: components/publisher/util/class.Publisher.inc^ =====
+Publisher interface
+ ==== _bool_ *`publish`* ( _array_ `$request`, _[DOCComponentsPublishUtil#PublishItem PublishItem]_ `$item` ) ====
+Publish an item
+ ==== _bool_ *`canPublish`* ( _string_ `$type` ) ====
+Check if an type can be published by this publisher
+ ==== _string_ *`auth`* ( _array_ `$request` ) ====
+Authenticated if needed to post the request

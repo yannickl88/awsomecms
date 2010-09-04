@@ -8,11 +8,10 @@ _Package: 'default'_
  * generateTranslateable
  * generateNewLangFile
 *classes*:
- * [DOCDefault#FileItem FileItem]
- * [DOCDefault#ImageFolder ImageFolder]
- * [DOCDefault#UploadFolder UploadFolder]
  * [DOCDefault#NewsItem NewsItem]
  * [DOCDefault#NewsFolder NewsFolder]
+ * [DOCDefault#Usage Usage]
+ * [DOCDefault#Cron Cron]
  * [DOCDefault#DeployAction DeployAction]
  * [DOCDefault#Usage Usage]
  * [DOCDefault#Pack Pack]
@@ -28,31 +27,6 @@ The following functions are located in this package
 
 The following classes are located in this package
 === Classes: ===
-== `FileItem` ==
-===== ,,class,, FileItem ,,extends,, [DOCComponentsPageUtil#TreeNode TreeNode] ^File: components/file/util/class.FileTree.inc^ =====
-
- ==== *public* _void_ *`__construct`* ( _object_ `$record` ) ====
-Constructor
- ==== *public* _string_ *`toJavascript`* (  ) ====
-Create the javascript code for the tree
-== `ImageFolder` ==
-===== ,,class,, ImageFolder ,,extends,, [DOCComponentsPageUtil#Folder Folder] ^File: components/file/util/class.FileTree.inc^ =====
-
- ==== *public* _void_ *`__construct`* ( _object_ `$record` ) ====
-Constructor
- ==== *public* _void_ *`registerIcons`* (  ) ====
-See parent
- ==== *public* _string_ *`toJavascript`* (  ) ====
-Create the javascript code for the tree
-== `UploadFolder` ==
-===== ,,class,, UploadFolder ,,extends,, [DOCComponentsPageUtil#Folder Folder] ^File: components/file/util/class.FileTree.inc^ =====
-
- ==== *public* _void_ *`__construct`* ( _object_ `$record` ) ====
-Constructor
- ==== *public* _void_ *`registerIcons`* (  ) ====
-See parent
- ==== *public* _string_ *`toJavascript`* (  ) ====
-Create the javascript code for the tree
 == `NewsItem` ==
 ===== ,,class,, NewsItem ,,extends,, [DOCComponentsPageUtil#TreeNode TreeNode] ^File: components/news/util/class.NewsTree.inc^ =====
 The node for the page items
@@ -61,16 +35,37 @@ Constructor
  ==== *public* _void_ *`registerIcons`* (  ) ====
 See parent
  ==== *public* _string_ *`toJavascript`* (  ) ====
-Create the javascript code for the tree
+ Inherited from: [DOCComponentsPageUtil#TreeNode TreeNode]
+Create the javascript code for the node
+ ==== *public* _string_ *`toData`* (  ) ====
+(non-PHPdoc)
 == `NewsFolder` ==
 ===== ,,class,, NewsFolder ,,extends,, [DOCComponentsPageUtil#TreeNode TreeNode] ^File: components/news/util/class.NewsTree.inc^ =====
-
+News root folder which contains all the news items
  ==== *public* _void_ *`__construct`* ( _object_ `$record` ) ====
 Constructor
  ==== *public* _void_ *`registerIcons`* (  ) ====
 See parent
  ==== *public* _string_ *`toJavascript`* (  ) ====
-Create the javascript code for the tree
+ Inherited from: [DOCComponentsPageUtil#TreeNode TreeNode]
+Create the javascript code for the node
+ ==== *public* _string_ *`toData`* (  ) ====
+(non-PHPdoc)
+== `Usage` ==
+===== ,,class,, Usage ,,extends,, [DOCLibs#CLIAction CLIAction] ^File: cron.php^ =====
+This file is part of the A.W.S.O.M.E.cms distribution.
+Detailed copyright and licensing information can be found
+in the doc/COPYRIGHT and doc/LICENSE files which should be
+included in the distribution.
+ ==== *public* _void_ *`exec`* ( _[DOCLibs#CLI CLI]_ `$cli`, _string_ `$action` ) ====
+ Inherited from: [DOCLibs#CLIAction CLIAction]
+Execute the action
+== `Cron` ==
+===== ,,class,, Cron ,,extends,, [DOCLibs#CLIAction CLIAction] ^File: cron.php^ =====
+
+ ==== *public* _void_ *`exec`* ( _[DOCLibs#CLI CLI]_ `$cli`, _string_ `$action` ) ====
+ Inherited from: [DOCLibs#CLIAction CLIAction]
+Execute the action
 == `DeployAction` ==
 ===== _abstract_ ,,class,, DeployAction ,,extends,, [DOCLibs#CLIAction CLIAction] ^File: deploy.php^ =====
 This file is part of the A.W.S.O.M.E.cms distribution.

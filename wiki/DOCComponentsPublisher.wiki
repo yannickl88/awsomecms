@@ -1,0 +1,31 @@
+#labels Documentation
+#summary Documentation for content in the components.publisher package.
+_Package: 'components.publisher'_ 
+
+This file is part of the A.W.S.O.M.E.cms distribution.
+Detailed copyright and licensing information can be found
+in the doc/COPYRIGHT and doc/LICENSE files which should be
+included in the distribution.
+== Index: ==
+*classes*:
+ * [DOCComponentsPublisher#PublishedTable PublishedTable]
+== Contents: ==
+The following classes are located in this package
+=== Classes: ===
+== `PublishedTable` ==
+===== ,,class,, PublishedTable ,,extends,, [DOCCore#Table Table] ^File: components/publisher/class.PublishedTable.inc^ =====
+Table to keep track of published items
+ ==== *public* _void_ *`__construct`* (  ) ====
+Constructor
+ ==== *protected* _void_ *`select`* ( _[DOCCore#SQLQuery SQLQuery]_ `$query`, _object_ `$data` ) ====
+ Inherited from: [DOCCore#Table Table]
+Additional Select data
+ ==== *protected* _void_ *`insert`* ( _[DOCCore#SQLQuery SQLQuery]_ `$query`, _object_ `$data` ) ====
+ Inherited from: [DOCCore#Table Table]
+Additional Insert data
+ ==== *protected* _void_ *`update`* ( _[DOCCore#SQLQuery SQLQuery]_ `$query`, _object_ `$data` ) ====
+ Inherited from: [DOCCore#Table Table]
+Additional Update data
+ ==== *protected* _void_ *`delete`* ( _[DOCCore#SQLQuery SQLQuery]_ `$query`, _object_ `$data` ) ====
+ Inherited from: [DOCCore#Table Table]
+Additional Delete data
