@@ -29,13 +29,6 @@ class NewsTable extends Table
         $this->addField(new Field("news_tag", "Tag"), 4);
         $this->addField(new TextField("news_text", "Content"), 5);
         $this->setTitle("[news_title]");
-        
-        $this->setURLs(
-            Config::get('newsadmin', 'newsadmin', 'admin'),
-            Config::get('newsadd', 'newsadd', 'admin'),
-            Config::get('newsedit', 'newsedit', 'admin'),
-            Config::get('newsdelete', 'newsdelete', 'admin')
-        );
     }
     
     protected function select($query, $data = null) 
