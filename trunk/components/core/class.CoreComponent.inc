@@ -125,11 +125,23 @@ class CoreComponent extends Component
             }
             
             file_put_contents(getFrameworkRoot().'/core/layoutmap.conf', $data);
-            $this->redirect(array($this, 'corelayout'));
+            $this->redirect(array($this, 'layout'));
         }
         else
         {
-            $smarty->assign("maping", Config::get("layoutmap", array()));
+            $map = array();
+            
+            if(file_exists(getFrameworkRoot().'/core/layoutmap.conf'))
+            {
+                $data = file(getFrameworkRoot().'/core/layoutmap.conf');
+                
+                foreach($data as $line)
+                {
+                    $map[] = explode(" ", trim($line));
+                }
+            }
+            
+            $smarty->assign("maping", $map);
         }
     }
     /**
