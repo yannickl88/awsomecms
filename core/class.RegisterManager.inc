@@ -112,10 +112,16 @@ class RegisterManager
             $this->auth = array();
 
             //Load the components
-            $result = SQLQuery::doSelect()
-            ->table('components')
-            ->orderBy("component_name")
-            ->exec();
+            try {
+                $result = SQLQuery::doSelect()
+                    ->table('components')
+                    ->orderBy("component_name")
+                    ->exec();
+            }
+            catch(SQLExeption $e)
+            {
+                return; //seems we are not properly installed (yet)
+            }
 
             while($row = $result->getRow())
             {
