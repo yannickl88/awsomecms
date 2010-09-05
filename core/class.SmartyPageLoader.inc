@@ -195,6 +195,8 @@ class SmartyPageLoader
             $pageName = array_pop($pageArray);
             $pageLocation = implode('/', $pageArray);
             
+            if($pageLocation != "") $pageLocation .= "/";
+            
             $result = SQLQuery::doSelect()
             ->table('pages')
             ->where('page_name', $pageName)
@@ -253,6 +255,8 @@ class SmartyPageLoader
                 $pageArray = explode('/', $tpl_name);
                 $pageName = array_pop($pageArray);
                 $pageLocation = implode('/', $pageArray);
+                
+                if($pageLocation != "") $pageLocation .= "/";
                 
                 $result = SQLQuery::doSelect()
                 ->table('pages')
