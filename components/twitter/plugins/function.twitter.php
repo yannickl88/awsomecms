@@ -22,39 +22,25 @@
  */
 function smarty_function_twitter($params, &$smarty)
 {
-    include_once Config::get('websiteroot', '.').'/../components/twitter/util/class.Twitter.inc';
+    $username = rawurlencode(Config::get("username", "", "twitter"));
+    $url = "http://api.twitter.com/1/statuses/user_timeline.json?screen_name={$username}&count=1";
 
-    $twitter = new Twitter(Config::get("username", "", "twitter"), Config::get("password", "", "twitter"));
-
-    if(!isset($_SESSION['twitter']['statuses']))
+    if(!isset($_SESSION['twitter']['status']))
     {
-        try
-        {
-            $_SESSION['twitter']['statuses'] = $twitter->getUserTimeline();
-            $statuses = $_SESSION['twitter']['statuses'];
-        }
-        catch(Exception $e)
-        {
-            $statuses = array(array(
-                "text" => $e->getMessage(),
-                "created_at" => time()
-            ));
-        }
+        $_SESSION['twitter']['status'] = json_decode(file_get_contents($url));
     }
-    else 
-    {
-        $statuses = $_SESSION['twitter']['statuses'];
-    }
+    $statuses = $_SESSION['twitter']['status'];
 
-    $text = $statuses[0]['text'];
+    $text = $statuses[0]->text;
 
     //parse for the extra stuff
     $text = preg_replace('/http:\/\/(www\.)?[a-zA-Z-\.0-9]*\.[a-z\.]{2,5}(\/[.\/\S]*)?/m', '<a href="$0" rel="external">$0</a>', $text); //link
     $text = preg_replace('/@([.\S]*)/', '<a href="http://twitter.com/$1" rel="external">$0</a>', $text); //user
+    $text = preg_replace('/#([.\S]*)/', '<a href="http://twitter.com/#search?q=%23$1" rel="external">$0</a>', $text); //hashtags
 
     $smarty->assign("message", $text);
     $smarty->assign("url", "http://twitter.com/".Config::get("username", "", "twitter"));
-    $smarty->assign("time", date("H:m n/j/Y", $statuses[0]['created_at']));
+    $smarty->assign("time", date("H:m n/j/Y", parse_str($statuses[0]->created_at)));
 
     return $smarty->fetch("twitter/twitter.tpl");
 }
