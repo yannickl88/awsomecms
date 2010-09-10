@@ -1,0 +1,34 @@
+#summary The requirements for version 2.0 of the CMS.
+#labels Phase-Requirements
+
+After almost 1 year of active development and shaping the CMS to what it is today; it is time to reevaluate and see where we want to go from here on. What we want is to redefine the requirements that the CMS should for fill and see in how much it matches the current features.
+
+= Requirements =
+MoSCoW
+== Functional requirements ==
+Requirements which are directly related to the user
+=== Content Management ===
+ # The user must be able to add, edit and remove a page
+ # The user must be able to upload files
+ # The user must use a template engine for the HTML pages
+ # The user should be able to define page types
+ # The user should be able to define the layout of a page based on the page type
+ # The user should be able to reference/include files in page
+ # The user should be able to format pages using a text-editor (WYSIWIG)
+ # The user could be able to re-use content for other purposes
+== System requirements ==
+Requirements which are used for the application flow and components
+=== Content Management ===
+ # The system must have a location-based page structure
+ # The system must have a layout file for each page type
+ # The system should not allow duplicate pages on the same location
+=== Infrastructure ===
+ # The system must use a meta-table like way for interacting with the the database
+ # The system should contain validation of input
+ # The system could have a restful interface
+=== Components ===
+ # The system must be extentable with plugin like programs
+ # The system should only load plugins when needed
+ # The system should allow for components to add the page listings
+== Component requirements ==
+ # A components should be able to installed from an external location
