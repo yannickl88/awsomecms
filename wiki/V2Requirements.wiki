@@ -1,5 +1,5 @@
 #summary The requirements for version 2.0 of the CMS.
-#labels Phase-Requirements
+#labels Phase-Requirements,v2
 
 After almost 1 year of active development and shaping the CMS to what it is today; it is time to reevaluate and see where we want to go from here on. What we want is to redefine the requirements that the CMS should for fill and see in how much it matches the current features.
 
