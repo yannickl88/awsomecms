@@ -16,6 +16,7 @@ Requirements which are directly related to the user
  # The user should be able to reference/include files in page
  # The user should be able to format pages using a text-editor (WYSIWIG)
  # The user could be able to re-use content for other purposes
+ # The user could be able to publish content on other sites
 == System requirements ==
 Requirements which are used for the application flow and components
 === Content Management ===
