@@ -1,5 +1,5 @@
 #summary Design of table architecture
-#labels Phase-Design
+#labels Phase-Design,v2
 All Design aspects of the tables for v2
 
 == Table Definition ==
