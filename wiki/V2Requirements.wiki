@@ -23,13 +23,20 @@ Requirements which are used for the application flow and components
  # The system must have a location-based page structure
  # The system must have a layout file for each page type
  # The system should not allow duplicate pages on the same location
+ # The system should be able to generate a sitemap.xml
 === Infrastructure ===
  # The system must use a meta-table like way for interacting with the the database
  # The system should contain validation of input
  # The system could have a restful interface
+ # The system could be installed as a service (rather then a website)
 === Components ===
  # The system must be extentable with plugin like programs
+ # The system must copy site specific content from the install folders to the site root
  # The system should only load plugins when needed
  # The system should allow for components to add the page listings
+ # The system could be configured to pull data externally for some components
 == Component requirements ==
- # A components should be able to installed from an external location
+ # A component must be able to pre-hook another component action
+ # A component must be able to post-hook another component action
+ # A component must have an install folder which contains site specific content
+ # A component should be able to installed from an external location
