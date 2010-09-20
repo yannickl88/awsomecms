@@ -11,6 +11,7 @@ Requirements which are directly related to the user
  # The user must be able to add, edit and remove a page
  # The user must be able to upload files
  # The user must use a template engine for the HTML pages
+ # The user must be able to login to the front and backend
  # The user should be able to define page types
  # The user should be able to define the layout of a page based on the page type
  # The user should be able to reference/include files in page
