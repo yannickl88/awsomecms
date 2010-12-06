@@ -141,15 +141,22 @@ class SmartyPageLoader
             {
                 $smarty_obj->assign('content', $smarty_obj->fetch("{$url}.tpl"));
             }
-
+            
             $robotmap = Config::get('robots', array());
 
             foreach($robotmap as $map)
             {
                 if(preg_match("/".$map."/i", $_SERVER['HTTP_USER_AGENT']) > 0)
                 {
-                    Debugger::getInstance()->setRobot($map);
-                    return $smarty_obj->fetch("robot_layout.tpl");
+                    if(file_exists("{$smarty_obj->template_dir}/robot_layout.tpl")) //check for layout file
+                    {
+                        Debugger::getInstance()->setRobot($map);
+                        return $smarty_obj->fetch("robot_layout.tpl");
+                    }
+                    else
+                    {
+                        Debugger::getInstance()->error("Cannot find the required 'robot_layout.tpl' file.");
+                    }
                 }
             }
 
