@@ -31,6 +31,13 @@ class PrivilegesTable extends Table
         parent::__construct("privileges");
         $this->assign("users");
         
+        $componentObj = Component::init($this->component);
+        
+        $this->adminURL = makeLink(array($componentObj, "privadmin"));
+        $this->addURL = makeLink(array($componentObj, "privadd"));
+        $this->editURL = makeLink(array($componentObj, "privedit"));
+        $this->deleteURL = makeLink(array($componentObj, "privdelete"));
+        
         $this->addField(new IntField("privilege_id", Field::INDEX|Field::AUTOKEY));
         $this->addField(new Field("privilege_name"), 1);
         $this->addField(new AuthsField("privilege_auths", Field::HIDE_VIEW|Field::OPTIONAL|Field::FORCEUPDATE), 2);
