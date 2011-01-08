@@ -13,6 +13,7 @@
  * @version $Revision$
  */
 import('/core/class.Component.inc');
+import('/core/class.Authentication.inc');
 
 /**
  * User component and the actions that it can do.
