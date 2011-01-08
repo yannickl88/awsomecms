@@ -40,7 +40,16 @@ function smarty_function_twitter($params, &$smarty)
 
     $smarty->assign("message", $text);
     $smarty->assign("url", "http://twitter.com/".Config::get("username", "", "twitter"));
-    $smarty->assign("time", date("H:m n/j/Y", parse_str($statuses[0]->created_at)));
+    
+    $smarty->assign("time", date("H:i n/j/Y", parseTwitterDateString($statuses[0]->created_at)));
 
     return $smarty->fetch("twitter/twitter.tpl");
+}
+
+function parseTwitterDateString($string)
+{
+    $m = array();
+    preg_match('/([A-Z]{1}[a-z]{2}) ([A-Z]{1}[a-z]*) ([0-9]*) ([0-9]*):([0-9]*):([0-9]*) \+([0-9]*) ([0-9]*)/', $string, $m);
+    
+    return strtotime("{$m[1]}, {$m[3]} {$m[2]} {$m[8]} {$m[4]}:{$m[5]}:{$m[6]} +{$m[7]}");
 }
