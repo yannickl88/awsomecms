@@ -44,6 +44,7 @@ class LocationField extends Field
     protected function toHTML_add()
     {
         $smarty = Controller::getInstance()->getSmarty();
+        $smarty->loadPlugin("smarty_function_admintree");
         
         $html = "";
         $html .= smarty_function_admintree(array("javascript" => $this->getName(), "folderonly" => !$this->displayPages, "types" => 1), $smarty);
@@ -57,6 +58,7 @@ class LocationField extends Field
     protected function toHTML_edit()
     {
         $smarty = Controller::getInstance()->getSmarty();
+        $smarty->loadPlugin("smarty_function_admintree");
         
         $html = "";
         $html .= smarty_function_admintree(array("javascript" => $this->getName(), "folderonly" => !$this->displayPages, "types" => 1), $smarty);
