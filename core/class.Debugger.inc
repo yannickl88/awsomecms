@@ -31,6 +31,8 @@ class Debugger
     private $logs;
     private $currentRobot;
     private $type;
+    private $debugID;
+    private $stackTraces;
     
     /**
      * singelton
@@ -52,8 +54,16 @@ class Debugger
     {
         $this->currentRobot = null;
         $this->logs = array();
+        $this->stackTraces = array();
         $this->log("Debugger initialized");
         $this->type = Debugger::HTML;
+        
+        if(empty($_SESSION["DEBUGID"]))
+        {
+            //create a debug ID
+            $_SESSION["DEBUGID"] = md5(rand()*microtime());
+        }
+        $this->debugID = $_SESSION["DEBUGID"];
     }
     /**
      * Set the robot that was used when visiting the site
@@ -70,13 +80,13 @@ class Debugger
      * @param string $message
      * @param int $level
      */
-    public function log($message, $level = Debugger::LOG)
+    public function log($message, $level = Debugger::LOG, $stackTraceID = -1)
     {
         global $start;
         
         $timestamp = round(microtime(true) - $start, 2);
         
-        $this->logs[] = array($level, "[{$timestamp}sec] - {$message}");
+        $this->logs[] = array($level, "[{$timestamp}sec] - {$message}", $stackTraceID);
         
         if($this->type == Debugger::CLI && $level >= 4)
         {
@@ -90,7 +100,13 @@ class Debugger
      */
     public function warning($message)
     {
-        $this->log($message, Debugger::WARNING);
+        $stackTraceID = -1;
+        if(Config::get('debug', 0, 'debug') > 1)
+        {
+            $stackTraceID = count($this->stackTraces);
+            $this->stackTraces[] = debug_backtrace();
+        }
+        $this->log($message, Debugger::WARNING, $stackTraceID);
     }
     /**
      * Add a error message
@@ -99,7 +115,13 @@ class Debugger
      */
     public function error($message)
     {
-        $this->log($message, Debugger::ERROR);
+        $stackTraceID = -1;
+        if(Config::get('debug', 0, 'debug') > 0)
+        {
+            $stackTraceID = count($this->stackTraces);
+            $this->stackTraces[] = debug_backtrace();
+        }
+        $this->log($message, Debugger::ERROR, $stackTraceID);
     }
     /**
      * Add a notice message
@@ -108,7 +130,13 @@ class Debugger
      */
     public function notice($message)
     {
-        $this->log($message, Debugger::NOTICE);
+        $stackTraceID = -1;
+        if(Config::get('debug', 0, 'debug') > 1)
+        {
+            $stackTraceID = count($this->stackTraces);
+            $this->stackTraces[] = debug_backtrace();
+        }
+        $this->log($message, Debugger::NOTICE, $stackTraceID);
     }
     /**
      * Converet the debugger to a string representation
@@ -134,6 +162,10 @@ class Debugger
     {
         global $start;
         $debug = '';
+        
+        // cache the debug stacktrace
+        if(count($this->stackTraces) > 0)
+        Cache::set("debug_{$this->debugID}", $this->stackTraces);
         
         $baseLevel = Debugger::LOG;
         
@@ -179,7 +211,12 @@ class Debugger
                     break;
             }
             
-            $debug .= $log[1]."</span>";
+            $debug .= $log[1];
+            if($log[2] > -1)
+            {
+                $debug .= " - <a href='javascript:debug_backtrace(\"{$this->debugID}\", {$log[2]});'>[backtrace]</a>";
+            }
+            $debug .= "</span>";
         }
         
         $timestamp = round(microtime(true) - $start, 2);
@@ -255,6 +292,11 @@ class Debugger
             $('.debugBody').css('display', 'none');
             document.cookie = "debugHide=true; path=/";
         }
+    }
+    
+    function debug_backtrace(debug_ID, trace_ID)
+    {
+        alert(debug_ID + ", " + trace_ID);
     }
 //]]>
 </script>
