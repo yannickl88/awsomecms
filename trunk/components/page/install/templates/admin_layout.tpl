@@ -9,7 +9,6 @@
         <meta name="country" content="United Kingdom" />
         <meta name="geo.country" content="GB" />
         <link type="text/css" rel="stylesheet" href="/css/admin.css" media="screen" />
-        <link type="text/css" rel="stylesheet" href="/css/lightbox.css" media="screen" />
         <link type="text/css" rel="stylesheet" href="/css/datePicker.css" media="screen" />
         <link type="text/css" rel="stylesheet" href="/css/style.css" media="screen" />
         <script type="text/javascript" src="http://www.google.com/jsapi"></script>

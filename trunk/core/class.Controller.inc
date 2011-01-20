@@ -424,6 +424,7 @@ class Controller
             
             if($proxyObject)
             {
+                $data = $request->data;
                 
                 unset($data['username']);
                 unset($data['password']);

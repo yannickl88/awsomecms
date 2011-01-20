@@ -35,8 +35,8 @@ function smarty_function_twitter($params, &$smarty)
 
     //parse for the extra stuff
     $text = preg_replace('/http:\/\/(www\.)?[a-zA-Z-\.0-9]*\.[a-z\.]{2,5}(\/[.\/\S]*)?/m', '<a href="$0" rel="external">$0</a>', $text); //link
-    $text = preg_replace('/@([.\S]*)/', '<a href="http://twitter.com/$1" rel="external">$0</a>', $text); //user
-    $text = preg_replace('/#([.\S]*)/', '<a href="http://twitter.com/#search?q=%23$1" rel="external">$0</a>', $text); //hashtags
+    $text = preg_replace('/@([a-zA-Z0-9_-]*)/', '<a href="http://twitter.com/$1" rel="external">$0</a>', $text); //user
+    $text = preg_replace('/#([a-zA-Z0-9_-]*)/', '<a href="http://twitter.com/#search?q=%23$1" rel="external">$0</a>', $text); //hashtags
 
     $smarty->assign("message", $text);
     $smarty->assign("url", "http://twitter.com/".Config::get("username", "", "twitter"));
