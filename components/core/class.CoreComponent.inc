@@ -292,7 +292,7 @@ class CoreComponent extends Component
     {
         if($request['method'] == 'post')
         {
-            $components = RegisterManager::getComponents();
+            $components = RegisterManager::getInstance()->getComponents();
             
             foreach($components as $component)
             {
@@ -307,6 +307,7 @@ class CoreComponent extends Component
                     $total = 15 - array_sum($request[$key]);
                 }
                 
+                
                 if($total != $component->component_auth)
                 {
                     Table::init('core.components')
@@ -318,8 +319,8 @@ class CoreComponent extends Component
                 }
             }
             
-            Config::getInstance()->reloadComponenets();
-            $this->redirect(array($this, 'components'));
+            RegisterManager::getInstance()->reload();
+            //$this->redirect(array($this, 'components'));
         }
         else
         {

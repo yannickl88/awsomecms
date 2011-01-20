@@ -296,7 +296,8 @@ class Debugger
     
     function debug_backtrace(debug_ID, trace_ID)
     {
-        alert(debug_ID + ", " + trace_ID);
+        window.open("/debug.php?id="+debug_ID+"&key="+trace_ID, "_blank", "width=500,height=600");
+        return false;
     }
 //]]>
 </script>
