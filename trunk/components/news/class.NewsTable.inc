@@ -57,6 +57,7 @@ class NewsTable extends Table
     protected function select($query, $data = null) 
     {
         $query->orderby('news_date', "DESC");
+        $query->orderby('news_id', "DESC");
         
         if($data)
         {

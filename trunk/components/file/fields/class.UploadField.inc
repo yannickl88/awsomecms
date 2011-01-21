@@ -154,6 +154,22 @@ class UploadField extends Field
         
         return array($newUrl, $thumb);
     }
+    private function calcBoundingBox($imageSize, $maxSize)
+    {
+        $ratio = $imageSize[0] / $imageSize[1];
+        
+        if($imageSize[0] > $maxSize[0]) {
+            $imageSize[0] = $maxSize[0];
+            $imageSize[1] = floor($maxSize[0] / $ratio);
+        }
+        
+        if($imageSize[1] > $maxSize[1]) {
+            $imageSize[1] = $maxSize[1];
+            $imageSize[0] = floor($maxSize[1] * $ratio);
+        }
+        
+        return $imageSize;
+    }
     private function createThumb($filename, $fileLoc)
     {
         $info = getimagesize($fileLoc);
@@ -162,7 +178,7 @@ class UploadField extends Field
         {
             $src = null;
             $newUrl = $this->uploadDir.$this->parent->getName()."/".substr($filename, 0, strrpos($filename, "."))."_thumb".substr($filename, strrpos($filename, "."));
-            $maxDimentions = array(100, 100);
+            $maxDimentions = explode("x", Config::get("thumbsize", "100x100", "file"));
             
             switch($info[2])
             {
@@ -189,17 +205,12 @@ class UploadField extends Field
             
             //make a resize version to crop from
             $newSrc = imagecreatetruecolor($maxDimentions[0], $maxDimentions[1]);
-            if($info[0] > 400)
-            {
-                $tmpSrc = imagecreatetruecolor(400, 400*$ratio);
-                imagecopyresampled($tmpSrc, $src, 0, 0, 0, 0, 400, 400*$ratio, $info[0], $info[1]);
-                imagecopy($newSrc, $tmpSrc, 0, 0, (200 - ($maxDimentions[0]/2)), (200 - ($maxDimentions[1]/2)), 400, 400);
-                imagedestroy($tmpSrc);
-            }
-            else
-            {
-                imagecopy($newSrc, $src, 0, 0, (($info[0]/2) - ($maxDimentions[0]/2)), ($info[1]/2 - ($maxDimentions[1]/2)), $info[0], $info[1]);
-            }
+            $rInfo = $this->calcBoundingBox($info, array(400, 400));
+            
+            $tmpSrc = imagecreatetruecolor($rInfo[0], $rInfo[1]);
+            imagecopyresampled($tmpSrc, $src, 0, 0, 0, 0, $rInfo[0], $rInfo[1], $info[0], $info[1]);
+            imagecopy($newSrc, $tmpSrc, 0, 0, floor($rInfo[0]/2 - ($maxDimentions[0]/2)), floor($rInfo[1]/2 - ($maxDimentions[1]/2)), $rInfo[0], $rInfo[1]);
+            imagedestroy($tmpSrc);
             
             imagepng($newSrc, Config::get("websiteroot", "/").$newUrl);
             

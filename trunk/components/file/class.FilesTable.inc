@@ -51,7 +51,8 @@ class FilesTable extends Table
      */
     protected function select($query, $data = null)
     {
-        $query->orderBy("file_name", "desc");
+        $query->orderBy("file_date", "desc");
+        $query->orderBy("file_id", "desc");
         
         if($data)
         {
