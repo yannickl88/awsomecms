@@ -30,8 +30,17 @@ function smarty_function_twitter($params, &$smarty)
         $_SESSION['twitter']['status'] = json_decode(file_get_contents($url));
     }
     $statuses = $_SESSION['twitter']['status'];
-
-    $text = $statuses[0]->text;
+    
+    if(isset($statuses->error))
+    {
+        $text = "There was an error at twitter.";
+        $smarty->assign("time", date("H:i n/j/Y"));
+    }
+    else
+    {
+        $smarty->assign("time", date("H:i n/j/Y", parseTwitterDateString($statuses[0]->created_at)));
+        $text = $statuses[0]->text;
+    }
 
     //parse for the extra stuff
     $text = preg_replace('/http:\/\/(www\.)?[a-zA-Z-\.0-9]*\.[a-z\.]{2,5}(\/[.\/\S]*)?/m', '<a href="$0" rel="external">$0</a>', $text); //link
@@ -40,8 +49,6 @@ function smarty_function_twitter($params, &$smarty)
 
     $smarty->assign("message", $text);
     $smarty->assign("url", "http://twitter.com/".Config::get("username", "", "twitter"));
-    
-    $smarty->assign("time", date("H:i n/j/Y", parseTwitterDateString($statuses[0]->created_at)));
 
     return $smarty->fetch("twitter/twitter.tpl");
 }
