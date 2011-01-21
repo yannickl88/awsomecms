@@ -43,8 +43,8 @@ var Editor = function(element, options)
             this.element.parent().append(this.resizebar);
             
             //bind the resize
-            this.resizebar.bind("selectstart", function(e) { return false });
-            this.resizebar.bind("mousedown", {editor: this}, function(e) { e.data.editor.resize(e); return false });
+            this.resizebar.bind("selectstart", function(e) { return false;});
+            this.resizebar.bind("mousedown", {editor: this}, function(e) { e.data.editor.resize(e); return false;});
         }
         
         if(options != undefined)
@@ -108,12 +108,12 @@ var Editor = function(element, options)
         {
             var first = text.substring(0, range.start) + start + text.substring(range.start, range.end);
             
-            this.element.val(first + end + text.substring(range.end))
+            this.element.val(first + end + text.substring(range.end));
             caret = first.length;
         }
         else
         {
-            this.element.val(text.substring(0, range.start) + start + end + text.substring(range.end))
+            this.element.val(text.substring(0, range.start) + start + end + text.substring(range.end));
             caret = range.end + (start + end).length;
         }
         
@@ -206,7 +206,7 @@ var Editor = function(element, options)
         this.toolbar.append(html);
     };
     this.init(element, options); //call constructor
-}
+};
 
 /**
  * TODO refactor in Object the functions:
@@ -431,7 +431,7 @@ var Tree = function(element, javascript)
                 }
                 else
                 {
-                    this.children[x].html.before(folder.html)
+                    this.children[x].html.before(folder.html);
                     this.children.splice(x, 0, folder);
                 }
                 folder.setParent(this);
@@ -476,7 +476,7 @@ var Tree = function(element, javascript)
     };
 
     this.init(element);
-}
+};
 // Constants
 Tree.PAGE = 1;
 Tree.PAGE_FOLDER = 2;
@@ -552,7 +552,7 @@ var TreeItem = function(name, location, url, root, icon, actions, contentType)
     };
     
     this.init();
-}
+};
 /**
  * Folder item for a tree
  */
@@ -729,7 +729,7 @@ var TreeFolder = function(name, location, root, icon, actions, contentType, isRo
             }
             else
             {
-                this.children[x].html.before(folder.html)
+                this.children[x].html.before(folder.html);
                 this.children.splice(x, 0, folder);
             }
             folder.setParent(this);
@@ -853,7 +853,7 @@ var TreeFolder = function(name, location, root, icon, actions, contentType, isRo
     };
     
     this.init();
-}
+};
 /**
  * Actions for a tree node, these are icons displayed to the right when hovered over the node
  * 
@@ -873,10 +873,10 @@ var TreeAction = function(icon, url, root)
     this.init = function()
     {
         this.html = $("<a class='treeIcon "+this.icon+"' href='"+this.url+"'><img src='"+this.root.getIcon(this.icon)+"' alt='tree action'/></a>");
-    }
+    };
     
     this.init();
-}
+};
 var FileUpload = function(element) {
     this.element = element;
     
@@ -1015,7 +1015,7 @@ var FileUpload = function(element) {
                         else
                         {
                             node.icon.attr("src", node.root.getIcon(u.getType(data.type)));
-                            node.link.attr("href", data.editLink)
+                            node.link.attr("href", data.editLink);
                             node.addAction(new TreeAction("view", data.viewLink, node.root));
                             node.addAction(new TreeAction("delete", data.deleteLink, node.root));
                         }
@@ -1034,7 +1034,7 @@ var FileUpload = function(element) {
     };
     
     this.init(); //call constructor
-}
+};
 
 /**
  * TODO refactor in Object the functions:
@@ -1220,4 +1220,4 @@ var TagField = function(element, tags)
         return false;
     };
     this.init(element, tags); //call constructor
-}
+};
