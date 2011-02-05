@@ -74,7 +74,7 @@ class Config
         global $websiteroot;
         $frameworkroot = getFrameworkRoot();
         
-        $this->data = array();
+        $this->data = array("debug" => array("debug" => 0), "admin" => array("location" => "/"));
         
         if(file_exists($websiteroot.'/config.ini'))
         {
