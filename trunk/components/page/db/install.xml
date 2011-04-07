@@ -42,8 +42,8 @@
         <page_name>index</page_name>
         <page_location>/</page_location>
         <page_template>&lt;h1&gt;Welcome&lt;/h1&gt;&#13;
-&lt;p&gt;Installation was a success&lt;/p&gt;</page_template>
-        <page_timestamp>2010-08-01 15:52:32</page_timestamp>
+&lt;p&gt;Installation was a success&lt;/p&gt;&lt;p&gt;{gallery name="asf"}&lt;/p&gt;</page_template>
+        <page_timestamp>2010-09-05 12:23:22</page_timestamp>
         <page_html>1</page_html>
       </entry>
     </data>
