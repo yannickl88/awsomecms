@@ -34,7 +34,6 @@ abstract class DeployAction extends CLIAction
     {
         $this->helper = new InstallHelper();
         $this->location = dirname(__FILE__);
-        var_dump($this->location);
     }
     /**
      * (non-PHPdoc)
@@ -337,6 +336,7 @@ class Release extends DeployAction
 
 
         //archive
+        $suffix = "";
         if($action != 'release')
         {
             $suffix = '-'.$action;
