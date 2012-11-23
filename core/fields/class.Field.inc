@@ -25,6 +25,7 @@ class Field
     const EDIT      = 2;
     const VIEW      = 3;
     const DELETE    = 4;
+    const DISABLED  = 5;
     
     //fieldoptions
     const HIDE_VIEW     = 1;
@@ -41,6 +42,8 @@ class Field
     const AUTOKEY       = 256; //auto_increment is turned on at the database
     const FORCEUPDATE   = 512;
     const DUMMY         = 1024; //does not get's added to the selection list
+    const NOWHERE       = 2048; // Is not included in the where
+    const FORCESELECT    = 4096;
     
     protected $parent;
     protected $name;
@@ -114,6 +117,24 @@ class Field
     public function hasFlag($flag)
     {
         return Config::hasFlag($this->style, $flag);
+    }
+    /**
+     * Add the give flag from the field
+     * 
+     * @param int $flag
+     */
+    public function addFlag($flag)
+    {
+        $this->style |= $flag;
+    }
+    /**
+     * Remove the give flag from the field
+     * 
+     * @param int $flag
+     */
+    public function removeFlag($flag)
+    {
+        $this->style &= ~$flag;
     }
     /**
      * Get the name of this field
@@ -451,6 +472,9 @@ class Field
                     return $this->toHTML_edit();
                 }
                 break;
+            case Field::DISABLED:
+                return $this->toHTML_disabled();
+                break;
             case Field::VIEW:
             case Field::DELETE:
             default:
@@ -481,7 +505,7 @@ class Field
             $value = $this->getValue();
         }
         
-        return "<input type='text' class='cmsfield' name='{$this->getName()}' id='{$this->getName()}' value='".htmlentities($value, ENT_QUOTES)."'/>";
+        return "<input type='text' class='cmsfield' name='{$this->getName()}' id='{$this->getName()}' value='".htmlentities($value, ENT_QUOTES, "UTF-8")."'/>";
     }
     /**
      * Create a HTML representation of edit field
@@ -490,7 +514,7 @@ class Field
      */
     protected function toHTML_edit()
     {
-        return "<input type='text' class='cmsfield' name='{$this->getName()}' id='{$this->getName()}' value='".htmlentities($this->getValue(), ENT_QUOTES)."'/>";
+        return "<input type='text' class='cmsfield' name='{$this->getName()}' id='{$this->getName()}' value='".htmlentities($this->getValue(), ENT_QUOTES, "UTF-8")."'/>";
     }
     /**
      * Create a HTML representation of hidden field
@@ -499,7 +523,7 @@ class Field
      */
     protected function toHTML_edit_hidden()
     {
-        return "<input type='hidden' class='cmsfield' name='{$this->getName()}' id='{$this->getName()}' value='".htmlentities($this->getValue(), ENT_QUOTES)."'/>";
+        return "<input type='hidden' class='cmsfield' name='{$this->getName()}' id='{$this->getName()}' value='".htmlentities($this->getValue(), ENT_QUOTES, "UTF-8")."'/>";
     }
     /**
      * Create a HTML representation of view field
@@ -509,6 +533,15 @@ class Field
     protected function toHTML_view()
     {
         return $this->getValue();
+    }
+    /**
+     * Create a HTML representation of disabled field
+     * 
+     * @return string
+     */
+    protected function toHTML_disabled()
+    {
+        return $this->toHTML_view();
     }
     /**
      * get the javascript for this field
@@ -527,7 +560,7 @@ class Field
      */
     public function select($query, $data = array())
     {
-        if($this->hasFlag(Field::DUMMY))
+        if($this->hasFlag(Field::DUMMY) && !$this->hasFlag(Field::FORCESELECT))
         {
             return;
         }

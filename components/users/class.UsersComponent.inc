@@ -107,7 +107,7 @@ class UsersComponent extends Component implements AuthComponent
     {
         if($request['method'] == 'post')
         {
-            $this->login($request, $_GET['url']);
+            $this->login($request, "/".$_GET['url']);
         }
     }
     /**
@@ -121,7 +121,7 @@ class UsersComponent extends Component implements AuthComponent
     {
         if($request['method'] == 'post')
         {
-            $this->login($request, Config::get('location', 'location', 'admin'));
+            $this->login($request, "/".Config::get('location', 'location', 'admin'));
         }
     }
     /**
@@ -369,6 +369,10 @@ class UsersComponent extends Component implements AuthComponent
     {
         $menu->addChild(new MenuItem("users", array($this, 'admin')));
         $menu->addChild(new MenuItem("usersadmin", array($this, 'admin'), "users"));
-        $menu->addChild(new MenuItem("privadmin", array($this, 'privadmin'), "users"));
+        
+        if(Config::get("usersMenu", true, "menu"))
+        {
+            $menu->addChild(new MenuItem("privadmin", array($this, 'privadmin'), "users"));
+        }
     }
 }

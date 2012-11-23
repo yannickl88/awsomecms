@@ -48,6 +48,17 @@ class Language
         return self::getInstance()->getText($key, $lang);
     }
     /**
+     * Check if there is a language key
+     *
+     * @param String $key
+     * @param String $lang
+     * @return Boolean
+     */
+    public static function has($key, $lang = false)
+    {
+        return self::getInstance()->hasText($key, $lang);
+    }
+    /**
      * Get a language string from a key
      * 
      * @param String $key
@@ -66,10 +77,29 @@ class Language
         {
             return $map[$key];
         }
-        else
+        else if(Config::get("showPlaceholder", false, "lang"))
         {
             return "{{$key}}";
         }
+        else
+            return "";
+    }
+    /**
+     * Check if there is a language string from a key
+     * 
+     * @param String $key
+     * @param String $lang
+     * @return Boolean
+     */
+    public function hasText($key, $lang = false)
+    {
+        if(!$lang)
+        {
+            $lang = Config::get("lang", "en", "lang");
+        }
+        $map = $this->getLangMap($lang);
+        
+        return isset($map[$key]);
     }
     /**
      * Get mapped keys to string for a given language
@@ -96,6 +126,20 @@ class Language
         $this->lang[$lang] = (array) json_decode(file_get_contents(getFrameworkRoot()."/core/lang/{$lang}.lang"));
         
         $components = RegisterManager::getInstance()->getComponents();
+        
+        if(file_exists(Config::get("websiteroot", "/")."/lang/{$lang}.lang"))
+        {
+            $langArr = json_decode(file_get_contents(Config::get("websiteroot", "/")."/lang/{$lang}.lang"));
+            
+            if($langArr != null)
+            {
+                $this->lang[$lang] = array_merge($this->lang[$lang], (array) $langArr);
+            }
+            else
+            {
+                Debugger::getInstance()->warning("could not parse lang file '{/lang/{$lang}.lang'");
+            }
+        }
         
         foreach($components as $component)
         {

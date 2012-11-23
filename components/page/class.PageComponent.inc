@@ -14,6 +14,7 @@
  */
 import('/libs/class.TextSpider.inc');
 import('/core/class.Component.inc');
+import('/components/page/util/class.Tree.inc');
 
 /**
  * The Page component, together with the core component, is this used to show pages and manage them
@@ -40,10 +41,85 @@ class PageComponent extends Component
         $registerManager->registerAuth("page.action_add", "admin");
         $registerManager->registerAuth("page.action_edit", "admin");
         $registerManager->registerAuth("page.action_delete", "admin");
+        $registerManager->registerAuth("page.action_loadTree", "admin");
         
         $registerManager->registerPage(array($this, 'edit'), '{form table="page.pages" form="edit"}');
         $registerManager->registerPage(array($this, 'add'), '{form table="page.pages" form="add"}');
         $registerManager->registerPage(array($this, 'delete'), '{form table="page.pages" form="delete"}');
+        $registerManager->registerPage("search", '{search}');
+        
+        $registerManager->registerURLMap('^\/sitemap\.xml$', 'page.sitemap', 18);
+    }
+    /**
+    * Action for displaying the sitemap
+    *
+    * @param Smarty $smarty
+    * @param SmartyPageLoader $smartyLoader
+    * @param array $request
+    */
+    public function action_sitemap($smarty, $smartyLoader, $request)
+    {
+        $xml = <<<XML
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
+
+XML;
+        //get all the pages;
+        $pages = array();
+        $url = "http://".$_SERVER['SERVER_NAME'];
+        $components = RegisterManager::getInstance()->getComponents();
+        
+        foreach($components as $component => $componentData)
+        {
+            $pages = array_merge($pages, Component::init($component)->getAllPages());
+        }
+        
+        sort($pages);
+        
+        foreach($pages as $page)
+        {
+            $xml .= "  <url>\n";
+            $xml .= "    <loc>".htmlentities($url.$page->loc)."</loc>\n";
+            if(!empty($page->images))
+            {
+                foreach($page->images as $img)
+                {
+                    $xml .= "    <image:image>\n";
+                    $xml .= "      <image:loc>".htmlentities($url.$img)."</image:loc>\n";
+                    $xml .= "    </image:image>\n";
+                }
+            }
+            if(!empty($page->lastmod))
+            {
+                $xml .= "    <lastmod>{$page->lastmod}</lastmod>\n";
+            }
+            if(!empty($page->changefreq))
+            {
+                $xml .= "    <changefreq>{$page->changefreq}</changefreq>\n";
+            }
+            if($page->priority > 0)
+            {
+                $xml .= "    <priority>{$page->priority}</priority>\n";
+            }
+            $xml .= "  </url>\n";
+        }
+
+        $xml .= <<<XML
+</urlset>
+XML;
+        Controller::getInstance()->setOutput($xml);
+    }
+    /**
+     * Action for loading part of the tree
+     * 
+     * @param Smarty $smarty
+     * @param SmartyPageLoader $smartyLoader
+     * @param array $request
+     */
+    public function action_loadTree($smarty, $smartyLoader, $request)
+    {
+        $this->ajax(Tree::getInstance()->getNodesDataUnder($request['path']));
     }
     /**
      * Action for adding a page
@@ -60,9 +136,6 @@ class PageComponent extends Component
                 ->setRecord((object) $request)
                 ->doInsert()
                 ->insertID();
-            
-            $indexer = new TextSpider();
-            $indexer->index($request['page_template'], $request['page_location'].$request['page_name'], $request['page_name'], "page.{$id}");
             
             $this->redirect(array($this, "edit"), array("page_id" => $id));
         }
@@ -81,9 +154,6 @@ class PageComponent extends Component
             Table::init('page.pages')
                 ->setRecord((object) $request)
                 ->doUpdate();
-            
-            $indexer = new TextSpider();
-            $indexer->index($request['page_template'], $request['page_location'].$request['page_name'], $request['page_name'], "page.{$request['page_id']}");
             
             $this->redirect(array($this, "edit"), array("page_id" => $request['page_id']));
         }
@@ -115,9 +185,6 @@ class PageComponent extends Component
                 ->setRecord((object) $request)
                 ->doDelete();
             
-            $indexer = new TextSpider();
-            $indexer->clearByHook("page.{$request['page_id']}");
-
             $this->redirect(Config::get("location", "admin/", "admin"));
         }
         else
@@ -163,5 +230,32 @@ class PageComponent extends Component
         {
             $tree->addChild(new PageItem($row));
         }
+    }
+    /**
+     * (non-PHPdoc)
+     * @see Component::getAllPages()
+     */
+    public function getAllPages()
+    {
+        $table = Table::init("page.pages", "sitemap");
+        $table->setRequest((object) array("where" => array('page_location', "/admin/%", "NOT LIKE")));
+        
+        $pages = array();
+        $result = $table
+        ->doSelect()
+        ->getRows();
+        
+        foreach($result as $row)
+        {
+            $pages[md5($row->page_location.$row->page_name)] = (object) array(
+                "loc" => $row->page_location.$row->page_name,
+                "images" => array(),
+                "lastmod" => date("c", strtotime($row->page_timestamp)),
+                "changefreq" => "",
+                "priority" => 0,
+            );
+        }
+        
+        return $pages;
     }
 }

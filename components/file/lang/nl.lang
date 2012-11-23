@@ -3,6 +3,7 @@
     "field_file_name":      "Naam",
     "field_file_date":      "Datum",
     "field_file_data":      "Bestand",
+    "field_file_location":  "Locatie",
     "field_file_tag":       "Tag",
     "field_file_description":"Beschrijving",
     "images":               "afbeeldingen",

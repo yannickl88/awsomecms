@@ -172,7 +172,8 @@ class Notifications
         {
             unset($this->map["ids"][$id]);
             unset($this->notifications["ids"][$id]);
-            unset($this->map["url"][$url][array_search($id, $this->map["url"][$url])]);
+            if(isset($this->map["url"][$url]))
+                unset($this->map["url"][$url][array_search($id, $this->map["url"][$url])]);
         }
         $this->save();
     }
@@ -233,11 +234,13 @@ class Controller
                 import('/core/class.InvalidFormException.inc');
                 
                 $e = unserialize($_SESSION['FORMERROR']);
+                Debugger::getInstance()->log("Loading InvalidFormException");
                 $url = "/";
                 if(isset($_GET['url']))
                 {
                     $url = "/".$_GET['url'];
                 }
+                
                 if(is_a($e, 'InvalidFormException') && $url == $e->getRedirect())
                 {
                     $this->smarty->assign("FORMERROR", $e);
@@ -275,6 +278,7 @@ class Controller
                 $_SESSION['FORMERROR'] = serialize($e);
                 
                 $url = $e->getRedirect();
+                Debugger::getInstance()->log("Catching InvalidFormException, redirecting to: {$url}");
                 $data = "";
                 
                 foreach($e->getRedirectData() as $key => $value)
@@ -293,6 +297,11 @@ class Controller
                 }
                 
                 $this->setRedirect($url);
+            }
+            catch(UnauthException $e)
+            {
+                header("HTTP/1.0 401 Unauthorized");
+                $this->output = "401 Unauthorized";
             }
             $this->redirect();
             

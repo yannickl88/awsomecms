@@ -8,9 +8,7 @@ import('/components/page/util/class.Tree.inc');
  */
 class NewsItem extends TreeNode
 {
-    private $name;
     private $id;
-    private $location;
     private $viewURL;
     
     /**
@@ -61,18 +59,24 @@ class NewsItem extends TreeNode
     public function toData()
     {
         $component = Component::init("news");
+        
+        $linkEdit = makeLink(array($component, "edit"))."?news_id={$this->id}";
+        $linkDelete = makeLink(array($component, "delete"))."?news_id={$this->id}";
+        $icon = "news";
+        
         $actions = array(
-            array("icon" =>"view", "link" => $this->viewURL),
-            array("icon" =>"delete", "link" => makeLink(array($component, "delete"))."?news_id={$this->id}")
+            array("icon" => "view", "link" => $this->viewURL),
+            array("icon" => "delete", "link" => $linkDelete)
         );
-            
         return array(
+            "classname" => 'TreeNode',
             "name" => $this->name,
             "location" => $this->location,
-            "editLink" => makeLink(array($component, "edit"))."?news_id={$this->id}",
-            "icon" => "news",
+            "url" => $linkEdit,
+            "icon" => $icon,
             "actions" => $actions,
-            "type" => $this->type
+            "contentType" => $this->type,
+            "id" => -1
         );
     }
 }
@@ -81,10 +85,8 @@ class NewsItem extends TreeNode
  * 
  * @author Yannick de Lange <yannick.l.88@gmail.com>
  */
-class NewsFolder extends TreeNode
+class NewsFolder extends Folder
 {
-    private $name;
-    private $location;
     private $realLocation;
     
     /**
@@ -131,12 +133,24 @@ class NewsFolder extends TreeNode
      */
     public function toData()
     {
+        $component = Component::init("news");
+        
+        $linkAdd = makeLink(array($component, "add"));
+        $linkView = makeLink(array($component, "admin"));
+        
+        $actions = array(
+            array("icon" => "add", "link" => $linkAdd),
+            array("icon" => "overview", "link" => $linkView)
+        );
+        
         return array(
+            "classname" => 'TreeFolder',
             "name" => $this->name,
             "location" => $this->location,
             "icon" => "news_folder",
-            "actions" => array(),
-            "type" => $this->type
+            "actions" => $actions,
+            "contentType" => $this->type,
+            "isRootFolder" => false
         );
     }
 }

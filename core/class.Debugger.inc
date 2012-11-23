@@ -146,7 +146,13 @@ class Debugger
     public function __toString() {
         if(Config::get('debug', 0, 'debug') > 0)
         {
-            return $this->renderDebug();
+            try {
+                return $this->renderDebug();
+            }
+            catch (Exception $e)
+            {
+                return $e->getMessage();
+            }
         }
         else
         {

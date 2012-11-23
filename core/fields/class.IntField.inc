@@ -29,7 +29,7 @@ class IntField extends Field
      */
     protected function toHTML_add()
     {
-        return "<input type='text' class='cmsfield' name='{$this->getName()}' id='{$this->getName()}' value='".htmlentities($this->getDefaultValue(), ENT_QUOTES)."' size='5' onkeypress='return form_IntField_handleKey(event);'/>";
+        return "<input type='text' class='cmsfield' name='{$this->getName()}' id='{$this->getName()}' value='".htmlentities($this->getDefaultValue(), ENT_QUOTES, "UTF-8")."' size='5' onkeypress='return form_IntField_handleKey(event);'/>";
     }
     /**
      * (non-PHPdoc)
@@ -37,7 +37,7 @@ class IntField extends Field
      */
     protected function toHTML_edit()
     {
-        return "<input type='text' class='cmsfield' name='{$this->getName()}' id='{$this->getName()}' value='".htmlentities($this->getValue(), ENT_QUOTES)."' size='5' onkeypress='return form_IntField_handleKey(event);'/>";
+        return "<input type='text' class='cmsfield' name='{$this->getName()}' id='{$this->getName()}' value='".htmlentities($this->getValue(), ENT_QUOTES, "UTF-8")."' size='5' onkeypress='return form_IntField_handleKey(event);'/>";
     }
     /**
      * (non-PHPdoc)

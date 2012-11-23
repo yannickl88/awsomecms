@@ -8,5 +8,6 @@
     "field_news_user":      "User",
     "field_news_date":      "Date",
     "field_news_tag":       "Tag",
+    "field_news_hidden":    "Hidden",
     "field_news_text":      "Content"
 }

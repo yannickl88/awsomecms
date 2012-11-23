@@ -2,7 +2,7 @@
 @package:components.comments
 @copyright:(c) 2009-2010 Yannick de Lange
 @licence:http://www.gnu.org/licenses/gpl.txt
-@version:1
+@version:313
 
 COMMENTS:
 A way to add comments to a section or a page. Comments work by hooks; this hook is a way to link the comments with a certain topic, section or page. By default each comment is hooked on a page.

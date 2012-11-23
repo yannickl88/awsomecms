@@ -17,6 +17,7 @@ importField("IntField");
 importField("TextField");
 importField("DateField");
 importField("BooleanField");
+importField("MLangTextField");
 importField("page.LocationField");
 
 /**
@@ -36,8 +37,8 @@ class PagesTable extends Table
         
         $this->addField(new IntField("page_id", Field::INDEX|Field::AUTOKEY));
         $this->addField(new Field("page_name"), 1);
-        $this->addField(new LocationField("page_location"), 2);
-        $this->addField(new TextField("page_template"), 3);
+        $this->addField(new LocationField("page_location", 0, false, 1, true), 2);
+        $this->addField(new MLangTextField("page_template"), 3);
         $this->addField(new DateField("page_timestamp", Field::HIDE));
         $this->addField(new BooleanField("page_html", Field::HIDE|Field::OPTIONAL));
         $this->setTitle("[page_name]");
@@ -86,4 +87,66 @@ class PagesTable extends Table
      * @see core/Table#delete($query, $data)
      */
     protected function delete($query, $data = null) {}
+    
+    /**
+     * (non-PHPdoc)
+     * @see core/Table::postSQL()
+     *
+     * @param SQLRecord $record
+     * @param SQLQuery $query
+     */
+    protected function postSQL(&$record, $query)
+    {
+        if($query->getAction() == "update" || $query->getAction() == "insert")
+        {
+            $row = $record->getRow();
+            $dbRow = $this->doSelect()->getRow();
+            
+            $summary = array("en" => "", "nl" => "");
+            $summary["en"] = substr(BBCodeParser::parse($row->page_template['en'], false, false), 0, 100)."...";
+            $summary["nl"] = substr(BBCodeParser::parse($row->page_template['nl'], false, false), 0, 100)."...";
+            
+            if($query->getAction() == "insert")
+                $id = $record->insertID();
+            else
+            {
+                $data = $this->getRecord();
+                $id = $data[0]->page_id;
+            }
+                
+            $indexer = new TextSpider();
+            $title = array("en" => $row->page_name, "nl" => $row->page_name);
+            if(Language::has($row->page_name, "en"))
+                $title['en'] = Language::get($row->page_name, "en");
+            if(Language::has($row->page_name, "nl"))
+                $title['nl'] = Language::get($row->page_name, "nl");
+            
+            $indexer->index(
+                $row->page_template, 
+                $row->page_location.$row->page_name, 
+                $title,
+                "page.{$id}",
+                $summary
+            );
+        }
+    }
+    
+    /**
+     * (non-PHPdoc)
+     * @see core/Table::preSQL()
+     *
+     * @param SQLRecord $record
+     * @param SQLQuery $query
+     */
+    protected function preSQL(&$record, $query)
+    {
+        if($query->getAction() == "delete")
+        {
+            $data = $this->getRecord();
+            
+            $indexer = new TextSpider();
+            foreach ($data[0]->page_id as $d)
+                $indexer->clearByHook("page.{$d}");
+        }
+    }
 }

@@ -28,8 +28,7 @@ class BooleanField extends IntField
     protected function toHTML_add()
     {
         $html = "";
-        $html .= "<input type='radio' name='{$this->name}' id='{$this->name}' value='0' checked=\"checked\"/> On";
-        $html .= "Off <input type='radio' name='{$this->name}' id='{$this->name}' value='0'/>";
+        $html .= "<input type='checkbox' name='{$this->name}' id='{$this->name}' value='1' checked=\"checked\"/>";
         
         return $html;
     }
@@ -41,20 +40,34 @@ class BooleanField extends IntField
     {
         $html = "";
         
-        $html .= "<input type='radio' name='{$this->name}' id='{$this->name}' value='0'";
-        if($this->value)
+        $html .= "<input type='checkbox' name='{$this->name}' id='{$this->name}' value='1'";
+        if($this->getValue() == 1)
         {
             $html .= " checked=\"checked\"";
         }
-        $html .="/> On";
-        $html .= "Off <input type='radio' name='{$this->name}' id='{$this->name}' value='0'";
-        if(!$this->value)
-        {
-            $html .= " checked=\"checked\"";
-        }
-        $html .= "/>";
+        $html .="/>";
         
         return $html;
+    }
+    /**
+     * (non-PHPdoc)
+     * @see core/fields/Field::setData()
+     *
+     * @param object $record
+     */
+    public function setData($record)
+    {
+        $name = $this->getName();
+        if(isset($record->$name))
+        {
+            $this->setValue($record->$name);
+        }
+        else 
+        {
+            $this->setValue(0);
+        }
+        
+        return $this;
     }
     /**
      * (non-PHPdoc)

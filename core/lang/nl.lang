@@ -24,5 +24,6 @@
     "formerror":            "Het formulier is niet correct ingevuld. Gelieve de volgende velden te controleren",
     "error_notfilledin":    "Veld niet ingevuld",
     "error_notnumber":      "Veld was geen nummer",
+    "error_bbcode":         "De ingevulde tekst is niet valide BBCode",
     "error_wrongcaptcha":   "Captcha is niet correct ingevuld, probeer het opnieuw."
 }

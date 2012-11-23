@@ -124,6 +124,7 @@ class FileComponent extends Component
     {
         $request["file_name"] = basename($_FILES['file_data']['name'], substr($_FILES['file_data']['name'], strrpos($_FILES['file_data']['name'], ".")));
         $request["file_date"] = "now";
+        $request["file_location"] = $request["file_location"];
         
         try
         {
@@ -135,7 +136,16 @@ class FileComponent extends Component
             $linkDelete = makeLink(array($this, "delete"))."?file_id={$return->insertID()}";
             $row = $return->getRow();
             
-            $this->ajax(array("succes" => true, "id" => $return->insertID(), "editLink" => $linkEdit, "deleteLink" => $linkDelete, "viewLink" => $row->file_data->url, "type" => $row->file_data->type));
+            $this->ajax(array(
+                 "succes" => true, 
+                 "id" => $return->insertID(), 
+                 "name" => $request["file_name"], 
+                 "location" => $request["file_location"], 
+                 "editLink" => $linkEdit, 
+                 "deleteLink" => $linkDelete, 
+                 "viewLink" => $row->file_data->url, 
+                 "type" => $row->file_data->type
+            ));
         }
         catch(InvalidFormException $e)
         {
@@ -231,7 +241,7 @@ class FileComponent extends Component
         
         foreach($result as $row)
         {
-            $row->file_location = $mapping[$this->getType($row->file_data->type)];
+            $row->file_location = $mapping[$this->getType($row->file_data->type)].substr($row->file_location, 1);
             
             $item = new FileItem($row);
             $tree->addChild($item);

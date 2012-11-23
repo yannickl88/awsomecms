@@ -233,4 +233,12 @@ class Component
      * Execute a task for the cron. This called in the interval secified in the config files.
      */
     public function execCron() { }
+    /**
+     * Get all the(frontend) pages associated with this component. This is used for generatring a sitemap.
+     * 
+     * @return array
+     */
+    public function getAllPages() {
+        return array();
+    }
 }

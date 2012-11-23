@@ -2,7 +2,7 @@
 @package:components.users
 @copyright:(c) 2009-2010 Yannick de Lange
 @licence:http://www.gnu.org/licenses/gpl.txt
-@version:1
+@version:350
 
 USERS:
 A way to create different users inside a system, these users can be assigned a name and password and privileges. If the group component is installed, privileges will be delegated there

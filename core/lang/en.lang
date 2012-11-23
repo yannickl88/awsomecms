@@ -24,5 +24,6 @@
     "formerror":            "The form was not filled in correctly. Please check the following fields",
     "error_notfilledin":    "Field was not filled in",
     "error_notnumber":      "Field was not a number",
+    "error_bbcode":         "The entered text is not valid BBCode",
     "error_wrongcaptcha":   "Captcha was not filled in correctly, please try again."
 }

@@ -13,12 +13,15 @@
  * @version $Revision$
  */
 importField("Field");
+importField("MLangField");
 importField("IntField");
 importField("DateField");
-importField("TextField");
+importField("BooleanField");
+importField("MLangTextField");
 importField("BooleanField");
 importField("TagField");
 importField("users.UsersField");
+importField("file.UploadField");
 
 /**
  * News table, this handels all interaction with the news table in the database
@@ -36,12 +39,12 @@ class NewsTable extends Table
         $this->assign("news");
         
         $this->addField(new IntField("news_id", Field::INDEX|Field::AUTOKEY));
-        $this->addField(new Field("news_title"), 1);
+        $this->addField(new MLangField("news_title"), 1);
         $this->addField(new Field("news_titleurl", Field::HIDE|Field::OPTIONAL));
         $this->addField(new UsersField("news_user"), 2);
         $this->addField(new DateField("news_date"), 3);
-        $this->addField(new TagField("news_tag", Field::OPTIONAL), 4);
-        $this->addField(new TextField("news_text"), 5);
+        $this->addField(new TagField("news_tag", Field::OPTIONAL|Field::HIDE), 4);
+        $this->addField(new MLangTextField("news_text"), 5);
         $this->setTitle("[news_title]");
         
         $extField = new IntField("news_external", Field::HIDE|Field::OPTIONAL);
@@ -63,8 +66,12 @@ class NewsTable extends Table
         {
             if($data->max)
             {
-                $query->limit($data->max);
+                $offset = 0;
+                if($data->offset) $offset = $data->offset;
+                
+                $query->limit($data->max, $offset);
             }
+                
             $query->whereWhenSet("news_id", $data->news_id);
             $query->whereWhenSet("news_title", $data->news_title);
             $query->whereWhenSet("news_date", $data->news_date);
@@ -80,7 +87,7 @@ class NewsTable extends Table
      */
     protected function update($query, $data = null)
     {
-        $query->update("news_titleurl", urlEscape($this->record[0]->news_title));
+        $query->update("news_titleurl", urlEscape($data['news_title']["en"]));
         Cache::clear("newslist");
     }
     /**
@@ -89,7 +96,7 @@ class NewsTable extends Table
      */
     protected function insert($query, $data = null)
     {
-        $query->insert("news_titleurl", urlEscape($this->record[0]->news_title));
+        $query->insert("news_titleurl", urlEscape($data['news_title']["en"]));
         Cache::clear("newslist");
     }
     /**
@@ -98,5 +105,60 @@ class NewsTable extends Table
      */
     protected function delete($query, $data = null) {
         Cache::clear("newslist");
+    }
+    
+    /**
+     * (non-PHPdoc)
+     * @see core/Table::postSQL()
+     *
+     * @param SQLRecord $record
+     * @param SQLQuery $query
+     */
+    protected function postSQL(&$record, $query)
+    {
+        if($query->getAction() == "update" || $query->getAction() == "insert")
+        {
+            $row = $record->getRow();
+            
+            $summary = array("en" => "", "nl" => "");
+            $summary["en"] = substr(BBCodeParser::parse($row->news_text['en'], false, false), 0, 100)."...";
+            $summary["nl"] = substr(BBCodeParser::parse($row->news_text['nl'], false, false), 0, 100)."...";
+            
+            if($query->getAction() == "insert")
+                $id = $record->insertID();
+            else
+            {
+                $data = $this->getRecord();
+                $id = $data[0]->news_id;
+            }
+                
+            $indexer = new TextSpider();
+            $indexer->index(
+                $row->news_text, 
+                Component::init("news")->makeURL($row, true), 
+                $row->news_title,
+                "news.{$id}",
+                $summary
+            );
+        }
+    }
+    
+    /**
+     * (non-PHPdoc)
+     * @see core/Table::preSQL()
+     *
+     * @param SQLRecord $record
+     * @param SQLQuery $query
+     */
+    protected function preSQL(&$record, $query)
+    {
+        if($query->getAction() == "delete")
+        {
+            $data = $this->getRecord();
+            
+            $indexer = new TextSpider();
+            foreach ($data[0]->news_id as $d)
+                $indexer->clearByHook("news.{$d}");
+        }
     }
 }
