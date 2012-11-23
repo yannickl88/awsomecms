@@ -43,6 +43,12 @@
       <value null="0">internal</value>
       <extra></extra>
     </field>
+    <field>
+      <name>file_location</name>
+      <type>varchar(255)</type>
+      <value null="0"></value>
+      <extra></extra>
+    </field>
     <data/>
   </table>
 </sqldata>
