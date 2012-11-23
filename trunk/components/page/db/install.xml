@@ -41,9 +41,10 @@
       <entry>
         <page_name>index</page_name>
         <page_location>/</page_location>
-        <page_template>a:1:{s:2:"en";s:79:"&lt;h1&gt;Welcome&lt;/h1&gt;<br />&lt;p&gt;Installation was a success&lt;/p&gt;";}</page_template>
-        <page_timestamp>2010-09-05 12:23:22</page_timestamp>
-        <page_html>1</page_html>
+        <page_template>a:1:{s:2:"en";s:51:"&lt;h1&gt;Welcome&lt;/h1&gt;&#13;
+&lt;p&gt;Installation was a success&lt;/p&gt;";}</page_template>
+        <page_timestamp>2012-11-23 15:52:18</page_timestamp>
+        <page_html>0</page_html>
       </entry>
     </data>
   </table>
