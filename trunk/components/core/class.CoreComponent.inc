@@ -44,7 +44,7 @@ class CoreComponent extends Component
         $registerManager->registerURLMap('\/(.*)', 'core.index', 0);
         
         //admin pages
-        $registerManager->registerPage(Config::get("location", "admin/", "admin")."index", '<h1>{"welcome"|text} {$USR.user_name|ucfirst}</h1>{"welcomeadmin"|text}');
+        $registerManager->registerPage(Config::get("location", "admin/", "admin")."index", '{"welcomeadmin"|text}');
         $registerManager->registerPage(Config::get("login", "admin/login", "admin"), '{form component="users" form="admin_login"}');
         $registerManager->registerPage(array($this, "layout"), '{form component="core" form="layout"}');
         $registerManager->registerPage(array($this, "components"), '{form component="core" form="components"}');
@@ -72,9 +72,12 @@ class CoreComponent extends Component
             array($smartyLoader, "getSecure"),
             array($smartyLoader, "getTrusted"),
         ));
-
+        
         //Handle URL
         $url = (isset($_GET['url']))? $_GET['url'] : "";
+        
+        if(Language::has($url, getLang()))
+            $smarty->assign("TITLE", $url);
         Controller::getInstance()->setOutput($smartyLoader->getPage($url, $smarty));
     }
     /**
@@ -438,8 +441,10 @@ class CoreComponent extends Component
     }
     public function action_getform($smarty, $smartyLoader, $request)
     {
+        $smarty->loadPlugin("smarty_function_form");
+        
         $html = smarty_function_form($request["data"], $smarty);
-        $this->ajax(array("html" => rawurlencode($html)));
+        $this->ajax(array("html" => base64_encode($html)));
     }
     /**
      * (non-PHPdoc)
@@ -447,8 +452,11 @@ class CoreComponent extends Component
      */
     public function registerMenuItems($menu)
     {
-        $menu->addChild(new MenuItem("system", ""));
-        $menu->addChild(new MenuItem("layoutmaps", array($this, 'layout'), "system"));
-        $menu->addChild(new MenuItem("components", array($this, 'components'), "system"));
+        if(Config::get("coreMenu", true, "menu"))
+        {
+            $menu->addChild(new MenuItem("system", ""));
+            $menu->addChild(new MenuItem("layoutmaps", array($this, 'layout'), "system"));
+            $menu->addChild(new MenuItem("components", array($this, 'components'), "system"));
+        }
     }
 }

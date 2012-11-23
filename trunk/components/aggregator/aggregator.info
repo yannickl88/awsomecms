@@ -2,7 +2,7 @@
 @package:components.aggregator
 @copyright:(c) 2009-2010 Yannick de Lange
 @licence:http://www.gnu.org/licenses/gpl.txt
-@version:1
+@version:319
 
 AGGREGATOR:
 Aggregates News form RSS feeds and imports them into the news component

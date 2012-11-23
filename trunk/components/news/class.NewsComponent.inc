@@ -46,7 +46,8 @@ class NewsComponent extends Component
         $newsRoot = Config::get("newsroot", "/", "news");
         $newsName = strtolower(Language::get("news"));
         
-        $registerManager->registerURLMap(preg_quote("{$newsRoot}{$newsName}", "/").'\/([0-9]{4}?)\/([0-9]{2}?)\/(.*?)', 'news.index', 10);
+        $registerManager->registerURLMap(preg_quote("{$newsRoot}news", "/").'\/([0-9]{4}?)\/([0-9]{2}?)\/(.*?)', 'news.index', 10);
+        $registerManager->registerURLMap(preg_quote("{$newsRoot}news", "/").'(\/([0-9]*))?$', 'news.overview', 11);
         
         $registerManager->registerPage(array($this, 'admin'), '{form table="news.news" form="admin"}');
         $registerManager->registerPage(array($this, 'add'), '{form table="news.news" form="add"}');
@@ -60,9 +61,48 @@ class NewsComponent extends Component
      * @param SmartyPageLoader $smartyLoader
      * @param array $request
      */
+    public function action_overview($smarty, $smartyLoader, $request)
+    {
+        $smarty->registerResource("scf", array(
+            array($smartyLoader, "getTemplate"),
+            array($smartyLoader, "getTimestamp"),
+            array($smartyLoader, "getSecure"),
+            array($smartyLoader, "getTrusted"),
+        ));
+        
+        $smarty->assign("TITLE", 'news');
+        
+        if(!empty($request['urlmapmatch']))
+        {
+            $items = array();
+            $ppp = 10;
+            $page = (isset($request['urlmapmatch'][2]) && $request['urlmapmatch'][2] > 0 ? (int) $request['urlmapmatch'][2]: 1 ) - 1;
+            $rows = Table::init('news.news')
+                ->setRequest((object) array("max" => $ppp, "offset" => $page * $ppp, "hideHidden" => true))
+                ->doSelect()
+                ->getRows();
+            
+            $count = (int) SQLQuery::doSelect("COUNT(news_id) AS total")
+                ->table(Table::init('news.news'))
+                ->exec()
+                ->getRow()
+                ->total;
+            
+            $smarty->assign("news", $rows);
+            $smarty->assign("content", $smarty->fetch("scf:news"));
+            $smarty->assign("currentPage", $page + 1);
+            $smarty->assign("totalPosts", $count);
+            $smarty->assign("postsPerPage", $ppp);
+            
+            Controller::getInstance()->setOutput($smartyLoader->getRenderedPage($smarty->fetch("news/news.tpl"), $_GET['url'], $smarty));
+            return;
+        }
+        
+        Controller::getInstance()->setOutput($smartyLoader->getPage($_GET['url'], $smarty));
+    }
     public function action_index($smarty, $smartyLoader, $request)
     {
-        $smarty->register->resource("scf", array(
+        $smarty->registerResource("scf", array(
             array($smartyLoader, "getTemplate"),
             array($smartyLoader, "getTimestamp"),
             array($smartyLoader, "getSecure"),
@@ -84,7 +124,6 @@ class NewsComponent extends Component
                 if(date("m", $data) === $request['urlmapmatch'][2] && date("Y", $data) === $request['urlmapmatch'][1])
                 {
                     $template = "news/news_item.tpl";
-                    $news->news_text = BBCodeParser::parse($news->news_text);
                     $smarty->assign("news", $news);
                     
                     if(Cache::has("newslist"))
@@ -120,6 +159,8 @@ class NewsComponent extends Component
                         Cache::set("newslist", $newsList);
                     }
                     
+                    $smarty->assign("TITLE", $news->news_title);
+                    
                     $smarty->assign("nextnews", $newsList[$news->news_id][0]);
                     $smarty->assign("prevnews", $newsList[$news->news_id][1]);
                     
@@ -147,9 +188,6 @@ class NewsComponent extends Component
                 ->doInsert()
                 ->insertID();
             
-            $indexer = new TextSpider();
-            $indexer->index($request['news_text'], urlEscape($request['news_title'])."/".date("Y/m/", strtotime($request['news_date'])), $request['news_title'], "news.{$id}");
-            
             $this->redirect(array($this, "admin"));
         }
     }
@@ -167,9 +205,6 @@ class NewsComponent extends Component
             Table::init("news.news")
                 ->setRecord((object) $request)
                 ->doUpdate();
-            
-            $indexer = new TextSpider();
-            $indexer->index($request['news_text'], urlEscape($request['news_title'])."/".date("Y/m/", strtotime($request['news_date'])), $request['news_title'], "news.{$request['news_id']}");
             
             $this->redirect(array($this, "admin"));
         }
@@ -201,9 +236,6 @@ class NewsComponent extends Component
             Table::init("news.news")
                 ->setRecord((object) $request)
                 ->doDelete();
-            
-            $indexer = new TextSpider();
-            $indexer->clearByHook("news.{$request['news_id']}");
             
             $this->redirect(array($this, "admin"));
         }
@@ -238,6 +270,8 @@ class NewsComponent extends Component
             
         foreach($result as $row)
         {
+            $row->news_title = $row->news_title[getLang()];
+            
             if(strlen($row->news_title) > 17)
             {
                 $row->news_title = substr($row->news_title, 0, 15)."...";
@@ -248,14 +282,54 @@ class NewsComponent extends Component
         }
     }
     /**
+     * (non-PHPdoc)
+     * @see core/Component#registerMenuItems($menu)
+     */
+    public function registerMenuItems($menu)
+    {
+        $menu->addChild(new MenuItem("news", array($this, 'admin')));
+        $menu->addChild(new MenuItem("news", array($this, 'admin'), "news"));
+        $menu->addChild(new MenuItem("newsadd", array($this, 'add'), "news"));
+    }
+    /**
      * Create a url for the news record
      * 
      * @param Object $record
      * @return String
      */
-    public function makeURL($record)
+    public function makeURL($record, $withpage = false)
     {
         $newsName = strtolower(Language::get("news"));
-        return $newsName."/".date("Y/m/", strtotime($record->news_date));
+        
+        if($withpage)
+            return $newsName."/".date("Y/m/", strtotime($record->news_date)).$record->news_titleurl;
+        else
+            return $newsName."/".date("Y/m/", strtotime($record->news_date));
+    }
+    /**
+    * (non-PHPdoc)
+    * @see Component::getAllPages()
+    */
+    public function getAllPages()
+    {
+        $table = Table::init("news.news", "admintree");
+    
+        $pages = array();
+        $result = $table
+            ->doSelect()
+            ->getRows();
+    
+        foreach($result as $row)
+        {
+            $pages[md5('/'.$this->makeURL($row, true))] = (object) array(
+                "loc" => '/'.$this->makeURL($row, true),
+                "images" => array(),
+                "lastmod" => "",
+                "changefreq" => "",
+                "priority" => 0,
+            );
+        }
+    
+        return $pages;
     }
 }

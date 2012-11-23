@@ -5,5 +5,8 @@
     "field_page_name":      "Naam",
     "field_page_location":  "Locatie",
     "field_page_template":  "Inhoud",
+    "field_page_bg":        "Achtergrond",
+    "field_page_slideshow": "Slideshow",
+    "field_page_hide":      "Verborgen",
     "field_page_title":     "Titel"
 }

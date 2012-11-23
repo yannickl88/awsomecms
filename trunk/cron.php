@@ -95,7 +95,7 @@ class Cron extends CLIAction
 
 
 $cli = new CLI($argv);
-$cli->setVerbose();
+//$cli->setVerbose();
 $cli->header();
 
 //register the actions

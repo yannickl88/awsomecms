@@ -419,3 +419,39 @@ function makeLink($url)
     
     return $url;
 }
+/**
+ * Generate a random string
+ * 
+ * @param int $length
+ * @param String $characters
+ * @return String
+ */
+function makeRandomString($length, $characters = "0123456789abcdefghijklmnopqrstuvwxyz")
+{
+    $string = "";
+
+    for ($p = 0; $p < $length; $p++)
+    {
+        $string .= $characters[mt_rand(0, strlen($characters) - 1)];
+    }
+
+    return $string;
+}
+
+function getLang()
+{
+    // is it in the URL?
+    if(isset($_GET["lang"]))
+        $lang = $_GET["lang"];
+    elseif(isset($_SESSION["USERLANG"]))
+        return $_SESSION["USERLANG"];
+    else // get the browser language
+        $lang = strtolower(substr($_SERVER['HTTP_ACCEPT_LANGUAGE'], 0, 2));
+    
+    if(!in_array($lang, array("en", "nl")))
+        $lang = "en"; //just in case it's not a valid language, return EN
+    
+    $_SESSION["USERLANG"] = $lang;
+        
+    return $lang;
+}

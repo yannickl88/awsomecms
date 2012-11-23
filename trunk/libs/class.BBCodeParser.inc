@@ -130,6 +130,15 @@ class BBCodeElement
         return false;
     }
     /**
+     * Check if the element can have line break after it
+     * 
+     * @return Boolean
+     */
+    public function removeBreak()
+    {
+        return false;
+    }
+    /**
      * Check if the element doesn't need a closing tag
      * 
      * @return Boolean
@@ -180,6 +189,10 @@ class BBCodeElement
     public function hasAttr($key)
     {
         return isset($this->attributes[$key]);
+    }
+    public function hasChildren()
+    {
+        return (count($this->children) > 0);
     }
     /**
      * Get an attribute of this element
@@ -235,6 +248,17 @@ class BBCodeElement
      */
     protected function wrap($text)
     {
+        return $text;
+    }
+    /**
+     * Wrap the content of the element (without formatting)
+     * 
+     * @param String $text
+     */
+    protected function plain($text)
+    {
+        if($this->isBlock())
+            return $text . "\n";
         return $text;
     }
     /**
@@ -308,16 +332,22 @@ class BBCodeElement
      * 
      * @return String
      */
-    public function text()
+    public function text($formatting)
     {
         $html = "";
+        $lastElement = null;
 
         foreach($this->children as $child)
         {
-            $html .= $child->text();
+            if($lastElement != null && is_a($child, "BBCodeNewLine") && $lastElement->removeBreak())
+                continue;
+            $html .= $child->text($formatting);
+            $lastElement = $child;
         }
-
-        return $this->wrap($html);
+        if($formatting)
+            return $this->wrap($html);
+        else
+            return $this->plain($html);
     }
     /**
      * Debug for showing the element tree from this element
@@ -459,7 +489,8 @@ class BBCodeParagraph extends BBCodeElement
      */
     public function wrap($text)
     {
-        return "<p>{$text}</p>";
+        if(!empty($text))
+            return "<p>{$text}</p>";
     }
 }
 /**
@@ -482,6 +513,7 @@ class BBCodeUnknownElement extends BBCodeElement
         }
         else 
         {
+            return "";
             throw new BBCodeException("Unknown tag '{$this->type}'");
         }
     }
@@ -534,12 +566,12 @@ class BBCodeParser
      * @param String $text
      * @return String
      */
-    public static function parse($text, $force = false)
+    public static function parse($text, $force = false, $formatting = true)
     {
         if(Config::get("type", "wysiwig", "input") == "bbcode" || $force)
         {
-            $parser = new BBCodeParser(htmlentities($text, ENT_NOQUOTES));
-            return $parser->process();
+            $parser = new BBCodeParser(htmlentities($text, ENT_NOQUOTES, "UTF-8"));
+            return $parser->process($formatting);
         }
         return $text;
     }
@@ -558,7 +590,7 @@ class BBCodeParser
      * 
      * @return String
      */
-    private function process()
+    private function process($formatting)
     {
         $state = BBCodeParser::READING;
         $tag = '';
@@ -604,8 +636,10 @@ class BBCodeParser
                             $e = array_shift($tagStack);
                             $tagStack[0]->addChild($e);
                         }
-
-                        $tagStack[0]->addChild(new BBCodeNewLine());
+                        if($tagStack[0]->hasChildren())
+                        {
+                            $tagStack[0]->addChild(new BBCodeNewLine());
+                        }
                         $tag = '';
                         $state = BBCodeParser::READING;
                         $countFromStateChange = 0;
@@ -643,7 +677,8 @@ class BBCodeParser
                     }
                     else
                     {
-                        throw new BBCodeException("Cannot end '{$tag}' without opening it first");
+                        $near = substr($this->text, $i - 10, 20);
+                        throw new BBCodeException("Cannot end '{$tag}' without opening it first. Near '{$near}'");
                     }
                     $tag = '';
                     $state = BBCodeParser::READING;
@@ -664,10 +699,15 @@ class BBCodeParser
             $tagStack[0]->addChild(new BBCodeText($text));
             $text = "";
         }
+        
+        if(!is_a($tagStack[0], 'BBCodeDocument'))
+        {
+            throw new BBCodeException("Cannot find end for '{$tagStack[0]->type()}'.");
+        }
 
         $tagStack[0]->text2par();
         $tagStack[0]->removeTrailingBreak();
-        return $tagStack[0]->text();
+        return $tagStack[0]->text($formatting);
     }
 
 }

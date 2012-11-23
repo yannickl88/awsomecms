@@ -21,12 +21,14 @@
 class FormException extends Exception
 {
     private $field;
+    private $section;
     
-    public function __construct($field, $message = null, $code = 0)
+    public function __construct($field, $message = null, $code = 0, $section="")
     {
         parent::__construct($message, $code);
         
         $this->field = $field;
+        $this->section = $section;
     }
     /**
      * Get the field that were not valid
@@ -36,6 +38,15 @@ class FormException extends Exception
     public function getField()
     {
         return $this->field;
+    }
+    /**
+     * Get the section of the field
+     * 
+     * @return string
+     */
+    public function getSection()
+    {
+        return !empty($this->section)? "#".$this->section : "";
     }
 }
 
@@ -140,14 +151,14 @@ class InvalidFormException extends Exception
         $html .= "            $(\"#errorlist\").empty();\n";
         foreach($this->fields as $field => $error)
         {
-            $html .= "            addFieldError('{$field}', '{$error}');\n";
+            $html .= "            addFieldError('{$field}', '".addslashes($error)."');\n";
         }
         
         foreach($this->record as $field => $value)
         {
             if($field != "method")
             {
-                $html .= "            setFieldValue('{$field}', \"".htmlentities("".$value, ENT_QUOTES)."\");\n";
+                $html .= "            setFieldValue('{$field}', \"".base64_encode(htmlentities("".$value, ENT_QUOTES, "UTF-8"))."\");\n";
             }
         }
         $html .= "        });";

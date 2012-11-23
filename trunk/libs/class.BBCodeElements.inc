@@ -87,12 +87,65 @@ class H3Element extends BBCodeElement
         return false;
     }
 }
+class H4Element extends BBCodeElement
+{
+    public function wrap($text)
+    {
+        return "<h4>{$text}</h4>";
+    }
+    public function isBlock()
+    {
+        return true;
+    }
+    public function mayContainPars()
+    {
+        return false;
+    }
+}
 /** Media */
 class ImgElement extends BBCodeElement
 {
     public function wrap($text)
     {
-        return "<img src='{$text}' />";
+        $style = "";
+        
+        if($this->hasAttr("width"))
+        {
+            if($style != "")
+                $style .= "; ";
+            $style .= "width: {$this->getAttr("width")}px";
+        }
+        
+        if($this->hasAttr("height"))
+        {
+            if($style != "")
+                $style .= "; ";
+            $style .= "height: {$this->getAttr("height")}px";
+        }
+        
+        if($this->hasAttr("float"))
+        {
+            if($style != "")
+                $style .= "; ";
+            $style .= "float: {$this->getAttr("float")}";
+        }
+        
+        if($style != "")
+            $style = "style='{$style}'";
+        
+        return "<img src='{$text}' {$style} class='bbcodeimg' alt='image'/>";
+    }
+    public function plain($text)
+    {
+        return "";
+    }
+    public function isBlock()
+    {
+        return $this->hasAttr("float");
+    }
+    public function mayContainPars()
+    {
+        return !$this->hasAttr("float");
     }
 }
 class YoutubeElement extends BBCodeElement
@@ -101,7 +154,7 @@ class YoutubeElement extends BBCodeElement
     {
         //http://www.youtube.com/watch?v={key} -> http://www.youtube.com/v/{key}&amp;fs=1
         $matches = array();
-        if(preg_match('/^http:\/\/(www\.)?youtube\.com\/watch\?v=([a-zA-Z0-9\-]*)$/', $text, $matches) === 1)
+        if(preg_match('/^http:\/\/(www\.)?youtube\.com\/watch\?v=([a-zA-Z0-9\-_]*)$/', $text, $matches) === 1)
         {
             $width = 480;
             $height = 385;
@@ -116,6 +169,10 @@ class YoutubeElement extends BBCodeElement
         {
             return "NO YOUTUBE VIDEO FOUND<br /> Make you use the format [youtube]http://www.youtube.com/watch?v=&lt;key&gt;[/youtube]";
         }
+    }
+    public function plain($text)
+    {
+        return "";
     }
 }
 /** Linking */
@@ -133,7 +190,7 @@ class UrlElement extends BBCodeElement
         }
     }
 }
-class EmailElement extends BBCodeElement
+class MailElement extends BBCodeElement
 {
     public function wrap($text)
     {
@@ -145,6 +202,10 @@ class EmailElement extends BBCodeElement
         {
             return "<a href='mailto:{$text}'>{$text}</a>";
         }
+    }
+    public function plain($text)
+    {
+        return "";
     }
 }
 /** Alignment */
@@ -181,6 +242,26 @@ class CenterElement extends BBCodeElement
         return true;
     }
 }
+class LinkElement extends BBCodeElement
+{
+    public function wrap($text)
+    {
+        $text = addslashes($text);
+        $action = isset($this->attributes['goto']) ? $this->attributes['goto'] : "default";
+        return "{link text=\"{$text}\" code='{$this->attributes['code']}' action='{$action}'}";
+    }
+}
+class RefElement extends BBCodeElement
+{
+    public function wrap($text)
+    {
+        return "{ref code='{$this->attributes['code']}'}";
+    }
+    public function singelTag()
+    {
+        return true;
+    }
+}
 /** Lists */
 class ListElement extends BBCodeElement
 {
@@ -206,6 +287,10 @@ class ListElement extends BBCodeElement
             return "<ul>{$text}</ul>";
         }
     }
+    public function mayContainPars()
+    {
+        return false;
+    }
 }
 class ItemElement extends BBCodeElement
 {
@@ -221,5 +306,13 @@ class ItemElement extends BBCodeElement
     public function singelLine()
     {
         return true;
+    }
+    public function removeBreak()
+    {
+        return true;
+    }
+    public function mayContainPars()
+    {
+        return false;
     }
 }

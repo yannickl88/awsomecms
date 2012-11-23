@@ -171,7 +171,13 @@ class SmartyPageLoader
             }
 
             //no layout fond so we fallback to the default
-            return $smarty_obj->fetch("layout.tpl");
+            if(Config::get("privLayout", true, "debug") && $_GET["debug_public"] != 1 && in_array($_SERVER['REMOTE_ADDR'], Config::get("privLayout_ip", array(), "debug"))) {
+                return $smarty_obj->fetch("priv_layout.tpl");
+            } 
+            else
+            {
+                return $smarty_obj->fetch("layout.tpl");
+            }
         }
         else
         {
@@ -214,13 +220,18 @@ class SmartyPageLoader
             {
                 // cache template timestamp
                 $this->timestamps[$tpl_name] = strtotime($result->record->page_timestamp);
-
+                
+                $result->record->page_template = unserialize($result->record->page_template);
+                
                 $smarty_obj->assign('PAGE', $result->record);
+                $this->assignBackgroundImage($result->record, $smarty_obj);
+                
+                $html = $result->record->page_template[getLang()];
 
                 if(!$result->record->page_html)
-                $tpl_source = BBCodeParser::parse($result->record->page_template);
+                    $tpl_source = BBCodeParser::parse($html);
                 else
-                $tpl_source = $result->record->page_template;
+                    $tpl_source = $html;
 
                 return true;
             }
@@ -273,6 +284,8 @@ class SmartyPageLoader
 
                 if($result->count() > 0)
                 {
+                    $smarty_obj->assign('PAGE', $result->record);
+                    $this->assignBackgroundImage($result->record, $smarty_obj);
                     // cache template timestamp
                     $this->timestamps[$tpl_name] = strtotime($result->record->page_timestamp);
 
@@ -311,6 +324,47 @@ class SmartyPageLoader
         return true;
     }
     /**
+     * Set the background image
+     * 
+     * @param $row
+     * @param Smarty $smarty_obj
+     */
+    public function assignBackgroundImage($row, $smarty_obj)
+    {
+        if($smarty_obj->getTemplateVars('BGIMG') != null)
+            return;
+        
+        if(!empty($row->page_slideshow) && empty($row->page_bg))
+        {
+            $fileComp = Component::init("file");
+            $loc = explode("/", $row->page_slideshow);
+            array_shift($loc);
+            array_shift($loc);
+            $type = array_shift($loc);
+            
+            $file_loc = '/'.implode("/", $loc);
+            $images = array();
+            
+            $rows = Table::init("file.files")
+                ->setRequest((object) array("file_location" => $file_loc))
+                ->doSelect();
+            
+            while($row = $rows->getRow())
+            {
+                if($fileComp->getType($row->file_data->type) == $type)
+                {
+                    $images[] = $row->file_data->url;
+                }
+            }
+            
+            $smarty_obj->assign('BGIMG', $images[rand(0, count($images) - 1)]);
+        }
+        else
+        {
+            $smarty_obj->assign('BGIMG', unserialize($row->page_bg)->url);
+        }
+    }
+    /**
      * register all the smarty extentions from the components,
      * see http://smarty.net/manual/en/plugins.php
      *
@@ -340,19 +394,22 @@ class SmartyPageLoader
         }
         
         //Load the extentions
-        $extentions = scandir(getFrameworkRoot()."/extentions/");
-        
-        foreach($extentions as $extention)
+        if(file_exists(getFrameworkRoot()."/extentions/"))
         {
-            $matches = array();
-            if($extention != "." && $extention != ".." && preg_match('/^(.*)\.ext\.inc$/', $extention, $matches) === 1)
+            $extentions = scandir(getFrameworkRoot()."/extentions/");
+            
+            foreach($extentions as $extention)
             {
-                try
+                $matches = array();
+                if($extention != "." && $extention != ".." && preg_match('/^(.*)\.ext\.inc$/', $extention, $matches) === 1)
                 {
-                    $ext = Extention::init($matches[1]);
-                    $ext->extend($smarty_obj);
+                    try
+                    {
+                        $ext = Extention::init($matches[1]);
+                        $ext->extend($smarty_obj);
+                    }
+                    catch(Exception $e) { throw $e; }
                 }
-                catch(Exception $e) { throw $e; }
             }
         }
     }

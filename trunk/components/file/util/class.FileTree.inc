@@ -20,9 +20,7 @@ import('/components/page/util/class.Tree.inc');
  */
 class FileItem extends TreeNode
 {
-    private $name;
     private $id;
-    private $location;
     private $viewURL;
     private $fileType;
     
@@ -56,19 +54,22 @@ class FileItem extends TreeNode
      */
     public function toJavascript()
     {
+        if(!empty($this->parent->fileTypes) && !in_array(substr($this->fileType, strrpos($this->fileType, "/") + 1), $this->parent->fileTypes))
+            return;
+        
         $component = Component::init("file");
         $linkEdit = "";
         $actions = array();
         if($this->canEdit)
             $linkEdit = makeLink(array($component, "edit"))."?file_id={$this->id}";
-        if($this->canView)
+        if($this->canView && !empty($this->viewURL))
             $actions[] = "new TreeAction(\"view\", \"{$this->viewURL}\", {$this->parent->getName()})";;
         if($this->canDelete)
             $actions[] = "new TreeAction(\"delete\", \"".makeLink(array($component, "delete"))."?file_id={$this->id}"."\", {$this->parent->getName()})";
             
         $icon = $component->getType($this->fileType);
         
-        $html = "{$this->parent->getName()}.addChild(new TreeItem(\"{$this->name}\", \"{$this->location}\", \"{$linkEdit}\", {$this->parent->getName()}, \"{$icon}\", [".implode(",", $actions)."], {$this->getType()}));\n";
+        $html = "{$this->parent->getName()}.addChild(new TreeItem(\"{$this->name}\", \"{$this->location}\", \"{$linkEdit}\", {$this->parent->getName()}, \"{$icon}\", [".implode(",", $actions)."], {$this->getType()}, {$this->id}));\n";
         
         return $html;
     }
@@ -85,20 +86,22 @@ class FileItem extends TreeNode
         $actions = array();
         if($this->canEdit)
             $linkEdit = makeLink(array($component, "edit"))."?file_id={$this->id}";
-        if($this->canView)
+        if($this->canView && !empty($this->viewURL))
             $actions[] = array("icon" =>"view", "link" => $this->viewURL);
         if($this->canDelete)
             $actions[] = array("icon" =>"delete", "link" => makeLink(array($component, "delete"))."?file_id={$this->id}");
-            
+        
         $icon = $component->getType($this->fileType);
         
         return array(
+            "classname" => 'TreeNode',
             "name" => $this->name,
             "location" => $this->location,
-            "editLink" => $linkEdit,
+            "url" => $linkEdit,
             "icon" => $icon,
             "actions" => $actions,
-            "type" => $this->type
+            "type" => $this->type,
+            "id" => $this->id
         );
     }
 }
@@ -137,6 +140,19 @@ class ImageFolder extends Folder
         $html = "{$this->parent->getName()}.addChild(new TreeFolder(\"{$this->name}\", \"{$this->location}\", {$this->parent->getName()}, \"image_folder\", [], {$this->getType()}));\n";
         
         return $html;
+    }
+    
+    public function toData()
+    {
+        return array(
+            "classname" => 'TreeFolder',
+            "name" => $this->name,
+            "location" => $this->location,
+            "icon" => "image_folder",
+            "actions" => array(),
+            "contentType" => $this->type,
+            "isRootFolder" => false
+        );
     }
 }
 /**
@@ -181,11 +197,28 @@ class UploadFolder extends Folder
         $linkAdd = makeLink(array($component, "add"));
         $linkView = makeLink(array($component, "admin"));
         
-        $html = "uploadFolder = new TreeFolder(\"{$this->name}\", \"{$this->location}\", {$this->parent->getName()}, \"folder\", [new TreeAction(\"reload\", \"\", {$this->parent->getName()}), new TreeAction(\"overview\", \"{$linkView}\", {$this->parent->getName()}), new TreeAction(\"add\", \"{$linkAdd}\", {$this->parent->getName()})], {$this->getType()});\n";
-        $html .= "uploadFolder.nodes = ".stripslashes(json_encode($this->nodeMap))."\n";
-        $html .= "$().ready(function(e) {new FileUpload(uploadFolder.html.get(0)); });\n";
-        $html .= "{$this->parent->getName()}.addChild(uploadFolder);\n";
+        $html = "var child = new TreeFolder(\"{$this->name}\", \"{$this->location}\", {$this->parent->getName()}, \"folder\", [new TreeAction(\"reload\", \"\", {$this->parent->getName()}), new TreeAction(\"overview\", \"{$linkView}\", {$this->parent->getName()}), new TreeAction(\"add\", \"{$linkAdd}\", {$this->parent->getName()})], {$this->getType()});\n";
+        $html .= "if({$this->parent->getName()}.systemFileTree) { \n";
+        $html .= "    uploadFolder = child;\n";
+        $html .= "    uploadFolder.nodes = ".stripslashes(json_encode($this->nodeMap))."\n";
+        $html .= "    $().ready(function(e) {new FileUpload(uploadFolder.html.get(0)); });\n";
+        $html .= "}\n";
+        $html .= "{$this->parent->getName()}.addChild(child);\n";
         
         return $html;
+    }
+    
+    public function toData()
+    {
+        return array(
+            "classname" => 'TreeUploadFolder',
+            "name" => $this->name,
+            "location" => $this->location,
+            "icon" => "image_folder",
+            "actions" => array(),
+            "contentType" => $this->type,
+            "isRootFolder" => false,
+            "nodes" => $this->nodeMap
+        );
     }
 }

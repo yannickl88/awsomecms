@@ -12,6 +12,7 @@
  *
  * @version $Revision$
  */
+import("libs/class.PorterStemmer.inc");
 
 /**
  * Spider class for indexing and searching in the text items
@@ -42,7 +43,7 @@ class TextSpider
      * @param int $link
      * @param String $hook
      */
-    public function index($string, $link, $title, $hook)
+    public function index($string, $link, $title, $hook, $text)
     {
         //fetch already existing words
         $results = SQLQuery::doSelect("word_id")
@@ -63,32 +64,45 @@ class TextSpider
         $this->words2id = array_flip($this->id2words);
         
         //create a new item for this if not already there
-        $check = md5($link);
         $item = -1;
         
         $result = SQLQuery::doSelect()
             ->table("search_items")
-            ->where("item_checksum", $check)
+            ->where("item_hook", $hook)
             ->exec();
         
         if($result->count() > 0)
         {
             $item = $result->getRow()->item_id;
             $this->clearByID($item);
+            
+            SQLQuery::doUpdate()
+                ->table("search_items")
+                ->update("item_link", $link)
+                ->update("item_title", serialize($title))
+                ->update("item_checksum", md5($link))
+                ->update("item_hook", $hook)
+                ->update("item_text", serialize($text))
+                ->where("item_id", $item)
+                ->exec();
         }
         else
         {
             $item = SQLQuery::doInsert()
                 ->table("search_items")
                 ->insert("item_link", $link)
-                ->insert("item_title", $title)
-                ->insert("item_checksum", $check)
+                ->insert("item_title", serialize($title))
+                ->insert("item_checksum", md5($link))
                 ->insert("item_hook", $hook)
+                ->insert("item_text", serialize($text))
                 ->exec()
                 ->insertID();
         }
-            
-        $string = trim(preg_replace(array('/(\s+)/', '/(<.*?>)/', '/({.*?})/'), " ", str_replace(array(".", ",", "'", "\"", "\n", "\r", "“"), " ", strtolower($string))));
+        
+        if(is_array($string))
+            $string = implode(" ", $string);
+        
+        $string = trim(preg_replace(array('/(\s+)/', '/(\[.*?\])/', '/(<.*?>)/', '/({.*?})/'), " ", str_replace(array(".", ",", "'", "\"", "\n", "\r", "“"), " ", strtolower($string))));
         $words = array();
         $offset = 0;
         $break = false;
@@ -99,7 +113,7 @@ class TextSpider
             
             if($nextSpace !== false)
             {
-                $word = substr($string, $offset, $nextSpace - $offset);
+                $word = $this->procesWord(substr($string, $offset, $nextSpace - $offset));
                 
                 $from = $offset - 20;
                 
@@ -108,39 +122,32 @@ class TextSpider
                     $from = 0;
                 }
                 
-                $text = substr($string, $from, 50);
-                $text = str_replace($word, "<b>{$word}</b>", $text);
                 $offset = $nextSpace + 1;
             }
             else
             {
-                $word = substr($string, $offset);
-                $text = substr($string, strlen($string) - 51);
-                $text = str_replace($word, "<b>{$word}</b>", $text);
+                $word = $this->procesWord(substr($string, $offset));
                 $string = "";
                 $break = true;
             }
             
-            if(strlen($word) > 3 && preg_match('/^[a-zA-Z]*$/', $word) !== 0)
+            if(preg_match('/^[a-zA-Z0-9]*$/', $word) !== 0 && strlen($word) > 1)
             {
                 if(!isset($words[$word]))
                 {
-                    $words[$word] = array(0, $text);
+                    $words[$word] = 0;
                 }
-                $words[$word][0]++;
+                $words[$word]++;
             }
         }
-        $query = SQLQuery::doMInsert(array("ref_word", "ref_item", "ref_count", "ref_text"))->table("search_refs");
+        $query = SQLQuery::doMInsert(array("ref_word", "ref_item", "ref_count"))->table("search_refs");
         
         foreach($words as $word => $data)
         {
-            $word = $this->procesWord($word);
-            
             $query->mInsert(array(
                 "ref_word" => $this->getID($word), 
                 "ref_item" => $item, 
-                "ref_count" => $data[0],
-                "ref_text" => $data[1]
+                "ref_count" => $data,
             ));
         }
         
@@ -216,13 +223,10 @@ class TextSpider
             
             foreach($this->newWords as $id => $word)
             {
-                if(strlen($word) > 3)
-                {
-                    $query->mInsert(array(
-                        "word_id" => $id, 
-                        "word_word" => $word, 
-                    ));
-                }
+                $query->mInsert(array(
+                    "word_id" => $id, 
+                    "word_word" => $word, 
+                ));
             }
             
             $this->newWords = array();
@@ -237,7 +241,7 @@ class TextSpider
      */
     public function procesWord($word)
     {
-        return $word;
+        return PorterStemmer::Stem($word);
     }
     /**
      * Search for items that are indexed
@@ -245,37 +249,27 @@ class TextSpider
      * @param Array $words
      * @return Array
      */
-    public function search($words)
+    public function search($words, $limit = -1)
     {
         $searchResults = array();
         $query = SQLQuery::doSelect()
+            ->select("COUNT(word_id) AS rating")
+            ->select("search_items.*")
             ->table("search_words")
             ->join("search_refs", "word_id", "ref_word", "LEFT")
-            ->join("search_items", "ref_item", "item_id", "LEFT");
+            ->join("search_items", "ref_item", "item_id", "INNER")
+            ->groupBy("search_items.item_id")
+            ->orderBy("rating", "DESC");
         
         foreach($words as $word)
         {
-            $query->where("word_word", "%{$word}%", "LIKE", "OR");
+            $query->where("word_word", "%".PorterStemmer::Stem($word)."%", "LIKE", "OR");
         }
+        
+        if($limit >= 0)
+            $query->limit($limit[0], $limit[1]);
 
-        $results = $query->exec();
-        
-        while($result = $results->getRow())
-        {
-            $id = $result->item_checksum;
-            
-            if(isset($searchResults[$id]))
-            {
-                $searchResults[$id]->rank += $result->ref_count;
-            }
-            else
-            {
-                $searchResults[$id] = $result;
-                $searchResults[$id]->rank = $result->ref_count;
-            }
-        }
-        
-        usort($searchResults, array($this, "sort"));
+        $searchResults = $query->exec()->getRows();
         
         return $searchResults;
     }

@@ -2,7 +2,7 @@
 @package:components.file
 @copyright:(c) 2009-2010 Yannick de Lange
 @licence:http://www.gnu.org/licenses/gpl.txt
-@version:1
+@version:354
 
 FILE:
 A way to create a centeral file repository to upload file.

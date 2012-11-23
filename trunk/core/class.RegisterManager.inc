@@ -310,6 +310,9 @@ class RegisterManager
      */
     public function getURLMap($url, &$request)
     {
+        //remove the query string if needed
+        if(strpos($url, "?") !== false) $url = substr($url, 0, strpos($url, "?"));
+        
         foreach($this->mappings as $check)
         {
             $matches = array();

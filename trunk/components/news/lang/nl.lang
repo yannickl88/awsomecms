@@ -8,5 +8,6 @@
     "field_news_user":      "Gebruiker",
     "field_news_date":      "Datum",
     "field_news_tag":       "Tag",
+    "field_news_hidden":    "Verborgen",
     "field_news_text":      "Inhoud"
 }

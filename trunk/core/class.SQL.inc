@@ -258,9 +258,9 @@ class SQLQuery
      * @param string $table
      * @return SQLQuery
      */
-    public function table($table)
+    public function table($table, $alias = null)
     {
-        $this->table[] = $table;
+        $this->table[] = array($table, $alias);
         
         return $this;
     }
@@ -273,7 +273,7 @@ class SQLQuery
      * @param string $orAnd  AND or OR
      * @return SQLQuery
      */
-    public function where($field, $value, $comparison = "=", $orAnd = 'AND')
+    public function where($field, $value, $comparison = "=", $orAnd = 'AND', $noquote = false)
     {
         if(self::isEmpty($value))
         {
@@ -289,7 +289,7 @@ class SQLQuery
         {
             foreach($value as $key => $value2)
             {
-                if(!is_numeric($value))
+                if((!$noquote && !is_numeric($value2)) || $noquote === 2)
                 {
                     $value[$key] = "'" . addSlashesConfig($value2) . "'";
                 }
@@ -306,16 +306,16 @@ class SQLQuery
             
             $value = implode(",", $value);
             
-            $this->where[] = array("({$field} {$comparison}({$value}))", $orAnd);
+            $this->where[] = array("({$field} {$comparison}({$value}))", $orAnd, $field, $value, $comparison);
         }
         else
         {
-            if(!is_numeric($value))
+            if((!$noquote && !is_numeric($value)) || $noquote === 2)
             {
                 $value = "'" . addSlashesConfig($value) . "'";
             }
             
-            $this->where[] = array("({$field} {$comparison} {$value})", $orAnd);
+            $this->where[] = array("({$field} {$comparison} {$value})", $orAnd, $field, $value, $comparison);
         }
         
         return $this;
@@ -337,6 +337,18 @@ class SQLQuery
         }
         
         return $this;
+    }
+    
+    public function getWhereOnField($field)
+    {
+        $conditions = array();
+        
+        foreach ($this->where as $w)
+        {
+            if($w[2] == $field) $conditions[] = $w;
+        }
+        
+        return $conditions;
     }
     /**
      * add group statement
@@ -406,7 +418,7 @@ class SQLQuery
     {
         if(isset($value))
         {
-            if($value == "")
+            if($value === "")
             {
                 return true;
             }
@@ -472,13 +484,35 @@ class SQLQuery
         
         foreach($this->table as $table)
         {
-            if(is_a($table, "Table"))
+            if(is_a($table[0], "Table"))
             {
-                $tables[] = $table;
+                $tables[] = $table[0];
             }
         }
         
         return $tables;
+    }
+    /**
+     * Get a field from the tables which are added to this query.
+     * If it does not exists, return null
+     * 
+     * @param String $fieldName
+     * @return Field
+     */
+    public function getFieldFromTable($fieldName)
+    {
+        $field = null;
+        
+        foreach($this->table as $table)
+        {
+            if(is_a($table[0], "Table"))
+            {
+                $field = $table[0]->getField($fieldName);
+                if($field != null) break;
+            }
+        }
+        
+        return $field;
     }
     /**
      * Get a string containing the table names
@@ -496,14 +530,17 @@ class SQLQuery
                 $tables .= ", ";
             }
             
-            if(is_a($table, "Table"))
+            if(is_a($table[0], "Table"))
             {
-                $tables .= $table->getName();
+                $tables .= $table[0]->getName();
             }
             else
             {
-                $tables .= $table;
+                $tables .= $table[0];
             }
+            
+            if($table[1] != null)
+                $tables .= " AS {$table[1]}";
         }
         
         return $tables;
@@ -535,6 +572,10 @@ class SQLQuery
             
             foreach($this->where as $where)
             {
+                $field = $this->getFieldFromTable($where[2]);
+                
+                if($field != null && $field->hasFlag(Field::NOWHERE)) continue;
+                
                 if($totalWhere != '')
                 {
                     $totalWhere .= ' '.$where[1].' ';
@@ -543,6 +584,7 @@ class SQLQuery
                 $totalWhere .= $where[0];
             }
             
+            if(!empty($totalWhere))
             $query .= ' WHERE '.$totalWhere.' ';
         }
         
@@ -685,6 +727,9 @@ class SQLQuery
             
             foreach($this->where as $where)
             {
+                $field = $this->getFieldFromTable($where[2]);
+                if($field != null && $field->hasFlag(Field::NOWHERE)) continue;
+                
                 if($totalWhere != '')
                 {
                     $totalWhere .= ' '.$where[1].' ';
@@ -715,6 +760,9 @@ class SQLQuery
             
             foreach($this->where as $where)
             {
+                $field = $this->getFieldFromTable($where[2]);
+                if($field != null && $field->hasFlag(Field::NOWHERE)) continue;
+                
                 if($totalWhere != '')
                 {
                     $totalWhere .= ' '.$where[1].' ';
@@ -817,7 +865,7 @@ class SQLRecord
         }   
     }
     /**
-     * reset the internal pointer
+     * reset the internal row pointer
      */
     public function reset()
     {
@@ -841,6 +889,17 @@ class SQLRecord
     public function insertID()
     {
         return $this->insertID;
+    }
+    /**
+     * Filter the records, this will reset the internal row pointer
+     * 
+     * @param callback $function
+     */
+    public function filter($function)
+    {
+        $this->records = array_filter($this->records, $function);
+        $this->count = count($this->record);
+        $this->reset();
     }
 }
 /**

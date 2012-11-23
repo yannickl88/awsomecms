@@ -3,7 +3,7 @@
 @copyright: (c)2009-2010 AWSOMEcms
 @licence: GNU General Public License
 @website: http://yannickl88.nl/cms
-@version: 1
+@version:353
 
 CORE:
 All core functionality is included in here, this, together with the page component, is the heart of the cms

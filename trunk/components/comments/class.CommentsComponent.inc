@@ -34,6 +34,7 @@ class CommentsComponent extends Component
      */
     public function register($registerManager)
     {
+        $registerManager->registerAuth("comments.action_delete", "admin");
     }
     /**
     * Repley action, this is called when a reply is posted
@@ -51,6 +52,16 @@ class CommentsComponent extends Component
                 ->doInsert();
             
             $this->redirect($request['comment_hook']);
+        }
+    }
+    public function action_delete($smarty, $smartyLoader, $request)
+    {
+        if($request['method'] == 'post')
+        {
+            $requestObj = Table::init('comments.comments')
+                ->setRecord((object) $request)
+                ->doDelete();
+            $this->ajax(array('id' => (int) $request['comment_id']));
         }
     }
 }

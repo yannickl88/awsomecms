@@ -22,6 +22,7 @@ importField("Field");
 class UploadField extends Field
 {
     protected $uploadDir;
+    protected $resizeTo = null;
     
     /**
      * Constructor
@@ -44,13 +45,85 @@ class UploadField extends Field
         $this->parent->setMultipart(true);
         return "<input type='file' name='{$this->getName()}' id='{$this->getName()}'/>";
     }
+    public function setResize($to)
+    {
+        $this->resizeTo = $to;
+    }
     /**
      * (non-PHPdoc)
      * @see core/fields/Field#toHTML_edit()
      */
     protected function toHTML_edit()
     {
-        return $this->toHTML_add()."<input type='hidden' name='{$this->getName()}_data' id='{$this->getName()}_data' value='".$this->getValue()->url."'/>";
+        $value = $this->getValue();
+        $info = $preview = $valueUrl = "";
+        
+        if(empty($value->url))
+            $info = Language::get("nofile");
+        else
+        {
+            $c = Component::init("file");
+            
+            switch ($c->getType($value->type))
+            {
+                case "images":
+                    $info .= "<img src='/img/icons/image.png' alt='image'/>";
+                    $preview = "<img src='{$value->url}' alt='preview' style='max-height: 150px;'/><br />";
+                    break;
+                case "vid":
+                    $info .= "<img src='/img/icons/vid.png' alt='video'/>";
+                    break;
+                case "doc":
+                    $info .= "<img src='/img/icons/doc.png' alt='document'/>";
+                    break;
+                default:
+                    $info .= "<img src='/img/icons/other.png' alt='other'/>";
+                    break;
+            }
+            $info .= " ".$value->url;
+            $valueUrl = $value->url;
+        }
+        
+        $delete = "<input type='checkbox' name='{$this->getName()}_delete' />".Language::get("delete");
+        
+        return $preview.$info."<br />".$this->toHTML_add()."<input type='hidden' name='{$this->getName()}_data' id='{$this->getName()}_data' value='".$valueUrl."'/>".$delete;
+    }
+    /**
+     * (non-PHPdoc)
+     * @see Field::toHTML_view()
+     */
+    protected function toHTML_view()
+    {
+        $value = $this->getValue();
+        $info = $preview = $valueUrl = "";
+        
+        if(empty($value->url))
+            $info = Language::get("nofile");
+        else
+        {
+            $c = Component::init("file");
+            
+            switch ($c->getType($value->type))
+            {
+                case "images":
+                    $info .= "<img src='/img/icons/image.png' alt='image'/>";
+                    $preview = "<img src='{$value->url}' alt='preview' style='max-height: 150px;'/><br />";
+                    break;
+                case "vid":
+                    $info .= "<img src='/img/icons/vid.png' alt='video'/>";
+                    break;
+                case "doc":
+                    $info .= "<img src='/img/icons/doc.png' alt='document'/>";
+                    break;
+                default:
+                    $info .= "<img src='/img/icons/other.png' alt='other'/>";
+                    break;
+            }
+            $info .= " ".$value->url;
+            $valueUrl = $value->url;
+        }
+        
+        return $preview.$info;
     }
     /**
      * Convert the dbvalue of the param to what the field expects
@@ -82,6 +155,7 @@ class UploadField extends Field
         
         return $value;
     }
+    
     /**
      * upload the file on edit
      * @param SQLRecord $record
@@ -89,20 +163,48 @@ class UploadField extends Field
      */
     public function preSQL(&$record, $query)
     {
+        $record2 = $this->parent->getRecord();
+        
+        if($query->getAction() == "delete" || (($query->getAction() == "update" || $query->getAction() == "insert") && $record2[0]->{$this->getName()."_delete"} == "on"))
+        {
+            $data = $this->parent->doSelect()->getRows();
+            
+            foreach($data as $row)
+            {
+                if($row && isset($row->{$this->getDBName()}->url) && file_exists(Config::get("websiteroot", "/")."/".$row->{$this->getDBName()}->url))
+                {
+                    unlink(Config::get("websiteroot", "/")."/".$row->{$this->getDBName()}->url);
+                }
+                if($row && isset($row->{$this->getDBName()}->thumb) && file_exists(Config::get("websiteroot", "/")."/".$row->{$this->getDBName()}->thumb))
+                {
+                    unlink(Config::get("websiteroot", "/")."/".$row->{$this->getDBName()}->thumb);
+                }
+            }
+            
+            $this->setValue("");
+            $this->style = $this->style | Field::FORCEUPDATE;
+        }
+        
         if($query->getAction() == "update" || $query->getAction() == "insert")
         {
             if(is_object($this->getValue())) return;
             
             if(!empty($_FILES[$this->getName()]['name']))
             {
-                $record2 = $this->parent->getRecord();
                 $data = $record2[0]->{$this->getName()."_data"};
                 $fileData = $_FILES[$this->getName()];
                 $newData = new stdClass();
                 
-                if($data && file_exists(Config::get("websiteroot", "/")."/".$data))
+                //delete old images
+                $row = $this->parent->doSelect()->getRow();
+                
+                if($row && isset($row->{$this->getDBName()}->url) && file_exists(Config::get("websiteroot", "/")."/".$row->{$this->getDBName()}->url))
                 {
-                    unlink(Config::get("websiteroot", "/")."/".$data);
+                    unlink(Config::get("websiteroot", "/")."/".$row->{$this->getDBName()}->url);
+                }
+                if($row && isset($row->{$this->getDBName()}->url) && file_exists(Config::get("websiteroot", "/")."/".$row->{$this->getDBName()}->thumb))
+                {
+                    unlink(Config::get("websiteroot", "/")."/".$row->{$this->getDBName()}->thumb);
                 }
                 
                 $filename = md5($fileData['name'].time())."-".$fileData['name'];
@@ -119,22 +221,6 @@ class UploadField extends Field
                 $this->setValue("");
             }
         }
-        else if($query->getAction() == "delete")
-        {
-            $data = $this->parent->doSelect()->getRows();
-            
-            foreach($data as $row)
-            {
-                if($row && file_exists(Config::get("websiteroot", "/")."/".$row->{$this->getDBName()}->url))
-                {
-                    unlink(Config::get("websiteroot", "/")."/".$row->{$this->getDBName()}->url);
-                }
-                if($row && file_exists(Config::get("websiteroot", "/")."/".$row->{$this->getDBName()}->thumb))
-                {
-                    unlink(Config::get("websiteroot", "/")."/".$row->{$this->getDBName()}->thumb);
-                }
-            }
-        }
     }
     private function handleFileUpload($filename, $tmpUrl)
     {
@@ -147,10 +233,24 @@ class UploadField extends Field
         
         $newLoc = Config::get("websiteroot", "/")."/".$newUrl;
         
-        move_uploaded_file($tmpUrl, $newLoc);
+        //check if we need to resize
+        if($this->resizeTo != null)
+        {
+            $src = $this->resize($tmpUrl, $this->resizeTo, false);
+            
+            if($src)
+            {
+                imagepng($src, $newLoc);
+                imagedestroy($src);
+            }
+        }
+        else
+        {
+            move_uploaded_file($tmpUrl, $newLoc);
+        }
         
         //create thumb file
-        $thumb = $this->createThumb($filename, $newLoc);
+        $thumb = $this->createThumb($filename, $newLoc, Config::get("crop", true, "file"));
         
         return array($newUrl, $thumb);
     }
@@ -158,27 +258,25 @@ class UploadField extends Field
     {
         $ratio = $imageSize[0] / $imageSize[1];
         
-        if($imageSize[0] > $maxSize[0]) {
+        if(is_numeric($maxSize[0]) && $imageSize[0] > $maxSize[0]) {
             $imageSize[0] = $maxSize[0];
             $imageSize[1] = floor($maxSize[0] / $ratio);
         }
         
-        if($imageSize[1] > $maxSize[1]) {
+        if(is_numeric($maxSize[1]) && $imageSize[1] > $maxSize[1]) {
             $imageSize[1] = $maxSize[1];
             $imageSize[0] = floor($maxSize[1] * $ratio);
         }
         
         return $imageSize;
     }
-    private function createThumb($filename, $fileLoc)
+    private function resize($fileLoc, $to, $crop = true)
     {
         $info = getimagesize($fileLoc);
 
         if(in_array($info[2], array(1,2,3,6)))
         {
             $src = null;
-            $newUrl = $this->uploadDir.$this->parent->getName()."/".substr($filename, 0, strrpos($filename, "."))."_thumb".substr($filename, strrpos($filename, "."));
-            $maxDimentions = explode("x", Config::get("thumbsize", "100x100", "file"));
             
             switch($info[2])
             {
@@ -201,20 +299,48 @@ class UploadField extends Field
                     break;
             }
             
-            $ratio = $info[0]/$info[1];
-            
             //make a resize version to crop from
-            $newSrc = imagecreatetruecolor($maxDimentions[0], $maxDimentions[1]);
-            $rInfo = $this->calcBoundingBox($info, array(400, 400));
+            $newSrc = null;
             
-            $tmpSrc = imagecreatetruecolor($rInfo[0], $rInfo[1]);
-            imagecopyresampled($tmpSrc, $src, 0, 0, 0, 0, $rInfo[0], $rInfo[1], $info[0], $info[1]);
-            imagecopy($newSrc, $tmpSrc, 0, 0, floor($rInfo[0]/2 - ($maxDimentions[0]/2)), floor($rInfo[1]/2 - ($maxDimentions[1]/2)), $rInfo[0], $rInfo[1]);
-            imagedestroy($tmpSrc);
-            
-            imagepng($newSrc, Config::get("websiteroot", "/").$newUrl);
+            if($crop)
+            {
+                $newSrc = imagecreatetruecolor($to[0], $to[1]);
+                imagealphablending( $newSrc, false );
+                imagesavealpha( $newSrc, true );
+                $rInfo = $this->calcBoundingBox($info, array(400, 400));
+                
+                $tmpSrc = imagecreatetruecolor($rInfo[0], $rInfo[1]);
+                
+                imagecopyresampled($tmpSrc, $src, 0, 0, 0, 0, $rInfo[0], $rInfo[1], $info[0], $info[1]);
+                imagecopy($newSrc, $tmpSrc, 0, 0, floor($rInfo[0]/2 - ($to[0]/2)), floor($rInfo[1]/2 - ($to[1]/2)), $rInfo[0], $rInfo[1]);
+                imagedestroy($tmpSrc);
+            }
+            else
+            {
+                $rInfo = $this->calcBoundingBox($info, $to);
+                $newSrc = imagecreatetruecolor($rInfo[0], $rInfo[1]);
+                imagealphablending( $newSrc, false );
+                imagesavealpha( $newSrc, true );
+                
+                imagecopyresampled($newSrc, $src, 0, 0, 0, 0, $rInfo[0], $rInfo[1], $info[0], $info[1]);
+            }
             
             imagedestroy($src);
+            return $newSrc;
+        }
+        
+        return false;
+    }
+    
+    private function createThumb($filename, $fileLoc, $crop = true)
+    {
+        $newUrl = $this->uploadDir.$this->parent->getName()."/".substr($filename, 0, strrpos($filename, "."))."_thumb".substr($filename, strrpos($filename, "."));
+        $maxDimentions = explode("x", Config::get("thumbsize", "100x100", "file"));
+        $newSrc = $this->resize($fileLoc, $maxDimentions, $crop);
+        
+        if($newSrc)
+        {
+            imagepng($newSrc, Config::get("websiteroot", "/").$newUrl);
             imagedestroy($newSrc);
             
             return $newUrl;

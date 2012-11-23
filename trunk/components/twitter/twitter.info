@@ -2,7 +2,7 @@
 @package:components.twitter
 @copyright:(c) 2009-2010 Yannick de Lange
 @licence:http://www.gnu.org/licenses/gpl.txt
-@version:1
+@version:355
 
 TWITTER:
 A simple way to add the last tweed of a twitter account to the page. Settings need to be set in the config of this component

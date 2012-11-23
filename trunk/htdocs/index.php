@@ -31,8 +31,9 @@ try
 
     $smarty->template_dir = $websiteroot.'/templates';
     $smarty->compile_dir = $websiteroot.'/templates_c';
+    $smarty->compile_id = getLang();
     $smarty->cache_dir = $websiteroot.'/../cache';
-
+    $smarty->assign("LANG", $smarty->compile_id);
 
     $smartyLoader = new SmartyPageLoader();
     $smartyLoader->registerModulePlugins($smarty);

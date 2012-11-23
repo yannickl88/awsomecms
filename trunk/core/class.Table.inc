@@ -113,6 +113,8 @@ abstract class Table
     protected $editURL;
     protected $deleteURL;
     
+    protected $lockField = "";
+    
     /**
     * Static function to get a table object
     * 
@@ -226,6 +228,14 @@ abstract class Table
         $this->deleteURL = makeLink(array($componentObj, "delete"));
         
         return $this;
+    }
+    /**
+     * Assign a field which, when true, locks a row from being able to be edited
+     * 
+     * @param string $fieldName
+     */
+    public function lock($fieldName) {
+        $this->lockField = $fieldName;
     }
     /**
     * Add Field to the table
@@ -546,6 +556,8 @@ abstract class Table
     protected function toHTML_edit()
     {
         $data = $this->doSelect($this->request[0])->getRow();
+        $locked = (!empty($this->lockField) && $data->{$this->lockField} == 1);
+        
         $html_post = "";
         $fields = "";
         foreach($this->fields as $field) //@var $field Field
@@ -556,7 +568,10 @@ abstract class Table
             {
                 $fields .= "<div class=\"admin_form_row\">\n";
                 $fields .= "<div class=\"admin_form_label\"><label for=\"".$field->getName()."\">".$field->getDisplayName().":</label></div>\n";
-                $fields .= "<div class=\"admin_form_field\">".$field->toHTML(Field::EDIT)."</div>\n";
+                if($locked && $field->getName() != $this->lockField)
+                    $fields .= "<div class=\"admin_form_field\">".$field->toHTML(Field::DISABLED)."</div>\n";
+                else
+                    $fields .= "<div class=\"admin_form_field\">".$field->toHTML(Field::EDIT)."</div>\n";
                 $fields .= "</div>\n";
             }
             elseif($field->isIndex())
@@ -565,7 +580,8 @@ abstract class Table
             }
         }
         
-        $html = $this->getErrors();
+        $html = $this->getJavascript();
+        $html .= $this->getErrors();
         $html .= "<h2>".ucfirst(Language::get("edit"))." ".$this->parseTitle($this->title, $data)."</h2>\n";
         $multipart = "";
         if($this->multipart)
@@ -577,10 +593,12 @@ abstract class Table
         $html .= "<div class=\"admin_form_row admin_form_submit\">\n";
         $html .= "<input type='submit' value='".ucfirst(Language::get("save"))."' />\n";
         $html .= $html_post;
-        $html .= $this->getAssignment(Field::EDIT);
+        if($locked)
+            $html .= $this->getAssignment(Field::DISABLED);
+        else
+            $html .= $this->getAssignment(Field::EDIT);
         $html .= "</div>\n";
         $html .= "</form>\n";
-        $html .= $this->getJavascript();
         
         return $html;
     }
@@ -612,6 +630,7 @@ abstract class Table
         $cols = 0;
         foreach($data as $row)
         {
+            $this->setRecord($row);
             $class = "admin_table_row";
             
             if($count%2 == 1)
@@ -625,7 +644,8 @@ abstract class Table
             {
                 if($field->visible(Field::VIEW))
                 {
-                    $html .= "        <td class=\"admin_table_cell\">".$field->getValue($row)."</td>\n";
+                    $field->setValue($row->{$field->getName()});
+                    $html .= "        <td class=\"admin_table_cell\">".$field->toHTML(Field::VIEW)."</td>\n";
                     $cols++;
                 }
             }
@@ -681,7 +701,8 @@ abstract class Table
         $colspan = $cols + 1;
         $html .= "    <tr class=\"admin_table_row admin_table_actions_row\">\n";
         $html .= "        <td class=\"admin_table_cell admin_table_actions\" colspan=\"{$colspan}\">\n";
-        $html .= "            <img src=\"/img/icons/add.png\" alt=\"add\" /> <a href=\"/{$this->addURL}\">".ucfirst(Language::get("add"))."</a>\n";
+        if($this->addURL != null)
+            $html .= "            <img src=\"/img/icons/add.png\" alt=\"add\" /> <a href=\"/{$this->addURL}\">".ucfirst(Language::get("add"))."</a>\n";
         $html .= "        </td>\n";
         $html .= "        <td class=\"admin_table_cell\">\n";
         $html .= "            <a href=\"#\" onclick=\"return deleteMultiple('/{$this->deleteURL}', '{$this->keys[0]->getName()}', $('.actioncheckbox'));\"><img src=\"/img/icons/delete.png\" alt=\"".Language::get("deleteselected")."\" /></a>\n";
@@ -763,7 +784,8 @@ abstract class Table
             $field =  $this->getField($match);
             if($field)
             {
-                $title = str_replace("[{$match}]", $field->getValue($data), $title);
+                $field->setData($data);
+                $title = str_replace("[{$match}]", $field->toHTML(Field::VIEW), $title);
             }
         }
         
@@ -921,7 +943,7 @@ abstract class Table
         {
             $html .= "<input type='hidden' name='action' value='{$this->action}'/>\n";
         }
-        elseif($mode == Field::ADD || $mode == Field::DELETE || $mode == Field::EDIT)
+        elseif($mode == Field::ADD || $mode == Field::DELETE || $mode == Field::EDIT || $mode == Field::DISABLED)
         {
             $html .= "<input type='hidden' name='action' value='{$this->getAction($mode)}'/>\n";
         }
@@ -944,6 +966,9 @@ abstract class Table
         
         switch($mode)
         {
+            case Field::DISABLED:
+                return "disabled";
+                break;
             case Field::EDIT:
                 return "edit";
                 break;
@@ -1056,7 +1081,7 @@ abstract class Table
             {
                 $valid = false;
                 Debugger::getInstance()->log("Validation ERROR {$e->getField()->getName()} '{$e->getMessage()}'");
-                $exception->addInvalidField($e->getField()->getName(), $e->getMessage());
+                $exception->addInvalidField($e->getField()->getName().$e->getSection(), $e->getMessage());
             }
         }
         
@@ -1119,6 +1144,7 @@ abstract class Table
         {
             $field->preSQL($record, $query);
         }
+        $this->preSQL($record, $query);
     }
     private function callPostFields(&$record, $query)
     {
@@ -1126,5 +1152,16 @@ abstract class Table
         {
             $field->postSQL($record, $query);
         }
+        $this->postSQL($record, $query);
+    }
+    
+    protected function preSQL(&$record, $query)
+    {
+        
+    }
+    
+    protected function postSQL(&$record, $query)
+    {
+        
     }
 }

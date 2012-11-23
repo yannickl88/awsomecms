@@ -14,12 +14,26 @@
  */
 
 /**
-* Modifier to count the number of elements
+* Modifier to translate a text string
 * 
 * @param Array $array
 * @return Boolean
 */
-function smarty_modifier_text($string)
+function smarty_modifier_text($string, $lang = null)
 {
-    return Language::get($string);
+    if(empty($string)) return "";
+    
+    if($lang == null)
+        $lang = getLang();
+    
+    if(is_array($string))
+    {
+        return $string[$lang];
+    }
+    else 
+    {
+        if(Controller::getInstance()->getSmarty()->getTemplateVars('isADMIN') == 1)
+            return Language::get($string);
+        return Language::get($string, $lang);
+    }
 }
