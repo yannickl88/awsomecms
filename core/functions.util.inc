@@ -448,7 +448,7 @@ function getLang()
     else // get the browser language
         $lang = strtolower(substr($_SERVER['HTTP_ACCEPT_LANGUAGE'], 0, 2));
     
-    if(!in_array($lang, array("en", "nl")))
+    if(!in_array($lang, Config::get("languages", array("en"), "page")))
         $lang = "en"; //just in case it's not a valid language, return EN
     
     $_SESSION["USERLANG"] = $lang;

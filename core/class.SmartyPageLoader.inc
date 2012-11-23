@@ -133,11 +133,11 @@ class SmartyPageLoader
                 return $smarty_obj->fetch("{$template}.tpl");
             }
         }
-        elseif(file_exists("{$smarty_obj->template_dir}/layout.tpl")) //check for layout file
+        elseif($this->hasTemplate("layout.tpl", $smarty_obj)) //check for layout file
         {
             $smarty_obj->assign('content', $content);
 
-            if(file_exists("{$smarty_obj->template_dir}/{$url}.tpl"))
+            if($this->hasTemplate("{$url}.tpl", $smarty_obj))
             {
                 $smarty_obj->assign('content', $smarty_obj->fetch("{$url}.tpl"));
             }
@@ -148,7 +148,7 @@ class SmartyPageLoader
             {
                 if(preg_match("/".$map."/i", $_SERVER['HTTP_USER_AGENT']) > 0)
                 {
-                    if(file_exists("{$smarty_obj->template_dir}/robot_layout.tpl")) //check for layout file
+                    if($this->hasTemplate("robot_layout.tpl", $smarty_obj)) //check for layout file
                     {
                         Debugger::getInstance()->setRobot($map);
                         return $smarty_obj->fetch("robot_layout.tpl");
@@ -171,7 +171,7 @@ class SmartyPageLoader
             }
 
             //no layout fond so we fallback to the default
-            if(Config::get("privLayout", true, "debug") && $_GET["debug_public"] != 1 && in_array($_SERVER['REMOTE_ADDR'], Config::get("privLayout_ip", array(), "debug"))) {
+            if(Config::get("privLayout", true, "debug") && isset($_GET["debug_public"]) && $_GET["debug_public"] != 1 && in_array($_SERVER['REMOTE_ADDR'], Config::get("privLayout_ip", array(), "debug"))) {
                 return $smarty_obj->fetch("priv_layout.tpl");
             } 
             else
@@ -183,6 +183,18 @@ class SmartyPageLoader
         {
             return $content;
         }
+    }
+    
+    private function hasTemplate($tpl_name, $smarty_obj)
+    {
+        $dirs = $smarty_obj->getTemplateDir();
+        
+        foreach($dirs as $dir) {
+            if(file_exists("{$dir}/{$tpl_name}"))
+                return true;
+        }
+        
+        return false;
     }
     /**
      * load the template from the database
@@ -224,7 +236,6 @@ class SmartyPageLoader
                 $result->record->page_template = unserialize($result->record->page_template);
                 
                 $smarty_obj->assign('PAGE', $result->record);
-                $this->assignBackgroundImage($result->record, $smarty_obj);
                 
                 $html = $result->record->page_template[getLang()];
 
@@ -285,7 +296,6 @@ class SmartyPageLoader
                 if($result->count() > 0)
                 {
                     $smarty_obj->assign('PAGE', $result->record);
-                    $this->assignBackgroundImage($result->record, $smarty_obj);
                     // cache template timestamp
                     $this->timestamps[$tpl_name] = strtotime($result->record->page_timestamp);
 
@@ -324,47 +334,6 @@ class SmartyPageLoader
         return true;
     }
     /**
-     * Set the background image
-     * 
-     * @param $row
-     * @param Smarty $smarty_obj
-     */
-    public function assignBackgroundImage($row, $smarty_obj)
-    {
-        if($smarty_obj->getTemplateVars('BGIMG') != null)
-            return;
-        
-        if(!empty($row->page_slideshow) && empty($row->page_bg))
-        {
-            $fileComp = Component::init("file");
-            $loc = explode("/", $row->page_slideshow);
-            array_shift($loc);
-            array_shift($loc);
-            $type = array_shift($loc);
-            
-            $file_loc = '/'.implode("/", $loc);
-            $images = array();
-            
-            $rows = Table::init("file.files")
-                ->setRequest((object) array("file_location" => $file_loc))
-                ->doSelect();
-            
-            while($row = $rows->getRow())
-            {
-                if($fileComp->getType($row->file_data->type) == $type)
-                {
-                    $images[] = $row->file_data->url;
-                }
-            }
-            
-            $smarty_obj->assign('BGIMG', $images[rand(0, count($images) - 1)]);
-        }
-        else
-        {
-            $smarty_obj->assign('BGIMG', unserialize($row->page_bg)->url);
-        }
-    }
-    /**
      * register all the smarty extentions from the components,
      * see http://smarty.net/manual/en/plugins.php
      *
@@ -390,7 +359,7 @@ class SmartyPageLoader
         //Load components
         foreach($modules as $module => $component)
         {
-            $smarty_obj->plugins_dir[]  = $component->component_path.'/plugins/';
+            $smarty_obj->addPluginsDir($component->component_path.'/plugins/');
         }
         
         //Load the extentions

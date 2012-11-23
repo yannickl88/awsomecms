@@ -29,10 +29,11 @@ try
     $smarty->compile_check = true;
     $smarty->debugging = false;
 
-    $smarty->template_dir = $websiteroot.'/templates';
-    $smarty->compile_dir = $websiteroot.'/templates_c';
+    $smarty->setTemplateDir($websiteroot.'/templates');
+    $smarty->setConfigDir($websiteroot.'/templates_c');
+    $smarty->setCacheDir($websiteroot.'/../cache');
+    
     $smarty->compile_id = getLang();
-    $smarty->cache_dir = $websiteroot.'/../cache';
     $smarty->assign("LANG", $smarty->compile_id);
 
     $smartyLoader = new SmartyPageLoader();
