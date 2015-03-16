@@ -1,26 +1,8 @@
 <?php
 /**
- * This file is part of the A.W.S.O.M.E.cms distribution.
- * Detailed copyright and licensing information can be found
- * in the doc/COPYRIGHT and doc/LICENSE files which should be
- * included in the distribution.
- *
- * @package components.news
- *
- * @copyright (c) 2009-2010 Yannick de Lange
- * @license http://www.gnu.org/licenses/gpl.txt
- *
- * @version $Revision$
- */
-import('/core/class.Component.inc');
-import('/core/class.Language.inc');
-import('/components/news/util/class.NewsTree.inc');
-import('/libs/class.TextSpider.inc');
-
-/**
- * The News component provides a simple news system that allows for new messages. 
+ * The News component provides a simple news system that allows for new messages.
  * News items can be grouped using a tag if needed.
- * 
+ *
  * @author Yannick <yannick.l.88@gmail.com>
  */
 class NewsComponent extends Component
@@ -45,10 +27,10 @@ class NewsComponent extends Component
         $registerManager->registerAuth("news.action_delete", "admin");
         $newsRoot = Config::get("newsroot", "/", "news");
         $newsName = strtolower(Language::get("news"));
-        
+
         $registerManager->registerURLMap(preg_quote("{$newsRoot}news", "/").'\/([0-9]{4}?)\/([0-9]{2}?)\/(.*?)', 'news.index', 10);
         $registerManager->registerURLMap(preg_quote("{$newsRoot}news", "/").'(\/([0-9]*))?$', 'news.overview', 11);
-        
+
         $registerManager->registerPage(array($this, 'admin'), '{form table="news.news" form="admin"}');
         $registerManager->registerPage(array($this, 'add'), '{form table="news.news" form="add"}');
         $registerManager->registerPage(array($this, 'delete'), '{form table="news.news" form="delete"}');
@@ -69,9 +51,9 @@ class NewsComponent extends Component
             array($smartyLoader, "getSecure"),
             array($smartyLoader, "getTrusted"),
         ));
-        
+
         $smarty->assign("TITLE", 'news');
-        
+
         if(!empty($request['urlmapmatch']))
         {
             $items = array();
@@ -81,23 +63,23 @@ class NewsComponent extends Component
                 ->setRequest((object) array("max" => $ppp, "offset" => $page * $ppp, "hideHidden" => true))
                 ->doSelect()
                 ->getRows();
-            
+
             $count = (int) SQLQuery::doSelect("COUNT(news_id) AS total")
                 ->table(Table::init('news.news'))
                 ->exec()
                 ->getRow()
                 ->total;
-            
+
             $smarty->assign("news", $rows);
             $smarty->assign("content", $smarty->fetch("scf:news"));
             $smarty->assign("currentPage", $page + 1);
             $smarty->assign("totalPosts", $count);
             $smarty->assign("postsPerPage", $ppp);
-            
+
             Controller::getInstance()->setOutput($smartyLoader->getRenderedPage($smarty->fetch("news/news.tpl"), $_GET['url'], $smarty));
             return;
         }
-        
+
         Controller::getInstance()->setOutput($smartyLoader->getPage($_GET['url'], $smarty));
     }
     public function action_index($smarty, $smartyLoader, $request)
@@ -108,24 +90,24 @@ class NewsComponent extends Component
             array($smartyLoader, "getSecure"),
             array($smartyLoader, "getTrusted"),
         ));
-        
+
         if(!empty($request['urlmapmatch']))
         {
             $record = Table::init("news.news")
                 ->setRequest((object) array("news_titleurl" => $request['urlmapmatch'][3]))
                 ->doSelect();
-            
+
             if($record->count() == 1)
             {
                 //check the date given
                 $news = $record->getRow();
                 $data = strtotime($news->news_date);
-                
+
                 if(date("m", $data) === $request['urlmapmatch'][2] && date("Y", $data) === $request['urlmapmatch'][1])
                 {
                     $template = "news/news_item.tpl";
                     $smarty->assign("news", $news);
-                    
+
                     if(Cache::has("newslist"))
                     {
                         $newsList = Cache::get("newslist");
@@ -138,8 +120,8 @@ class NewsComponent extends Component
                             ->setRequest((object) array())
                             ->doSelect()
                             ->getRows();
-                        
-                        
+
+
                         foreach($news2 as $key => $newsitem)
                         {
                             $previtem = -1;
@@ -152,29 +134,29 @@ class NewsComponent extends Component
                             {
                                 $nextitem = $news2[$key - 1]->news_id;
                             }
-                            
+
                             $newsList[$newsitem->news_id] = array($previtem, $nextitem);
                         }
-                        
+
                         Cache::set("newslist", $newsList);
                     }
-                    
+
                     $smarty->assign("TITLE", $news->news_title);
-                    
+
                     $smarty->assign("nextnews", $newsList[$news->news_id][0]);
                     $smarty->assign("prevnews", $newsList[$news->news_id][1]);
-                    
+
                     echo $smartyLoader->getRenderedPage($smarty->fetch($template), $_GET['url'], $smarty);
                     return;
                 }
             }
         }
-        
+
         Controller::getInstance()->setOutput($smartyLoader->getPage($_GET['url'], $smarty));
     }
     /**
      * Action for adding a news item
-     * 
+     *
      * @param Smarty $smarty
      * @param SmartyPageLoader $smartyLoader
      * @param array $request
@@ -187,13 +169,13 @@ class NewsComponent extends Component
                 ->setRecord((object) $request)
                 ->doInsert()
                 ->insertID();
-            
+
             $this->redirect(array($this, "admin"));
         }
     }
     /**
      * Action for editing a news item
-     * 
+     *
      * @param Smarty $smarty
      * @param SmartyPageLoader $smartyLoader
      * @param array $request
@@ -205,12 +187,12 @@ class NewsComponent extends Component
             Table::init("news.news")
                 ->setRecord((object) $request)
                 ->doUpdate();
-            
+
             $this->redirect(array($this, "admin"));
         }
         else
         {
-            
+
             if(!empty($request['news_id']))
             {
                 Table::init('news.news')
@@ -224,7 +206,7 @@ class NewsComponent extends Component
     }
     /**
      * Action for deleting a news item
-     * 
+     *
      * @param Smarty $smarty
      * @param SmartyPageLoader $smartyLoader
      * @param array $request
@@ -236,7 +218,7 @@ class NewsComponent extends Component
             Table::init("news.news")
                 ->setRecord((object) $request)
                 ->doDelete();
-            
+
             $this->redirect(array($this, "admin"));
         }
         else
@@ -259,7 +241,7 @@ class NewsComponent extends Component
     public function registerTreeItems($tree)
     {
         $table = Table::init("news.news", "admintree");
-        
+
         $result = $table
             ->doSelect()
             ->getRows();
@@ -267,17 +249,17 @@ class NewsComponent extends Component
         $newsRoot = Config::get("newsroot", "/", "news");
         $newsName = strtolower(Language::get("news"));
         $tree->addChild(new NewsFolder($newsName, $newsRoot));
-            
+
         foreach($result as $row)
         {
             $row->news_title = $row->news_title[getLang()];
-            
+
             if(strlen($row->news_title) > 17)
             {
                 $row->news_title = substr($row->news_title, 0, 15)."...";
             }
             $row->news_location = $this->makeURL($row);
-            
+
             $tree->addChild(new NewsItem($row));
         }
     }
@@ -293,14 +275,14 @@ class NewsComponent extends Component
     }
     /**
      * Create a url for the news record
-     * 
+     *
      * @param Object $record
      * @return String
      */
     public function makeURL($record, $withpage = false)
     {
         $newsName = strtolower(Language::get("news"));
-        
+
         if($withpage)
             return $newsName."/".date("Y/m/", strtotime($record->news_date)).$record->news_titleurl;
         else
@@ -313,12 +295,12 @@ class NewsComponent extends Component
     public function getAllPages()
     {
         $table = Table::init("news.news", "admintree");
-    
+
         $pages = array();
         $result = $table
             ->doSelect()
             ->getRows();
-    
+
         foreach($result as $row)
         {
             $pages[md5('/'.$this->makeURL($row, true))] = (object) array(
@@ -329,7 +311,7 @@ class NewsComponent extends Component
                 "priority" => 0,
             );
         }
-    
+
         return $pages;
     }
 }

@@ -5,7 +5,7 @@
  * in the doc/COPYRIGHT and doc/LICENSE files which should be
  * included in the distribution.
  *
- * @package core
+ * @package components.core.plugins
  *
  * @copyright (c) 2009-2010 Yannick de Lange
  * @license http://www.gnu.org/licenses/gpl.txt
@@ -14,9 +14,12 @@
  */
 
 /**
- * Initalisation file, include this in order to use the CMS
- */
-require_once realpath(dirname(__FILE__).'/functions.util.inc');
-
-error_reporting(E_ALL);
-set_error_handler("handleError");
+* Modifier to count the number of elements
+* 
+* @param Array $array
+* @return Boolean
+*/
+function smarty_modifier_startswith($str, $needle)
+{
+    return substr($str, 0, strlen($needle)) == $needle;
+}

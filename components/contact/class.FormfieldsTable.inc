@@ -1,24 +1,7 @@
 <?php
 /**
- * This file is part of the A.W.S.O.M.E.cms distribution.
- * Detailed copyright and licensing information can be found
- * in the doc/COPYRIGHT and doc/LICENSE files which should be
- * included in the distribution.
- *
- * @package components.contact
- *
- * @copyright (c) 2009-2010 Yannick de Lange
- * @license http://www.gnu.org/licenses/gpl.txt
- *
- * @version $Revision$
- */
-importField("Field");
-importField("IntField");
-importField("BooleanField");
-
-/**
  * Form table, this is where all the forms are stored
- * 
+ *
  * @author Yannick <yannick.l.88@gmail.com>
  */
 class FormfieldsTable extends Table
@@ -30,7 +13,7 @@ class FormfieldsTable extends Table
     {
         parent::__construct("form_fields");
         $this->assign("contact");
-        
+
         $this->addField(new IntField("field_id", Field::AUTOKEY));
         $this->addField(new IntField("field_form"));
         $this->addField(new Field("field_name"));
@@ -42,10 +25,10 @@ class FormfieldsTable extends Table
      * (non-PHPdoc)
      * @see core/Table#select($query, $data)
      */
-    protected function select($query, $data = null) 
+    protected function select($query, $data = null)
     {
         $query->orderBy("field_id");
-        
+
         if($data)
         {
             $query->whereWhenSet("field_form", $data->form_id);

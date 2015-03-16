@@ -1,21 +1,7 @@
 <?php
 /**
- * This file is part of the A.W.S.O.M.E.cms distribution.
- * Detailed copyright and licensing information can be found
- * in the doc/COPYRIGHT and doc/LICENSE files which should be
- * included in the distribution.
- *
- * @package components.file.connectors
- *
- * @copyright (c) 2009-2010 Yannick de Lange
- * @license http://www.gnu.org/licenses/gpl.txt
- *
- * @version $Revision$
- */
-import("file.util.FileConnector");
-/**
  * Connector for twitpic.com
- * 
+ *
  * @author Yannick de Lange <yannick.l.88@gmail.com>
  */
 class TwitpicConnector implements FileConnector
@@ -23,7 +9,7 @@ class TwitpicConnector implements FileConnector
     /**
      * (non-PHPdoc)
      * @see components/file/util/FileConnector::fetch()
-     * 
+     *
      * @return array
      */
     public function fetch()
@@ -32,28 +18,28 @@ class TwitpicConnector implements FileConnector
         $lastID = null;
         $table = Table::init("file.files");
         $component = Component::init("file");
-        
+
         //fetch all images
         $rows = $table
         ->setRequest((object) array("file_reference" => "twitpic"))
         ->doSelect();
-        
+
         while($row = $rows->getRow())
         {
             $mapping[$row->file_data->filename] = $row;
-            
+
             if($lastID == null || strtotime($lastID->file_date) < strtotime($row->file_date))
                 $lastID = $row;
         }
-        
+
         $data = json_decode(file_get_contents("http://api.twitpic.com/2/users/show.json?username=".Config::get("twitpic_user", "", "connectors")));
         $return = array();
         $foundImages = array();
         $locMapping = $component->getLocationMap();
-        
+
         $loc = Config::get("websiteroot", "/")."/";
         $folder = Config::get("uploaddir", "/", "file")."files/twitpic/";
-        
+
         foreach($data->images as $image)
         {
             if(!isset($mapping[$image->id]))
@@ -61,16 +47,16 @@ class TwitpicConnector implements FileConnector
                 //download the file and thumb
                 $filename = $folder.$image->short_id.".".$image->type;
                 $filenameThumb = $folder.$image->short_id."_thumb.".$image->type;
-                
+
                 //is there an upload folder?
                 if(!file_exists($loc.$folder))
                 {
                     mkdir($loc.$folder, 0777, true);
                 }
-                
+
                 file_put_contents($loc.$filename, file_get_contents("http://twitpic.com/show/full/".$image->short_id));
                 file_put_contents($loc.$filenameThumb, file_get_contents("http://twitpic.com/show/thumb/".$image->short_id));
-                
+
                 $row = new stdClass();
                 $row->file_name = $image->short_id;
                 $row->file_data = (object) array(
@@ -85,27 +71,27 @@ class TwitpicConnector implements FileConnector
                 $row->file_tag = implode(", ", $this->getTags($image->message));
                 $row->file_description = $image->message;
                 $row->file_reference = "twitpic";
-                
+
                 $row = $table->setRecord($row)
                 ->doInsert()
                 ->getRow();
-                
+
                 $row->file_id = $table->getInsertedID();
                 $row->file_location = $locMapping[$component->getType($row->file_data->type)];
                 $node = new FileItem($row);
-                
+
                 array_push($return, $node->toData());
             }
             array_push($foundImages, $image->id);
             set_time_limit(60);
         }
-        
+
         $diff = array_diff(array_keys($mapping), $foundImages);
-        
+
         foreach($diff as $deleted)
         {
             $table->setRequest($mapping[$deleted])->doDelete();
-            
+
             //remove the images
             if(file_exists($loc.$mapping[$deleted]->file_data->url))
                 unlink($loc.$mapping[$deleted]->file_data->url);
@@ -123,7 +109,7 @@ class TwitpicConnector implements FileConnector
     public function walk($row)
     {
         $row->permissions = array(
-            "view" => true, 
+            "view" => true,
             "edit" => false,
             "delete" => false
         );
@@ -140,14 +126,14 @@ class TwitpicConnector implements FileConnector
     }
     /**
      * Parse a post for tags
-     * 
+     *
      * @param $tweet
      * @return array
      */
     private function getTags($tweet)
     {
         $matches = array();
-        
+
         preg_match_all('/#([\w]*)/', $tweet, $matches);
         return $matches[1];
     }

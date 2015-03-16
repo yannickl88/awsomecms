@@ -10,6 +10,7 @@
  *
  * @version $Revision$
  */
+require_once __DIR__ . '/../vendor/autoload.php';
 session_start();
 
 if(!file_exists('./install/')) //can we even do an install?
@@ -23,11 +24,9 @@ $websiteroot = dirname(__FILE__);
 
 include_once '../core/init.inc';
 
-import("libs/class.InstallHelper.inc");
-
 /**
  * Install the database
- * 
+ *
  * @return array()      [boolean, errormessage]
  */
 function installDB()
@@ -46,12 +45,12 @@ function installDB()
         {
             //try to create the DB
             $sql = 'CREATE DATABASE '.$database;
-            if (mysql_query($sql, $link)) 
+            if (mysql_query($sql, $link))
             {
                 SQL::getInstance()->reconnect();
                 return array(true, "");
-            } 
-            else 
+            }
+            else
             {
                 return array(false, "could not create DB");
             }
@@ -69,28 +68,28 @@ function installDB()
 }
 /**
  * Install the components
- * 
+ *
  * @return array()      [boolean, errormessage]
  */
 function installComponents()
 {
     global $websiteroot;
-    
+
     $h = new InstallHelper();
     $db = SQL::getInstance();
-    
+
     if(array_keys($_POST['components'], 'core'))
     {
         unset($_POST['components'][array_search('core', $_POST['components'])]);
     }
-    
+
     array_unshift($_POST['components'], 'core');
-    
+
     //fetch version number
     $versions = json_decode(file_get_contents($websiteroot."/install/version.json"));
-    
+
     file_put_contents(getFrameworkRoot()."/version.info", $versions->framework);
-    
+
     foreach($_POST['components'] as $component)
     {
         try
@@ -98,32 +97,32 @@ function installComponents()
             //run install sql
             $dir = realpath($websiteroot.'/../components/'.$component);
             $file = $dir.'/db/install.xml';
-            
+
             if(file_exists($file) && is_readable($file))
             {
                 $h->loadTable(file_get_contents($file));
             }
-            
+
             //insert component into the database
             $ini = parse_ini_file($dir.'/info.ini', true);
             $info = parseInfoFile($dir.'/'.$component.".info");
-            
+
             $dir = addslashes($dir);
-            
+
             $version = $info["atlines"]["version"];
-            
+
             //copy the install files
             if(file_exists($dir.'/install'))
             {
                 $h->rcopy($dir.'/install', $websiteroot);
             }
-            
+
             $db->query(
-                "INSERT INTO 
-                    `components` 
+                "INSERT INTO
+                    `components`
                 (
-                    `component_name`, 
-                    `component_path`, 
+                    `component_name`,
+                    `component_path`,
                     `component_auth`,
                     `component_version`
                 )
@@ -141,19 +140,19 @@ function installComponents()
             return array(false, $e->getMessage());
         }
     }
-    
+
     return array(true);
 }
 /**
  * Write the config file
- * 
+ *
  * @return boolean
  */
 function saveConfig()
 {
     global $websiteroot;
     $h = new InstallHelper();
-    
+
     $header = <<<HEADER
 ; This file is part of the A.W.S.O.M.E.cms distribution.
 ; Detailed copyright and licensing information can be found
@@ -171,11 +170,11 @@ function saveConfig()
 ;
 
 HEADER;
-    
+
     copy($websiteroot.'/config-default.ini', $websiteroot.'/config.ini');
-    
+
     $ini = parse_ini_file($websiteroot.'/config.ini', true);
-    
+
     //update the data
     $ini['db']['dbhost'] = $_POST['dbhost'];
     $ini['db']['database'] = $_POST['dbdatabase'];
@@ -190,14 +189,14 @@ HEADER;
     $ini['admin']['location'] = $_POST['admin_location'];
     $ini['admin']['login'] = $_POST['admin_login'];
     $ini['debug']['debug'] = $_POST['debug'];
-    
+
     $result = (file_put_contents($websiteroot.'/config.ini', $header.$h->arrayToIni($ini)) !== false);
-    
+
     if($result)
     {
         Config::getInstance()->reload();
     }
-    
+
     return $result;
 }
 
@@ -207,7 +206,7 @@ $config = Config::getInstance();
 if(!empty($_REQUEST['action']))
 {
     $data = true;
-    
+
     switch($_REQUEST['action'])
     {
         case 'checkphp' :
@@ -226,7 +225,7 @@ if(!empty($_REQUEST['action']))
         case 'checkdbconnection' :
             $connection = @mysql_connect($_REQUEST['host'], $_REQUEST['user'], $_REQUEST['pass']);
             $error = "";
-            
+
             if($connection == false)
             {
                 $error = "Could not connect to Database Host";
@@ -236,7 +235,7 @@ if(!empty($_REQUEST['action']))
                 //check privilages
                 $result = @mysql_query("SELECT Select_priv, Insert_priv, Update_priv, Delete_priv, Create_priv, Drop_priv, Alter_priv FROM mysql.user WHERE User = '{$_REQUEST['user']}' AND Host = '{$_REQUEST['host']}';", $connection);
                 $privs = @mysql_fetch_assoc($result);
-                
+
                 if(implode("", $privs) != "YYYYYYY")
                 {
                     $error = "Not enough privilages";
@@ -245,31 +244,31 @@ if(!empty($_REQUEST['action']))
                 {
                     //is the tabel empty if we have it? (if it empty we get an error)
                     $result = @mysql_query("SHOW TABLES FROM {$_REQUEST['db']}", $connection);
-                    
+
                     if($result !== false && mysql_num_rows($result) > 0)
                     {
                         $error = "Database is not empty";
                     }
                 }
             }
-            
+
             $data = array("success" => ($error == ""), "error" => $error);
             @mysql_close($connection);
             break;
         case 'save' :
             $check1 = false;
             $check2 = false;
-            $check3 = false; 
+            $check3 = false;
             $error = "";
-            
+
             if($check1 = saveConfig())
             {
                 $check2 = installDB();
-                
+
                 if($check2[0])
                 {
                     $check3 = installComponents();
-                    
+
                     if(!$check3[0])
                     {
                         $error = "could not install componentes, '" . $check3[1] . "'";
@@ -284,7 +283,7 @@ if(!empty($_REQUEST['action']))
             {
                 $error = "Could not save the config file";
             }
-            
+
             $data = array("result" => ($check1 && $check2[0] && $check3[0]), "error" => $error );
             break;
     }
@@ -313,9 +312,9 @@ foreach($componentsDirs as $component)
         {
             $infodata = parseInfoFile($websiteroot.'/../components/'.$component.'/'.$component.'.info', $component);
             $inidata = parse_ini_file($websiteroot.'/../components/'.$component.'/info.ini', true);
-            
+
             $components[$component] = array("name" => ucfirst($component), "info" => $infodata);
-            
+
             if($inidata['dependson'])
             {
                 $components[$component]['dependson'] = $inidata['dependson'];
@@ -327,10 +326,10 @@ foreach($componentsDirs as $component)
                 $components[$component]['dependson'] = array();
                 $components[$component]['hasdependencies'] = false;
             }
-            
+
             $components[$component]['canauth'] = ($inidata['canauth'] === "1");
             $components[$component]['development'] = $inidata['development'];
-            
+
             if($inidata['required'])
             {
                 $components[$component]['required'] = $inidata['required'];

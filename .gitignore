@@ -1,0 +1,13 @@
+/vendor/
+/cache/
+/htdocs/config.ini
+/htdocs/configs/
+/htdocs/css
+/htdocs/img/
+/htdocs/js/
+/htdocs/securimage_show.php
+/htdocs/templates/
+/htdocs/templates_c/
+/htdocs/install/templates_c/
+/.settings
+/.project

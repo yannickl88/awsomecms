@@ -1,29 +1,14 @@
 <?php
 /**
- * This file is part of the A.W.S.O.M.E.cms distribution.
- * Detailed copyright and licensing information can be found
- * in the doc/COPYRIGHT and doc/LICENSE files which should be
- * included in the distribution.
- *
- * @package core.fields
- *
- * @copyright (c) 2009-2010 Yannick de Lange
- * @license http://www.gnu.org/licenses/gpl.txt
- *
- * @version $Revision$
- */
-importField("Field");
-
-/**
  * Textarea field
- * 
+ *
  * @author Yannick <yannick.l.88@gmail.com>
  */
 class TextField extends Field
 {
     /**
      * Constructor
-     * 
+     *
      * @param string $name
      * @param string $displayName
      * @param int $style
@@ -94,7 +79,7 @@ JS;
                     toggle:{text:'source',activetext:'wysiwyg',cssclass:'toggle'},
                     resize:{cssclass:'resize'}
                 });
-                
+
                 element.parents("form").submit(function(e) {
                     $(e.currentTarget).find(".htmleditor").each(function(key, value) {
                         value.editor.post()

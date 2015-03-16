@@ -1,22 +1,7 @@
 <?php
 /**
- * This file is part of the A.W.S.O.M.E.cms distribution.
- * Detailed copyright and licensing information can be found
- * in the doc/COPYRIGHT and doc/LICENSE files which should be
- * included in the distribution.
- *
- * @package components.users.fields
- *
- * @copyright (c) 2009-2010 Yannick de Lange
- * @license http://www.gnu.org/licenses/gpl.txt
- *
- * @version $Revision$
- */
-importField("Field");
-
-/**
  * AuthsField list of check boxes
- * 
+ *
  * @author Yannick <yannick.l.88@gmail.com>
  */
 class AuthsField extends Field
@@ -28,7 +13,7 @@ class AuthsField extends Field
     protected function toHTML_add()
     {
         $groups = RegisterManager::getInstance()->getAuths();
-        
+
         $html = "";
         foreach($groups as $group => $auths)
         {
@@ -43,7 +28,7 @@ class AuthsField extends Field
     protected function toHTML_edit()
     {
         $groups = RegisterManager::getInstance()->getAuths();
-        
+
         $html = "";
         foreach($groups as $group => $auths)
         {

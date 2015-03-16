@@ -38,5 +38,6 @@
     "september":            "september",
     "october":              "oktober",
     "november":             "november",
-    "december":             "december"
+    "december":             "december",
+    "items":                "elementen"
 }

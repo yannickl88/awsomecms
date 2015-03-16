@@ -1,24 +1,7 @@
 <?php
 /**
- * This file is part of the A.W.S.O.M.E.cms distribution.
- * Detailed copyright and licensing information can be found
- * in the doc/COPYRIGHT and doc/LICENSE files which should be
- * included in the distribution.
- *
- * @package components.page
- *
- * @copyright (c) 2009-2010 Yannick de Lange
- * @license http://www.gnu.org/licenses/gpl.txt
- *
- * @version $Revision$
- */
-import('/libs/class.TextSpider.inc');
-import('/core/class.Component.inc');
-import('/components/page/util/class.Tree.inc');
-
-/**
  * The Page component, together with the core component, is this used to show pages and manage them
- * 
+ *
  * @author Yannick <yannick.l.88@gmail.com>
  */
 class PageComponent extends Component
@@ -42,12 +25,12 @@ class PageComponent extends Component
         $registerManager->registerAuth("page.action_edit", "admin");
         $registerManager->registerAuth("page.action_delete", "admin");
         $registerManager->registerAuth("page.action_loadTree", "admin");
-        
+
         $registerManager->registerPage(array($this, 'edit'), '{form table="page.pages" form="edit"}');
         $registerManager->registerPage(array($this, 'add'), '{form table="page.pages" form="add"}');
         $registerManager->registerPage(array($this, 'delete'), '{form table="page.pages" form="delete"}');
         $registerManager->registerPage("search", '{search}');
-        
+
         $registerManager->registerURLMap('^\/sitemap\.xml$', 'page.sitemap', 18);
     }
     /**
@@ -69,14 +52,14 @@ XML;
         $pages = array();
         $url = "http://".$_SERVER['SERVER_NAME'];
         $components = RegisterManager::getInstance()->getComponents();
-        
+
         foreach($components as $component => $componentData)
         {
             $pages = array_merge($pages, Component::init($component)->getAllPages());
         }
-        
+
         sort($pages);
-        
+
         foreach($pages as $page)
         {
             $xml .= "  <url>\n";
@@ -112,7 +95,7 @@ XML;
     }
     /**
      * Action for loading part of the tree
-     * 
+     *
      * @param Smarty $smarty
      * @param SmartyPageLoader $smartyLoader
      * @param array $request
@@ -123,7 +106,7 @@ XML;
     }
     /**
      * Action for adding a page
-     * 
+     *
      * @param Smarty $smarty
      * @param SmartyPageLoader $smartyLoader
      * @param array $request
@@ -136,13 +119,13 @@ XML;
                 ->setRecord((object) $request)
                 ->doInsert()
                 ->insertID();
-            
+
             $this->redirect(array($this, "edit"), array("page_id" => $id));
         }
     }
     /**
      * Action for editing a page
-     * 
+     *
      * @param Smarty $smarty
      * @param SmartyPageLoader $smartyLoader
      * @param array $request
@@ -154,7 +137,7 @@ XML;
             Table::init('page.pages')
                 ->setRecord((object) $request)
                 ->doUpdate();
-            
+
             $this->redirect(array($this, "edit"), array("page_id" => $request['page_id']));
         }
         else
@@ -172,7 +155,7 @@ XML;
     }
     /**
      * Action for deleting a page
-     * 
+     *
      * @param Smarty $smarty
      * @param SmartyPageLoader $smartyLoader
      * @param array $request
@@ -184,7 +167,7 @@ XML;
             Table::init('page.pages')
                 ->setRecord((object) $request)
                 ->doDelete();
-            
+
             $this->redirect(Config::get("location", "admin/", "admin"));
         }
         else
@@ -239,12 +222,12 @@ XML;
     {
         $table = Table::init("page.pages", "sitemap");
         $table->setRequest((object) array("where" => array('page_location', "/admin/%", "NOT LIKE")));
-        
+
         $pages = array();
         $result = $table
         ->doSelect()
         ->getRows();
-        
+
         foreach($result as $row)
         {
             $pages[md5($row->page_location.$row->page_name)] = (object) array(
@@ -255,7 +238,7 @@ XML;
                 "priority" => 0,
             );
         }
-        
+
         return $pages;
     }
 }

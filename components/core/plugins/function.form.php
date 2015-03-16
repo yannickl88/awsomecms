@@ -1,20 +1,5 @@
 <?php
 /**
- * This file is part of the A.W.S.O.M.E.cms distribution.
- * Detailed copyright and licensing information can be found
- * in the doc/COPYRIGHT and doc/LICENSE files which should be
- * included in the distribution.
- *
- * @package components.core.plugins
- *
- * @copyright (c) 2009-2010 Yannick de Lange
- * @license http://www.gnu.org/licenses/gpl.txt
- *
- * @version $Revision$
- */
-import("/core/class.Table.inc");
-
-/**
  * Form tag, this is used to add a form from a component to a page. This will call the action and hooks related to the action of the form
  *
  * @param array $params
@@ -28,7 +13,7 @@ function smarty_function_form($params, &$smarty)
     $components = RegisterManager::getInstance()->getComponents();
     $component;
     $table;
-    
+
     if(!empty($params['component']))
     {
         $component = $params['component'];
@@ -39,29 +24,29 @@ function smarty_function_form($params, &$smarty)
         $component = $tableID[0];
         $table = $tableID[1];
     }
-    
+
     //call the action for the form
     $componentObject = Component::init($component);
-    
+
     $action = $params['form'];
     $tableObject = null;
-    
+
     if(!isset($params['component']) && isset($params['table']))
     {
         $tableObject = Table::init($params['table']);
-        
+
         if(!$tableObject)
         {
             return "Could not find table '{$params['table']}'";
         }
-        
+
         $action = $tableObject->getAction($params['form']);
     }
-    
+
     $actionHandler = "action_".$action;
     $prehook = RegisterManager::getInstance()->getHook($component, $params['form'], "pre");
     $posthook = RegisterManager::getInstance()->getHook($component, $params['form'], "post");
-    
+
     if($componentObject)
     {
         switch(strtoupper($_SERVER['REQUEST_METHOD']))
@@ -75,7 +60,7 @@ function smarty_function_form($params, &$smarty)
                 $request['method'] = 'get';
                 break;
         }
-        
+
         if(isset($request['component']))
         {
             unset($request['component']);
@@ -84,7 +69,7 @@ function smarty_function_form($params, &$smarty)
         {
             unset($request['action']);
         }
-        
+
         if(method_exists($componentObject, $actionHandler))
         {
             //pre action
@@ -93,10 +78,10 @@ function smarty_function_form($params, &$smarty)
                 try
                 {
                     Debugger::getInstance()->log("Calling PRE hook {$prehook[1]} on {$prehook[0]}");
-                    
+
                     $prehookComponent = Component::init($prehook[0]);
                     $prehookAction = "hook_".$prehook[1];
-                    
+
                     if(method_exists($prehookComponent, $prehookAction))
                     {
                         $request = call_user_func(array($prehookComponent, $prehookAction), $smarty, $request);
@@ -104,23 +89,23 @@ function smarty_function_form($params, &$smarty)
                 }
                 catch(Exception $e) { }
             }
-            
+
             try
             {
                 call_user_func(array($componentObject, $actionHandler), $smarty, null, $request);
             }
             catch(Exception $e) { }
-            
+
             //post action
             if($posthook)
             {
                 try
                 {
                     Debugger::getInstance()->log("Calling POST hook {$posthook[1]} on {$posthook[0]}");
-                    
+
                     $posthookComponent = Component::init($posthook[0]);
                     $posthookAction = "hook_".$posthook[1];
-                    
+
                     if(method_exists($posthookComponent, $posthookAction))
                     {
                         $request = call_user_func(array($posthookComponent, $posthookAction), $smarty, $request);
@@ -130,9 +115,9 @@ function smarty_function_form($params, &$smarty)
             }
         }
     }
-    
+
     $render = $params['form'];
-    
+
     if(isset($params['component']))
     {
         $loc = $components[$component]->component_path."/forms/form.".$render.".tpl";
@@ -144,12 +129,12 @@ function smarty_function_form($params, &$smarty)
         {
             return "Could not find the Table '{$params['table']}'";
         }
-        
+
         if(isset($params['render']))
         {
             $render = $params['render'];
         }
-        
+
         switch(strtolower($render))
         {
             case "add":

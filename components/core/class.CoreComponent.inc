@@ -1,21 +1,5 @@
 <?php
 /**
- * This file is part of the A.W.S.O.M.E.cms distribution.
- * Detailed copyright and licensing information can be found
- * in the doc/COPYRIGHT and doc/LICENSE files which should be
- * included in the distribution.
- *
- * @package components.core
- *
- * @copyright (c) 2009-2010 Yannick de Lange
- * @license http://www.gnu.org/licenses/gpl.txt
- *
- * @version $Revision$
- */
-import('core/class.Component.inc');
-import('libs/class.InstallHelper.inc');
-
-/**
  * Core component class, this includes all the logic for the core actions
  */
 class CoreComponent extends Component
@@ -30,7 +14,7 @@ class CoreComponent extends Component
     /**
      * (non-PHPdoc)
      * @see core/Component::register()
-     * 
+     *
      * @param RegisterManager $registerManager
      */
     public function register($registerManager)
@@ -40,9 +24,9 @@ class CoreComponent extends Component
         $registerManager->registerAuth("core.action_getform", "admin");
         $registerManager->registerAuth("core.action_install", "admin");
         $registerManager->registerAuth("core.action_update", "admin");
-        
+
         $registerManager->registerURLMap('\/(.*)', 'core.index', 0);
-        
+
         //admin pages
         $registerManager->registerPage(Config::get("location", "admin/", "admin")."index", '{"welcomeadmin"|text}');
         $registerManager->registerPage(Config::get("login", "admin/login", "admin"), '{form component="users" form="admin_login"}');
@@ -65,17 +49,12 @@ class CoreComponent extends Component
             $this->redirect("/");
             Controller::getInstance()->redirect();
         }
-        
-        $smarty->registerResource("scf", array(
-            array($smartyLoader, "getTemplate"),
-            array($smartyLoader, "getTimestamp"),
-            array($smartyLoader, "getSecure"),
-            array($smartyLoader, "getTrusted"),
-        ));
-        
+
+        $smarty->registerResource("scf", $smartyLoader);
+
         //Handle URL
         $url = (isset($_GET['url']))? $_GET['url'] : "";
-        
+
         if(Language::has($url, getLang()))
             $smarty->assign("TITLE", $url);
         Controller::getInstance()->setOutput($smartyLoader->getPage($url, $smarty));
@@ -116,34 +95,34 @@ class CoreComponent extends Component
         if($request['method'] == 'post')
         {
             $data = "";
-            
+
             foreach($request['map'] as $map)
             {
                 if($data != "")
                 {
                     $data .= "\n";
                 }
-                
+
                 $data .= trim(urldecode($map));
             }
-            
+
             file_put_contents(getFrameworkRoot().'/core/layoutmap.conf', $data);
             $this->redirect(array($this, 'layout'));
         }
         else
         {
             $map = array();
-            
+
             if(file_exists(getFrameworkRoot().'/core/layoutmap.conf'))
             {
                 $data = file(getFrameworkRoot().'/core/layoutmap.conf');
-                
+
                 foreach($data as $line)
                 {
                     $map[] = explode(" ", trim($line));
                 }
             }
-            
+
             $smarty->assign("maping", $map);
         }
     }
@@ -159,16 +138,16 @@ class CoreComponent extends Component
         if($request['method'] == 'post')
         {
             $installer = new InstallHelper();
-            
+
             if(isset($request['installComponent']))
             {
                 $result = $installer->installComponent($request['installComponent'], ($request['installAdmin'] == 'true'));
-                
+
                 echo json_decode($result);
-                
+
                 Config::getInstance()->reload();
                 RegisterManager::getInstance()->reload();
-                
+
                 return;
             }
             echo "false";
@@ -191,7 +170,7 @@ class CoreComponent extends Component
             {
                 $updateURL = Config::get("updateurl", "", "update");
                 $versions = json_decode(file_get_contents("{$updateURL}/version.json"));
-                
+
                 if($request['framework'] == 1)
                 {
                     //framework?
@@ -200,29 +179,29 @@ class CoreComponent extends Component
                         $installer->downloadAndInstall("{$updateURL}/framework.zip");
                         file_put_contents(getFrameworkRoot()."/version.info", trim($versions->framework));
                     }
-                    
+
                     echo "true";
                     return;
                 }
-                
+
                 if(isset($request['updateComponent']))
                 {
                     //components
                     $components = RegisterManager::getInstance()->getComponents();
                     $component = $components[$request['updateComponent']];
                     $component_name = $component->component_name;
-                    
+
                     if(!empty($component->component_updateurl))
                     {
                         $extVersions = json_decode(file_get_contents("{$component->component_updateurl}/version.json"));
-                        
+
                         $version = trim($extVersions->$component_name);
                     }
                     else
                     {
                         $version = trim($versions->components->$component_name);
                     }
-                    
+
                     if($version > $component->component_version)
                     {
                         //is there an update URL set?
@@ -240,28 +219,28 @@ class CoreComponent extends Component
                                 die("false");
                             }
                         }
-                        
+
                         Table::init('core.components')->setRecord(array(
                             'component_version'=> trim($version),
                             'component_name' => $component->component_name
                         ))
                         ->doUpdate();
                     }
-                    
+
                     //update DB
                     if(file_exists($component->component_path.'/db/install.xml'))
                     {
                         $installer->loadTable(file_get_contents($component->component_path.'/db/install.xml'));
                     }
-                    
+
                     //copy any new stuff from the install folder
                     $installer->rcopy($component->component_path."/install", Config::get('websiteroot'), false);
-                    
+
                     echo "true";
-                    
+
                     Config::getInstance()->reload();
                     RegisterManager::getInstance()->reload();
-                    
+
                     return;
                 }
             }
@@ -271,13 +250,13 @@ class CoreComponent extends Component
                 {
                     $installer->loadTable(file_get_contents($component->component_path.'/db/install.xml'));
                 }
-                
+
                 //copy any new stuff from the install folder
                 $installer->rcopy($component->component_path."/install", Config::get('websiteroot'), false);
-                
+
                 Config::getInstance()->reload();
                 RegisterManager::getInstance()->reload();
-                
+
                 echo "true";
                 return;
             }
@@ -296,11 +275,11 @@ class CoreComponent extends Component
         if($request['method'] == 'post')
         {
             $components = RegisterManager::getInstance()->getComponents();
-            
+
             foreach($components as $component)
             {
                 $key = "auth_".$component->component_name;
-                
+
                 if(!isset($request[$key]))
                 {
                     $total = 15;
@@ -309,19 +288,19 @@ class CoreComponent extends Component
                 {
                     $total = 15 - array_sum($request[$key]);
                 }
-                
-                
+
+
                 if($total != $component->component_auth)
                 {
                     Table::init('core.components')
                         ->setRecord((object) array(
-                            "component_auth" => $total, 
+                            "component_auth" => $total,
                             "component_name" => $component->component_name
                         ))
                         ->doUpdate();
                 }
             }
-            
+
             RegisterManager::getInstance()->reload();
             //$this->redirect(array($this, 'components'));
         }
@@ -329,7 +308,7 @@ class CoreComponent extends Component
         {
             $updateURL = Config::get("updateurl", "", "update");
             $versions = new stdClass();
-            
+
             if(file_exists("{$updateURL}/version.json"))
             {
                 //fetch the current version info
@@ -341,37 +320,37 @@ class CoreComponent extends Component
                 "disable" => true,
                 "U2D" => (file_exists(getFrameworkRoot()."/version.info") && isset($versions->framework) && trim(file_get_contents(getFrameworkRoot()."/version.info")) == trim($versions->framework)),
             );
-            
-            
-            
+
+
+
             $smarty->assign("framework", $framework);
-            
+
             $components = RegisterManager::getInstance()->getComponents();
-            
+
             foreach($components as $component)
             {
                 $version = $component->component_version;
-                
+
                 $component->SVN = file_exists($component->component_path.".svn/");
                 $component->disable = $component->SVN;
                 $component->U2D = "???";
                 $component->info = array();
                 $component->needsPatch = false;
-                
+
                 $component_name = $component->component_name;
-                
+
                 //check if there are patches to be run
                 if(file_exists($component->component_path."db/install.xml"))
                 {
                     $ih = new InstallHelper();
                     $component->needsPatch = $ih->needsLoad(file_get_contents($component->component_path."db/install.xml"));
                 }
-                
+
                 //is there an update URL set?
                 if(!empty($component->component_updateurl))
                 {
                     $extVersions = json_decode(file_get_contents("{$component->component_updateurl}/version.json"));
-                    
+
                     if($extVersions === false || $extVersions === null)
                     {
                         $component->U2D = "???";
@@ -385,22 +364,22 @@ class CoreComponent extends Component
                 {
                     $component->U2D = (isset($versions->components->$component_name) && trim($versions->components->$component_name) == $version);
                 }
-                
+
                 $component->info = parseInfoFile($component->component_path."/{$component_name}.info", $component_name);
             }
-            
+
             //search for non installed components
             $componentsDir = getFrameworkRoot()."/components";
             $uninstalledComponents = array();
-            
+
             if(file_exists($componentsDir))
             {
                 $folders = scandir($componentsDir);
-                
+
                 foreach($folders as $folder)
                 {
                     $componentDir = $componentsDir."/".$folder;
-                    
+
                     if($folder != "." && $folder != '..' && is_dir($componentDir) && $folder != ".svn")
                     {
                         //check for a info file, if so then it must be component
@@ -409,13 +388,13 @@ class CoreComponent extends Component
                             $component = new stdClass();
                             $component->component_name = $folder;
                             $component->info = parseInfoFile($componentDir."/{$folder}.info", $folder);
-                            
+
                             $uninstalledComponents[$component->component_name] = $component;
                         }
                     }
                 }
             }
-            
+
             $smarty->assign("components", $components);
             $smarty->assign("uninstalledComponents", $uninstalledComponents);
             $smarty->assign("auth", array(
@@ -430,19 +409,19 @@ class CoreComponent extends Component
     {
         $websiteRoot = Config::get("websiteroot");
         $installHelper = new InstallHelper();
-        
+
         $installHelper->remove($websiteRoot."/install/");
         $installHelper->remove($websiteRoot."/install.php");
-        
+
         //remove the notification
         Notifications::getInstance()->removeNotification("*","installnotremoved");
-        
+
         $this->ajax(true);
     }
     public function action_getform($smarty, $smartyLoader, $request)
     {
         $smarty->loadPlugin("smarty_function_form");
-        
+
         $html = smarty_function_form($request["data"], $smarty);
         $this->ajax(array("html" => base64_encode($html)));
     }

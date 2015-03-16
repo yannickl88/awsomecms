@@ -1,22 +1,7 @@
 <?php
 /**
- * This file is part of the A.W.S.O.M.E.cms distribution.
- * Detailed copyright and licensing information can be found
- * in the doc/COPYRIGHT and doc/LICENSE files which should be
- * included in the distribution.
- *
- * @package libs
- *
- * @copyright (c) 2009-2010 Yannick de Lange
- * @license http://www.gnu.org/licenses/gpl.txt
- *
- * @version $Revision$
- */
-import("libs/class.PorterStemmer.inc");
-
-/**
  * Spider class for indexing and searching in the text items
- * 
+ *
  * @author Yannick <yannick.l.88@gmail.com>
  */
 class TextSpider
@@ -34,11 +19,11 @@ class TextSpider
         $this->words2id = array();
         $this->newWords = array();
         $this->id = 0;
-        
+
     }
     /**
      * Index a text block, the found words and matches are stored in the database
-     * 
+     *
      * @param String $string
      * @param int $link
      * @param String $hook
@@ -50,32 +35,32 @@ class TextSpider
             ->select("word_word")
             ->table("search_words")
             ->exec();
-        
+
         while($result = $results->getRow())
         {
             $this->id2words[$result->word_id] = $result->word_word;
-            
+
             if($result->word_id > $this->id)
             {
                 $this->id = (int) $result->word_id;
             }
         }
-        
+
         $this->words2id = array_flip($this->id2words);
-        
+
         //create a new item for this if not already there
         $item = -1;
-        
+
         $result = SQLQuery::doSelect()
             ->table("search_items")
             ->where("item_hook", $hook)
             ->exec();
-        
+
         if($result->count() > 0)
         {
             $item = $result->getRow()->item_id;
             $this->clearByID($item);
-            
+
             SQLQuery::doUpdate()
                 ->table("search_items")
                 ->update("item_link", $link)
@@ -98,30 +83,30 @@ class TextSpider
                 ->exec()
                 ->insertID();
         }
-        
+
         if(is_array($string))
             $string = implode(" ", $string);
-        
+
         $string = trim(preg_replace(array('/(\s+)/', '/(\[.*?\])/', '/(<.*?>)/', '/({.*?})/'), " ", str_replace(array(".", ",", "'", "\"", "\n", "\r", "“"), " ", strtolower($string))));
         $words = array();
         $offset = 0;
         $break = false;
-        
+
         while(!$break)
         {
             $nextSpace = strpos($string, " ", $offset);
-            
+
             if($nextSpace !== false)
             {
                 $word = $this->procesWord(substr($string, $offset, $nextSpace - $offset));
-                
+
                 $from = $offset - 20;
-                
+
                 if($from < 0)
                 {
                     $from = 0;
                 }
-                
+
                 $offset = $nextSpace + 1;
             }
             else
@@ -130,7 +115,7 @@ class TextSpider
                 $string = "";
                 $break = true;
             }
-            
+
             if(preg_match('/^[a-zA-Z0-9]*$/', $word) !== 0 && strlen($word) > 1)
             {
                 if(!isset($words[$word]))
@@ -141,19 +126,19 @@ class TextSpider
             }
         }
         $query = SQLQuery::doMInsert(array("ref_word", "ref_item", "ref_count"))->table("search_refs");
-        
+
         foreach($words as $word => $data)
         {
             $query->mInsert(array(
-                "ref_word" => $this->getID($word), 
-                "ref_item" => $item, 
+                "ref_word" => $this->getID($word),
+                "ref_item" => $item,
                 "ref_count" => $data,
             ));
         }
-        
+
         //add missing words to the db
         $this->addNewWords();
-        
+
         //add refs
         $query->exec();
     }
@@ -170,7 +155,7 @@ class TextSpider
             ->table("search_items")
             ->where("item_hook", $hook)
             ->exec();
-        
+
         if($result->count() > 0)
         {
             $this->clearByID($result->getRow()->item_id);
@@ -182,16 +167,16 @@ class TextSpider
             ->table("search_items")
             ->where("item_checksum", md5($link))
             ->exec();
-        
+
         if($result->count() > 0)
         {
             $this->clearByID($result->getRow()->item_id);
         }
     }
-    
+
     /**
      * Get the ID that comes with a word
-     * 
+     *
      * @param String $word
      * @return int
      */
@@ -204,11 +189,11 @@ class TextSpider
         else
         {
             $this->id++;
-            
+
             $this->words2id[$word] = $this->id;
             $this->id2words[$this->id] = $word;
             $this->newWords[$this->id] = $word;
-            
+
             return $this->id;
         }
     }
@@ -220,22 +205,22 @@ class TextSpider
         if(count($this->newWords) > 0)
         {
             $query = SQLQuery::doMInsert(array("word_id", "word_word"))->table("search_words");
-            
+
             foreach($this->newWords as $id => $word)
             {
                 $query->mInsert(array(
-                    "word_id" => $id, 
-                    "word_word" => $word, 
+                    "word_id" => $id,
+                    "word_word" => $word,
                 ));
             }
-            
+
             $this->newWords = array();
             $query->exec();
         }
     }
     /**
      * Parse a word before proccessing
-     * 
+     *
      * @param String $word
      * @return String
      */
@@ -245,7 +230,7 @@ class TextSpider
     }
     /**
      * Search for items that are indexed
-     * 
+     *
      * @param Array $words
      * @return Array
      */
@@ -260,22 +245,22 @@ class TextSpider
             ->join("search_items", "ref_item", "item_id", "INNER")
             ->groupBy("search_items.item_id")
             ->orderBy("rating", "DESC");
-        
+
         foreach($words as $word)
         {
             $query->where("word_word", "%".PorterStemmer::Stem($word)."%", "LIKE", "OR");
         }
-        
+
         if($limit >= 0)
             $query->limit($limit[0], $limit[1]);
 
         $searchResults = $query->exec()->getRows();
-        
+
         return $searchResults;
     }
     /**
      * Helper for sorting items based on rank
-     * 
+     *
      * @param Object $a
      * @param Object $b
      * @return int

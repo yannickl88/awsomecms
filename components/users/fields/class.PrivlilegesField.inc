@@ -1,22 +1,7 @@
 <?php
 /**
- * This file is part of the A.W.S.O.M.E.cms distribution.
- * Detailed copyright and licensing information can be found
- * in the doc/COPYRIGHT and doc/LICENSE files which should be
- * included in the distribution.
- *
- * @package components.users.fields
- *
- * @copyright (c) 2009-2010 Yannick de Lange
- * @license http://www.gnu.org/licenses/gpl.txt
- *
- * @version $Revision$
- */
-importField("IntField");
-
-/**
  * Privileges list of check boxes
- * 
+ *
  * @author Yannick <yannick.l.88@gmail.com>
  */
 class PrivlilegesField extends IntField
@@ -30,7 +15,7 @@ class PrivlilegesField extends IntField
         $privs = Table::init("users.privileges")
             ->doSelect()
             ->getRows();
-        
+
         $html = "";
         foreach($privs as $priv)
         {
@@ -47,12 +32,12 @@ class PrivlilegesField extends IntField
         $privs = Table::init("users.privileges")
             ->doSelect()
             ->getRows();
-        
+
         $html = "";
         foreach($privs as $priv)
         {
             $checked = "";
-            
+
             if(Config::hasFlag((int) $this->getValue(), (int) $priv->privilege_int))
             {
                 $checked = "checked=\"checked\"";

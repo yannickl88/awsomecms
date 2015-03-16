@@ -146,7 +146,7 @@ class Config
     {
         if($section === false)
         {
-            if(array_key_exists($key, $this->data))
+            if($this->hasKey($key))
             {
                 return $this->data[$key];
             }
@@ -159,7 +159,7 @@ class Config
         }
         else
         {
-            if(array_key_exists($section, $this->data) && array_key_exists($key, $this->data[$section]))
+            if($this->hasKey($key, $section))
             {
                 return $this->data[$section][$key];
             }
@@ -171,6 +171,13 @@ class Config
             }
         }
     }
+	public function hasKey($key, $section = false)
+	{
+		if($section === false)
+			return array_key_exists($key, $this->data);
+		else
+			return array_key_exists($section, $this->data) && array_key_exists($key, $this->data[$section]);
+	}
     /**
      * reload the config values, this should be called when the config is changed during the execution of a page
      */

@@ -1,28 +1,13 @@
 <?php
 /**
- * This file is part of the A.W.S.O.M.E.cms distribution.
- * Detailed copyright and licensing information can be found
- * in the doc/COPYRIGHT and doc/LICENSE files which should be
- * included in the distribution.
- *
- * @package components.users.fields
- *
- * @copyright (c) 2009-2010 Yannick de Lange
- * @license http://www.gnu.org/licenses/gpl.txt
- *
- * @version $Revision$
- */
-importField("Field");
-
-/**
  * Selection list of all the users
- * 
+ *
  * @author Yannick <yannick.l.88@gmail.com>
  */
 class UsersField extends Field
 {
     private $username;
-    
+
     /**
      * (non-PHPdoc)
      * @see core/fields/Field#setData($record)
@@ -30,7 +15,7 @@ class UsersField extends Field
     public function setData($record)
     {
         $this->username = $record->user_name;
-        
+
         return parent::setData($record);
     }
     /**
@@ -57,7 +42,7 @@ class UsersField extends Field
         $users = Table::init("users.users")
             ->doSelect()
             ->getRows();
-        
+
         $html = "";
         $html .= "<select class='cmsfield' name=\"{$this->getName()}\" id=\"{$this->getName()}\" >";
         foreach($users as $user)
@@ -76,7 +61,7 @@ class UsersField extends Field
         $users = Table::init("users.users")
             ->doSelect()
             ->getRows();
-        
+
         $html = "";
         $html .= "<select class='cmsfield' name=\"{$this->getName()}\" id=\"{$this->getName()}\" >";
         foreach($users as $user)
@@ -86,7 +71,7 @@ class UsersField extends Field
             {
                 $checked = " selected=\"selected\"";
             }
-            
+
             $html .= "    <option value=\"{$user->user_id}\"{$checked}>{$user->user_name}</option>";
         }
         $html .= "</select>";
@@ -110,6 +95,6 @@ class UsersField extends Field
         $query->join("users", $this->getName(), "user_id")
             ->select("user_name")
             ->select("user_id");
-        
+
     }
 }

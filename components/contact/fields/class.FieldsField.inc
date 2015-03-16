@@ -1,29 +1,14 @@
 <?php
 /**
- * This file is part of the A.W.S.O.M.E.cms distribution.
- * Detailed copyright and licensing information can be found
- * in the doc/COPYRIGHT and doc/LICENSE files which should be
- * included in the distribution.
- *
- * @package components.contact.fields
- *
- * @copyright (c) 2009-2010 Yannick de Lange
- * @license http://www.gnu.org/licenses/gpl.txt
- *
- * @version $Revision$
- */
-importField("Field");
-
-/**
  * Field for selecting the location within the site
- * 
+ *
  * @author Yannick <yannick.l.88@gmail.com>
  */
 class FieldsField extends Field
 {
     /**
      * Constructor
-     * 
+     *
      * @param string $name
      * @param string $displayName
      * @param int $style
@@ -40,7 +25,7 @@ class FieldsField extends Field
     {
         $lang = Language::getInstance();
         $add = ucfirst($lang->getText("add"));
-        
+
         $html = <<<HTML
             <table id="{$this->getName()}">
                 <tr>
@@ -64,10 +49,10 @@ HTML;
     protected function toHTML_edit()
     {
         $lang = Language::getInstance();
-        
+
         $fields = $this->getRequestValue();
         $add = ucfirst($lang->getText("add"));
-        
+
         $html = <<<HTML
             <table id="{$this->getName()}">
                 <tr>
@@ -100,12 +85,12 @@ HTML;
                     break;
             }
             $fieldRequired = "";
-            
+
             if($field->field_required == 1)
             {
                 $fieldRequired = 'checked="checked"';
             }
-            
+
             $html .= <<<HTML
                     <tr class="fieldrow">
                         <td>
@@ -150,7 +135,7 @@ HTML;
     public function getJavascript()
     {
         $lang = Language::getInstance();
-        
+
         //TODO: fix this so that it can be used multiple times on the same page. Now it is depended on the field name.
         return <<<JS
             $("#{$this->getName()}").ready(function(e) {
@@ -158,28 +143,28 @@ HTML;
                     prossesFields();
                 });
             });
-        
+
             function prossesFields()
             {
                 var string = '';
-                
+
                 var fieldsTable = $("#{$this->getName()}");
-                
+
                 fieldsTable.find(".fieldrow").each(function(key, value) {
                     if(string != '')
                         string += "&";
-                    
+
                     var required = ($(value).find(".field_required").attr("checked"))? 1 : 0;
-                    
+
                     string += "field_name[]="+ encodeURIComponent($(value).find(".field_name").val());
                     string += "&field_code[]="+ encodeURIComponent($(value).find(".field_code").val());
                     string += "&field_type[]="+ encodeURIComponent($(value).find(".field_type").val());
                     string += "&field_required[]="+ required;
                     string += "&field_sort[]="+ encodeURIComponent($(value).find(".field_sort").val());
                 });
-                
+
                 $("#{$this->getName()}_fields").val(string);
-                
+
                 return false;
             }
             function addFieldsRow()
@@ -210,17 +195,17 @@ HTML;
                             <a href="#" onclick="return deleteFieldsRow('+($("#{$this->getName()} tr.fieldrow").length)+')"><img src="/img/icons/cross.png" id="deleteIcon"/><\/a>\
                         <\/td>\
                     <\/tr>';
-                
+
                 $("#{$this->getName()}").append(html);
-                
+
                 return false;
             }
             function deleteFieldsRow(id)
             {
                 $($("#{$this->getName()} tr.fieldrow")[id]).remove();
-                
+
                 resetFieldsRowIds();
-                
+
                 return false;
             }
             function resetFieldsRowIds()
@@ -229,7 +214,7 @@ HTML;
                     $(value).find("#deleteIcon").removeAttr("onclick");
                     $(value).find("#deleteIcon").click(function(e) { deleteFieldsRow(key); });
                 });
-                
+
                 return false;
             }
 JS;

@@ -1,24 +1,9 @@
 <?php
 /**
- * This file is part of the A.W.S.O.M.E.cms distribution.
- * Detailed copyright and licensing information can be found
- * in the doc/COPYRIGHT and doc/LICENSE files which should be
- * included in the distribution.
- *
- * @package components.users.fields
- *
- * @copyright (c) 2009-2010 Yannick de Lange
- * @license http://www.gnu.org/licenses/gpl.txt
- *
- * @version $Revision$
- */
-importField("Field");
-
-/**
  * Selection list of all the users, do note you may want to use this as a dummy
- * field and so something with it yourself. There is currently no relation 
+ * field and so something with it yourself. There is currently no relation
  * option or something.
- * 
+ *
  * @author Yannick <yannick.l.88@gmail.com>
  */
 class UsersselectField extends Field
@@ -32,7 +17,7 @@ class UsersselectField extends Field
         $users = Table::init("users.users")
             ->doSelect()
             ->getRows();
-        
+
         $html = "";
         $html .= "<div style=\"float: left; width: 150px;\">";
         $html .= "    Selected Users<br />";
@@ -64,7 +49,7 @@ class UsersselectField extends Field
         $users = Table::init("users.users")
             ->doSelect()
             ->getRows();
-        
+
         $html = "";
         $html .= "<div style=\"float: left; width: 150px;\">";
         $html .= "    Selected Users<br />";
@@ -117,27 +102,27 @@ class UsersselectField extends Field
             {
                 var fromObj = $('#'+from);
                 var toObj = $('#'+to);
-                
+
                 fromObj.find("option").each(function(key, value) {
                     if(value.selected)
                     {
                         toObj.append($(value));
                     }
                 });
-                
+
                 form_UsersselectField_updateUsersField()
             }
-            
+
             function form_UsersselectField_updateUsersField()
             {
                 $("#{$this->getName()}_values").empty();
                 $("#{$this->getName()}_activeusers option").each(function(key, value) {
                     $('#{$this->getName()}_values').append("<input type='hidden' name='users[]' value='"+$(value).val()+"' />");
                 });
-                
+
                 return true;
             }
-            
+
             $().ready(function(e) {
                 form_UsersselectField_updateUsersField();
             });

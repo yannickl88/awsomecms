@@ -12,8 +12,6 @@
  *
  * @version $Revision$
  */
-import("core/class.Extention.inc");
-import("libs/class.BBCodeParser.inc");
 
 /**
  * Exception thrown when a page could not be found
@@ -32,16 +30,18 @@ class NotInstalledException extends Exception {}
  * Handel all the database loading and file checking. Also do some util
  * actions with smarty, like loading all the plugins
  */
-class SmartyPageLoader
+class SmartyPageLoader extends Smarty_Resource_Custom
 {
     private $timestamps;
+    private $smarty;
 
     /**
      * constructor
      */
-    public function __construct()
+    public function __construct($smarty)
     {
         $this->timestamps = array();
+        $this->smarty = $smarty;
     }
     /**
      * Get the HTML of an page
@@ -133,22 +133,22 @@ class SmartyPageLoader
                 return $smarty_obj->fetch("{$template}.tpl");
             }
         }
-        elseif($this->hasTemplate("layout.tpl", $smarty_obj)) //check for layout file
+        elseif($smarty_obj->templateExists("layout.tpl")) //check for layout file
         {
             $smarty_obj->assign('content', $content);
 
-            if($this->hasTemplate("{$url}.tpl", $smarty_obj))
+            if(file_exists("{$smarty_obj->template_dir[0]}/{$url}.tpl"))
             {
                 $smarty_obj->assign('content', $smarty_obj->fetch("{$url}.tpl"));
             }
-            
+
             $robotmap = Config::get('robots', array());
 
             foreach($robotmap as $map)
             {
                 if(preg_match("/".$map."/i", $_SERVER['HTTP_USER_AGENT']) > 0)
                 {
-                    if($this->hasTemplate("robot_layout.tpl", $smarty_obj)) //check for layout file
+                    if(file_exists("{$smarty_obj->template_dir}/robot_layout.tpl")) //check for layout file
                     {
                         Debugger::getInstance()->setRobot($map);
                         return $smarty_obj->fetch("robot_layout.tpl");
@@ -173,7 +173,7 @@ class SmartyPageLoader
             //no layout fond so we fallback to the default
             if(Config::get("privLayout", true, "debug") && isset($_GET["debug_public"]) && $_GET["debug_public"] != 1 && in_array($_SERVER['REMOTE_ADDR'], Config::get("privLayout_ip", array(), "debug"))) {
                 return $smarty_obj->fetch("priv_layout.tpl");
-            } 
+            }
             else
             {
                 return $smarty_obj->fetch("layout.tpl");
@@ -184,44 +184,31 @@ class SmartyPageLoader
             return $content;
         }
     }
-    
-    private function hasTemplate($tpl_name, $smarty_obj)
-    {
-        $dirs = $smarty_obj->getTemplateDir();
-        
-        foreach($dirs as $dir) {
-            if(file_exists("{$dir}/{$tpl_name}"))
-                return true;
-        }
-        
-        return false;
-    }
     /**
      * load the template from the database
      *
-     * @param string $tpl_name      Template name
-     * @param string $tpl_source    Template content, should be set
-     * @param Smarty $smarty_obj    Smarty object
+     * @param string  $name    template name
+     * @param string  &$source template source
+     * @param integer &$mtime  template modification timestamp (epoch)
      * @return boolean
      */
-    public function getTemplate($tpl_name, $tpl_source, $smarty_obj)
+    public function fetch($name, &$source, &$mtime)
     {
         //check registered pages first
-        if(RegisterManager::getInstance()->hasPage($tpl_name))
+        if(RegisterManager::getInstance()->hasPage($name))
         {
-            $page = RegisterManager::getInstance()->getPage($tpl_name);
-            
-            $tpl_source = $page[0];
-            return true;
+            $page = RegisterManager::getInstance()->getPage($name);
+
+            $source = $page[0];
         }
         else
         {
-            $pageArray = explode('/', $tpl_name);
+            $pageArray = explode('/', $name);
             $pageName = array_pop($pageArray);
             $pageLocation = implode('/', $pageArray);
-            
+
             if($pageLocation != "") $pageLocation .= "/";
-            
+
             $result = SQLQuery::doSelect()
             ->table('pages')
             ->where('page_name', $pageName)
@@ -231,62 +218,57 @@ class SmartyPageLoader
             if($result->count() > 0)
             {
                 // cache template timestamp
-                $this->timestamps[$tpl_name] = strtotime($result->record->page_timestamp);
-                
+                $this->timestamps[$name] = strtotime($result->record->page_timestamp);
+
                 $result->record->page_template = unserialize($result->record->page_template);
-                
-                $smarty_obj->assign('PAGE', $result->record);
-                
+
+                $this->smarty->assign('PAGE', $result->record);
+
                 $html = $result->record->page_template[getLang()];
 
-                if(!$result->record->page_html)
-                    $tpl_source = BBCodeParser::parse($html);
-                else
-                    $tpl_source = $html;
+                $mtime = $this->timestamps[$tpl_name];
 
-                return true;
+                if(!$result->record->page_html)
+                    $source = BBCodeParser::parse($html);
+                else
+                    $source = $html;
             }
             else
             {
-                throw new PageNotFoundExeption("Page not found '{$tpl_name}'");
-                return false;
+                throw new PageNotFoundExeption("Page not found '{$name}'");
             }
         }
     }
     /**
      * check the timestamp for an template
      *
-     * @param string $tpl_name      Template name
-     * @param string $tpl_timestamp Template timestamp, should be set
-     * @param Smarty $smarty_obj    Smarty object
-     * @return Boolean
+     * @param string $name template name
+     * @return integer|boolean timestamp (epoch) the template was modified, or false if not found
      */
-    public function getTimestamp($tpl_name, $tpl_timestamp, $smarty_obj)
+    public function fetchTimestamp($name)
     {
         //check cache
-        if(array_key_exists($tpl_name, $this->timestamps))
+        if(array_key_exists($name, $this->timestamps))
         {
-            $tpl_timestamp = $this->timestamps[$tpl_name];
-            return true;
+            return $this->timestamps[$name];
         }
         else
         {
             //check registered pages first
-            if(RegisterManager::getInstance()->hasPage($tpl_name))
+            if(RegisterManager::getInstance()->hasPage($name))
             {
-                $page = RegisterManager::getInstance()->getPage($tpl_name);
+                $page = RegisterManager::getInstance()->getPage($name);
 
-                $tpl_timestamp = $page[1];
-                return true;
+                return $page[1];
             }
             else
             {
-                $pageArray = explode('/', $tpl_name);
+                $pageArray = explode('/', $name);
                 $pageName = array_pop($pageArray);
                 $pageLocation = implode('/', $pageArray);
-                
+
                 if($pageLocation != "") $pageLocation .= "/";
-                
+
                 $result = SQLQuery::doSelect()
                 ->table('pages')
                 ->where('page_name', $pageName)
@@ -295,16 +277,15 @@ class SmartyPageLoader
 
                 if($result->count() > 0)
                 {
-                    $smarty_obj->assign('PAGE', $result->record);
+                    $this->smarty->assign('PAGE', $result->record);
                     // cache template timestamp
-                    $this->timestamps[$tpl_name] = strtotime($result->record->page_timestamp);
+                    $this->timestamps[$name] = strtotime($result->record->page_timestamp);
 
-                    $tpl_timestamp = $this->timestamps[$tpl_name];
-                    return true;
+                    return $this->timestamps[$name];
                 }
                 else
                 {
-                    throw new PageNotFoundExeption("Page not found '{$tpl_name}'");
+                    throw new PageNotFoundExeption("Page not found '{$name}'");
                     return false;
                 }
             }
@@ -334,6 +315,47 @@ class SmartyPageLoader
         return true;
     }
     /**
+     * Set the background image
+     *
+     * @param $row
+     * @param Smarty $smarty_obj
+     */
+    public function assignBackgroundImage($row, $smarty_obj)
+    {
+        if($smarty_obj->getTemplateVars('BGIMG') != null)
+            return;
+
+        if(!empty($row->page_slideshow) && empty($row->page_bg))
+        {
+            $fileComp = Component::init("file");
+            $loc = explode("/", $row->page_slideshow);
+            array_shift($loc);
+            array_shift($loc);
+            $type = array_shift($loc);
+
+            $file_loc = '/'.implode("/", $loc);
+            $images = array();
+
+            $rows = Table::init("file.files")
+                ->setRequest((object) array("file_location" => $file_loc))
+                ->doSelect();
+
+            while($row = $rows->getRow())
+            {
+                if($fileComp->getType($row->file_data->type) == $type)
+                {
+                    $images[] = $row->file_data->url;
+                }
+            }
+
+            $smarty_obj->assign('BGIMG', $images[rand(0, count($images) - 1)]);
+        }
+        else
+        {
+            $smarty_obj->assign('BGIMG', unserialize($row->page_bg)->url);
+        }
+    }
+    /**
      * register all the smarty extentions from the components,
      * see http://smarty.net/manual/en/plugins.php
      *
@@ -355,18 +377,18 @@ class SmartyPageLoader
         {
             throw new NotInstalledException();
         }
-        
+
         //Load components
         foreach($modules as $module => $component)
         {
             $smarty_obj->addPluginsDir($component->component_path.'/plugins/');
         }
-        
+
         //Load the extentions
         if(file_exists(getFrameworkRoot()."/extentions/"))
         {
             $extentions = scandir(getFrameworkRoot()."/extentions/");
-            
+
             foreach($extentions as $extention)
             {
                 $matches = array();

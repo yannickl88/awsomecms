@@ -1,19 +1,5 @@
 <?php
 /**
- * This file is part of the A.W.S.O.M.E.cms distribution.
- * Detailed copyright and licensing information can be found
- * in the doc/COPYRIGHT and doc/LICENSE files which should be
- * included in the distribution.
- *
- * @package libs
- *
- * @copyright (c) 2009-2010 Yannick de Lange
- * @license http://www.gnu.org/licenses/gpl.txt
- *
- * @version $Revision$
- */
-import("libs/class.BBCodeElements.inc");
-/**
  * Exception which is triggered if something goes wrong
  */
 class BBCodeException extends Exception { }
@@ -30,7 +16,7 @@ class BBCodeElement
     protected $attributes;
     /**
      * Constructor
-     * 
+     *
      * @param string $type
      */
     public function __construct($type)
@@ -69,10 +55,10 @@ class BBCodeElement
     }
     /**
      * Parse the tag name for type and arguments passed
-     * 
+     *
      * @param string $tag
      * @return array        array(String, Array<String, String>)
-     *                      where the first element is the tag and the second a key value array with arguments 
+     *                      where the first element is the tag and the second a key value array with arguments
      */
     public static function parseTag($tag)
     {
@@ -111,9 +97,9 @@ class BBCodeElement
     }
     /**
      * Get the parent or null if not set
-     * 
+     *
      * NOTE: this is only set when added to another element using the BBCodeElement::addChild()
-     * 
+     *
      * @return BBCodeElement
      */
     public function getParent()
@@ -122,7 +108,7 @@ class BBCodeElement
     }
     /**
      * Check if the element doesn't need a closing tag and can only be a singel line
-     * 
+     *
      * @return Boolean
      */
     public function singelLine()
@@ -131,7 +117,7 @@ class BBCodeElement
     }
     /**
      * Check if the element can have line break after it
-     * 
+     *
      * @return Boolean
      */
     public function removeBreak()
@@ -140,7 +126,7 @@ class BBCodeElement
     }
     /**
      * Check if the element doesn't need a closing tag
-     * 
+     *
      * @return Boolean
      */
     public function singelTag()
@@ -149,7 +135,7 @@ class BBCodeElement
     }
     /**
      * Add a Child to the element
-     * 
+     *
      * @param BBCodeElement $child
      */
     public function addChild($child)
@@ -159,9 +145,9 @@ class BBCodeElement
     }
     /**
      * Get the last child in this element
-     * 
+     *
      * NOTE: if there is no child, this will return a BBCodeDummyElement rather then null or false
-     * 
+     *
      * @return BBCodeElement
      */
     public function getLastChild()
@@ -173,7 +159,7 @@ class BBCodeElement
     }
     /**
      * Set an attribute on this element
-     * 
+     *
      * @param String $key
      * @param String $value
      */
@@ -196,7 +182,7 @@ class BBCodeElement
     }
     /**
      * Get an attribute of this element
-     * 
+     *
      * @param String $key
      * @return String
      */
@@ -206,7 +192,7 @@ class BBCodeElement
     }
     /**
      * Get the type of this element, this is the tag used in the BBCode
-     * 
+     *
      * @return String
      */
     public function type()
@@ -215,7 +201,7 @@ class BBCodeElement
     }
     /**
      * Check if this is a block element
-     * 
+     *
      * @return Boolean
      */
     public function isBlock()
@@ -232,9 +218,9 @@ class BBCodeElement
         }
     }
     /**
-     * Check if the element may contain paragraphs. 
+     * Check if the element may contain paragraphs.
      * Overwrite this in your elements
-     * 
+     *
      * @return Boolean
      */
     protected function mayContainPars()
@@ -243,7 +229,7 @@ class BBCodeElement
     }
     /**
      * Wrap the content of the element
-     * 
+     *
      * @param String $text
      */
     protected function wrap($text)
@@ -252,7 +238,7 @@ class BBCodeElement
     }
     /**
      * Wrap the content of the element (without formatting)
-     * 
+     *
      * @param String $text
      */
     protected function plain($text)
@@ -329,7 +315,7 @@ class BBCodeElement
     }
     /**
      * Get the HTML, including the wrapping, of the element
-     * 
+     *
      * @return String
      */
     public function text($formatting)
@@ -351,7 +337,7 @@ class BBCodeElement
     }
     /**
      * Debug for showing the element tree from this element
-     * 
+     *
      * @param String $level
      * @param int $i
      * @return String
@@ -506,12 +492,12 @@ class BBCodeUnknownElement extends BBCodeElement
     {
         //check if we have a smarty handler somewhere
         $smartyFunction = "smarty_function_".$this->type();
-        
+
         if(function_exists($smartyFunction))
         {
             return "{gallery{$this->serializeAttr()}}";
         }
-        else 
+        else
         {
             return "";
             throw new BBCodeException("Unknown tag '{$this->type}'");
@@ -519,24 +505,24 @@ class BBCodeUnknownElement extends BBCodeElement
     }
     /**
      * Create a string which we can use as smarty params
-     * 
+     *
      * @return String
      */
     public function serializeAttr()
     {
         $str = "";
-        
+
         foreach($this->attributes as $key => $value)
         {
             $str .= " ";
-            
+
             if(!is_numeric($value))
             {
                 $value = "'{$value}'";
             }
             $str .= "{$key}={$value}";
         }
-        
+
         return $str;
     }
     /**
@@ -562,7 +548,7 @@ class BBCodeParser
     private $blockTags;
     /**
      * Parse a string into a XHTML valid string
-     * 
+     *
      * @param String $text
      * @return String
      */
@@ -577,7 +563,7 @@ class BBCodeParser
     }
     /**
      * Constructor
-     * 
+     *
      * @param String $text
      */
     private function __construct($text)
@@ -587,7 +573,7 @@ class BBCodeParser
     }
     /**
      * Process the given string and return a XHTML string
-     * 
+     *
      * @return String
      */
     private function process($formatting)
@@ -699,7 +685,7 @@ class BBCodeParser
             $tagStack[0]->addChild(new BBCodeText($text));
             $text = "";
         }
-        
+
         if(!is_a($tagStack[0], 'BBCodeDocument'))
         {
             throw new BBCodeException("Cannot find end for '{$tagStack[0]->type()}'.");

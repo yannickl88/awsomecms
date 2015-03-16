@@ -1,34 +1,19 @@
 <?php
 /**
- * This file is part of the A.W.S.O.M.E.cms distribution.
- * Detailed copyright and licensing information can be found
- * in the doc/COPYRIGHT and doc/LICENSE files which should be
- * included in the distribution.
- *
- * @package core
- *
- * @copyright (c) 2009-2010 Yannick de Lange
- * @license http://www.gnu.org/licenses/gpl.txt
- *
- * @version $Revision$
- */
-
-import('core/class.Debugger.inc');
-/**
  * SQLException when there was an error in executing a given Query
- * 
+ *
  * @author Yannick <yannick.l.88@gmail.com>
  */
 class SQLExeption extends Exception { }
 /**
  * SQLException when there was a problem connecting to the database
- * 
+ *
  * @author Yannick <yannick.l.88@gmail.com>
  */
 class SQLConnenectionExeption extends SQLExeption { }
 /**
  * Abstraction of a SQL query
- * 
+ *
  * @author Yannick <yannick.l.88@gmail.com>
  */
 class SQLQuery
@@ -39,19 +24,19 @@ class SQLQuery
     private $group;
     private $order;
     private $limit;
-    
+
     private $insert;
     private $minsert;
-    
+
     private $update;
-    
+
     private $values;
     private $where;
-    
+
     private $action;
     /**
      * Constructor
-     * 
+     *
      * @param String $action
      */
     private function __construct($action)
@@ -63,17 +48,17 @@ class SQLQuery
         $this->group  = array();
         $this->order  = array();
         $this->limit  = '';
-        
+
         //insert
         $this->insert = array();
-        
+
         //update
         $this->update = array();
-        
+
         //common
         $this->values = array();
         $this->where  = array();
-        
+
         $this->action = $action;
     }
     /**
@@ -96,7 +81,7 @@ class SQLQuery
     {
         $query = new SQLQuery('select');
         $query->select($field, $distrinct);
-        
+
         return $query;
     }
     /**
@@ -110,7 +95,7 @@ class SQLQuery
     {
         $query = new SQLQuery('insert');
         $query->insert($field, $value);
-        
+
         return $query;
     }
     /**
@@ -123,7 +108,7 @@ class SQLQuery
     {
         $query = new SQLQuery('minsert');
         $query->insert = $fields;
-        
+
         return $query;
     }
     /**
@@ -137,7 +122,7 @@ class SQLQuery
     {
         $query = new SQLQuery('update');
         $query->update($field, $value);
-        
+
         return $query;
     }
     /**
@@ -165,10 +150,10 @@ class SQLQuery
             {
                 $field = 'DISTINCT '.$field;
             }
-            
+
             $this->select[] = $field;
         }
-        
+
         return $this;
     }
     /**
@@ -185,13 +170,13 @@ class SQLQuery
             $this->insert[$field] = $field;
             $this->values[$field] = $value;
         }
-        
+
         return $this;
     }
     /**
      * add insert statement
      *
-     * @param Array $values 
+     * @param Array $values
      * @return SQLQuery
      */
     public function mInsert($values)
@@ -200,7 +185,7 @@ class SQLQuery
         {
             $this->values[] = $values;
         }
-        
+
         return $this;
     }
     /**
@@ -216,7 +201,7 @@ class SQLQuery
         {
             $this->insert($field, $value);
         }
-        
+
         return $this;
     }
     /**
@@ -233,7 +218,7 @@ class SQLQuery
             $this->update[$field] = $field;
             $this->values[$field] = $value;
         }
-        
+
         return $this;
     }
     /**
@@ -249,7 +234,7 @@ class SQLQuery
         {
             $this->update($field, $value);
         }
-        
+
         return $this;
     }
     /**
@@ -261,7 +246,7 @@ class SQLQuery
     public function table($table, $alias = null)
     {
         $this->table[] = array($table, $alias);
-        
+
         return $this;
     }
     /**
@@ -279,12 +264,12 @@ class SQLQuery
         {
             throw new SQLExeption("Cannot compare '{$field}' with empty value");
         }
-        
+
         if($orAnd != 'AND')
         {
             $orAnd = "OR";
         }
-        
+
         if(is_array($value))
         {
             foreach($value as $key => $value2)
@@ -294,7 +279,7 @@ class SQLQuery
                     $value[$key] = "'" . addSlashesConfig($value2) . "'";
                 }
             }
-            
+
             if($comparison == "!=")
             {
                 $comparison = "NOT IN";
@@ -303,9 +288,9 @@ class SQLQuery
             {
                 $comparison = "IN";
             }
-            
+
             $value = implode(",", $value);
-            
+
             $this->where[] = array("({$field} {$comparison}({$value}))", $orAnd, $field, $value, $comparison);
         }
         else
@@ -314,10 +299,10 @@ class SQLQuery
             {
                 $value = "'" . addSlashesConfig($value) . "'";
             }
-            
+
             $this->where[] = array("({$field} {$comparison} {$value})", $orAnd, $field, $value, $comparison);
         }
-        
+
         return $this;
     }
     /**
@@ -335,19 +320,19 @@ class SQLQuery
         {
             $this->where($field, $value, $comparison, $orAnd);
         }
-        
+
         return $this;
     }
-    
+
     public function getWhereOnField($field)
     {
         $conditions = array();
-        
+
         foreach ($this->where as $w)
         {
             if($w[2] == $field) $conditions[] = $w;
         }
-        
+
         return $conditions;
     }
     /**
@@ -359,7 +344,7 @@ class SQLQuery
     public function groupBy($field)
     {
         $this->group[] = $field;
-        
+
         return $this;
     }
     /**
@@ -375,9 +360,9 @@ class SQLQuery
         {
             $sort = "DESC";
         }
-        
+
         $this->order[] = $field.' '.$sort;
-        
+
         return $this;
     }
     /**
@@ -390,7 +375,7 @@ class SQLQuery
     public function limit($amount, $start = 0)
     {
         $this->limit = "LIMIT {$start}, {$amount}";
-        
+
         return $this;
     }
     /**
@@ -405,12 +390,12 @@ class SQLQuery
     public function join($table, $local, $forign, $type = 'left')
     {
         $this->join[] = strtoupper($type)." JOIN {$table} ON {$local} = {$forign}";
-        
+
         return $this;
     }
     /**
      * Check if a value is empty
-     * 
+     *
      * @param string $value
      * @return boolean
      */
@@ -435,7 +420,7 @@ class SQLQuery
                 return empty($value);
             }
         }
-        
+
         return true;
     }
     /**
@@ -449,7 +434,7 @@ class SQLQuery
     }
     /**
      * Get the SQL statement as a string formed by this query
-     * 
+     *
      * @return String
      */
     public function getSQL()
@@ -475,13 +460,13 @@ class SQLQuery
     }
     /**
      * Get a list of all table objects
-     * 
+     *
      * @return array
      */
     public function getTables()
     {
         $tables = array();
-        
+
         foreach($this->table as $table)
         {
             if(is_a($table[0], "Table"))
@@ -489,20 +474,20 @@ class SQLQuery
                 $tables[] = $table[0];
             }
         }
-        
+
         return $tables;
     }
     /**
      * Get a field from the tables which are added to this query.
      * If it does not exists, return null
-     * 
+     *
      * @param String $fieldName
      * @return Field
      */
     public function getFieldFromTable($fieldName)
     {
         $field = null;
-        
+
         foreach($this->table as $table)
         {
             if(is_a($table[0], "Table"))
@@ -511,25 +496,25 @@ class SQLQuery
                 if($field != null) break;
             }
         }
-        
+
         return $field;
     }
     /**
      * Get a string containing the table names
-     * 
+     *
      * @return String
      */
     private function getTablesString()
     {
         $tables = "";
-        
+
         foreach($this->table as $table)
         {
             if($tables != "")
             {
                 $tables .= ", ";
             }
-            
+
             if(is_a($table[0], "Table"))
             {
                 $tables .= $table[0]->getName();
@@ -538,11 +523,11 @@ class SQLQuery
             {
                 $tables .= $table[0];
             }
-            
+
             if($table[1] != null)
                 $tables .= " AS {$table[1]}";
         }
-        
+
         return $tables;
     }
     /**
@@ -553,7 +538,7 @@ class SQLQuery
     private function getSelectSQL()
     {
         $query = '';
-        
+
         if(count($this->select) > 0)
         {
             $query .= 'SELECT '.implode(', ', $this->select).' ';
@@ -562,47 +547,47 @@ class SQLQuery
         {
             $query .= 'SELECT * ';
         }
-        
+
         $query .= ' FROM '.$this->getTablesString().' ';
         $query .= implode(' ', $this->join).' ';
-        
+
         if(count($this->where) > 0)
         {
             $totalWhere = '';
-            
+
             foreach($this->where as $where)
             {
                 $field = $this->getFieldFromTable($where[2]);
-                
+
                 if($field != null && $field->hasFlag(Field::NOWHERE)) continue;
-                
+
                 if($totalWhere != '')
                 {
                     $totalWhere .= ' '.$where[1].' ';
                 }
-                
+
                 $totalWhere .= $where[0];
             }
-            
+
             if(!empty($totalWhere))
             $query .= ' WHERE '.$totalWhere.' ';
         }
-        
+
         if(count($this->group) > 0)
         {
             $query .= ' GROUP BY '.implode(', ', $this->group).' ';
         }
-        
+
         if(count($this->order) > 0)
         {
             $query .= ' ORDER BY '.implode(', ', $this->order).' ';
         }
-        
+
         if($this->limit != '')
         {
             $query .= $this->limit;
         }
-        
+
         return $query;
     }
     /**
@@ -613,19 +598,19 @@ class SQLQuery
     private function getInsertSQL()
     {
         $query = '';
-        
+
         $query .= 'INSERT INTO '.$this->getTablesString().' ';
         $query .= '('.implode(', ', $this->insert).') ';
-        
+
         $totalValues = '';
-        
+
         foreach($this->insert as $field)
         {
             if($totalValues != '')
             {
                 $totalValues .= ', ';
             }
-            
+
             if(is_numeric($this->values[$field]))
             {
                 $totalValues .= addSlashesConfig($this->values[$field]);
@@ -635,9 +620,9 @@ class SQLQuery
                 $totalValues .= "'".addSlashesConfig($this->values[$field])."'";
             }
         }
-        
+
         $query .= ' VALUES ('.$totalValues.');';
-        
+
         return $query;
     }
     /**
@@ -651,26 +636,26 @@ class SQLQuery
         {
             return null;
         }
-        
+
         $query = '';
-        
+
         $query .= 'INSERT INTO '.$this->getTablesString().' ';
         $query .= '('.implode(', ', $this->insert).') ';
         $query .= ' VALUES';
-        
+
         $insertValues = '';
-        
+
         foreach($this->values as $values)
         {
             $totalValues = '';
-            
+
             foreach($this->insert as $field)
             {
                 if($totalValues != '')
                 {
                     $totalValues .= ', ';
                 }
-                
+
                 if(is_numeric($values[$field]))
                 {
                     $totalValues .= addSlashesConfig($values[$field]);
@@ -682,9 +667,9 @@ class SQLQuery
             }
             $insertValues .= (($insertValues != '')? ", " : "" ). "\n({$totalValues})";
         }
-        
+
         $query .= $insertValues.';';
-        
+
         return $query;
     }
     /**
@@ -695,20 +680,20 @@ class SQLQuery
     private function getUpdateSQL()
     {
         $query = '';
-        
+
         $query .= 'UPDATE '.$this->getTablesString().' ';
-        
+
         $totalValues = '';
-        
+
         foreach($this->update as $field)
         {
             if($totalValues != '')
             {
                 $totalValues .= ', ';
             }
-            
+
             $totalValues .= $field.' = ';
-            
+
             if(is_numeric($this->values[$field]))
             {
                 $totalValues .= addSlashesConfig($this->values[$field]);
@@ -718,29 +703,29 @@ class SQLQuery
                 $totalValues .= "'".addSlashesConfig($this->values[$field])."'";
             }
         }
-        
+
         $query .= ' SET '.$totalValues;
-        
+
         if(count($this->where) > 0)
         {
             $totalWhere = '';
-            
+
             foreach($this->where as $where)
             {
                 $field = $this->getFieldFromTable($where[2]);
                 if($field != null && $field->hasFlag(Field::NOWHERE)) continue;
-                
+
                 if($totalWhere != '')
                 {
                     $totalWhere .= ' '.$where[1].' ';
                 }
-                
+
                 $totalWhere .= $where[0];
             }
-            
+
             $query .= ' WHERE '.$totalWhere.' ';
         }
-        
+
         return $query;
     }
     /**
@@ -751,32 +736,32 @@ class SQLQuery
     private function getDeleteSQL()
     {
         $query = '';
-        
+
         $query .= 'DELETE FROM '.$this->getTablesString().' ';
-        
+
         if(count($this->where) > 0)
         {
             $totalWhere = '';
-            
+
             foreach($this->where as $where)
             {
                 $field = $this->getFieldFromTable($where[2]);
                 if($field != null && $field->hasFlag(Field::NOWHERE)) continue;
-                
+
                 if($totalWhere != '')
                 {
                     $totalWhere .= ' '.$where[1].' ';
                 }
-                
+
                 $totalWhere .= $where[0];
             }
-            
+
             $query .= ' WHERE '.$totalWhere.' ';
         }
-        
+
         return $query;
     }
-    
+
     public function getRequest()
     {
         return $this->values;
@@ -784,7 +769,7 @@ class SQLQuery
 }
 /**
  * SQLRecord that is a wrapper for all data generated from the queries
- * 
+ *
  * @author Yannick <yannick.l.88@gmail.com>
  */
 class SQLRecord
@@ -793,15 +778,15 @@ class SQLRecord
     private $count;
     public $records;
     private $insertID = false;
-    
+
     private $index = 0;
-    
+
     public function __construct($record = null, $tables = array())
     {
         $this->records = array();
         $this->record = null;
         $this->count = 0;
-        
+
         if($record != null)
         {
             if(is_a($record, "PDOStatement"))
@@ -825,7 +810,7 @@ class SQLRecord
                 $this->records[] = $record;
                 $this->count = 1;
             }
-            
+
             if($this->count > 0 && isset($this->records[0]))
             {
                 $this->record = $this->records[0];
@@ -839,7 +824,7 @@ class SQLRecord
     }
     /**
      * Get all the rows that were returned by the query
-     * 
+     *
      * @return unknown_type
      */
     public function getRows()
@@ -848,13 +833,13 @@ class SQLRecord
     }
     /**
      * Get a row and move the interal point one place ahead. returns false when there are no more rows
-     * 
+     *
      * @return Object
      */
     public function getRow()
     {
         $this->index++;
-        
+
         if(count($this->records) > 0 && $this->index <= count($this->records) && $this->records[$this->index - 1])
         {
             return $this->records[$this->index-1];
@@ -862,7 +847,7 @@ class SQLRecord
         else
         {
             return false;
-        }   
+        }
     }
     /**
      * reset the internal row pointer
@@ -874,7 +859,7 @@ class SQLRecord
     }
     /**
      * Get the amount of rows returned by the query
-     * 
+     *
      * @return int
      */
     public function count()
@@ -883,7 +868,7 @@ class SQLRecord
     }
     /**
      * Get the latest ID from the last insert. This is 0 when there was no insert done
-     * 
+     *
      * @return int
      */
     public function insertID()
@@ -892,7 +877,7 @@ class SQLRecord
     }
     /**
      * Filter the records, this will reset the internal row pointer
-     * 
+     *
      * @param callback $function
      */
     public function filter($function)
@@ -904,25 +889,25 @@ class SQLRecord
 }
 /**
  * SQL class that handels the connection to the database
- * 
+ *
  * @author Yannick <yannick.l.88@gmail.com>
  */
 class SQL
 {
     private static $instance;
-    
+
     private $host     = '';
     private $database = '';
     private $username = '';
     private $password = '';
-    
+
     private $query;
-    
+
     private $PDOconnection;
-    
+
     /**
      * Get a SQL instance
-     * 
+     *
      * @return SQL
      */
     public static function getInstance()
@@ -931,17 +916,17 @@ class SQL
         {
             self::$instance = new SQL();
         }
-        
+
         return self::$instance;
     }
-    
+
     private function __construct()
     {
         $this->host     = Config::get('dbhost',   'localhost', 'db');
         $this->database = Config::get('database', 'site',      'db');
         $this->username = Config::get('username', 'root',      'db');
         $this->password = Config::get('password', '',          'db');
-        
+
         try
         {
             $this->PDOconnection = new PDO("mysql:host={$this->host};dbname={$this->database}","{$this->username}","{$this->password}");
@@ -960,7 +945,7 @@ class SQL
     }
     /**
      * Get the PDO instance that this SQL class uses
-     * 
+     *
      * @return PDO
      */
     public function getPDOInstance()
@@ -969,7 +954,7 @@ class SQL
     }
     /**
      * Execute a query
-     * 
+     *
      * @param SQLQuery $query      String|SQLQuery
      * @return SQLRecord
      */
@@ -979,7 +964,7 @@ class SQL
         $query_obj = array();
         $request = null;
         $insert = false;
-        
+
         if(is_a($query, "SQLQuery"))
         {
             $query_str = $query->getSQL();
@@ -991,13 +976,13 @@ class SQL
         {
             $query_str = "".$query;
         }
-        
+
         if(!empty($query_str))
         {
             $this->query = $query_str;
-            
+
             $result = $this->PDOconnection->query($query_str);
-            
+
             if($this->PDOconnection->errorCode() != '00000')
             {
                 $error = $this->PDOconnection->errorInfo();
@@ -1014,14 +999,14 @@ class SQL
         {
             $result = new SQLRecord(null, $query_obj);
         }
-        
+
         Debugger::getInstance()->log("Query: '{$query_str}' [{$result->count()} rows returned]");
-        
+
         return $result;
     }
     /**
      * Execute multiple queries
-     * 
+     *
      * @param string $queries
      * @return array    containing SQLRecords
      */
@@ -1031,13 +1016,13 @@ class SQL
         $parsedQueries = array();
         $lines = explode("\n", $queries);
         $currentQuery = '';
-        
+
         foreach($lines as $line)
         {
             if(preg_match("/^--/", $line) === 0)
             {
                 $currentQuery .= $line."\n";
-                
+
                 //check if it's the ending
                 if(preg_match('/;$/', $line) == 1)
                 {
@@ -1046,25 +1031,25 @@ class SQL
                 }
             }
         }
-        
+
         //make sure we have the last line too, because if the last query doesn't end with a ; it doesn't reconize it
         if($currentQuery != '')
         {
             $parsedQueries[] = trim($currentQuery);
         }
-        
+
         $results = array();
-        
+
         foreach($parsedQueries as $query)
         {
             $results[] = $this->query($query);
         }
-        
+
         return $results;
     }
     /**
      * Trigger a SQL exception and throws it
-     * 
+     *
      * @param string $error
      * @param int $type     1: SQLExeption, 2:SQLConnenectionExeption
      */

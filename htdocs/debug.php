@@ -1,4 +1,5 @@
 <?php
+require_once __DIR__ . '/../vendor/autoload.php';
 session_start();
 
 global $websiteroot, $start;
@@ -23,12 +24,12 @@ function findLineNumber()
 {
     $args = func_get_args();
     $file = array_shift($args);
-    
+
     $lines = file($file);
     if(count($args) == 0) return -1;
-    
+
     $cSearch = array_shift($args);
-    
+
     foreach($lines as $lineno => $line)
     {
         if(strstr($line, $cSearch) !== false)
@@ -37,19 +38,19 @@ function findLineNumber()
             $cSearch = array_shift($args);
         }
     }
-    
+
     return -1;
 }
 
 if($_POST["action"] == "loadCode")
 {
     $lines = file(rawurldecode($_POST['file']));
-    
+
     $data = array();
     $code = array_slice($lines, $_POST['line']-5, 10);
     $code[4] = "<div class='highlight'>".$code[4]."</div>";
     $data["code"] = implode("", $code);
-    
+
     echo(json_encode($data));
     exit;
 }
@@ -59,16 +60,16 @@ if($_POST["action"] == "loadCode")
     <head>
         <script type="text/javascript" src="http://www.google.com/jsapi"></script>
         <script type="text/javascript">
-            // <![CDATA[ 
+            // <![CDATA[
             // Load jQuery
             google.load("jquery", "1.3.1", {uncompressed:false});
-            // ]]> 
+            // ]]>
         </script>
         <script type="text/javascript">
-            // <![CDATA[ 
+            // <![CDATA[
             var debugID = "<?php echo $debugID; ?>";
             var debugKey = <?php echo $debugKey; ?>;
-            
+
             function loadCode(file, line, rowKey)
             {
             	data = {
@@ -85,7 +86,7 @@ if($_POST["action"] == "loadCode")
 
 				return false;
             }
-            // ]]> 
+            // ]]>
         </script>
         <style type="text/css">
         	body, html {
@@ -106,7 +107,7 @@ if($_POST["action"] == "loadCode")
         $absFile = rawurlencode($item['file']);
         $file = getFileName($item['file']);
         $line = $item['line'];
-        
+
         if(empty($file))
         {
             $file = getFileName($data[$key - 1]['file']);
@@ -119,7 +120,7 @@ if($_POST["action"] == "loadCode")
         	</div>
     	</div>
     	<pre id="codeView">
-    	
+
     	</pre>
     </body>
 </html>

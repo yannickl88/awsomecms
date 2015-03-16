@@ -1,22 +1,7 @@
 <?php
 /**
- * This file is part of the A.W.S.O.M.E.cms distribution.
- * Detailed copyright and licensing information can be found
- * in the doc/COPYRIGHT and doc/LICENSE files which should be
- * included in the distribution.
- *
- * @package components.page.fields
- *
- * @copyright (c) 2009-2010 Yannick de Lange
- * @license http://www.gnu.org/licenses/gpl.txt
- *
- * @version $Revision$
- */
-importField("Field");
-
-/**
  * Field for selecting the location within the site
- * 
+ *
  * @author Yannick <yannick.l.88@gmail.com>
  */
 class LocationField extends Field
@@ -24,10 +9,10 @@ class LocationField extends Field
     protected $displayPages;
     protected $types;
     protected $autoOpen;
-    
+
     /**
      * Constructor
-     * 
+     *
      * @param string $name
      * @param string $displayName
      * @param int $style
@@ -35,7 +20,7 @@ class LocationField extends Field
     public function __construct($name, $style=0, $displayPages = false, $types = 1, $autoOpen = false)
     {
         parent::__construct($name, $style|Field::HIDE_VIEW);
-        
+
         $this->setDefaultValue("/");
         $this->displayPages = $displayPages;
         $this->types = $types;
@@ -49,7 +34,7 @@ class LocationField extends Field
     {
         $smarty = Controller::getInstance()->getSmarty();
         $smarty->loadPlugin("smarty_function_admintree");
-        
+
         $html = "";
         $html .= smarty_function_admintree(array("javascript" => $this->getName(), "folderonly" => !$this->displayPages, "types" => $this->types, "noCookie" => !$this->autoOpen), $smarty);
         $html .= "<input class='cmsfield' type='text' name='{$this->name}' id='{$this->name}' value='{$this->defaultValue}'/>";
@@ -63,11 +48,11 @@ class LocationField extends Field
     {
         $smarty = Controller::getInstance()->getSmarty();
         $smarty->loadPlugin("smarty_function_admintree");
-        
+
         $html = "";
         $html .= smarty_function_admintree(array("javascript" => $this->getName(), "folderonly" => !$this->displayPages, "types" => $this->types, "noCookie" => !$this->autoOpen), $smarty);
         $html .= "<input class='cmsfield' type='text' name='{$this->name}' id='{$this->name}' value='{$this->value}'/>";
-        
+
         return $html;
     }
 }

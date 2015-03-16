@@ -1,30 +1,14 @@
 <?php
 /**
- * This file is part of the A.W.S.O.M.E.cms distribution.
- * Detailed copyright and licensing information can be found
- * in the doc/COPYRIGHT and doc/LICENSE files which should be
- * included in the distribution.
- *
- * @package components.gallery
- *
- * @copyright (c) 2009-2010 Yannick de Lange
- * @license http://www.gnu.org/licenses/gpl.txt
- *
- * @version $Revision$
- * @TODO refactor this component into a more all purpose file component
- */
-import('/core/class.Component.inc');
-
-/**
  * A simple component to manage and show a series of images on a page. Using a tag, images can be grouped together
- * 
+ *
  * @author Yannick <yannick.l.88@gmail.com>
  */
 class GalleryComponent extends Component
 {
     /**
      * Constructor
-     * 
+     *
      * @return unknown_type
      */
     public function __construct()
@@ -42,7 +26,7 @@ class GalleryComponent extends Component
         $registerManager->registerAuth("gallery.action_add", "admin");
         $registerManager->registerAuth("gallery.action_edit", "admin");
         $registerManager->registerAuth("gallery.action_delete", "admin");
-        
+
         $registerManager->registerPage(array($this, 'add'), '{form table="gallery.gallery" form="add"}');
         $registerManager->registerPage(array($this, 'edit'), '{form table="gallery.gallery" form="edit"}');
         $registerManager->registerPage(array($this, 'delete'), '{form table="gallery.gallery" form="delete"}');
@@ -50,7 +34,7 @@ class GalleryComponent extends Component
     }
     /**
      * Action to add an image
-     * 
+     *
      * @param Smarty $smarty
      * @param SmartyPageLoader $smartyLoader
      * @param array $request
@@ -67,7 +51,7 @@ class GalleryComponent extends Component
     }
     /**
      * Action to edit an image
-     * 
+     *
      * @param Smarty $smarty
      * @param SmartyPageLoader $smartyLoader
      * @param array $request
@@ -79,7 +63,7 @@ class GalleryComponent extends Component
             Table::init("gallery.gallery")
                 ->setRecord((object) $request)
                 ->doUpdate();
-            
+
             $this->redirect(array($this, "admin"));
         }
         else
@@ -90,7 +74,7 @@ class GalleryComponent extends Component
                     ->setRequest((object) $request)
                     ->doSelect()
                     ->getRow();
-                
+
                 $smarty->assign("record", $record);
             }
             else
@@ -101,7 +85,7 @@ class GalleryComponent extends Component
     }
     /**
      * Action to delete an image
-     * 
+     *
      * @param Smarty $smarty
      * @param SmartyPageLoader $smartyLoader
      * @param array $request
@@ -113,7 +97,7 @@ class GalleryComponent extends Component
             Table::init("gallery.gallery")
                 ->setRequest((object) $request)
                 ->doDelete();
-            
+
             $this->redirect(array($this, "admin"));
         }
         else
@@ -124,7 +108,7 @@ class GalleryComponent extends Component
                     ->setRequest((object) $request)
                     ->doSelect()
                     ->getRows();
-                
+
                 $smarty->assign("record", $record);
             }
             else

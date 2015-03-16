@@ -1,19 +1,17 @@
 <?php
-import('/components/page/util/class.Tree.inc');
-
 /**
  * The node for the page items
- * 
+ *
  * @author Yannick
  */
 class NewsItem extends TreeNode
 {
     private $id;
     private $viewURL;
-    
+
     /**
      * Constructor
-     * 
+     *
      * @param Object $record
      */
     public function __construct($record)
@@ -41,13 +39,13 @@ class NewsItem extends TreeNode
     public function toJavascript()
     {
         $component = Component::init("news");
-        
+
         $linkEdit = makeLink(array($component, "edit"))."?news_id={$this->id}";
         $linkDelete = makeLink(array($component, "delete"))."?news_id={$this->id}";
         $icon = "news";
-        
+
         $html = "{$this->parent->getName()}.addChild(new TreeItem(\"{$this->name}\", \"{$this->location}\", \"{$linkEdit}\", {$this->parent->getName()}, \"{$icon}\", [new TreeAction(\"view\", \"{$this->viewURL}\", {$this->parent->getName()}), new TreeAction(\"delete\", \"{$linkDelete}\", {$this->parent->getName()})], {$this->getType()}));\n";
-        
+
         return $html;
     }
     /**
@@ -59,11 +57,11 @@ class NewsItem extends TreeNode
     public function toData()
     {
         $component = Component::init("news");
-        
+
         $linkEdit = makeLink(array($component, "edit"))."?news_id={$this->id}";
         $linkDelete = makeLink(array($component, "delete"))."?news_id={$this->id}";
         $icon = "news";
-        
+
         $actions = array(
             array("icon" => "view", "link" => $this->viewURL),
             array("icon" => "delete", "link" => $linkDelete)
@@ -82,16 +80,16 @@ class NewsItem extends TreeNode
 }
 /**
  * News root folder which contains all the news items
- * 
+ *
  * @author Yannick de Lange <yannick.l.88@gmail.com>
  */
 class NewsFolder extends Folder
 {
     private $realLocation;
-    
+
     /**
      * Constructor
-     * 
+     *
      * @param Object $record
      */
     public function __construct($name, $location)
@@ -117,12 +115,12 @@ class NewsFolder extends Folder
     public function toJavascript()
     {
         $component = Component::init("news");
-        
+
         $linkAdd = makeLink(array($component, "add"));
         $linkView = makeLink(array($component, "admin"));
-        
+
         $html = "{$this->parent->getName()}.addChild(new TreeFolder(\"{$this->name}\", \"{$this->location}\", {$this->parent->getName()}, \"news_folder\", [new TreeAction(\"overview\", \"{$linkView}\", {$this->parent->getName()}), new TreeAction(\"add\", \"{$linkAdd}\", {$this->parent->getName()})], {$this->getType()}));\n";
-        
+
         return $html;
     }
     /**
@@ -134,15 +132,15 @@ class NewsFolder extends Folder
     public function toData()
     {
         $component = Component::init("news");
-        
+
         $linkAdd = makeLink(array($component, "add"));
         $linkView = makeLink(array($component, "admin"));
-        
+
         $actions = array(
             array("icon" => "add", "link" => $linkAdd),
             array("icon" => "overview", "link" => $linkView)
         );
-        
+
         return array(
             "classname" => 'TreeFolder',
             "name" => $this->name,

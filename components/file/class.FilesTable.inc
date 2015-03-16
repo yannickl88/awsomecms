@@ -1,28 +1,7 @@
 <?php
 /**
- * This file is part of the A.W.S.O.M.E.cms distribution.
- * Detailed copyright and licensing information can be found
- * in the doc/COPYRIGHT and doc/LICENSE files which should be
- * included in the distribution.
- *
- * @package components.file
- *
- * @copyright (c) 2009-2010 Yannick de Lange
- * @license http://www.gnu.org/licenses/gpl.txt
- *
- * @version $Revision$
- */
-importField("Field");
-importField("IntField");
-importField("TagField");
-importField("DateField");
-importField("TextField");
-importField("TablePermissionField");
-importField("file.UploadField");
-
-/**
  * Core table, this handels all interaction with the core table in the database
- * 
+ *
  * @author Yannick <yannick.l.88@gmail.com>
  */
 class FilesTable extends Table
@@ -34,7 +13,7 @@ class FilesTable extends Table
     {
         parent::__construct("files");
         $this->assign("file");
-        
+
         $this->addField(new IntField("file_id", Field::INDEX|Field::AUTOKEY));
         $this->addField(new Field("file_name"), 1);
         $this->addField(new DateField("file_date"), 2);
@@ -53,7 +32,7 @@ class FilesTable extends Table
     protected function select($query, $data = null)
     {
         $query->orderBy("file_name", "ASC");
-        
+
         if($data)
         {
             if($data->max)

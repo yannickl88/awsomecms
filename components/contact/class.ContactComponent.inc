@@ -1,23 +1,7 @@
 <?php
 /**
- * This file is part of the A.W.S.O.M.E.cms distribution.
- * Detailed copyright and licensing information can be found
- * in the doc/COPYRIGHT and doc/LICENSE files which should be
- * included in the distribution.
- *
- * @package components.contact
- *
- * @copyright (c) 2009-2010 Yannick de Lange
- * @license http://www.gnu.org/licenses/gpl.txt
- *
- * @version $Revision$
+ * Contact component class, this holds all the logic for the contact component
  */
-import('/core/class.Component.inc');
-import('/libs/captcha/securimage.php');
-
-/**
-* Contact component class, this holds all the logic for the contact component
-*/
 class ContactComponent extends Component
 {
     /**
@@ -38,7 +22,7 @@ class ContactComponent extends Component
         $registerManager->registerAuth("contact.action_add", "admin");
         $registerManager->registerAuth("contact.action_edit", "admin");
         $registerManager->registerAuth("contact.action_delete", "admin");
-         
+
         $registerManager->registerPage(array($this, 'admin'), '{form table="contact.forms" form="admin"}');
         $registerManager->registerPage(array($this, 'add'), '{form table="contact.forms" form="add"}');
         $registerManager->registerPage(array($this, 'edit'), '{form table="contact.forms" form="edit"}');
@@ -59,14 +43,14 @@ class ContactComponent extends Component
                 ->setRecord((object) $request)
                 ->doInsert()
                 ->insertID();
-            
+
             $fields;
             parse_str($request['form_fields'], $fields);
-            
+
             if($fields["field_sort"] != null)
             {
                 asort($fields["field_sort"]);
-                
+
                 foreach($fields["field_sort"] as $key => $value)
                 {
                     $record = (object) array(
@@ -76,13 +60,13 @@ class ContactComponent extends Component
                         "field_type" => (int) $fields["field_type"][$key],
                         "field_required" => (int) $fields["field_required"][$key],
                     );
-                    
+
                     Table::init("contact.formfields")
                         ->setRecord((object) $record)
                         ->doInsert();
                 }
             }
-            
+
             $this->redirect(array($this, 'admin'));
         }
     }
@@ -100,19 +84,19 @@ class ContactComponent extends Component
             Table::init("contact.forms")
                 ->setRecord((object) $request)
                 ->doUpdate();
-            
+
             Table::init("contact.formfields")
                 ->setRequest((object) array("form_id" => $request['form_id']))
                 ->doDelete();
-            
+
             $id = $request['form_id'];
             $fields;
             parse_str($request['form_fields'], $fields);
-            
+
             if($fields["field_sort"] != null)
             {
                 asort($fields["field_sort"]);
-                
+
                 foreach($fields["field_sort"] as $key => $value)
                 {
                     $record = (object) array(
@@ -122,13 +106,13 @@ class ContactComponent extends Component
                         "field_type" => (int) $fields["field_type"][$key],
                         "field_required" => (int) $fields["field_required"][$key],
                     );
-                    
+
                     Table::init("contact.formfields")
                         ->setRecord((object) $record)
                         ->doInsert();
                 }
             }
-            
+
             $this->redirect(array($this, 'admin'), array("form_id" => $request['form_id']));
         }
         else
@@ -139,7 +123,7 @@ class ContactComponent extends Component
                     ->setRequest((object) $request)
                     ->doSelect()
                     ->getRows();
-                
+
                 Table::init("contact.forms")
                     ->setRequest((object) $request);
             }
@@ -163,11 +147,11 @@ class ContactComponent extends Component
             Table::init("contact.formfields")
                 ->setRequest((object) array("form_id" => $request['form_id']))
                 ->doDelete();
-            
+
             Table::init("contact.forms")
                 ->setRequest((object) $request)
                 ->doDelete();
-            
+
             $this->redirect(array($this, 'admin'));
         }
         else
@@ -199,49 +183,49 @@ class ContactComponent extends Component
                 ->doSelect()
                 ->getRow();
             $fields = $form->fields;
-                
+
             $to         = $form->form_to;
             $bcc        = $form->form_bcc;
             $subject    = $form->form_subject;
-            
+
             $valid = true;
             $body = '';
             $headers = '';
-            
+
             if(empty($to) || empty($subject))
             {
                 $this->redirect($form->form_thanks);
             }
-            
+
             $e = new InvalidFormException((object) $request, "/".$request['url'], "");
             $img = new Securimage();
-            
+
             if(!$img->check($request['captcha']))
             {
                 $valid = false;
-                
+
                 $e->addInvalidField('captcha', Language::get("error_wrongcaptcha"));
             }
-            
+
             foreach($fields as $field)
             {
                 if($field->field_required == 1 && trim($request[$field->field_code]) == '')
                 {
                     $valid = false;
-                    
+
                     $e->addInvalidField($field->field_code, Language::get("error_notfilledin"));
-                    
+
                     continue;
                 }
-                
+
                 if($body != "")
                 {
                     $body .= "\n\n";
                 }
-                
+
                 $body .= "{$field->field_name}: ".$request[$field->field_code];
             }
-            
+
             if($valid)
             {
                 $headers .= "Bcc: {$bcc}\r\n";
@@ -252,7 +236,7 @@ class ContactComponent extends Component
             {
                 throw $e;
             }
-            
+
             $this->redirect($form->form_thanks);
         }
     }

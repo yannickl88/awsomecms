@@ -1,22 +1,7 @@
 <?php
 /**
- * This file is part of the A.W.S.O.M.E.cms distribution.
- * Detailed copyright and licensing information can be found
- * in the doc/COPYRIGHT and doc/LICENSE files which should be
- * included in the distribution.
- *
- * @package core.fields
- *
- * @copyright (c) 2009-2010 Yannick de Lange
- * @license http://www.gnu.org/licenses/gpl.txt
- *
- * @version $Revision$
- */
-import('/core/class.InvalidFormException.inc');
-
-/**
  * Superclass for a Field.
- * 
+ *
  * @author Yannick <yannick.l.88@gmail.com>
  */
 class Field
@@ -26,7 +11,7 @@ class Field
     const VIEW      = 3;
     const DELETE    = 4;
     const DISABLED  = 5;
-    
+
     //fieldoptions
     const HIDE_VIEW     = 1;
     const HIDE_ADD      = 2;
@@ -44,7 +29,7 @@ class Field
     const DUMMY         = 1024; //does not get's added to the selection list
     const NOWHERE       = 2048; // Is not included in the where
     const FORCESELECT    = 4096;
-    
+
     protected $parent;
     protected $name;
     protected $table;
@@ -53,15 +38,15 @@ class Field
     protected $requestValue;
     protected $defaultValue;
     protected $maxSize;
-    
+
     public $sort;
     protected $style;
-    
+
     //table stuff
     protected $required;
     protected $null;
     protected $index;
-    
+
     /**
      * Constructor of the field
      *
@@ -72,9 +57,9 @@ class Field
     public function __construct($name, $style = 0)
     {
         $this->style = $style;
-        
+
         $nameArray = explode(".", $name);
-        
+
         if(count($nameArray) == 2)
         {
             $this->name = $nameArray[1];
@@ -87,7 +72,7 @@ class Field
         }
         $this->displayName = Language::get("field_".$name);
         $this->value = "";
-        
+
         $this->defaultValue = false;
         $this->null = !$this->hasFlag(Field::NOTNULL);
         if($this->hasFlag(Field::INDEX))
@@ -103,14 +88,14 @@ class Field
         {
             $this->index = Field::NO_INDEX;
         }
-        
+
         $this->maxSize = -1;
-        
+
         return $this;
     }
     /**
      * Check if this field has a give flag
-     * 
+     *
      * @param int $flag
      * @return boolean
      */
@@ -120,7 +105,7 @@ class Field
     }
     /**
      * Add the give flag from the field
-     * 
+     *
      * @param int $flag
      */
     public function addFlag($flag)
@@ -129,7 +114,7 @@ class Field
     }
     /**
      * Remove the give flag from the field
-     * 
+     *
      * @param int $flag
      */
     public function removeFlag($flag)
@@ -138,7 +123,7 @@ class Field
     }
     /**
      * Get the name of this field
-     * 
+     *
      * @return string
      */
     public function getName()
@@ -147,7 +132,7 @@ class Field
     }
     /**
      * Get the name that should be show in the forms
-     * 
+     *
      * @return string
      */
     public function getDisplayName()
@@ -178,7 +163,7 @@ class Field
     }
     /**
      * Set the value that the field got in the request
-     * 
+     *
      * @param mixed $value
      * @return Field
      */
@@ -200,12 +185,12 @@ class Field
         {
             $this->setValue($record->$name);
         }
-        
+
         return $this;
     }
     /**
      * Set the request value of this field with an request object
-     * 
+     *
      * @param Object $record
      * @return Field
      */
@@ -214,12 +199,10 @@ class Field
         $name = $this->getName();
         if(isset($record->$name))
         {
-            return $this->setRequestValue($record->$name);
+            $this->setRequestValue($record->$name);
         }
-        else
-        {
-            return null;
-        }
+
+        return $this;
     }
     /**
      * get the data from this field
@@ -232,7 +215,7 @@ class Field
         if($data != null)
         {
             $name = $this->getName();
-            
+
             if(isset($data->$name))
             {
                 return $data->$name;
@@ -250,7 +233,7 @@ class Field
     }
     /**
      * get the request data from this field
-     * 
+     *
      * @param Object $data
      * @return mixed
      */
@@ -264,18 +247,18 @@ class Field
         else
         {
             $value = $this->requestValue;
-            
+
             if(SQLQuery::isEmpty($value))
             {
                 $value = $this->getDefaultValue();
             }
-            
+
             return $value;
         }
     }
     /**
      * Check if this field has a value that is not empty
-     * 
+     *
      * @param array $data
      * @return boolean
      */
@@ -292,7 +275,7 @@ class Field
     }
     /**
      * Check if this field is required
-     * 
+     *
      * @param int $mode
      * @return boolean
      */
@@ -324,7 +307,7 @@ class Field
     }
     /**
      * Check if this field can be null
-     * 
+     *
      * @return boolean
      */
     public function canBeNull()
@@ -344,7 +327,7 @@ class Field
     }
     /**
      * Get the default value of this field
-     * 
+     *
      * @return mixed
      */
     public function getDefaultValue()
@@ -364,7 +347,7 @@ class Field
     }
     /**
      * get the max size of this field
-     * 
+     *
      * @return int
      */
     public function getMaxSize()
@@ -384,7 +367,7 @@ class Field
     }
     /**
      * Check if this field in an index field
-     * 
+     *
      * @return boolean
      */
     public function isIndex()
@@ -411,16 +394,16 @@ class Field
     }
     /**
      * check if this field is visible
-     * 
+     *
      * @param int $mode
      * @return boolean
      */
     public function visible($mode = Field::VIEW)
     {
         return (
-            ($mode == Field::ADD && (!Config::hasFlag($this->style, Field::HIDE_ADD))) || 
-            ($mode == Field::EDIT && (!Config::hasFlag($this->style, Field::HIDE_EDIT))) || 
-            ($mode == Field::VIEW && (!Config::hasFlag($this->style, Field::HIDE_VIEW))) || 
+            ($mode == Field::ADD && (!Config::hasFlag($this->style, Field::HIDE_ADD))) ||
+            ($mode == Field::EDIT && (!Config::hasFlag($this->style, Field::HIDE_EDIT))) ||
+            ($mode == Field::VIEW && (!Config::hasFlag($this->style, Field::HIDE_VIEW))) ||
             ($mode == Field::DELETE)
         );
     }
@@ -484,7 +467,7 @@ class Field
     }
     /**
      * String representation of this field
-     * 
+     *
      * @return string
      */
     public function __toString()
@@ -493,23 +476,23 @@ class Field
     }
     /**
      * Create a HTML representation of add field
-     * 
+     *
      * @return string
      */
     protected function toHTML_add()
     {
         $value = $this->getDefaultValue();
-        
+
         if($this->hasValue())
         {
             $value = $this->getValue();
         }
-        
+
         return "<input type='text' class='cmsfield' name='{$this->getName()}' id='{$this->getName()}' value='".htmlentities($value, ENT_QUOTES, "UTF-8")."'/>";
     }
     /**
      * Create a HTML representation of edit field
-     * 
+     *
      * @return string
      */
     protected function toHTML_edit()
@@ -518,7 +501,7 @@ class Field
     }
     /**
      * Create a HTML representation of hidden field
-     * 
+     *
      * @return string
      */
     protected function toHTML_edit_hidden()
@@ -527,7 +510,7 @@ class Field
     }
     /**
      * Create a HTML representation of view field
-     * 
+     *
      * @return string
      */
     protected function toHTML_view()
@@ -536,7 +519,7 @@ class Field
     }
     /**
      * Create a HTML representation of disabled field
-     * 
+     *
      * @return string
      */
     protected function toHTML_disabled()
@@ -545,7 +528,7 @@ class Field
     }
     /**
      * get the javascript for this field
-     * 
+     *
      * @return string
      */
     public function getJavascript()
@@ -554,7 +537,7 @@ class Field
     }
     /**
      * Add select data for this field to a query
-     * 
+     *
      * @param $query SQLquery
      * @param $data
      */
@@ -564,7 +547,7 @@ class Field
         {
             return;
         }
-        
+
         if($this->isIndex())
         {
             $query->whereWhenSet($this->getDBName(), $this->value2db($this->getValue($data)));
@@ -573,7 +556,7 @@ class Field
     }
     /**
      * Add insert data for this field to a query
-     * 
+     *
      * @param $query SQLquery
      * @param $data
      */
@@ -594,7 +577,7 @@ class Field
     }
     /**
      * Add update data for this field to a query
-     * 
+     *
      * @param $query SQLquery
      * @param $data
      */
@@ -604,7 +587,7 @@ class Field
         {
             return;
         }
-        
+
         if(!$this->isIndex())
         {
             if($this->isRequired(Field::EDIT) || $this->hasFlag(Field::FORCEUPDATE))
@@ -622,7 +605,7 @@ class Field
             {
                 $query->update($this->getDBName(), $this->value2db($this->getValue()));
             }
-            
+
             if($this->isRequired(Field::EDIT))
             {
                 $query->where($this->getDBName(), $this->value2db($this->getValue()));
@@ -635,7 +618,7 @@ class Field
     }
     /**
      * Add delete data for this field to a query
-     * 
+     *
      * @param $query SQLquery
      * @param $data
      */
@@ -645,7 +628,7 @@ class Field
         {
             return;
         }
-        
+
         if($this->isIndex())
         {
             if($this->isRequired(Field::DELETE))
@@ -660,15 +643,15 @@ class Field
     }
     /**
      * Validate the data for this field. This throws a FormException when not valid
-     * 
+     *
      * @param int $mode
      */
     public function validate($mode)
     {
         $value = $this->value2db($this->getValue());
-        
+
         if($mode == Field::ADD &&
-            $this->isRequired($mode) && 
+            $this->isRequired($mode) &&
             !$this->hasValue($value) &&
             $this->hasFlag(Field::AUTOKEY) == false &&
             !$this->hasFlag(Field::DUMMY)
@@ -677,7 +660,7 @@ class Field
             throw new FormException($this, Language::get("error_notfilledin"));
         }
         if($mode == Field::EDIT &&
-            $this->isRequired($mode) && 
+            $this->isRequired($mode) &&
             !$this->hasValue($value) &&
             !$this->hasFlag(Field::DUMMY)
         )
@@ -687,7 +670,7 @@ class Field
     }
     /**
      * Convert the value of the param to that what the DB expects
-     * 
+     *
      * @param $value String
      * @return String
      */
@@ -697,7 +680,7 @@ class Field
     }
     /**
      * Convert the dbvalue of the param to what the field expects
-     * 
+     *
      * @param $value mixed
      * @return mixed
      */
@@ -707,7 +690,7 @@ class Field
     }
     /**
      * Get the name to be used in the SQL queries
-     * 
+     *
      * @return string
      */
     public function getDBName()
@@ -723,23 +706,31 @@ class Field
     }
     /**
      * preform this action prior to the SQL execution that uses this field
-     * 
+     *
      * @param Array record that was used
      * @param SQLQuery $query
      */
     public function preSQL(&$record, $query)
     {
-        
+
     }
     /**
      * preform this action prior to the SQL execution that uses this field
-     * 
+     *
      * @param SQLRecord $sqlrecord
      * @param Array $record
      * @param SQLQuery $query
      */
     public function postSQL(&$record, $query)
     {
-        
+
+    }
+    /**
+     * Check if this field is a multi-language field.
+     *
+     * @return boolean
+     */
+    public function isMLField() {
+        return false;
     }
 }

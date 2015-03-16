@@ -1,25 +1,7 @@
 <?php
 /**
- * This file is part of the A.W.S.O.M.E.cms distribution.
- * Detailed copyright and licensing information can be found
- * in the doc/COPYRIGHT and doc/LICENSE files which should be
- * included in the distribution.
- *
- * @package components.users
- *
- * @copyright (c) 2009-2010 Yannick de Lange
- * @license http://www.gnu.org/licenses/gpl.txt
- *
- * @version $Revision$
- */
-importField("Field");
-importField("IntField");
-importField("PasswordField");
-importField("users.PrivlilegesField");
-
-/**
  * User table, this handels all interaction with the user table in the database
- * 
+ *
  * @author Yannick <yannick.l.88@gmail.com>
  */
 class UsersTable extends Table
@@ -31,7 +13,7 @@ class UsersTable extends Table
     {
         parent::__construct("users");
         $this->assign("users");
-        
+
         $this->addField(new IntField("user_id", Field::INDEX|Field::AUTOKEY));
         $this->addField(new Field("user_name"));
         $this->addField(new PasswordField("user_pass", Field::OPTIONAL_EDIT));
@@ -53,7 +35,7 @@ class UsersTable extends Table
     protected function select($query, $data = null)
     {
         $query->orderby('user_name');
-        
+
         if($data)
         {
             $query->whereWhenSet('user_name', $data->user_name);

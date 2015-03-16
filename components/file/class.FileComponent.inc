@@ -1,30 +1,14 @@
 <?php
 /**
- * This file is part of the A.W.S.O.M.E.cms distribution.
- * Detailed copyright and licensing information can be found
- * in the doc/COPYRIGHT and doc/LICENSE files which should be
- * included in the distribution.
- *
- * @package components.file
- *
- * @copyright (c) 2009-2010 Yannick de Lange
- * @license http://www.gnu.org/licenses/gpl.txt
- *
- * @version $Revision$
- */
-import('/core/class.Component.inc');
-import('file.util.FileTree');
-
-/**
  * A way to create a centeral file repository to upload files.
- * 
+ *
  * @author Yannick <yannick.l.88@gmail.com>
  */
 class FileComponent extends Component
 {
     /**
      * Constructor
-     * 
+     *
      * @return unknown_type
      */
     public function __construct()
@@ -43,7 +27,7 @@ class FileComponent extends Component
         $registerManager->registerAuth("file.action_edit", "admin");
         $registerManager->registerAuth("file.action_delete", "admin");
         $registerManager->registerAuth("file.action_upload", "admin");
-        
+
         $registerManager->registerPage(array($this, 'add'), '{form table="file.files" form="add"}');
         $registerManager->registerPage(array($this, 'edit'), '{form table="file.files" form="edit"}');
         $registerManager->registerPage(array($this, 'delete'), '{form table="file.files" form="delete"}');
@@ -51,7 +35,7 @@ class FileComponent extends Component
     }
     /**
      * Get a connector object based on the type
-     * 
+     *
      * @param String $name
      * @return FileConnector
      */
@@ -60,18 +44,17 @@ class FileComponent extends Component
         $className = ucfirst($name)."Connector";
         $conn = "class.".$className.".inc";
         $obj = null;
-        
+
         if(file_exists($this->location."connectors/".$conn))
         {
-            import($this->location."connectors/".$conn);
             $obj = new $className();
         }
-        
+
         return $obj;
     }
     /**
      * Add action
-     * 
+     *
      * @param Smarty $smarty
      * @param SmartyPageLoader $smartyLoader
      * @param array $request
@@ -83,13 +66,13 @@ class FileComponent extends Component
             Table::init("file.files")
                 ->setRecord((object) $request)
                 ->doInsert();
-            
+
             $this->redirect(array($this, 'admin'));
         }
     }
     /**
      * update the references made by the connectors
-     * 
+     *
      * @param Smarty $smarty
      * @param SmartyPageLoader $smartyLoader
      * @param Array $request
@@ -98,7 +81,7 @@ class FileComponent extends Component
     {
         $connectors = scandir($this->location."/connectors");
         $rows = array();
-        
+
         foreach($connectors as $connectorFile)
         {
             $matches = array();
@@ -115,7 +98,7 @@ class FileComponent extends Component
     }
     /**
      * Upload a file action
-     * 
+     *
      * @param Smarty $smarty
      * @param SmartyPageLoader $smartyLoader
      * @param array $request
@@ -125,25 +108,25 @@ class FileComponent extends Component
         $request["file_name"] = basename($_FILES['file_data']['name'], substr($_FILES['file_data']['name'], strrpos($_FILES['file_data']['name'], ".")));
         $request["file_date"] = "now";
         $request["file_location"] = $request["file_location"];
-        
+
         try
         {
             $return = Table::init("file.files")
                 ->setRecord((object) $request)
                 ->doInsert();
-            
+
             $linkEdit = makeLink(array($this, "edit"))."?file_id={$return->insertID()}";
             $linkDelete = makeLink(array($this, "delete"))."?file_id={$return->insertID()}";
             $row = $return->getRow();
-            
+
             $this->ajax(array(
-                 "succes" => true, 
-                 "id" => $return->insertID(), 
-                 "name" => $request["file_name"], 
-                 "location" => $request["file_location"], 
-                 "editLink" => $linkEdit, 
-                 "deleteLink" => $linkDelete, 
-                 "viewLink" => $row->file_data->url, 
+                 "succes" => true,
+                 "id" => $return->insertID(),
+                 "name" => $request["file_name"],
+                 "location" => $request["file_location"],
+                 "editLink" => $linkEdit,
+                 "deleteLink" => $linkDelete,
+                 "viewLink" => $row->file_data->url,
                  "type" => $row->file_data->type
             ));
         }
@@ -155,7 +138,7 @@ class FileComponent extends Component
     }
     /**
      * Edit action
-     * 
+     *
      * @param Smarty $smarty
      * @param SmartyPageLoader $smartyLoader
      * @param array $request
@@ -167,7 +150,7 @@ class FileComponent extends Component
             Table::init("file.files")
                 ->setRecord((object) $request)
                 ->doUpdate();
-            
+
             $this->redirect(array($this, "admin"));
         }
         else
@@ -185,7 +168,7 @@ class FileComponent extends Component
     }
     /**
      * Delete action
-     * 
+     *
      * @param Smarty $smarty
      * @param SmartyPageLoader $smartyLoader
      * @param array $request
@@ -197,7 +180,7 @@ class FileComponent extends Component
             Table::init("file.files")
                 ->setRequest((object) $request)
                 ->doDelete();
-            
+
             $this->redirect(array($this, "admin"));
         }
         else
@@ -220,7 +203,7 @@ class FileComponent extends Component
     public function registerTreeItems($tree)
     {
         $table = Table::init("file.files", "admintree");
-        
+
         $result = $table
             ->doSelect()
             ->getRows();
@@ -230,19 +213,19 @@ class FileComponent extends Component
         $docName = strtolower(Language::get("documents"));
         $vidName = strtolower(Language::get("videos"));
         $otherName = strtolower(Language::get("other"));
-        
+
         $mapping = $this->getLocationMap();
-        
+
         $tree->addChild(new UploadFolder($filesName, "/", $mapping));
         $tree->addChild(new ImageFolder($imageName, "/{$filesName}/"));
         $tree->addChild(new Folder($docName, "/[contentroot]/{$filesName}/", Tree::CONTENT));
         $tree->addChild(new Folder($vidName, "/[contentroot]/{$filesName}/", Tree::CONTENT));
         $tree->addChild(new Folder($otherName, "/[contentroot]/{$filesName}/", Tree::CONTENT));
-        
+
         foreach($result as $row)
         {
             $row->file_location = $mapping[$this->getType($row->file_data->type)].substr($row->file_location, 1);
-            
+
             $item = new FileItem($row);
             $tree->addChild($item);
         }
@@ -254,7 +237,7 @@ class FileComponent extends Component
         $docName = strtolower(Language::get("documents"));
         $vidName = strtolower(Language::get("videos"));
         $otherName = strtolower(Language::get("other"));
-        
+
         return array(
             "images"    => "/[contentroot]/{$filesName}/{$imageName}/",
             "docs"      => "/[contentroot]/{$filesName}/{$docName}/",
@@ -264,7 +247,7 @@ class FileComponent extends Component
     }
     /**
      * Get the type of a file based on the mimetype
-     * 
+     *
      * @param String $fileType      mimetype like image/jpg
      * @return String               [images|vid|docs|other]
      */
@@ -302,14 +285,14 @@ class FileComponent extends Component
         {
             return "docs";
         }
-        else 
+        else
         {
             return "other";
         }
     }
     /**
      * Set the permissions for a row using the Table
-     * 
+     *
      * @param Object $row
      */
     public function permissions($row)
@@ -320,7 +303,7 @@ class FileComponent extends Component
             $conn->walk($row);
             return true;
         }
-        
+
         return false;
     }
     /**

@@ -1,22 +1,10 @@
 <?php
-/**
- * This file is part of the A.W.S.O.M.E.cms distribution.
- * Detailed copyright and licensing information can be found
- * in the doc/COPYRIGHT and doc/LICENSE files which should be
- * included in the distribution.
- *
- * @copyright (c) 2009-2010 Yannick de Lange
- * @license http://www.gnu.org/licenses/gpl.txt
- *
- * @version $Revision$
- */
+require_once __DIR__ . '/vendor/autoload.php';
+
 global $websiteroot;
 $websiteroot = dirname(__FILE__).DIRECTORY_SEPARATOR."htdocs";
 
 require_once 'core/init.inc';
-
-import('libs/class.CronParser.inc');
-import('libs/class.CLI.inc');
 
 class Usage extends CLIAction
 {
@@ -70,11 +58,11 @@ class Cron extends CLIAction
         }
         $cronParser = new CronParser();
         $components = RegisterManager::getInstance()->getComponents();
-        
+
         foreach($components as $component)
         {
             $cronTime = Config::get($component->component_name, false, "cron");
-            
+
             $count = $lastrun;
             if($cronTime)
             {
@@ -84,7 +72,7 @@ class Cron extends CLIAction
                     {
                         Component::init($component->component_name)->execCron();
                     }
-                    
+
                     $count += 60;
                 }
             }

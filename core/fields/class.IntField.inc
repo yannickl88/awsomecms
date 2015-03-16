@@ -1,24 +1,7 @@
 <?php
 /**
- * This file is part of the A.W.S.O.M.E.cms distribution.
- * Detailed copyright and licensing information can be found
- * in the doc/COPYRIGHT and doc/LICENSE files which should be
- * included in the distribution.
- *
- * @package core.fields
- *
- * @copyright (c) 2009-2010 Yannick de Lange
- * @license http://www.gnu.org/licenses/gpl.txt
- *
- * @version $Revision$
- */
-import('/core/class.InvalidFormException.inc');
-
-importField("Field");
-
-/**
  * Integer field
- * 
+ *
  * @author Yannick <yannick.l.88@gmail.com>
  */
 class IntField extends Field
@@ -59,7 +42,7 @@ JS;
     public function validate($mode)
     {
         $value = $this->value2db($this->getValue());
-        
+
         if(is_int($value) || is_numeric($value))
         {
             return;
@@ -67,12 +50,12 @@ JS;
         else
         {
             parent::validate($mode);
-            
+
             if($mode == Field::ADD && ($this->isIndex() || $this->isRequired($mode)) && !$this->hasFlag(Field::AUTOKEY))
             {
                 throw new FormException($this, Language::get("error_notnumber"));
             }
-            
+
             if($mode == Field::EDIT && $this->isIndex() && !is_numeric($this->getValue()))
             {
                 throw new FormException($this, Language::get("error_notnumber"));

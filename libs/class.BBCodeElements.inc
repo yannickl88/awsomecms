@@ -1,22 +1,7 @@
 <?php
 /**
- * This file is part of the A.W.S.O.M.E.cms distribution.
- * Detailed copyright and licensing information can be found
- * in the doc/COPYRIGHT and doc/LICENSE files which should be
- * included in the distribution.
- *
- * @package libs
- *
- * @copyright (c) 2009-2010 Yannick de Lange
- * @license http://www.gnu.org/licenses/gpl.txt
- *
- * @version $Revision$
- */
-import("libs/class.BBCodeParser.inc");
-
-/**
- * This file contains All the supported BBCodeElements and all methods that 
- * are defined are overwrites from BBCodeElement 
+ * This file contains All the supported BBCodeElements and all methods that
+ * are defined are overwrites from BBCodeElement
  */
 
 /** Text modifiers */
@@ -108,31 +93,31 @@ class ImgElement extends BBCodeElement
     public function wrap($text)
     {
         $style = "";
-        
+
         if($this->hasAttr("width"))
         {
             if($style != "")
                 $style .= "; ";
             $style .= "width: {$this->getAttr("width")}px";
         }
-        
+
         if($this->hasAttr("height"))
         {
             if($style != "")
                 $style .= "; ";
             $style .= "height: {$this->getAttr("height")}px";
         }
-        
+
         if($this->hasAttr("float"))
         {
             if($style != "")
                 $style .= "; ";
             $style .= "float: {$this->getAttr("float")}";
         }
-        
+
         if($style != "")
             $style = "style='{$style}'";
-        
+
         return "<img src='{$text}' {$style} class='bbcodeimg' alt='image'/>";
     }
     public function plain($text)
@@ -158,10 +143,10 @@ class YoutubeElement extends BBCodeElement
         {
             $width = 480;
             $height = 385;
-            
+
             if($this->hasAttr("width")) $width = $this->getAttr("width");
             if($this->hasAttr("height")) $height = $this->getAttr("height");
-            
+
             $url = "http://www.youtube.com/v/{$matches[2]}&amp;fs=1";
             return "<object width=\"{$width}\" height=\"{$height}\"><param name=\"movie\" value=\"{$url}\"></param><param name=\"allowFullScreen\" value=\"true\"></param><param name=\"allowscriptaccess\" value=\"always\"></param><embed src=\"{$url}\" type=\"application/x-shockwave-flash\" allowscriptaccess=\"always\" allowfullscreen=\"true\" width=\"{$width}\" height=\"{$height}\"></embed></object>";
         }
@@ -282,7 +267,7 @@ class ListElement extends BBCodeElement
                     break;
             }
         }
-        else 
+        else
         {
             return "<ul>{$text}</ul>";
         }
@@ -300,7 +285,7 @@ class ItemElement extends BBCodeElement
         {
             throw new BBCodeException("list item must be inside a list, parent is '{$this->parent->type()}'");
         }
-        
+
         return "<li>{$text}</li>";
     }
     public function singelLine()

@@ -1,21 +1,5 @@
 <?php
 /**
- * This file is part of the A.W.S.O.M.E.cms distribution.
- * Detailed copyright and licensing information can be found
- * in the doc/COPYRIGHT and doc/LICENSE files which should be
- * included in the distribution.
- *
- * @package components.groups
- *
- * @copyright (c) 2009-2010 Yannick de Lange
- * @license http://www.gnu.org/licenses/gpl.txt
- *
- * @version $Revision$
- */
-import('/core/class.Component.inc');
-import('/core/class.Authentication.inc');
-
-/**
  * Component that allowes for group based authentication, rather then user based
  *
  * @author Yannick <yannick.l.88@gmail.com>
@@ -42,10 +26,10 @@ class GroupsComponent extends Component implements AuthComponent
         $registerManager->registerAuth("groups.action_add", "admin");
         $registerManager->registerAuth("groups.action_edit", "admin");
         $registerManager->registerAuth("groups.action_delete", "admin");
-        
+
         $registerManager->registerHook($this->component, "users", "post", "add", "useradd");
         $registerManager->registerHook($this->component, "users", "post", "delete", "userdel");
-        
+
         //admin pages
         $registerManager->registerPage(array($this, 'admin'), '{form table="groups.groups" form="admin"}');
         $registerManager->registerPage(array($this, 'add'), '{form table="groups.groups" form="add"}');
@@ -218,7 +202,7 @@ class GroupsComponent extends Component implements AuthComponent
             ->setRequest((object) array("user_id" => $record->user_id))
             ->doSelect()
             ->getRows();
-            
+
             foreach($records as $record)
             {
                 list($rights, $authGroups) = $this->getPrivilageMapping($record->group_privileges, $_SESSION['usr']['auth']);
@@ -253,7 +237,7 @@ class GroupsComponent extends Component implements AuthComponent
         {
             Table::init('groups.usersgroups')
             ->setRecord((object) array(
-                    "group_id" => Config::get('defaultgroup', 2, 'groups'), 
+                    "group_id" => Config::get('defaultgroup', 2, 'groups'),
                     "user_id" => Table::init('users.users')->getInsertedID()
             ))
             ->doInsert();

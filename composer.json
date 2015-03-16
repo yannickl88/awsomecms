@@ -1,0 +1,17 @@
+{
+    "name": "yannickl88/awsomecms",
+    "description": "Simple and lightweight CMS",
+    "license": "GPL",
+    "authors": [
+        {
+            "name": "Yannick de Lange",
+            "email": "yannick.l.88@gmail.com"
+        }
+    ],
+    "require": {
+        "smarty/smarty" : "3.1.*"
+    },
+    "autoload": {
+        "classmap": ["components/", "core/", "libs/"]
+    }
+}

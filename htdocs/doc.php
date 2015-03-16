@@ -1,4 +1,5 @@
 <?php
+require_once __DIR__ . '/../vendor/autoload.php';
 session_start();
 
 global $websiteroot, $start;
@@ -15,11 +16,11 @@ $components = RegisterManager::getInstance()->getComponents();
         <title>Documentation</title>
         <script type="text/javascript" src="http://www.google.com/jsapi"></script>
         <script type="text/javascript">
-            // <![CDATA[ 
+            // <![CDATA[
             // Load jQuery
             google.load("jquery", "1.3.1", {uncompressed:false});
             google.load("jqueryui", "1.5.3");
-            // ]]> 
+            // ]]>
         </script>
         <style>
             h1, h2, h3 {
@@ -64,17 +65,17 @@ $components = RegisterManager::getInstance()->getComponents();
     foreach($components as $component)
     {
         echo "            <div id=\"comp_{$component->component_name}\" style=\"display: block;\">\n";
-        
+
         //let's parse that info file
         $data = parseInfoFile("{$component->component_path}/{$component->component_name}.info", $component->component_name);
-        
+
         echo "            <h1><a name='{$component->component_name}'>".ucfirst($component->component_name)."</a></h1>\n";
         echo "            <div class='body'>\n";
         echo "            <p>".nl2br($data['desc'])."</p>\n";
         if(count($data['tags']) > 0)
         {
             echo "            <h2>Tags:</h2>\n";
-            
+
             foreach($data['tags'] as $tag)
             {
                 echo "            <b>{$tag['name']}</b>";
@@ -109,7 +110,7 @@ $components = RegisterManager::getInstance()->getComponents();
         if(count($data['modifiers']) > 0)
         {
             echo "            <h2>Modifiers:</h2>\n";
-            
+
             foreach($data['modifiers'] as $tag)
             {
                 echo "            <b>{$tag['name']}</b>";

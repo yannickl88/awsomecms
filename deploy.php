@@ -1,26 +1,10 @@
 <?php
-/**
- * This file is part of the A.W.S.O.M.E.cms distribution.
- * Detailed copyright and licensing information can be found
- * in the doc/COPYRIGHT and doc/LICENSE files which should be
- * included in the distribution.
- *
- * @copyright (c) 2009-2010 Yannick de Lange
- * @license http://www.gnu.org/licenses/gpl.txt
- *
- * @version $Revision$
- */
+require_once __DIR__ . '/vendor/autoload.php';
+
 global $websiteroot;
 $websiteroot = dirname(__FILE__).DIRECTORY_SEPARATOR."htdocs";
 
 require_once 'core/functions.util.inc';
-
-import('core/class.Config.inc');
-import('libs/class.FTP.inc');
-import('libs/class.InstallHelper.inc');
-import('libs/class.CLI.inc');
-import('core/class.SQL.inc');
-
 
 //actions
 abstract class DeployAction extends CLIAction
@@ -328,7 +312,7 @@ class Release extends DeployAction
 
                 $infoContent = file_get_contents($cli->os->join($location,"RELEASES","tmp","components",$component, $component.".info"));
                 $infoContent = preg_replace("/@version: ?([1-9]*)/", "@version:".$compversion, $infoContent);
-                
+
                 file_put_contents($cli->os->join($location,"RELEASES","tmp","components",$component,$component.".info"), $infoContent);
             }
         }
@@ -360,16 +344,14 @@ class Patch extends CLIAction
      */
     public function exec($cli, $action)
     {
-        import("core/class.RegisterManager.inc");
-        
         $h = new InstallHelper();
         $count = array();
         $components = RegisterManager::getInstance()->getComponents();
-        
+
         foreach($components as $component)
         {
             $xmlFile = $cli->os->join($component->component_path, "db", "install.xml");
-            
+
             if(file_exists($xmlFile))
             {
                 if($h->loadTable(file_get_contents($xmlFile)))

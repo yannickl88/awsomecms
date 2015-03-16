@@ -1,26 +1,10 @@
 <?php
 /**
- * This file is part of the A.W.S.O.M.E.cms distribution.
- * Detailed copyright and licensing information can be found
- * in the doc/COPYRIGHT and doc/LICENSE files which should be
- * included in the distribution.
- *
- * @package components.users
- *
- * @copyright (c) 2009-2010 Yannick de Lange
- * @license http://www.gnu.org/licenses/gpl.txt
- *
- * @version $Revision$
- */
-import('/core/class.Component.inc');
-import('/core/class.Authentication.inc');
-
-/**
  * User component and the actions that it can do.
  * This components gives you the option to create different users inside a
  * system, these users can be assigned a name and password and privilages. If
  * the group component is installed, privilages will be delegated there
- * 
+ *
  * @author Yannick <yannick.l.88@gmail.com>
  */
 class UsersComponent extends Component implements AuthComponent
@@ -43,7 +27,7 @@ class UsersComponent extends Component implements AuthComponent
         $registerManager->registerAuth("users.action_privadd", "admin");
         $registerManager->registerAuth("users.action_privedit", "admin");
         $registerManager->registerAuth("users.action_privdelete", "admin");
-        
+
         $registerManager->registerPage(array($this, 'add'), '{form table="users.users" form="add"}');
         $registerManager->registerPage(array($this, 'edit'), '{form table="users.users" form="edit"}');
         $registerManager->registerPage(array($this, 'delete'), '{form table="users.users" form="delete"}');
@@ -56,7 +40,7 @@ class UsersComponent extends Component implements AuthComponent
     /**
      * Internal function to handle login. This checks user and password and
      * if they are filled in or throws and FormException otherwise.
-     * 
+     *
      * @param array $request
      * @param string $redirect
      */
@@ -65,7 +49,7 @@ class UsersComponent extends Component implements AuthComponent
         //extra custom validation
         $valid = true;
         $e = new InvalidFormException((object) $request, $redirect, "users.users");
-        
+
         if(empty($request['user_name']))
         {
             $valid = false;
@@ -76,16 +60,16 @@ class UsersComponent extends Component implements AuthComponent
             $valid = false;
             $e->addInvalidField('user_pass', Language::get("error_notfilledin"));
         }
-        
+
         if($valid)
         {
             $loggedin = Authentication::login($request['user_name'], $request['user_pass']);
-            
+
             if(!$loggedin || ($loggedin && isset($_SESSION['usr']['auth']['admin']) && $_SESSION['usr']['auth']['admin'] !== true))
             {
                 $e->addInvalidField('user_name', Language::get("error_nomatch"));
                 $e->addInvalidField('user_pass', "");
-                
+
                 throw $e;
             }
         }
@@ -93,12 +77,12 @@ class UsersComponent extends Component implements AuthComponent
         {
             throw $e;
         }
-        
+
         $this->redirect($redirect);
     }
     /**
      * Login and redirect to the admin section
-     * 
+     *
      * @param Smarty $smarty
      * @param SmartyPageLoader $smartyLoader
      * @param array $request
@@ -112,7 +96,7 @@ class UsersComponent extends Component implements AuthComponent
     }
     /**
      * Login and redirect to the index
-     * 
+     *
      * @param Smarty $smarty
      * @param SmartyPageLoader $smartyLoader
      * @param array $request
@@ -126,7 +110,7 @@ class UsersComponent extends Component implements AuthComponent
     }
     /**
      * Add a user
-     * 
+     *
      * @param Smarty $smarty
      * @param SmartyPageLoader $smartyLoader
      * @param array $request
@@ -139,10 +123,10 @@ class UsersComponent extends Component implements AuthComponent
             if($request['user_pass'] != $request['user_pass2'])
             {
                 $e = new InvalidFormException((object) $request, makeLink(array($this, "add")), "users.users", "Password do not match");
-                
+
                 $e->addInvalidField('user_pass', "Passwords do not match");
                 $e->addInvalidField('user_pass2', "");
-                
+
                 throw $e;
             }
             else
@@ -151,13 +135,13 @@ class UsersComponent extends Component implements AuthComponent
                     ->setRecord((object) $request)
                     ->doInsert();
             }
-            
+
             $this->redirect(array($this, "admin"));
         }
     }
     /**
      * Edit a user
-     * 
+     *
      * @param Smarty $smarty
      * @param SmartyPageLoader $smartyLoader
      * @param array $request
@@ -170,11 +154,11 @@ class UsersComponent extends Component implements AuthComponent
             if(!empty($request['user_pass']) && $request['user_pass'] != $request['user_pass2'])
             {
                 $e = new InvalidFormException((object) $request, makeLink(array($this, "edit")), "users.users", "Password do not match");
-                
+
                 $e->setRedirectData(array("user_id" => $request["user_id"]));
                 $e->addInvalidField('user_pass', Language::get("error_passwordsnomatch"));
                 $e->addInvalidField('user_pass2', "");
-                
+
                 throw $e;
             }
             else
@@ -182,7 +166,7 @@ class UsersComponent extends Component implements AuthComponent
                 Table::init('users.users')
                     ->setRecord((object) $request)
                     ->doUpdate();
-                
+
                 $this->redirect(array($this, "admin"));
             }
         }
@@ -201,7 +185,7 @@ class UsersComponent extends Component implements AuthComponent
     }
     /**
      * Delete a user
-     * 
+     *
      * @param Smarty $smarty
      * @param SmartyPageLoader $smartyLoader
      * @param array $request
@@ -213,7 +197,7 @@ class UsersComponent extends Component implements AuthComponent
             Table::init('users.users')
                 ->setRecord((object) $request)
                 ->doDelete();
-            
+
             $this->redirect(array($this, "admin"));
         }
         else
@@ -231,7 +215,7 @@ class UsersComponent extends Component implements AuthComponent
     }
     /**
      * Add a privilege
-     * 
+     *
      * @param Smarty $smarty
      * @param SmartyPageLoader $smartyLoader
      * @param array $request
@@ -242,7 +226,7 @@ class UsersComponent extends Component implements AuthComponent
         {
             $table = Table::init('users.privileges')
                 ->setRecord((object) $request);
-            
+
             //check if name is not yet chosen, we do not wat duplicates
             if($table->setRequest((object) $request)->doSelect()->count() == 0)
             {
@@ -252,16 +236,16 @@ class UsersComponent extends Component implements AuthComponent
             {
                 $e = new InvalidFormException((object) $request, makeLink(array($this, "privadd")), "users.privileges", "Privilage already exists");
                 $e->addInvalidField('privilege_name', Language::get("error_selectothername"));
-                
+
                 throw $e;
             }
-            
+
             $this->redirect(makeLink(array($this, "privadmin")));
         }
     }
     /**
      * Edit a privilege
-     * 
+     *
      * @param Smarty $smarty
      * @param SmartyPageLoader $smartyLoader
      * @param array $request
@@ -270,17 +254,17 @@ class UsersComponent extends Component implements AuthComponent
     {
         $table = Table::init('users.privileges')
             ->setRecord((object) $request);
-         
+
         if($request['method'] == 'post')
         {
             $table->doUpdate();
-            
+
             $this->redirect(makeLink(array($this, "privadmin")));
         }
     }
     /**
      * Delete a privilege
-     * 
+     *
      * @param Smarty $smarty
      * @param SmartyPageLoader $smartyLoader
      * @param array $request
@@ -289,11 +273,11 @@ class UsersComponent extends Component implements AuthComponent
     {
         $table = Table::init('users.privileges')
             ->setRecord((object) $request);
-        
+
         if($request['method'] == 'post')
         {
             $table->doDelete($request);
-            
+
             $this->redirect(makeLink(array($this, "privadmin")));
         }
         elseif(!$request['privilege_id'])
@@ -303,7 +287,7 @@ class UsersComponent extends Component implements AuthComponent
     }
     /**
      * Get the privileges the user has
-     * 
+     *
      * @param int $userPrivs        Privlige field from the user record
      * @return array
      */
@@ -312,7 +296,7 @@ class UsersComponent extends Component implements AuthComponent
         $privilages = Table::init('users.privileges')->doSelect()->getRows();
         $rights = array();
         $authGroups = array();
-        
+
         foreach($privilages as $privilage)
         {
             $rights[$privilage->privilege_name] = Config::hasFlag($userPrivs, $privilage->privilege_int);
@@ -321,12 +305,12 @@ class UsersComponent extends Component implements AuthComponent
                 $authGroups = array_merge($authGroups, $privilage->privilege_auths);
             }
         }
-        
+
         return array($rights, $authGroups);
     }
     /**
      * Authenticate a user
-     * 
+     *
      * @param string $user_name
      * @param string $user_pass
      * @return boolean
@@ -337,16 +321,16 @@ class UsersComponent extends Component implements AuthComponent
             ->setRequest((object) array("user_name" => $user_name))
             ->doSelect()
             ->getRow();
-        
+
         if(!empty($record) && $record->user_pass['password'] == sha1($record->user_pass['salt'].$user_pass))
         {
             //set the session
             $_SESSION['usr'] = array();
             $_SESSION['usr']['user_name'] = $user_name;
             $_SESSION['usr']['user_pass'] = $user_pass;
-            list($_SESSION['usr']['auth'], $_SESSION['usr']['privs']) = 
+            list($_SESSION['usr']['auth'], $_SESSION['usr']['privs']) =
                 $this->getPrivilageMapping($record->user_privileges);
-            
+
             return true;
         }
         return false;
@@ -358,7 +342,7 @@ class UsersComponent extends Component implements AuthComponent
     {
         $_SESSION['usr'] = null;
         session_destroy();
-        
+
         return true;
     }
     /**
@@ -369,7 +353,7 @@ class UsersComponent extends Component implements AuthComponent
     {
         $menu->addChild(new MenuItem("users", array($this, 'admin')));
         $menu->addChild(new MenuItem("usersadmin", array($this, 'admin'), "users"));
-        
+
         if(Config::get("usersMenu", true, "menu"))
         {
             $menu->addChild(new MenuItem("privadmin", array($this, 'privadmin'), "users"));

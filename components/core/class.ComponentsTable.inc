@@ -1,24 +1,7 @@
 <?php
 /**
- * This file is part of the A.W.S.O.M.E.cms distribution.
- * Detailed copyright and licensing information can be found
- * in the doc/COPYRIGHT and doc/LICENSE files which should be
- * included in the distribution.
- *
- * @package components.core
- *
- * @copyright (c) 2009-2010 Yannick de Lange
- * @license http://www.gnu.org/licenses/gpl.txt
- *
- * @version $Revision$
- */
-importField("Field");
-importField("IntField");
-importField("TextField");
-
-/**
  * Core table, this handels all interaction with the core table in the database
- * 
+ *
  * @author Yannick <yannick.l.88@gmail.com>
  */
 class ComponentsTable extends Table
@@ -30,7 +13,7 @@ class ComponentsTable extends Table
     {
         parent::__construct("components");
         $this->assign("core");
-        
+
         $this->addField(new Field("component_name", Field::STR_INDEX));
         $this->addField(new TextField("component_requests", Field::OPTIONAL));
         $this->addField(new Field("component_path", Field::OPTIONAL));

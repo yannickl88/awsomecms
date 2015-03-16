@@ -1,23 +1,7 @@
 <?php
 /**
- * This file is part of the A.W.S.O.M.E.cms distribution.
- * Detailed copyright and licensing information can be found
- * in the doc/COPYRIGHT and doc/LICENSE files which should be
- * included in the distribution.
- *
- * @package core
- *
- * @copyright (c) 2009-2010 Yannick de Lange
- * @license http://www.gnu.org/licenses/gpl.txt
- *
- * @version $Revision$
- */
-import("core/class.Cache.inc");
-import("core/class.Component.inc");
-import("core/class.Extention.inc");
-/**
  * Manager for registering components, hooks, mappings and pages dynamicly
- * 
+ *
  * @author Yannick <yannick.l.88@gmail.com>
  */
 class RegisterManager
@@ -71,7 +55,7 @@ class RegisterManager
                         }
                     }
                 }
-                
+
                 //check if the config has changed
                 if(Cache::has("configCheck") && Cache::get("configCheck") != Config::get("checksum", ""))
                 {
@@ -149,10 +133,10 @@ class RegisterManager
                 }
                 catch(Exception $e) { }
             }
-            
+
             //Load the extentions
             $extentions = scandir(getFrameworkRoot()."/extentions/");
-            
+
             foreach($extentions as $extention)
             {
                 $matches = array();
@@ -191,7 +175,7 @@ class RegisterManager
     }
     /**
      * Reload the content of the RegisterManager
-     * 
+     *
      * @param Bool $noload      Prevent Registermanager from already loading new data
      */
     public function reload()
@@ -201,7 +185,7 @@ class RegisterManager
         Cache::clear("hooks");
         Cache::clear("pages");
         Cache::clear("auth");
-        
+
         $this->load();
     }
     /**
@@ -232,7 +216,7 @@ class RegisterManager
     }
     /**
      * Register an auth group to which this action belongs
-     * 
+     *
      * @param String $action
      * @param String $group
      */
@@ -240,7 +224,7 @@ class RegisterManager
     {
         if(!isset($this->auth[$group]))
             $this->auth[$group] = array();
-            
+
         $this->auth[$group][] = $action;
     }
     /**
@@ -273,7 +257,7 @@ class RegisterManager
     public function getHook($component, $action, $prepost)
     {
         $key = "{$component}-{$action}-{$prepost}";
-        
+
         if(isset($this->hooks[$key]))
         {
             return $this->hooks[$key];
@@ -285,7 +269,7 @@ class RegisterManager
     }
     /**
      * Get a page
-     * 
+     *
      * @param * $url
      * @return String
      */
@@ -312,7 +296,7 @@ class RegisterManager
     {
         //remove the query string if needed
         if(strpos($url, "?") !== false) $url = substr($url, 0, strpos($url, "?"));
-        
+
         foreach($this->mappings as $check)
         {
             $matches = array();
@@ -331,7 +315,7 @@ class RegisterManager
     }
     /**
      * Get all components
-     * 
+     *
      * @return array
      */
     public function getComponents()
@@ -340,7 +324,7 @@ class RegisterManager
     }
     /**
      * Get a component
-     * 
+     *
      * @param String $name
      * @return array
      */
@@ -350,7 +334,7 @@ class RegisterManager
     }
     /**
      * Get all registered Auth groups
-     * 
+     *
      * @return array
      */
     public function getAuths()
@@ -359,7 +343,7 @@ class RegisterManager
     }
     /**
      * Check if a component is installed
-     * 
+     *
      * @param String $component
      * @return boolean
      */
@@ -369,7 +353,7 @@ class RegisterManager
     }
     /**
      * Check if a page is rgistered
-     * 
+     *
      * @param String $pageName
      * @param String $pageLocation
      * @return boolean
@@ -380,7 +364,7 @@ class RegisterManager
     }
     /**
      * Check if a hook is rgistered
-     * 
+     *
      * @param String $component
      * @param String $action
      * @param String $prepost   pre|post
@@ -395,7 +379,7 @@ class RegisterManager
     /**
      * Check if an user can execute the given action
      * NOTE: if there is no information on the action, valid is assumed
-     * 
+     *
      * @param String $action
      * @param Array $user
      */
@@ -403,7 +387,7 @@ class RegisterManager
     {
         if($user == null && isset($_SESSION['usr']))
             $user = $_SESSION['usr'];
-        
+
         $group = false;
         foreach($this->auth as $authGroup => $actions)
         {

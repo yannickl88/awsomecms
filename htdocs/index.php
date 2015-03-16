@@ -7,9 +7,10 @@
  *
  * @copyright (c) 2009-2010 Yannick de Lange
  * @license http://www.gnu.org/licenses/gpl.txt
- * 
+ *
  * @version $Revision$
  */
+require_once __DIR__ . '/../vendor/autoload.php';
 session_start();
 
 global $websiteroot, $start;
@@ -22,7 +23,7 @@ try
     require_once '../core/init.inc';
 
     $config = Config::getInstance();
-    
+
     $smarty = new Smarty();
     $smarty->assign("SCRIPT_START", $start);
 
@@ -32,11 +33,11 @@ try
     $smarty->setTemplateDir($websiteroot.'/templates');
     $smarty->setConfigDir($websiteroot.'/templates_c');
     $smarty->setCacheDir($websiteroot.'/../cache');
-    
+
     $smarty->compile_id = getLang();
     $smarty->assign("LANG", $smarty->compile_id);
 
-    $smartyLoader = new SmartyPageLoader();
+    $smartyLoader = new SmartyPageLoader($smarty);
     $smartyLoader->registerModulePlugins($smarty);
 
     Controller::getInstance()
@@ -53,7 +54,7 @@ catch(NotInstalledException $e)
     {
         header("HTTP/1.0 500 Internal Server Error");
         echo "Something went wrong, please contact the server administrator.";
-        
+
         if(Config::get('debug', 0, 'debug') >= 1)
         {
             echo "<br /><br /><b>".get_class($e)."</b>: ".$e->getMessage()."<pre>".$e->getTraceAsString()."</pre>";
@@ -64,7 +65,7 @@ catch(ForbiddenException $e)
 {
     header("HTTP/1.0 403 Forbidden");
     echo "You do not have access to preform this action";
-    
+
     if(Config::get('debug', 0, 'debug') >= 1)
     {
         echo "<br /><br /><b>".get_class($e)."</b>: ".$e->getMessage()."<pre>".$e->getTraceAsString()."</pre>";
@@ -74,7 +75,7 @@ catch(Exception $e)
 {
     header("HTTP/1.0 500 Internal Server Error");
     echo "Something went wrong, please contact the server administrator.";
-    
+
     if(Config::get('debug', 0, 'debug') >= 1)
     {
         echo "<br /><br /><b>".get_class($e)."</b>: ".$e->getMessage()."<pre>".$e->getTraceAsString()."</pre>";

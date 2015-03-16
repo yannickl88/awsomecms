@@ -22,18 +22,20 @@ class Debugger
     const NOTICE    = 2;
     const WARNING   = 3;
     const ERROR     = 4;
-    
+
     const HTML      = "html";
     const CLI       = "cli";
-    
+
     private static $instance;
-    
+
     private $logs;
     private $currentRobot;
     private $type;
     private $debugID;
     private $stackTraces;
-    
+    private $currentLevel;
+    private $cacheDebug;
+
     /**
      * singelton
      *
@@ -46,7 +48,7 @@ class Debugger
         }
         return self::$instance;
     }
-    
+
     /**
      * constructor
      */
@@ -57,7 +59,19 @@ class Debugger
         $this->stackTraces = array();
         $this->log("Debugger initialized");
         $this->type = Debugger::HTML;
-        
+
+		$this->currentLevel = Config::get('debug', 0, 'debug');
+		$this->cacheDebug = ! (Config::getInstance()->hasKey('debug_cache', 'debug') && Config::get('debug_cache', '1', 'debug') === '');
+
+		if(
+			isset($_GET["debug_key"]) &&
+			!empty($_GET["debug_key"]) &&
+			Config::getInstance()->hasKey('debug_key', 'debug') &&
+			Config::get('debug_key', null, 'debug') == $_GET["debug_key"]
+		) {
+			$this->currentLevel = 1;
+        }
+
         if(empty($_SESSION["DEBUGID"]))
         {
             //create a debug ID
@@ -65,6 +79,10 @@ class Debugger
         }
         $this->debugID = $_SESSION["DEBUGID"];
     }
+	public function getCurrentLevel()
+	{
+		return $this->currentLevel;
+	}
     /**
      * Set the robot that was used when visiting the site
      * @param $robot
@@ -76,18 +94,18 @@ class Debugger
     }
     /**
      * Add a log message
-     * 
+     *
      * @param string $message
      * @param int $level
      */
     public function log($message, $level = Debugger::LOG, $stackTraceID = -1)
     {
         global $start;
-        
+
         $timestamp = round(microtime(true) - $start, 2);
-        
+
         $this->logs[] = array($level, "[{$timestamp}sec] - {$message}", $stackTraceID);
-        
+
         if($this->type == Debugger::CLI && $level >= 4)
         {
             echo "{$message} \n";
@@ -95,13 +113,13 @@ class Debugger
     }
     /**
      * Add a warning message
-     * 
+     *
      * @param string $message
      */
     public function warning($message)
     {
         $stackTraceID = -1;
-        if(Config::get('debug', 0, 'debug') > 1)
+        if($this->currentLevel > 1)
         {
             $stackTraceID = count($this->stackTraces);
             $this->stackTraces[] = debug_backtrace();
@@ -110,13 +128,13 @@ class Debugger
     }
     /**
      * Add a error message
-     * 
+     *
      * @param string $message
      */
     public function error($message)
     {
         $stackTraceID = -1;
-        if(Config::get('debug', 0, 'debug') > 0)
+        if($this->currentLevel > 0)
         {
             $stackTraceID = count($this->stackTraces);
             $this->stackTraces[] = debug_backtrace();
@@ -125,13 +143,13 @@ class Debugger
     }
     /**
      * Add a notice message
-     * 
+     *
      * @param string $message
      */
     public function notice($message)
     {
         $stackTraceID = -1;
-        if(Config::get('debug', 0, 'debug') > 1)
+        if($this->currentLevel > 1)
         {
             $stackTraceID = count($this->stackTraces);
             $this->stackTraces[] = debug_backtrace();
@@ -140,11 +158,11 @@ class Debugger
     }
     /**
      * Converet the debugger to a string representation
-     * 
+     *
      * @return string
      */
     public function __toString() {
-        if(Config::get('debug', 0, 'debug') > 0)
+        if($this->currentLevel > 0)
         {
             try {
                 return $this->renderDebug();
@@ -161,62 +179,62 @@ class Debugger
     }
     /**
      * Render the debug list as HTML
-     * 
+     *
      * @return string
      */
     public function renderDebug()
     {
         global $start;
         $debug = '';
-        
+
         // cache the debug stacktrace
-        if(count($this->stackTraces) > 0)
+        if(count($this->stackTraces) > 0 && $this->cacheDebug)
         Cache::set("debug_{$this->debugID}", $this->stackTraces);
-        
+
         $baseLevel = Debugger::LOG;
-        
+
         foreach($this->logs as $log)
         {
             if($debug != "")
             {
                 $debug .= "<br />";
             }
-            
+
             switch($log[0])
             {
                 case Debugger::WARNING:
                     $debug .= "<span style='color: #ffcc00;' class='debugRow warning'>";
-                    
+
                     if($baseLevel < Debugger::WARNING)
                     {
                         $baseLevel = Debugger::WARNING;
                     }
-                    
+
                     break;
                 case Debugger::ERROR:
                     $debug .= "<span style='color: #ff0000;' class='debugRow error'>";
-                    
+
                     if($baseLevel < Debugger::ERROR)
                     {
                         $baseLevel = Debugger::ERROR;
                     }
-                    
+
                     break;
                     break;
                 case Debugger::NOTICE:
                     $debug .= "<span style='color: #84a60e;' class='debugRow notice'>";
-                    
+
                     if($baseLevel < Debugger::NOTICE)
                     {
                         $baseLevel = Debugger::NOTICE;
                     }
-                    
+
                     break;
                 default:
                     $debug .= "<span class='debugRow log'>";
                     break;
             }
-            
+
             $debug .= $log[1];
             if($log[2] > -1)
             {
@@ -224,11 +242,11 @@ class Debugger
             }
             $debug .= "</span>";
         }
-        
+
         $timestamp = round(microtime(true) - $start, 2);
-        
+
         $html = "";
-        
+
         //HTML
         $html .= "<div class='debug' style='margin-top: 5px;'>";
         switch($baseLevel)
@@ -262,7 +280,7 @@ class Debugger
         }
         $html .= $debug;
         $html .= "</div></div>";
-        
+
         //JAVASCRIPT
         $html .= <<<STR
 <script type="text/javascript">
@@ -270,25 +288,25 @@ class Debugger
     function debug_hadCookie() {
         var nameEQ = "debugHide=";
         var ca = document.cookie.split(';');
-        for(var i=0;i < ca.length;i++) 
+        for(var i=0;i < ca.length;i++)
         {
             var c = ca[i];
-            
-            while (c.charAt(0)==' ') 
+
+            while (c.charAt(0)==' ')
                 c = c.substring(1,c.length);
-            
-            if (c.indexOf(nameEQ) == 0) 
+
+            if (c.indexOf(nameEQ) == 0)
                 return true;
         }
         return false;
     }
-    
+
     function debug_toggleDebug()
     {
         if(debug_hadCookie())
         {
             $('.debugBody').css('display', 'block');
-            
+
             var date = new Date();
             date.setTime(date.getTime()+(-1*24*60*60*1000));
             document.cookie = "debugHide=true; expires="+date.toGMTString()+"; path=/";
@@ -299,7 +317,7 @@ class Debugger
             document.cookie = "debugHide=true; path=/";
         }
     }
-    
+
     function debug_backtrace(debug_ID, trace_ID)
     {
         window.open("/debug.php?id="+debug_ID+"&key="+trace_ID, "_blank", "width=500,height=600");
@@ -308,10 +326,10 @@ class Debugger
 //]]>
 </script>
 STR;
-        
+
         return $html;
     }
-    
+
     public function setType($type)
     {
         $this->type = $type;

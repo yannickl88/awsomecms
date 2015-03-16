@@ -48,7 +48,7 @@
     </field>
     <field>
       <name>item_title</name>
-      <type>text</type>
+      <type>varchar(100)</type>
       <value null="0"></value>
       <extra></extra>
     </field>
@@ -61,12 +61,6 @@
     <field>
       <name>item_hook</name>
       <type>varchar(20)</type>
-      <value null="0"></value>
-      <extra></extra>
-    </field>
-    <field>
-      <name>item_text</name>
-      <type>text</type>
       <value null="0"></value>
       <extra></extra>
     </field>

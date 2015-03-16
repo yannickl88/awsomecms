@@ -1,20 +1,5 @@
 <?php
 /**
- * This file is part of the A.W.S.O.M.E.cms distribution.
- * Detailed copyright and licensing information can be found
- * in the doc/COPYRIGHT and doc/LICENSE files which should be
- * included in the distribution.
- *
- * @package core
- *
- * @copyright (c) 2009-2010 Yannick de Lange
- * @license http://www.gnu.org/licenses/gpl.txt
- *
- * @version $Revision$
- */
-import('/core/class.InvalidFormException.inc');
-
-/**
  * Superclass for all the components
  *
  * @author Yannick <yannick.l.88@gmail.com>
@@ -80,8 +65,8 @@ class Component
     }
     /**
      * Create a component instance based on the name and the path
-     * 
-     * NOTE: do not use this, use Component::init(). 
+     *
+     * NOTE: do not use this, use Component::init().
      *       Only use this to resolve ciclur reference from the register manager
      * @throws Exception
      * @param String $name
@@ -100,12 +85,12 @@ class Component
             include_once $loc;
 
             $obj = new $className();
-            
+
             if(!isset(Component::$components))
             {
                 Component::$components = array();
             }
-            
+
             Component::$components[$name] = $obj;
             $obj->location = $path;
 
@@ -127,7 +112,7 @@ class Component
     }
     /**
      * Get the name of the component
-     * 
+     *
      * @return String;
      */
     public function getName()
@@ -235,7 +220,7 @@ class Component
     public function execCron() { }
     /**
      * Get all the(frontend) pages associated with this component. This is used for generatring a sitemap.
-     * 
+     *
      * @return array
      */
     public function getAllPages() {
