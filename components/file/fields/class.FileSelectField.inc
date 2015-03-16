@@ -70,7 +70,6 @@ class FileSelectField extends Field
             $checkboxes = Tree::CHECK;
         else
             $value = array($value); // make sure we get an array
-        
         $html .= smarty_function_admintree(array("javascript" => $this->getName(), "folderonly" => false, "types" => 2, "checkboxes" => $checkboxes, "value" => $value, "filetypes" => $this->types, "noCookie" => !$this->autoOpen), $smarty);
 
         return $html;

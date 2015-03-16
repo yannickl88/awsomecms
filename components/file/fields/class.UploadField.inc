@@ -183,7 +183,7 @@ class UploadField extends Field
                 if($query->getAction() == "update") {
                     //delete old images
                     $row = $this->parent->doSelect()->getRow();
-                    
+
                     if($row && isset($row->{$this->getDBName()}->url) && file_exists(Config::get("websiteroot", "/")."/".$row->{$this->getDBName()}->url))
                     {
                         unlink(Config::get("websiteroot", "/")."/".$row->{$this->getDBName()}->url);
@@ -192,7 +192,18 @@ class UploadField extends Field
                     {
                         unlink(Config::get("websiteroot", "/")."/".$row->{$this->getDBName()}->thumb);
                     }
+                //delete old images
+                $row = $this->parent->doSelect()->getRow();
+
+                if($row && isset($row->{$this->getDBName()}->url) && file_exists(Config::get("websiteroot", "/")."/".$row->{$this->getDBName()}->url))
+                {
+                    unlink(Config::get("websiteroot", "/")."/".$row->{$this->getDBName()}->url);
                 }
+                if($row && isset($row->{$this->getDBName()}->url) && file_exists(Config::get("websiteroot", "/")."/".$row->{$this->getDBName()}->thumb))
+                {
+                    unlink(Config::get("websiteroot", "/")."/".$row->{$this->getDBName()}->thumb);
+                }
+
                 $filename = md5($fileData['name'].time())."-".$fileData['name'];
 
                 $newData->filename = $filename;

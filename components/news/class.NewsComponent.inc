@@ -1,5 +1,6 @@
 <?php
 
+
  * @author Yannick <yannick.l.88@gmail.com>
  */
 class NewsComponent extends Component implements SearchProvider

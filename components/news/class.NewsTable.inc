@@ -46,6 +46,7 @@ class NewsTable extends Table
 
                 $query->limit($data->max, $offset);
             }
+
             if(isset($data->hideHidden) && $data->hideHidden)
                 $query->where("news_hidden", 0, "=", "AND", true);
 
