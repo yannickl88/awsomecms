@@ -1,7 +1,5 @@
 <?php
-/**
- * Show a list of results on this page
- *
+
  * @param array $params
  * @param Smarty $smarty
  * @return string
@@ -18,18 +16,30 @@ function smarty_function_search($params, &$smarty)
     }
 
     $indexer = new TextSpider();
-    $results = $indexer->search(explode(" ", htmlentities($_GET[$key])));
+    $results_all = $indexer->search(explode(" ", htmlentities($_GET[$key])));
+    $results_highlights = array();
+    $results = array();
 
-    foreach($results as &$result)
+    foreach($results_all as $result)
     {
         $text = unserialize($result->item_text);
         $text['en'] = _searchTruncate($text['en']);
         $text['nl'] = _searchTruncate($text['nl']);
 
         $result->item_text = serialize($text);
+
+        if($result->item_priority > 0)
+        {
+            $results_highlights[] = $result;
+        }
+        else
+        {
+            $results[] = $result;
+        }
     }
 
     $smarty->assign("searchTerm", htmlentities($_GET[$key]));
+    $smarty->assign("searchHighlightsResults", $results_highlights);
     $smarty->assign("searchResults", $results);
     return $smarty->fetch("search/search.tpl");
 }

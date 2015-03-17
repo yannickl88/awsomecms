@@ -1,7 +1,5 @@
 <?php
-/**
- * Spider class for indexing and searching in the text items
- *
+
  * @author Yannick <yannick.l.88@gmail.com>
  */
 class TextSpider
@@ -28,7 +26,7 @@ class TextSpider
      * @param int $link
      * @param String $hook
      */
-    public function index($string, $link, $title, $hook, $text)
+    public function index($string, $link, $title, $hook, $text, $priority = 0, $update = -1)
     {
         //fetch already existing words
         $results = SQLQuery::doSelect("word_id")
@@ -50,6 +48,9 @@ class TextSpider
 
         //create a new item for this if not already there
         $item = -1;
+        if($update == -1) {
+            $update = time();
+        }
 
         $result = SQLQuery::doSelect()
             ->table("search_items")
@@ -68,6 +69,8 @@ class TextSpider
                 ->update("item_checksum", md5($link))
                 ->update("item_hook", $hook)
                 ->update("item_text", serialize($text))
+                ->update("item_priority", $priority)
+                ->update("item_update", date("Y-m-d H:i:s", $update))
                 ->where("item_id", $item)
                 ->exec();
         }
@@ -80,6 +83,8 @@ class TextSpider
                 ->insert("item_checksum", md5($link))
                 ->insert("item_hook", $hook)
                 ->insert("item_text", serialize($text))
+                ->insert("item_priority", $priority)
+                ->insert("item_update", date("Y-m-d H:i:s", $update))
                 ->exec()
                 ->insertID();
         }
@@ -87,7 +92,7 @@ class TextSpider
         if(is_array($string))
             $string = implode(" ", $string);
 
-        $string = trim(preg_replace(array('/(\s+)/', '/(\[.*?\])/', '/(<.*?>)/', '/({.*?})/'), " ", str_replace(array(".", ",", "'", "\"", "\n", "\r", "“"), " ", strtolower($string))));
+        $string = trim(preg_replace(array('/(\s+)/', '/(\[.*?\])/', '/(<.*?>)/', '/({.*?})/'), " ", str_replace(array(".", ",", "'", "\"", "\n", "\r", "“", "!", "?", "(", ")"), " ", strtolower($string))));
         $words = array();
         $offset = 0;
         $break = false;
@@ -116,7 +121,7 @@ class TextSpider
                 $break = true;
             }
 
-            if(preg_match('/^[a-zA-Z0-9]*$/', $word) !== 0 && strlen($word) > 1)
+            if(preg_match('/^[a-zA-Z0-9\-]*$/', $word) !== 0 && strlen($word) > 1)
             {
                 if(!isset($words[$word]))
                 {
@@ -238,7 +243,7 @@ class TextSpider
     {
         $searchResults = array();
         $query = SQLQuery::doSelect()
-            ->select("COUNT(word_id) AS rating")
+            ->select("SUM(ref_count) / COUNT(ref_count) AS rating")
             ->select("search_items.*")
             ->table("search_words")
             ->join("search_refs", "word_id", "ref_word", "LEFT")
@@ -248,13 +253,32 @@ class TextSpider
 
         foreach($words as $word)
         {
-            $query->where("word_word", "%".PorterStemmer::Stem($word)."%", "LIKE", "OR");
+            if(!empty($word))
+                $query->where("word_word", "%".PorterStemmer::Stem($word)."%", "LIKE", "OR")
+                      ->where("word_word", "%{$word}%", "LIKE", "OR");
         }
 
         if($limit >= 0)
             $query->limit($limit[0], $limit[1]);
 
-        $searchResults = $query->exec()->getRows();
+        $searchResults = array();
+        $r = $query->exec();
+
+        while($row = $r->getRow()) {
+            $hook = explode(".", $row->item_hook);
+            $c = Component::init($hook[0]);
+
+            if($c instanceof SearchProvider) {
+                $row->item_link = $c->translate($hook[1], $row->item_link);
+            }
+
+            $update = (float) strtotime($row->item_update);
+            $row->item_weight = $row->rating * ($update > 0 ? pow($update / (float) time(), 2) : 0);
+
+            $searchResults[] = $row;
+        }
+
+        usort($searchResults, array($this, 'sort'));
 
         return $searchResults;
     }
@@ -267,11 +291,11 @@ class TextSpider
      */
     private function sort($a, $b)
     {
-        if($a->rank < $b->rank)
+        if($a->item_weight < $b->item_weight)
         {
             return 1;
         }
-        else if($a->rank > $b->rank)
+        else if($a->item_weight > $b->item_weight)
         {
             return -1;
         }

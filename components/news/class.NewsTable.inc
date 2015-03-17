@@ -1,7 +1,5 @@
 <?php
-/**
- * News table, this handels all interaction with the news table in the database
- *
+
  * @author Yannick <yannick.l.88@gmail.com>
  */
 class NewsTable extends Table
@@ -21,6 +19,7 @@ class NewsTable extends Table
         $this->addField(new DateField("news_date"), 3);
         $this->addField(new TagField("news_tag", Field::OPTIONAL|Field::HIDE), 4);
         $this->addField(new MLangTextField("news_text"), 5);
+        $this->addField(new BooleanField("news_hidden"), 6);
         $this->setTitle("[news_title]");
 
         $extField = new IntField("news_external", Field::HIDE|Field::OPTIONAL);
@@ -47,6 +46,8 @@ class NewsTable extends Table
 
                 $query->limit($data->max, $offset);
             }
+            if(isset($data->hideHidden) && $data->hideHidden)
+                $query->where("news_hidden", 0, "=", "AND", true);
 
             $query->whereWhenSet("news_id", $data->news_id);
             $query->whereWhenSet("news_title", $data->news_title);
@@ -114,7 +115,8 @@ class NewsTable extends Table
                 Component::init("news")->makeURL($row, true),
                 $row->news_title,
                 "news.{$id}",
-                $summary
+                $summary,
+                strtotime($row->news_date)
             );
         }
     }

@@ -1,8 +1,5 @@
 <?php
-/**
- * This file contains All the supported BBCodeElements and all methods that
- * are defined are overwrites from BBCodeElement
- */
+
 
 /** Text modifiers */
 class BElement extends BBCodeElement
@@ -24,6 +21,13 @@ class IElement extends BBCodeElement
     public function wrap($text)
     {
         return "<i>{$text}</i>";
+    }
+}
+class SmallElement extends BBCodeElement
+{
+    public function wrap($text)
+    {
+        return "<span class=\"small\">{$text}</span>";
     }
 }
 /** Headers */
@@ -247,6 +251,17 @@ class RefElement extends BBCodeElement
         return true;
     }
 }
+class GridElement extends BBCodeElement
+{
+    public function wrap($text)
+    {
+        return "{grid code='{$this->attributes['code']}'}";
+    }
+    public function singelTag()
+    {
+        return true;
+    }
+}
 /** Lists */
 class ListElement extends BBCodeElement
 {
@@ -299,5 +314,143 @@ class ItemElement extends BBCodeElement
     public function mayContainPars()
     {
         return false;
+    }
+}
+/** Table elements */
+class TableElement extends BBCodeElement
+{
+    private $numCols = -1;
+
+    public function wrap($text)
+    {
+        $align = "";
+
+        if($this->hasAttr("align")) {
+            if($this->getAttr("align") == "right") {
+                $align = " right";
+            } else if($this->getAttr("align") == "center") {
+                $align = " center";
+            }
+        }
+
+        return "<table class=\"bbcode_table{$align}\">{$text}</table>";
+    }
+    public function addChild($child)
+    {
+        if($child->type() != "PARSEP" && $child->type() != "TEXT") // ignore breaks in between tags
+        {
+            if($this->numCols == -1) $this->numCols = count($child->children());
+
+            if($child->type() != "tr")
+                throw new BBCodeException("expected table row (tr), got '{$child->type()}'");
+            if(count($child->children()) != $this->numCols)
+                throw new BBCodeException("Wrong number of collums expected {$this->numCols}, got '" . count($child->children()) . "'");
+
+            $child->parent = $this;
+            array_push($this->children, $child);
+        }
+    }
+    public function mayContainPars()
+    {
+        return false;
+    }
+    public function isBlock()
+    {
+        return true;
+    }
+}
+class TrElement extends BBCodeElement
+{
+    public function wrap($text)
+    {
+        if($this->parent->type() != "table")
+        {
+            throw new BBCodeException("table row must be inside a table, parent is '{$this->parent->type()}'");
+        }
+
+        return "<tr>{$text}</tr>";
+    }
+    public function addChild($child)
+    {
+        if($child->type() != "PARSEP" && $child->type() != "TEXT") // ignore breaks in between tags
+        {
+            if($child->type() != "td")
+                throw new BBCodeException("expected table cell (td), got '{$child->type()}'");
+
+            $child->parent = $this;
+            array_push($this->children, $child);
+        }
+    }
+    public function mayContainPars()
+    {
+        return false;
+    }
+    public function isBlock()
+    {
+        return true;
+    }
+}
+class TdElement extends BBCodeElement
+{
+    public function wrap($text)
+    {
+        if($this->parent->type() != "tr")
+        {
+            throw new BBCodeException("table cell must be inside a table row (tr), parent is '{$this->parent->type()}'");
+        }
+
+        return "<td>{$text}</td>";
+    }
+    public function mayContainPars()
+    {
+        return true;
+    }
+    public function isBlock()
+    {
+        return true;
+    }
+}
+
+/* Extra markup */
+class QuoteElement extends BBCodeElement
+{
+    public function wrap($text)
+    {
+        return "<div class=\"quote\"><span class=\"quoteStart\"></span>{$text}</div>";
+    }
+    public function isBlock()
+    {
+        return true;
+    }
+}
+
+/* diecastmodels.co video embed */
+class DcvideoElement extends BBCodeElement
+{
+    public function wrap($text)
+    {
+        //http://fast.wistia.net/embed/iframe/jjjrv38rq0?canonicalUrl=http%3A%2F%2Fwww.diecastmodels.co%2Fjcb-467-wls-wheel-loader%2F&canonicalTitle=JCB%20467%20WLS%20Wheel%20Loader%20Scale%20Diecast%20Model
+        if(preg_match('/^https?:\/\/fast\.wistia\.net\/embed\/iframe\/[a-z0-9]+\?canonicalUrl=http%3A%2F%2Fwww\.diecastmodels\.co%2F[a-zA-Z\._%\-0-9]+(&|&amp;)canonicalTitle=[a-zA-Z\._%\-0-9]+$/', trim($text)) === 1)
+        {
+            $width = 480;
+            $height = 298;
+
+            if($this->hasAttr("width")) $width = $this->getAttr("width");
+            if($this->hasAttr("height")) $height = $this->getAttr("height");
+
+            $html = '<iframe class="wistia_embed" name="wistia_embed" src="' .
+                trim($text) .
+                '" allowtransparency="true" frameborder="0" scrolling="no" width="' . $width .'" height="' . $height . '"></iframe>';
+
+            return $html;
+        }
+        else
+        {
+            return "NO diecastmodels.co VIDEO FOUND, Make you use the in src attribute.";
+        }
+    }
+    public function plain($text)
+    {
+        return "";
     }
 }

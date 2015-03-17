@@ -8,5 +8,6 @@
     "field_page_bg":        "Achtergrond",
     "field_page_slideshow": "Slideshow",
     "field_page_hide":      "Verborgen",
-    "field_page_title":     "Titel"
+    "field_page_title":     "Titel",
+    "field_page_highlight": "Zoek uitgelight"
 }

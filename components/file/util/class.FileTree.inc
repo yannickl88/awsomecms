@@ -170,6 +170,7 @@ class UploadFolder extends Folder
         $this->parent->addIcon("docs", "/img/icons/doc.png");
         $this->parent->addIcon("vid", "/img/icons/video.png");
         $this->parent->addIcon("other", "/img/icons/other.png");
+        $this->parent->addIcon("folder_page", "/img/icons/folder_page.png");
     }
     /**
      * Create the javascript code for the tree
@@ -183,7 +184,7 @@ class UploadFolder extends Folder
         $linkAdd = makeLink(array($component, "add"));
         $linkView = makeLink(array($component, "admin"));
 
-        $html = "var child = new TreeFolder(\"{$this->name}\", \"{$this->location}\", {$this->parent->getName()}, \"folder\", [new TreeAction(\"reload\", \"\", {$this->parent->getName()}), new TreeAction(\"overview\", \"{$linkView}\", {$this->parent->getName()}), new TreeAction(\"add\", \"{$linkAdd}\", {$this->parent->getName()})], {$this->getType()});\n";
+        $html = "var child = new TreeFolder(\"{$this->name}\", \"{$this->location}\", {$this->parent->getName()}, \"folder_page\", [new TreeAction(\"reload\", \"\", {$this->parent->getName()}), new TreeAction(\"overview\", \"{$linkView}\", {$this->parent->getName()}), new TreeAction(\"add\", \"{$linkAdd}\", {$this->parent->getName()})], {$this->getType()});\n";
         $html .= "if({$this->parent->getName()}.systemFileTree) { \n";
         $html .= "    uploadFolder = child;\n";
         $html .= "    uploadFolder.nodes = ".stripslashes(json_encode($this->nodeMap))."\n";
@@ -196,12 +197,20 @@ class UploadFolder extends Folder
 
     public function toData()
     {
+        $component = Component::init("file");
+        
+        $linkAdd = makeLink(array($component, "add"));
+        $linkView = makeLink(array($component, "admin"));
+        
         return array(
             "classname" => 'TreeUploadFolder',
             "name" => $this->name,
             "location" => $this->location,
-            "icon" => "image_folder",
-            "actions" => array(),
+            "icon" => "folder_page",
+            "actions" => array(array("icon" => "reload", "link" => ""),
+                        array("icon" => "overview", "link" => $linkView),
+                        array("icon" => "add", "link" => $linkAdd)
+                    ),
             "contentType" => $this->type,
             "isRootFolder" => false,
             "nodes" => $this->nodeMap

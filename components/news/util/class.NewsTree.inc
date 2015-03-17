@@ -16,11 +16,13 @@ class NewsItem extends TreeNode
      */
     public function __construct($record)
     {
-        $this->name = $record->news_title;
+        $component = Component::init("news");
+        
+        $this->name = htmlspecialchars($record->news_title);
         $this->id = $record->news_id;
         $this->location = "/[siteroot]/".$record->news_location;
         $newsName = strtolower(Language::get("news"));
-        $this->viewURL = "/".$newsName.date("/Y/m/", strtotime($record->news_date)).$record->news_titleurl;
+        $this->viewURL = "/".$component->makeURL($record, true);
         $this->setType(Tree::PAGE);
     }
     /**

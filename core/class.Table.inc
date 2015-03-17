@@ -1,7 +1,5 @@
 <?php
-/**
- * Container for dynamic data, this always returnes NULL when a propertie is not found
- *
+
  * @author Yannick <yannick.l.88@gmail.com>
  */
 class DataContainer

@@ -65,10 +65,13 @@ class FileSelectField extends Field
 
         $html = "";
         $checkboxes = Tree::RADIO;
+        $value = $this->getValue();
         if($this->multiSelect)
             $checkboxes = Tree::CHECK;
-
-        $html .= smarty_function_admintree(array("javascript" => $this->getName(), "folderonly" => false, "types" => 2, "checkboxes" => $checkboxes, "value" => $this->getValue(), "filetypes" => $this->types, "noCookie" => !$this->autoOpen), $smarty);
+        else
+            $value = array($value); // make sure we get an array
+        
+        $html .= smarty_function_admintree(array("javascript" => $this->getName(), "folderonly" => false, "types" => 2, "checkboxes" => $checkboxes, "value" => $value, "filetypes" => $this->types, "noCookie" => !$this->autoOpen), $smarty);
 
         return $html;
     }

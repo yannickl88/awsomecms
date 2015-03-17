@@ -171,7 +171,7 @@ class SmartyPageLoader extends Smarty_Resource_Custom
             }
 
             //no layout fond so we fallback to the default
-            if(Config::get("privLayout", true, "debug") && isset($_GET["debug_public"]) && $_GET["debug_public"] != 1 && in_array($_SERVER['REMOTE_ADDR'], Config::get("privLayout_ip", array(), "debug"))) {
+            if(Config::get("privLayout", true, "debug") && $_GET["debug_public"] != 1 && in_array($_SERVER['REMOTE_ADDR'], Config::get("privLayout_ip", array(), "debug"))) {
                 return $smarty_obj->fetch("priv_layout.tpl");
             }
             else
@@ -213,6 +213,7 @@ class SmartyPageLoader extends Smarty_Resource_Custom
             ->table('pages')
             ->where('page_name', $pageName)
             ->where('page_location', '/'.$pageLocation)
+            ->where('page_hide', 0)
             ->exec();
 
             if($result->count() > 0)
@@ -273,6 +274,7 @@ class SmartyPageLoader extends Smarty_Resource_Custom
                 ->table('pages')
                 ->where('page_name', $pageName)
                 ->where('page_location', '/'.$pageLocation)
+                ->where('page_hide', 0)
                 ->exec();
 
                 if($result->count() > 0)

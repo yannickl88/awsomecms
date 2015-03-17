@@ -1,12 +1,10 @@
 <?php
-/**
- * The News component provides a simple news system that allows for new messages.
- * News items can be grouped using a tag if needed.
- *
+
  * @author Yannick <yannick.l.88@gmail.com>
  */
-class NewsComponent extends Component
+class NewsComponent extends Component implements SearchProvider
 {
+    private $newsList = null;
     /**
      * Constructor
      */
@@ -45,12 +43,7 @@ class NewsComponent extends Component
      */
     public function action_overview($smarty, $smartyLoader, $request)
     {
-        $smarty->registerResource("scf", array(
-            array($smartyLoader, "getTemplate"),
-            array($smartyLoader, "getTimestamp"),
-            array($smartyLoader, "getSecure"),
-            array($smartyLoader, "getTrusted"),
-        ));
+        $smarty->registerResource("scf", $smartyLoader);
 
         $smarty->assign("TITLE", 'news');
 
@@ -84,12 +77,7 @@ class NewsComponent extends Component
     }
     public function action_index($smarty, $smartyLoader, $request)
     {
-        $smarty->registerResource("scf", array(
-            array($smartyLoader, "getTemplate"),
-            array($smartyLoader, "getTimestamp"),
-            array($smartyLoader, "getSecure"),
-            array($smartyLoader, "getTrusted"),
-        ));
+        $smarty->registerResource("scf", $smartyLoader);
 
         if(!empty($request['urlmapmatch']))
         {
@@ -258,7 +246,7 @@ class NewsComponent extends Component
             {
                 $row->news_title = substr($row->news_title, 0, 15)."...";
             }
-            $row->news_location = $this->makeURL($row);
+            $row->news_location = $this->makePageURL($row);
 
             $tree->addChild(new NewsItem($row));
         }
@@ -283,6 +271,30 @@ class NewsComponent extends Component
     {
         $newsName = strtolower(Language::get("news"));
 
+        $hookID = $record->news_id;
+        $c = 0;
+        
+        if($this->newsList == null)
+        {
+            $this->newsList = array();
+            $results = Table::init('news.news')
+                ->setRequest((object) array("hideHidden" => true))
+                ->doSelect();
+            
+            while($row = $results->getRow())
+            {
+                $this->newsList[$row->news_id] = "/" . $newsName . (($c >= 10) ?  "/" .(floor($c / 10) + 1) : "") . "#". $row->news_id . "-".$row->news_titleurl;
+                $c++;
+            }
+        }
+        
+        return $this->newsList[$hookID];
+    }
+    
+    public function makePageURL($record, $withpage = false)
+    {
+        $newsName = strtolower(Language::get("news"));
+    
         if($withpage)
             return $newsName."/".date("Y/m/", strtotime($record->news_date)).$record->news_titleurl;
         else
@@ -313,5 +325,9 @@ class NewsComponent extends Component
         }
 
         return $pages;
+    }
+    
+    public function translate($hook, $url) {
+        return $this->makeURL((object) array("news_id" => (int) $hook), true);
     }
 }

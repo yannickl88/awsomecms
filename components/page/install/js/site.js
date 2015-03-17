@@ -20,21 +20,11 @@
  */
 function addFieldError(field, message)
 {
-    field = field.split("#");
-    section = field[1];
-    
-    $('label[for='+field[0]+']').parents(".admin_form_row").addClass("form_error");
+    $('#'+field).parents(".admin_form_row").addClass("form_error");
     
     if(message != '')
     {
-        sectionStr = "";
-        if(section) sectionStr = "("+section+")";
-        $('#errorlist').append("<li><label for='"+field[0]+"'>"+sectionStr+$('label[for="'+field[0]+'"]').html()+" "+message+"</label></li>");
-        
-        $().ready(function(e) {
-            if($('label[for='+field[0]+']').parents(".admin_form_row").data("toggleSection"))
-                $('label[for='+field[0]+']').parents(".admin_form_row").data("toggleSection")(section);
-        });
+        $('#errorlist').append("<li><label for='"+field+"'>"+$('label[for="'+field+'"]').html()+" "+message+"</label></li>");
     }
     
     return false;
@@ -42,15 +32,11 @@ function addFieldError(field, message)
 function setFieldValue(field, value)
 {
     var field = $('form *[name='+field+']');
-    value = Base64.decode(value);
     
     if(!field.hasClass("empty"))
     {
-        if(field.data('setValue'))
-            field.data('setValue').setValue(value);
-        else {
-            switch(field.attr("type"))
-            {
+        switch(field.attr("type"))
+        {
             case "checkbox":
                 field.attr("checked", (value == "on")? "checked": "");
                 break;
@@ -64,7 +50,6 @@ function setFieldValue(field, value)
                 break;
             default:
                 field.val(value);
-            }
         }
     }
     

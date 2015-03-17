@@ -8,5 +8,6 @@
     "field_page_bg":        "Background",
     "field_page_slideshow": "Slideshow",
     "field_page_hide":      "Hidden",
-    "field_page_title":     "Title"
+    "field_page_title":     "Title",
+    "field_page_highlight": "Search Highlight"
 }

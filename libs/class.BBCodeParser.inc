@@ -370,6 +370,10 @@ class BBCodeElement
             array_pop($this->children);
         }
     }
+    
+    public function children() {
+        return $this->children;
+    }
 }
 /**
  * BBCode Document root

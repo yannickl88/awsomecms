@@ -68,7 +68,6 @@ var Editor = function(element, options)
         this._addButton("Align Right", "[right]", "[/right]", 17);
         this._addSpacer();
         this._addButton("Hyperlink", "[url]", "[/url]", 23);
-        this._addButton("Link", "[link code=]", "[/link]", 31);
         this._addButton("E-mail", "[mail]", "[/mail]", 29);
         this._addSpacer();
         this._addButton("Image", "[img]", "[/img]", 21);
@@ -309,54 +308,38 @@ function postComponent(component, action, data, onsucces)
     return false;
 }
 
-function openForm(component, action, callback)
+function openForm(component, action)
 {
-    getComponent("core", "getform", {component: component, form: action}, function(data) {
-        openFormPopup(data);
-        if(callback != null) callback();
-    });
-    return false; 
+    getComponent("core", "getform", {component: component, form: action}, openFormPopup);
+    return false;
 }
-function openTable(table, action, callback)
+function openTable(table, action)
 {
-    getComponent("core", "getform", {table: table, form: action}, function(data) {
-        openFormPopup(data);
-        if(callback != null) callback();
-    });
-    return false; 
+    getComponent("core", "getform", {table: table, form: action}, openFormPopup);
+    return false;
 }
 function openFormPopup(data)
 {
-    var html = $(Base64.decode(data.html));
-    $("#formWrapper").html(html);
+    $("#formWrapper").html(decodeURIComponent(data.html));
     $("#formWrapperBackground").css("display", "block");
-    $("#formHeaderWrapper").css("display", "block");
-    
-    return false;
 }
 function closeFormPopup()
 {
     $("#formWrapperBackground").css("display", "none");
-    
     return false;
 }
 
 /**
  * Admin tree with nodes
  */
-var Tree = function(element, checkboxes, systemFileTree)
+var Tree = function(element, javascript)
 {
     this.children = new Array();
     this.contentType = 1;
     this.iconMap = {};
     this.html = null;
-    this.javascript = false;
+    this.javascript = (javascript)? javascript : false;
     this.foldersOnly = false;
-    this.selectedFolder = "/";
-    this.checkboxes = checkboxes[0];
-    this.checkboxValues = (checkboxes[1] != "") ? checkboxes[1] : [];
-    this.noCookie = false;
-    this.systemFileTree = (systemFileTree === true);
 
     /**
      * Constructor
@@ -396,7 +379,7 @@ var Tree = function(element, checkboxes, systemFileTree)
             }
             if(x == this.children.length)
             {
-                if((!this.foldersOnly || child.isLoader) || child.type != Tree.PAGE)
+                if(!this.foldersOnly || child.type != Tree.PAGE)
                 {
                     this.html.append(child.html);
                 }
@@ -404,7 +387,7 @@ var Tree = function(element, checkboxes, systemFileTree)
             }
             else
             {
-                if((!this.foldersOnly || child.isLoader) || child.type != Tree.PAGE)
+                if(!this.foldersOnly || child.type != Tree.PAGE)
                 {
                     this.children[x].html.before(child.html);
                 }
@@ -491,42 +474,6 @@ var Tree = function(element, checkboxes, systemFileTree)
         //this does nothing, but we need it to solve the recursion
         return;
     };
-    this.addCheckboxValues = function(id) {
-        if(this.checkboxes == 2) {
-            this.checkboxValues[0] = id;
-        } else if(this.checkboxes == 3) {
-            for(var i in this.checkboxValues) {
-                if(this.checkboxValues[i] == id) {
-                    return;
-                }
-            }
-            this.checkboxValues.push(id);
-        }
-        this.updateCheckboxValues();
-    };
-    this.removeCheckboxValues = function(id) {
-        if(this.checkboxes == 2) {
-            this.checkboxValues = [];
-        } else if(this.checkboxes == 3) {
-            for(var i in this.checkboxValues) {
-                if(this.checkboxValues[i] == id) {
-                    this.checkboxValues.splice(i, 1);
-                    this.updateCheckboxValues();
-                    return;
-                }
-            }
-        }
-    };
-    this.updateCheckboxValues = function() {
-        this.html.find("input[type=hidden].treeValues").remove();
-        if(this.checkboxes == 2) {
-            this.html.append("<input type='hidden' name='"+this.javascript+"' value='"+this.checkboxValues[0] + "' class='treeValues'/>");
-        } else if(this.checkboxes == 3) {
-            for(var i in this.checkboxValues) {
-                this.html.append("<input type='hidden' name='"+this.javascript+"[]' value='"+this.checkboxValues[i] + "' class='treeValues'/>");
-            }
-        }
-    };
 
     this.init(element);
 };
@@ -537,7 +484,7 @@ Tree.PAGE_FOLDER = 2;
 /**
  * Folder page item
  */
-var TreeItem = function(name, location, url, root, icon, actions, contentType, id)
+var TreeItem = function(name, location, url, root, icon, actions, contentType)
 {
     this.name = name;
     this.location = location;
@@ -550,8 +497,6 @@ var TreeItem = function(name, location, url, root, icon, actions, contentType, i
     this.actions = actions;
     this.icon = $("<img alt='page' src='"+this.root.getIcon(icon)+"' />");
     this.link = null;
-    this.id = id;
-    this.isLoader = (icon == "loader");
     
     /**
      * Constructor
@@ -566,22 +511,7 @@ var TreeItem = function(name, location, url, root, icon, actions, contentType, i
             this.link.click(function(e) {
                 if(ref.root.javascript)
                 {
-                    if(ref.root.checkboxes == 1)
-                        $("#"+ref.root.javascript).val(ref.parent.getLocPath() + ref.name);
-                    else {
-                        var checkbox = ref.link.find("input");
-                        
-                        if((checkbox.attr("type") == "checkbox" && !checkbox.attr("checked")) || checkbox.attr("type") == "radio") {
-                            checkbox.attr("checked", "checked");
-                            
-                            ref.root.addCheckboxValues(ref.id);
-                        }
-                        else if(checkbox.attr("type") == "checkbox" && checkbox.attr("checked")) {
-                            checkbox.removeAttr("checked");
-                            
-                            ref.root.removeCheckboxValues(ref.id);
-                        }
-                    }
+                    $("#"+ref.root.javascript).val(ref.parent.getLocPath() + ref.name);
                     
                     return false;
                 }
@@ -590,30 +520,11 @@ var TreeItem = function(name, location, url, root, icon, actions, contentType, i
             this.link = $("<span class='treeItem'>"+this.name+"</span>");
         }
         this.link.prepend(this.icon);
-        
-        if(!this.isLoader) {
-            if(this.root.checkboxes == 2) {
-                var icon = $('<input type="radio" value="'+ this.id +'" name="'+this.root.javascript+'_dummy"/>');
-                if(this.root.checkboxValues == this.id)
-                    icon.attr("checked", true);
-                this.link.prepend(icon);
-            } else if(this.root.checkboxes == 3) {
-                var icon = $('<input type="checkbox" value="'+ this.id +'" name="'+this.root.javascript+'_dummy[]"/>');
-                for(var i in this.root.checkboxValues) {
-                    if(this.root.checkboxValues[i] == this.id) {
-                        icon.attr("checked", true);
-                        break;
-                    }
-                }
-                this.link.prepend(icon);
-            }
-        }
         this.html.append(this.link);
         if(this.actions)
         {
             for(var x in this.actions)
             {
-                this.actions[x].html.css("margin-left", -20 * x);
                 this.addAction(this.actions[x]);
             }
         }
@@ -659,8 +570,6 @@ var TreeFolder = function(name, location, root, icon, actions, contentType, isRo
     this.actions = actions;
     this.icon = icon;
     this.isRootFolder = isRootFolder;
-    this.loaded = false;
-    this.queue = [];
     
     /**
      * Constructor
@@ -675,7 +584,6 @@ var TreeFolder = function(name, location, root, icon, actions, contentType, isRo
             var x = this.actions.length - 1;
             while(x >= 0)
             {
-                this.actions[x].html.css("margin-left", -20 * x);
                 this.html.append(this.actions[x].html);
                 x--;
             }
@@ -725,13 +633,7 @@ var TreeFolder = function(name, location, root, icon, actions, contentType, isRo
         });
         if(!this.root.foldersOnly && !ref.root.javascript)
         {
-            this.html.mouseover(function(e) {
-                var div = $(e.target).parent(".treeNode div").get(0);
-                if(div && div.object) {
-                    var node = $(e.target).parent(".treeNode div")[0].object;
-                    if(node.type == Tree.PAGE_FOLDER)
-                        node.root.selectedFolder = node.location + node.name + "/";
-                }
+            this.html.mouseover(function(e){
                 $(this).removeClass("hideIcons");
             });
             this.html.mouseout(function(e){
@@ -740,9 +642,8 @@ var TreeFolder = function(name, location, root, icon, actions, contentType, isRo
         }
         
         //open when we have a cookie
-        if(this.hasCookie(this.getPath()) && !this.root.noCookie)
+        if(this.hasCookie(this.getPath()))
         {
-            this.loaded = true;
             this.open();
         }
     };
@@ -772,15 +673,11 @@ var TreeFolder = function(name, location, root, icon, actions, contentType, isRo
                 {
                     break;
                 }
-                if(this.children[x].type < child.type)
-                {
-                    break;
-                }
                 x++;
             }
             if(x == this.children.length)
             {
-                if((!this.root.foldersOnly || child.isLoader) || child.type != Tree.PAGE)
+                if(!this.root.foldersOnly || child.type != Tree.PAGE)
                 {
                     this.html.children(".treeNode").append(child.html);
                 }
@@ -788,7 +685,7 @@ var TreeFolder = function(name, location, root, icon, actions, contentType, isRo
             }
             else
             {
-                if((!this.root.foldersOnly || child.isLoader) || child.type != Tree.PAGE)
+                if(!this.root.foldersOnly || child.type != Tree.PAGE)
                 {
                     this.children[x].html.before(child.html);
                 }
@@ -800,7 +697,7 @@ var TreeFolder = function(name, location, root, icon, actions, contentType, isRo
         
         var loc = locArray.shift();
         var inserted = false;
-        
+
         for (var key in this.children)
         {
             var node = this.children[key];
@@ -820,10 +717,6 @@ var TreeFolder = function(name, location, root, icon, actions, contentType, isRo
             while(x < this.children.length)
             {
                 if(this.children[x].name > folder.name && this.children[x].type <= folder.type)
-                {
-                    break;
-                }
-                if(this.children[x].type < folder.type)
                 {
                     break;
                 }
@@ -875,55 +768,17 @@ var TreeFolder = function(name, location, root, icon, actions, contentType, isRo
     /**
      * Open the folder
      */
-    this.open = function(noload) 
+    this.open = function() 
     {
         this.html.children(".treeNode").removeClass("hidden");
         this.html.children(".clickableTreeArrow").addClass("open");
         this.openFolder = true;
         
-        if(!this.root.noCookie)
-            this.createCookie(this.getPath(), 1);
+        this.createCookie(this.getPath(), 1);
         
-        //load data
-        if(!this.loaded && noload !== true) {
-            var loaderNode = new TreeItem("loading...", this.getPath()+"/", null, this.root, "loader", [], 2, -1);
-            this.addChild(loaderNode, []);
-            var root = this.root;
-            var node = this;
-            $.getJSON("/", {
-                "action": "loadTree",
-                "component": "page",
-                "path": this.getPath()
-            }, function(e) {
-                node.removeChild(loaderNode);
-                
-                for(var i=0; i < e.length ; i++) {
-                    var data = e[i];
-                    
-                    if(data.classname == "TreeFolder")
-                        root.addChild(new TreeFolder(data.name, data.location, root, data.icon, createActionsFromData(data.actions, root), data.contentType, data.isRootFolder));
-                    else if(data.classname == "TreeNode")
-                        root.addChild(new TreeItem(data.name, data.location, data.url, root, data.icon, createActionsFromData(data.actions, root), data.contentType, data.id));
-                    else if(data.classname == "TreeUploadFolder")
-                    {
-                        var child = new TreeFolder(data.name, data.location, root, data.icon, createActionsFromData(data.actions, root), data.contentType, data.isRootFolder);
-                        if(root.systemFileTree) {
-                            uploadFolder = child
-                            uploadFolder.nodes = data.nodes;
-                            $().ready(function(e) {
-                                new FileUpload(uploadFolder.html.get(0));
-                            });
-                        }
-                        root.addChild(child);
-                    }
-                }
-                
-                for(var j = 0; i < node.queue.length ; i++) {
-                    root.addChild(node.queue[i]);
-                }
-                node.queue = [];
-            });
-            this.loaded = true;
+        if(this.parent)
+        {
+            this.parent.open();
         }
     };
     /**
@@ -931,19 +786,11 @@ var TreeFolder = function(name, location, root, icon, actions, contentType, isRo
      */
     this.close = function()
     {
-        if(this.openFolder) {
-            this.html.children(".treeNode").addClass("hidden");
-            this.html.children(".clickableTreeArrow").removeClass("open");
-            this.openFolder = false;
-            
-            if(!this.root.noCookie)
-                this.eraseCookie(this.getPath());
-            
-            for(var i=0; i < this.children.length; i++) {
-                if(this.children[i].close)
-                    this.children[i].close();
-            }
-        }
+        this.html.children(".treeNode").addClass("hidden");
+        this.html.children(".clickableTreeArrow").removeClass("open");
+        this.openFolder = false;
+        
+        this.eraseCookie(this.getPath());
     };
     /**
      * Create a Cookie
@@ -1007,17 +854,6 @@ var TreeFolder = function(name, location, root, icon, actions, contentType, isRo
     
     this.init();
 };
-
-function createActionsFromData(actionData, root) {
-    var actions = [];
-    
-    for(var i = 0; i < actionData.length; i++) {
-        actions.push(new TreeAction(actionData[i].icon, actionData[i].link, root))
-    }
-    
-    return actions;
-}
-
 /**
  * Actions for a tree node, these are icons displayed to the right when hovered over the node
  * 
@@ -1136,42 +972,29 @@ var FileUpload = function(element) {
                 });
                 return false;
             });
-            
-            this.element.object.upload = this;
         }
-    };
-    this.fixLocation = function(treeNode, type, location) {
-        var properLoc = "/"
-        if(location.indexOf(treeNode.nodes[type]) == 0) { // part of the subset
-            properLoc = location.substr(treeNode.nodes[type].length - 1);
-        }
-        
-        return properLoc;
     };
     this.upload = function(e) {
         var data = e.dataTransfer;
         
         if(data && data.files.length > 0)
         {
-            var loaded = 0;
-            var needsToLoad = data.files.length;
             /* For each dropped file. */
             for ( var i = 0; i < data.files.length; i++) {
                 var file = data.files[i];
                 
-                var treeNode = this.element.object;
-                var location = this.fixLocation(treeNode, this.getType(file.type), this.element.object.root.selectedFolder)
                 var formData = new FormData();
                 formData.append("component", "file");
                 formData.append("action", "upload");
-                formData.append("file_location", location);
                 formData.append("file_data", file);
                 
                 //add Loader to the tree
-                var parent = treeNode.nodes[this.getType(file.type)] + location.substr(1);
+                var treeNode = this.element.object;
+                var parent = treeNode.nodes[this.getType(file.type)];
                 var loaderNode = new TreeItem(file.name.substr(0, file.name.lastIndexOf(".")), parent, null, treeNode.root, "loader");
+                
                 treeNode.root.addChild(loaderNode);
-                loaderNode.parent.open(true);
+                loaderNode.parent.open();
                 
                 // create a new xhr object
                 var xhr = new XMLHttpRequest();
@@ -1191,36 +1014,10 @@ var FileUpload = function(element) {
                         }
                         else
                         {
-                            if(node.parent.loaded == true) {
-                                node.icon.attr("src", node.root.getIcon(u.getType(data.type)));
-                                
-                                var link =  $("<a href='/"+data.editLink+"'></a>");
-                                link.append(node.link.html())
-                                node.link.replaceWith(link);
-                                node.addAction(new TreeAction("view", data.viewLink, node.root));
-                                node.addAction(new TreeAction("delete", data.deleteLink, node.root));
-                                
-                                // check if there any select fields
-                                $(".admin_FileSelectField").each(function(key, element) {
-                                    if(FileUpload.filters[$(element).attr("id")]) {
-                                        var type = data.type.split("/")[1];
-                                        
-                                        for (var fType in FileUpload.filters[$(element).attr("id")]) {
-                                            if(type == fType) {
-                                                $(element).append("<option value='" + data.id + "'>" + data.location + data.name + "</option>");
-                                                break;
-                                            }
-                                        }
-                                    }
-                                });
-                            } else {
-                                loaded++;
-                                node.parent.removeChild(node);
-                                
-                                if(loaded == needsToLoad) {
-                                    node.parent.open(false);
-                                }
-                            }
+                            node.icon.attr("src", node.root.getIcon(u.getType(data.type)));
+                            node.link.attr("href", data.editLink);
+                            node.addAction(new TreeAction("view", data.viewLink, node.root));
+                            node.addAction(new TreeAction("delete", data.deleteLink, node.root));
                         }
                     }
                 };
@@ -1238,10 +1035,7 @@ var FileUpload = function(element) {
     
     this.init(); //call constructor
 };
-FileUpload.filters = {};
-FileUpload.addTypeFilter = function(id, filters) {
-	FileUpload.filters[id] = filters;
-}
+
 /**
  * TODO refactor in Object the functions:
  *   adminmenu_openMenu
@@ -1426,206 +1220,4 @@ var TagField = function(element, tags)
         return false;
     };
     this.init(element, tags); //call constructor
-};
-
-var cField = function(element) {
-    this.element = element;
-    this.value = $("<input type='hidden' name='"+element.attr("id")+"' value='0;0;0;0' />");
-    this.nodes = {
-        1 : {},
-        2 : {},
-        3 : {},
-        4 : {}
-    };
-    this.selected = [0,0,0,0];
-    this.types = {
-        "machine" : 1,
-        "model" : 2,
-        "type" : 3,
-        "brand" : 4
-    };
-    this.translations = {
-        "machine" : "Machine",
-        "model" : "Model",
-        "type" : "Type",
-        "brand" : "Brand"
-    };
-    
-    this.init = function() {
-        this.value.data('setValue', this);
-        
-        for(var k in this.types) {
-            var row = $("<div class='admin_categoryRow type_"+this.types[k]+"'></div>");
-            var link = $("<a class='admin_categoryAdd' href='#' style='display:none;'><img src='/img/icons/add.png' alt='add'/></a>");
-            
-            link.bind("click", {"type": this.types[k], "field": this}, function(e) {
-                var selectedE = $(e.data.field.findSelected(e.data.type - 1));
-                e.data.field.showAddFialoge(e.data.type);
-                
-                e.stopPropagation();
-                e.preventDefault();
-                return false;
-            });
-            
-            row.append("<div class='admin_categorylabel'>" + this.translations[k] + ":</div>");
-            
-            var select = $("<select disabled='disabled' class='admin_categorySelect'></select>");
-            select.bind("change", {"type": this.types[k], "field": this}, function(e) {
-                e.data.field.update(e.data.type);
-            });
-            
-            row.append(select);
-            row.append(link);
-            this.element.append(row);
-        }
-        var row = $("<div class='admin_categoryRow'></div>");
-        this.element.append(this.value);
-        this.element.append(row);
-    };
-    
-    this.findSelected = function(type) {
-        var value = this.element.find("div.admin_categoryRow.type_"+type+" select.admin_categorySelect").val();
-        return this.element.find("div.admin_categoryRow.type_"+type+" select.admin_categorySelect option[value="+value+"]");
-    };
-    
-    this.setActive = function(type) {
-        if(this.element.find("div.admin_categoryRow.type_"+(type)+" select.admin_categorySelect option").length > 0)
-            this.element.find("div.admin_categoryRow.type_"+(type)+" select.admin_categorySelect").removeAttr("disabled");
-        else
-            this.element.find("div.admin_categoryRow.type_"+(type)+" select.admin_categorySelect").attr("disabled", "disabled");
-        this.element.find("div.admin_categoryRow.type_"+(type)+" .admin_categoryAdd").css("display", "inline");
-    };
-    
-    this.setInactive = function(type) {
-        this.element.find("div.admin_categoryRow.type_"+(type)+" select.admin_categorySelect").attr("disabled", "disabled");
-        this.element.find("div.admin_categoryRow.type_"+(type)+" .admin_categoryAdd").css("display", "none");
-    };
-    
-    this.add = function(name, id, type, update) {
-        if(typeof(update) == "undefined")
-            update = true;
-        
-        this.nodes[type][id] = {"name": name, "id": id};
-        this._addOption(type, id, name);
-    };
-    this.setValue = function(ids) {
-        this.selected = ids.split(";");
-        
-        this.element.find("div.admin_categoryRow.type_1 select.admin_categorySelect").val(this.selected[0]);
-        this.element.find("div.admin_categoryRow.type_2 select.admin_categorySelect").val(this.selected[1]);
-        this.element.find("div.admin_categoryRow.type_3 select.admin_categorySelect").val(this.selected[2]);
-        this.element.find("div.admin_categoryRow.type_4 select.admin_categorySelect").val(this.selected[3]);
-    };
-    this.showAddFialoge = function(type) {
-        new cFieldAddDialog(type, this);
-    };
-    this.getParentID = function(type) {
-        if(type == 1) return -1;
-        
-        return this.element.find("div.admin_categoryRow.type_"+(type - 1)+" select.admin_categorySelect").val();
-    };
-    this._addOption = function(type, id, name, selected) {
-        // add select node
-        if(selected)
-            this.element.find("div.admin_categoryRow.type_"+type+" select.admin_categorySelect").append("<option value='"+id+"' selected='selected'>"+name+"</option>");
-        else
-            this.element.find("div.admin_categoryRow.type_"+type+" select.admin_categorySelect").append("<option value='"+id+"'>"+name+"</option>");
-        this.element.find("div.admin_categoryRow.type_"+type+" select.admin_categorySelect").val(""+id);
-        
-        sort_multi_select($("div.admin_categoryRow.type_"+type+" select.admin_categorySelect"));
-    };
-    this.update = function(type) {
-        for(var i = type + 1; i <= 4; i++) {
-            this.element.find("div.admin_categoryRow.type_"+(i)+" select.admin_categorySelect").empty();
-            for(var j in this.nodes[i]) {
-                this._addOption(i, j, this.nodes[i][j].name, (this.selected[i - 1] == j));
-            }
-            
-            this.element.find("div.admin_categoryRow.type_"+(i)+" select.admin_categorySelect").val(this.selected[i - 1]);
-        }
-        
-        this.setActive(1);
-        this.updateValue();
-    };
-    this.updateValue = function() {
-        var result = "";
-        
-        for(var i = 4; i > 0; i--) {
-            var c = this.element.find("div.admin_categoryRow.type_"+(i)+" select.admin_categorySelect option").length;
-            var cp = this.element.find("div.admin_categoryRow.type_"+(i - 1)+" select.admin_categorySelect option").length;
-            if(c > 0 || cp > 0)
-                this.setActive(i);
-            else
-                this.setInactive(i);
-            
-            var value = this.element.find("div.admin_categoryRow.type_"+(i)+" select.admin_categorySelect").val();
-            
-            if(result != "") {
-                result = ";" + result;
-            }
-            
-            if(value)
-                result = value + result;
-            else
-                result = "0" + result;
-        }
-        this.value.val(result);
-    };
-    this.init(); //call constructor
-};
-
-var cFieldAddDialog = function(type, cField) {
-    this.type = type;
-    this.cField = cField;
-    
-    this.init = function() {
-        var dialoge = this;
-        
-        openTable("collection.mcats", "add", function() {
-            $("#formWrapper .admin_form_row.admin_form_submit input[type=submit]").bind("click", {"d":dialoge}, function(e) {
-                var formData = {};
-                
-                $("#formWrapper .admin_form_row input, .admin_form_row select").each(function(k, e) {
-                    if($(e).attr("name") != "")
-                        formData[$(e).attr("name")] = $(e).val();
-                });
-                
-                e.data.d.save(formData);
-                
-                $(this).replaceWith("<img src='/img/admin/loader.gif' alt='loading'/>");
-                $("#formHeaderWrapper").css("display", "none");
-                
-                e.stopPropagation();
-                e.preventDefault();
-                return false;
-            });
-        });
-    };
-    
-    this.save = function(data) {
-        data["mcat_type"] = this.type;
-        
-        var field = this.cField;
-        
-        $.post("/", data, function(data) {
-            field.add(data.name, parseInt(data.id), parseInt(data.type), parseInt(data.parent));
-            field.update(data.type);
-            closeFormPopup();
-        }, "json");
-    };
-    
-    this.init(); //call constructor
-};
-
-function sort_multi_select(select) {
-    var x = select.find('option');
-    x.remove();
-    x.sort(function(a,b) {
-        a = a.firstChild.nodeValue.toLowerCase(); 
-        b = b.firstChild.nodeValue.toLowerCase(); 
-        if (a == b) 
-            return 0; 
-        return (a > b) ? 1 : -1; 
-    });
-    x.appendTo(select);
 };
