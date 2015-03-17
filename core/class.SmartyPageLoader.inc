@@ -210,11 +210,11 @@ class SmartyPageLoader extends Smarty_Resource_Custom
             if($pageLocation != "") $pageLocation .= "/";
 
             $result = SQLQuery::doSelect()
-            ->table('pages')
-            ->where('page_name', $pageName)
-            ->where('page_location', '/'.$pageLocation)
-            ->where('page_hide', 0)
-            ->exec();
+                ->table('pages')
+                ->where('page_name', $pageName)
+                ->where('page_location', '/'.$pageLocation)
+                ->where('page_hide', 0)
+                ->exec();
 
             if($result->count() > 0)
             {
@@ -225,7 +225,12 @@ class SmartyPageLoader extends Smarty_Resource_Custom
 
                 $this->smarty->assign('PAGE', $result->record);
 
-                $html = $result->record->page_template[getLang()];
+                $lang = getLang();
+                if (isset($result->record->page_template[$lang])) {
+                    $html = $result->record->page_template[$lang];
+                } else {
+                    $html = current($result->record->page_template);
+                }
 
                 $mtime = $this->timestamps[$tpl_name];
 
@@ -238,6 +243,8 @@ class SmartyPageLoader extends Smarty_Resource_Custom
             {
                 throw new PageNotFoundExeption("Page not found '{$name}'");
             }
+
+            return true;
         }
     }
     /**

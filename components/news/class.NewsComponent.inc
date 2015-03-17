@@ -1,6 +1,7 @@
 <?php
 
 
+
  * @author Yannick <yannick.l.88@gmail.com>
  */
 class NewsComponent extends Component implements SearchProvider
@@ -274,28 +275,28 @@ class NewsComponent extends Component implements SearchProvider
 
         $hookID = $record->news_id;
         $c = 0;
-        
+
         if($this->newsList == null)
         {
             $this->newsList = array();
             $results = Table::init('news.news')
                 ->setRequest((object) array("hideHidden" => true))
                 ->doSelect();
-            
+
             while($row = $results->getRow())
             {
                 $this->newsList[$row->news_id] = "/" . $newsName . (($c >= 10) ?  "/" .(floor($c / 10) + 1) : "") . "#". $row->news_id . "-".$row->news_titleurl;
                 $c++;
             }
         }
-        
+
         return $this->newsList[$hookID];
     }
-    
+
     public function makePageURL($record, $withpage = false)
     {
         $newsName = strtolower(Language::get("news"));
-    
+
         if($withpage)
             return $newsName."/".date("Y/m/", strtotime($record->news_date)).$record->news_titleurl;
         else
@@ -327,7 +328,7 @@ class NewsComponent extends Component implements SearchProvider
 
         return $pages;
     }
-    
+
     public function translate($hook, $url) {
         return $this->makeURL((object) array("news_id" => (int) $hook), true);
     }

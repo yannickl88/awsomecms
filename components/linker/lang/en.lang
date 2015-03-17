@@ -1,0 +1,20 @@
+{
+    "comp_linker":          "Links",
+    "menu_links":           "Links",
+    "menu_addlink":         "Add Link",
+    "menu_categories":      "Categories",
+    "field_link_code":      "Code",
+    "field_link_title":     "Title",
+    "field_link_url":       "URL",
+    "field_link_description": "Description",
+    "field_link_logo":      "Logo",
+    "field_link_page":      "Page",
+    "field_link_cat":       "Category",
+    "field_lcat_name":      "Name",
+    "field_lcat_image":     "Image",
+    "field_link_hidden":    "Hidden",
+    "field_lcat_hidden":    "Hidden",
+    "field_lcat_bg":        "Background",
+    "field_lcat_description": "Description",
+    "field_link_highlight": "Search Highlight"
+}

@@ -57,6 +57,7 @@ class CoreComponent extends Component
 
         if(Language::has($url, getLang()))
             $smarty->assign("TITLE", $url);
+
         Controller::getInstance()->setOutput($smartyLoader->getPage($url, $smarty));
     }
     /**

@@ -1,0 +1,8 @@
+{
+    "comp_glossary":        "Glossary",
+    "menu_glossary":        "Glossary",
+    "menu_addGlossary":     "Toevoegen Item",
+    "field_glossary_code":  "Code",
+    "field_glossary_title": "Titel",
+    "field_glossary_description": "Beschrijving"
+}

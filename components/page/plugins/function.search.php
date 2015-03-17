@@ -1,5 +1,5 @@
 <?php
-
+/**
  * @param array $params
  * @param Smarty $smarty
  * @return string

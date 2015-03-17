@@ -1,0 +1,15 @@
+{
+    "comp_imagegrid":       "Image Blocks",
+    "imagegrid":            "Image Blocks",
+    "menu_imagegrid":       "Image Blocks",
+    "menu_grids":           "Grids",
+    "menu_blocks":          "Blocks",
+    "field_grid_name":      "Grid name",
+    "field_grid_columns":   "Number of columns",
+    "field_grid_fill":      "Fill last",
+    "field_block_title":    "Block title",
+    "field_block_image":    "Block image",
+    "field_block_grid":     "Block grid",
+    "field_block_url":      "Block link",
+    "field_block_text":     "Blok text"
+}

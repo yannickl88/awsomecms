@@ -192,6 +192,7 @@ class UploadField extends Field
                     {
                         unlink(Config::get("websiteroot", "/")."/".$row->{$this->getDBName()}->thumb);
                     }
+                }
                 //delete old images
                 $row = $this->parent->doSelect()->getRow();
 

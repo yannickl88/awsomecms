@@ -354,7 +354,7 @@ function makeRandomString($length, $characters = "0123456789abcdefghijklmnopqrst
     return $string;
 }
 
-function getLang()
+function getLang($fallback = false)
 {
     // is it in the URL?
     if(isset($_GET["lang"]))

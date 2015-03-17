@@ -1,0 +1,8 @@
+{
+    "comp_glossary":        "Glossary",
+    "menu_glossary":        "Glossary",
+    "menu_addGlossary":     "Add Item",
+    "field_glossary_code":  "Code",
+    "field_glossary_title": "Title",
+    "field_glossary_description": "Description"
+}

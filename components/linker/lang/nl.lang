@@ -1,0 +1,20 @@
+{
+    "comp_linker":          "Links",
+    "menu_links":           "Links",
+    "menu_addlink":         "Link toevoegen",
+    "menu_categories":      "Categorieën",
+    "field_link_code":      "Code",
+    "field_link_title":     "Titel",
+    "field_link_url":       "URL",
+    "field_link_description":"Beschrijving",
+    "field_link_logo":      "Logo",
+    "field_link_page":      "Pagina",
+    "field_link_cat":       "Categorie",
+    "field_lcat_name":      "Naam",
+    "field_lcat_image":     "Image",
+    "field_link_hidden":    "Verborgen",
+    "field_lcat_hidden":    "Verborgen",
+    "field_lcat_bg":        "Achtergrond",
+    "field_lcat_description":"Beschrijving",
+    "field_link_highlight": "Zoek uitgelight"
+}

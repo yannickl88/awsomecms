@@ -1,0 +1,8 @@
+@author:Yannick <yannick.l.88@gmail.com>
+@package:components.collection
+@copyright:(c) 2009-2010 Yannick de Lange
+@licence:http://www.gnu.org/licenses/gpl.txt
+@version:354
+
+COLLECTION:
+A way to create a collection of models

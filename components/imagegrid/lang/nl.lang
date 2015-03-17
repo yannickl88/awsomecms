@@ -1,0 +1,13 @@
+{
+    "comp_imagegrid":       "Afbeelding Bloken",
+    "imagegrid":            "Afbeelding Bloken",
+    "menu_imagegrid":       "Afbeelding Bloken",
+    "menu_grids":           "Rasters",
+    "menu_blocks":          "Bloken",
+    "field_grid_name":      "Raster name",
+    "field_block_title":    "Blok title",
+    "field_block_image":    "Blok image",
+    "field_block_grid":     "Blok grid",
+    "field_block_url":      "Blok link",
+    "field_block_text":     "Blok text"
+}
