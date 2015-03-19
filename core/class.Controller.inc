@@ -1,4 +1,6 @@
 <?php
+use Symfony\Component\HttpFoundation\Request as Sf2Request;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 /**
  * Exception thrown if the given component is not installed or found
  *
@@ -40,9 +42,11 @@ class Notifications
      */
     public static function getInstance()
     {
-        if(isset($_SESSION['notifications']))
+        $session = Controller::getInstance()->getSF2Request()->getSession();
+
+        if($session->has('notifications'))
         {
-            return unserialize($_SESSION['notifications']);
+            return $session->get('notifications');
         }
         else
         {
@@ -134,7 +138,8 @@ class Notifications
      */
     public function save()
     {
-        $_SESSION['notifications'] = serialize($this);
+        $session = Controller::getInstance()->getSF2Request()->getSession();
+        $session->set('notifications', $this);
     }
     /**
      * remove the notifications for an URL
@@ -178,19 +183,37 @@ class Controller
      */
     public static function getInstance()
     {
-        if(!self::$instance)
-        {
-            self::$instance = new Controller();
+        if(!self::$instance) {
+            throw new RuntimeException("Config not initialized, did you forget to call Config::init()?");
         }
 
         return self::$instance;
     }
+
+    /**
+     * @param ContainerInterface $container
+     */
+    public static function init(ContainerInterface $container, Sf2Request $request)
+    {
+        self::$instance = new self($container, $request);
+
+        return self::$instance;
+    }
+
+    private $sf2_request;
+    private $container;
 
     private $redirect;
     private $request = null;
     private $smarty;
     private $smartyLoader;
     private $output;
+
+    public function __construct(ContainerInterface $container, Sf2Request $request)
+    {
+        $this->sf2_request = $request;
+        $this->container   = $container;
+    }
 
     /**
      * Handle a request
@@ -213,9 +236,9 @@ class Controller
         }
         else
         {
-            if(isset($_SESSION['FORMERROR']))
+            if($this->sf2_request->getSession()->has('FORMERROR'))
             {
-                $e = unserialize($_SESSION['FORMERROR']);
+                $e = $this->sf2_request->getSession()->get('FORMERROR');
                 Debugger::getInstance()->log("Loading InvalidFormException");
                 $url = "/";
                 if(isset($_GET['url']))
@@ -223,7 +246,7 @@ class Controller
                     $url = "/".$_GET['url'];
                 }
 
-                if(is_a($e, 'InvalidFormException') && $url == $e->getRedirect())
+                if($e instanceof FormError && $url == $e->getRedirect())
                 {
                     $this->smarty->assign("FORMERROR", $e);
 
@@ -234,13 +257,8 @@ class Controller
                         Table::init($e->getTable())
                             ->setError($e);
                     }
-
-                    unset($_SESSION['FORMERROR']);
                 }
-                else
-                {
-                    unset($_SESSION['FORMERROR']);
-                }
+//                 $this->sf2_request->getSession()->remove('FORMERROR');
             }
             $this->smarty->assign("NOTIFICATIONS", Notifications::getInstance()->getNotifications($request->url));
 
@@ -257,7 +275,7 @@ class Controller
             }
             catch(InvalidFormException $e)
             {
-                $_SESSION['FORMERROR'] = serialize($e);
+                $this->sf2_request->getSession()->set('FORMERROR', $e->toError());
 
                 $url = $e->getRedirect();
                 Debugger::getInstance()->log("Catching InvalidFormException, redirecting to: {$url}");
@@ -289,7 +307,7 @@ class Controller
 
             if(!$this->isRedirecting())
             {
-                echo $this->output; //show the output
+                return $this->output; //show the output
             }
         }
     }
@@ -460,10 +478,26 @@ class Controller
     {
         if(!$this->request)
         {
-            $this->request = new Request();
+            $this->request = new Request($this->sf2_request);
         }
 
         return $this->request;
+    }
+
+    /**
+     * @return Sf2Request
+     */
+    public function getSF2Request()
+    {
+        return $this->sf2_request;
+    }
+
+    /**
+     * @return ContainerInterface
+     */
+    public function getContainer()
+    {
+        return $this->container;
     }
     /**
      * Get the smarty object that is used for the page rendering
@@ -502,7 +536,6 @@ class Controller
             if(Config::get('debug', 0, 'debug') > 1)
             {
                 echo "Non debug would have redirected from \"{$_SERVER['SCRIPT_NAME']}{$_SERVER['REQUEST_URI']}\" to \" <a href='{$this->redirect}'>{$this->redirect}</a> \"";
-                echo Debugger::getInstance();
             }
             else
             {

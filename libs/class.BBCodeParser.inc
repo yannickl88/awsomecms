@@ -370,7 +370,7 @@ class BBCodeElement
             array_pop($this->children);
         }
     }
-    
+
     public function children() {
         return $this->children;
     }
@@ -391,7 +391,7 @@ class BBCodeDocument extends BBCodeElement
      * (non-PHPdoc)
      * @see libs/BBCodeElement::valueOf()
      */
-    public function valueOf()
+    public function valueOf($level, $i)
     {
         $return = "ROOT";
         foreach($this->children as $key => $child)
@@ -418,7 +418,7 @@ class BBCodeDummyElement extends BBCodeElement
      * (non-PHPdoc)
      * @see libs/BBCodeElement::text()
      */
-    public function text() { return ""; }
+    public function text($formatting) { return ""; }
 }
 /**
  * Element which only contains text
@@ -438,7 +438,7 @@ class BBCodeText extends BBCodeElement
      * (non-PHPdoc)
      * @see libs/BBCodeElement::text()
      */
-    public function text() { return $this->value; }
+    public function text($formatting) { return $this->value; }
 }
 /**
  * Element which indecates a new line
@@ -456,7 +456,7 @@ class BBCodeNewLine extends BBCodeElement
      * (non-PHPdoc)
      * @see libs/BBCodeElement::text()
      */
-    public function text()
+    public function text($formatting)
     {
         return "<br />";
     }

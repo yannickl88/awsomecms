@@ -226,4 +226,13 @@ class Component
     public function getAllPages() {
         return array();
     }
+
+    /**
+     * @param string $key
+     * @return mixed
+     */
+    public function get($key)
+    {
+        return Controller::getInstance()->getContainer()->get($key);
+    }
 }

@@ -1,4 +1,4 @@
-{if $FORMERROR}{$FORMERROR}{/if}
+{if isset($FORMERROR)}{$FORMERROR}{/if}
 <form method="post" action="/" class="form contact_send">
     <div class="form_row">
         <div class="form_label">

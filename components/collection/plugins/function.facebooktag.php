@@ -15,11 +15,11 @@
 
 function escapeParts($url) {
     $parts = parse_url($url);
-    
+
     $path = explode("/", $parts["path"]);
     $pathEsc = "";
     $first = true;
-    
+
     foreach($path as $part) {
         if(!$first) {
             $pathEsc .= "/";
@@ -27,7 +27,7 @@ function escapeParts($url) {
         $pathEsc .= rawurlencode($part);
         $first = false;
     }
-    
+
     return $parts["host"].
         $pathEsc.
         (isset($parts["query"]) ? "?" . $parts["query"] : "") .
@@ -42,17 +42,18 @@ function smarty_function_facebooktag($params, &$smarty)
 {
     $data = Config::get("facebookData", (object) array());
     $appID = Config::get("facebookID", "");
-    
-    $img = explode("/", $data->image);
-    
     $html = "";
-    
-    $html .= "<meta property=\"fb:app_id\" content=\"{$appID}\" />\n";
-    $html .= "<meta property=\"og:type\" content=\"website\" />\n";
-    $html .= "<meta property=\"og:title\" content=\"".htmlentities($data->title). "\" />\n";
-    $html .= "<meta property=\"og:image\" content=\"".htmlentities($data->image). "\" />\n";
-    $html .= "<meta property=\"og:description\" content=\"".htmlentities($data->description). "\" />\n";
-    $html .= "<meta property=\"og:url\" content=\"".htmlentities($data->url). "\" />\n";
-    
+
+    if (isset($data->image)) {
+        $img = explode("/", $data->image);
+
+        $html .= "<meta property=\"fb:app_id\" content=\"{$appID}\" />\n";
+        $html .= "<meta property=\"og:type\" content=\"website\" />\n";
+        $html .= "<meta property=\"og:title\" content=\"".htmlentities($data->title). "\" />\n";
+        $html .= "<meta property=\"og:image\" content=\"".htmlentities($data->image). "\" />\n";
+        $html .= "<meta property=\"og:description\" content=\"".htmlentities($data->description). "\" />\n";
+        $html .= "<meta property=\"og:url\" content=\"".htmlentities($data->url). "\" />\n";
+    }
+
     return $html;
 }

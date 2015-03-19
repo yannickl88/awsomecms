@@ -38,7 +38,7 @@ function smarty_function_comments($params, &$smarty)
 
     $smarty->assign("comments", Table::init("comments.comments")->setRequest((object) array('comment_hook' => $hook))->doSelect()->getRows());
     $smarty->assign("comment_hook", $hook);
-    $smarty->assign("comment_candelete", (true || isset($_SESSION['usr']) && $_SESSION['usr']['auth']['admin'] === true));
+    $smarty->assign("comment_candelete", false);
 
     return $smarty->fetch("comments/comments.tpl");
 }

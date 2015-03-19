@@ -1,7 +1,5 @@
 <?php
-
-
-
+/**
  * @author Yannick <yannick.l.88@gmail.com>
  */
 class NewsComponent extends Component implements SearchProvider
@@ -290,7 +288,7 @@ class NewsComponent extends Component implements SearchProvider
             }
         }
 
-        return $this->newsList[$hookID];
+        return isset($this->newsList[$hookID]) ? $this->newsList[$hookID] : '/';
     }
 
     public function makePageURL($record, $withpage = false)

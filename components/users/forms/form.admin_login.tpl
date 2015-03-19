@@ -1,4 +1,4 @@
-{if $FORMERROR}{$FORMERROR}{/if}
+{if isset($FORMERROR)}{$FORMERROR}{/if}
 <form method="post" action="/" class="admin_form admin_login">
     <div class="admin_form_row">
         <div class="admin_form_label">

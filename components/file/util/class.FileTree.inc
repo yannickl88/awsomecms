@@ -24,8 +24,10 @@ class FileItem extends TreeNode
         $this->name = $record->file_name;
         $this->id = $record->file_id;
         $this->location = $record->file_location;
-        $this->viewURL = $record->file_data->url;
-        $this->fileType = $record->file_data->type;
+        if (is_array($record->file_data)) {
+            $this->viewURL = $record->file_data->url;
+            $this->fileType = $record->file_data->type;
+        }
         $this->type = Tree::CONTENT;
 
         $this->canView = $record->permissions['view'];
@@ -198,10 +200,10 @@ class UploadFolder extends Folder
     public function toData()
     {
         $component = Component::init("file");
-        
+
         $linkAdd = makeLink(array($component, "add"));
         $linkView = makeLink(array($component, "admin"));
-        
+
         return array(
             "classname" => 'TreeUploadFolder',
             "name" => $this->name,

@@ -467,7 +467,7 @@ abstract class Table
     * @param InvalidFormException $error
     * @return Table
     */
-    public function setError($error)
+    public function setError(FormError $error)
     {
         $data = $error->getRecord();
 

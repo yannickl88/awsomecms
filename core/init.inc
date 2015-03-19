@@ -18,5 +18,5 @@
  */
 require_once realpath(dirname(__FILE__).'/functions.util.inc');
 
-error_reporting(E_ALL);
-set_error_handler("handleError");
+ini_set('display_errors', '0');     # don't show any errors...
+error_reporting(E_ALL | E_STRICT);  # ...but do log them

@@ -135,19 +135,21 @@ class RegisterManager
             }
 
             //Load the extentions
-            $extentions = scandir(getFrameworkRoot()."/extentions/");
+            if (file_exists(getFrameworkRoot()."/extentions/")) {
+                $extentions = scandir(getFrameworkRoot()."/extentions/");
 
-            foreach($extentions as $extention)
-            {
-                $matches = array();
-                if($extention != "." && $extention != ".." && preg_match('/^(.*)\.ext\.inc$/', $extention, $matches) === 1)
+                foreach($extentions as $extention)
                 {
-                    try
+                    $matches = array();
+                    if($extention != "." && $extention != ".." && preg_match('/^(.*)\.ext\.inc$/', $extention, $matches) === 1)
                     {
-                        $ext = Extention::init($matches[1]);
-                        $ext->register($this);
+                        try
+                        {
+                            $ext = Extention::init($matches[1]);
+                            $ext->register($this);
+                        }
+                        catch(Exception $e) { throw $e; }
                     }
-                    catch(Exception $e) { throw $e; }
                 }
             }
 
@@ -385,18 +387,8 @@ class RegisterManager
      */
     public function hasAuth($action, $user = null)
     {
-        if($user == null && isset($_SESSION['usr']))
-            $user = $_SESSION['usr'];
+        $auth = Controller::getInstance()->getContainer()->get("security.authorization_checker");
 
-        $group = false;
-        foreach($this->auth as $authGroup => $actions)
-        {
-            if(in_array($action, $actions))
-            {
-                $group = $authGroup;
-            }
-        }
-        //$_SESSION['usr']['privs']
-        return ($user && $group && in_array($group, $user['privs']) || $group == null);
+        return $auth->isGranted('ROLE_ADMIN');
     }
 }

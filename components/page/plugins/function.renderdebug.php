@@ -15,12 +15,12 @@
 
 /**
  * Show the debugger content
- * 
+ *
  * @param array $params
  * @param Smarty $smarty
  * @return string
  */
 function smarty_function_renderdebug($params, &$smarty)
 {
-    return Debugger::getInstance();
+    return "";
 }

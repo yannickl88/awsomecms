@@ -1,4 +1,6 @@
 <?php
+use Symfony\Component\HttpFoundation\Request as SF2Request;
+
 /**
  * This file is part of the A.W.S.O.M.E.cms distribution.
  * Detailed copyright and licensing information can be found
@@ -13,22 +15,22 @@
  * @version $Revision$
  */
 
-/** 
- * Exception thrown when you cannot make an call to that action 
- * 
+/**
+ * Exception thrown when you cannot make an call to that action
+ *
  * @author Yannick <yannick.l.88@gmail.com>
- */ 
+ */
 class ForbiddenException extends Exception {}
 
 /**
 * request object, datawrapper for an request call
-* 
+*
 * @author Yannick <yannick.l.88@gmail.com>
 */
 class Request
 {
     private static $requests;
-    
+
     public $component;
     public $table;
     public $method;
@@ -37,17 +39,17 @@ class Request
     public $fullUrl;
     public $url;
     private $isProxyRequest;
-    
+
     /**
      * Constructor, all relevent data is gathered here
      */
-    public function __construct()
+    public function __construct(SF2Request $request)
     {
         $config = Config::getInstance();
-        
-        $this->method = $_SERVER['REQUEST_METHOD'];
-        $this->isProxyRequest = ($config->get("enabled", false, 'proxy') == "1" && strpos('http://' . $_SERVER['SERVER_NAME'] . $_SERVER['REQUEST_URI'], $config->get("proxy", 'www.google.com', 'proxy')) === 0);
-        
+
+        $this->method         = $request->getMethod();
+        $this->isProxyRequest = false;
+
         switch($this->method)
         {
             case "POST" :
@@ -62,45 +64,31 @@ class Request
             break;
         }
         $this->data['method'] = strtolower($this->method);
-        
-        $this->fullUrl = 'http://' . $_SERVER['SERVER_NAME'] . $_SERVER['REQUEST_URI'];
-        $this->url = $_SERVER['REQUEST_URI'];
-        if($this->isProxyRequest)
+
+        $this->fullUrl = $request->getUri();
+        $this->url     = $request->getPathInfo();
+
+        if(isset($this->data['component']))
         {
-            $this->table = substr($this->fullUrl, strlen($config->get("proxy", 'http://www.google.com/', 'proxy')));
-            if(strrpos($this->table, "?") > 0)
+            $this->component = $this->data['component'];
+            unset($this->data['component']);
+
+            if(isset($this->data['action']))
             {
-                $this->table = substr($this->table, 0, strrpos($this->table, "?"));
+                $this->action = "action_".$this->data['action'];
+                unset($this->data['action']);
             }
-            
-            $tableArr = explode(".", $this->table);
-            
-            $this->component = $tableArr[0];
         }
         else
         {
-            if(isset($this->data['component']))
-            {
-                $this->component = $this->data['component'];
-                unset($this->data['component']);
-                
-                if(isset($this->data['action']))
-                {
-                    $this->action = "action_".$this->data['action'];
-                    unset($this->data['action']);
-                }
-            }
-            else
-            {
-                //set the default actions
-                $manager = RegisterManager::getInstance();
-                list($this->component, $this->action) = $manager->getURLMap($this->url, $this->data);
-            }
+            //set the default actions
+            $manager = RegisterManager::getInstance();
+            list($this->component, $this->action) = $manager->getURLMap($this->url, $this->data);
         }
     }
     /**
      * Check if the request is made through the proxy url
-     * 
+     *
      * @return Boolean
      */
     public function isMadeByProxy()
@@ -109,7 +97,7 @@ class Request
     }
     /**
      * translate the HTTP method to SQL method
-     * 
+     *
      * @return String           SELECT|INSERT|UPDATE|DELETE
      */
     public function translateAction()

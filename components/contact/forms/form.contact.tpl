@@ -1,4 +1,4 @@
-{if $FORMERROR}{$FORMERROR}{/if}
+{if isset($FORMERROR)}{$FORMERROR}{/if}
 <form method="post" action="/" class="form contact_send">
     {foreach from=$contactform->fields item=row}
         <div class="form_row fieldtype{$row->field_type}">

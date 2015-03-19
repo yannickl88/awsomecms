@@ -79,12 +79,6 @@ class SmartyPageLoader extends Smarty_Resource_Custom
 
         try
         {
-            if(Config::get('needslogin', false, 'admin') && $smarty_obj->getTemplateVars('isADMIN') === true && !(isset($_SESSION['usr']) && $_SESSION['usr']['auth']['admin'] === true))
-            {
-                $url = Config::get('login', '', 'admin');
-                $smarty_obj->assign("URL", $url); //reassign the URL var
-            }
-
             $page = $smarty_obj->fetch("scf:{$url}");
         }
         catch(PageNotFoundExeption $e)
@@ -171,7 +165,11 @@ class SmartyPageLoader extends Smarty_Resource_Custom
             }
 
             //no layout fond so we fallback to the default
-            if(Config::get("privLayout", true, "debug") && $_GET["debug_public"] != 1 && in_array($_SERVER['REMOTE_ADDR'], Config::get("privLayout_ip", array(), "debug"))) {
+            if (Config::get("privLayout", true, "debug")
+                && isset($_GET["debug_public"])
+                && $_GET["debug_public"] != 1
+                && in_array($_SERVER['REMOTE_ADDR'], Config::get("privLayout_ip", array(), "debug"))
+            ) {
                 return $smarty_obj->fetch("priv_layout.tpl");
             }
             else
@@ -232,7 +230,7 @@ class SmartyPageLoader extends Smarty_Resource_Custom
                     $html = current($result->record->page_template);
                 }
 
-                $mtime = $this->timestamps[$tpl_name];
+                $mtime = $this->timestamps[$name];
 
                 if(!$result->record->page_html)
                     $source = BBCodeParser::parse($html);

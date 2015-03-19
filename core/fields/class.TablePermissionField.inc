@@ -36,7 +36,7 @@ class TablePermissionField extends Field
      * @param SQLRecord $record
      * @param SQLQuery $query
      */
-    public function postSQL($record, $query)
+    public function postSQL(&$record, $query)
     {
         $rows = $record->getRows();
 

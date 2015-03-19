@@ -7,7 +7,7 @@
  *
  * @author Yannick <yannick.l.88@gmail.com>
  */
-class UsersComponent extends Component implements AuthComponent
+class UsersComponent extends Component
 {
     public function __construct()
     {
@@ -65,7 +65,7 @@ class UsersComponent extends Component implements AuthComponent
         {
             $loggedin = Authentication::login($request['user_name'], $request['user_pass']);
 
-            if(!$loggedin || ($loggedin && isset($_SESSION['usr']['auth']['admin']) && $_SESSION['usr']['auth']['admin'] !== true))
+            if(!$loggedin)
             {
                 $e->addInvalidField('user_name', Language::get("error_nomatch"));
                 $e->addInvalidField('user_pass', "");
@@ -307,43 +307,6 @@ class UsersComponent extends Component implements AuthComponent
         }
 
         return array($rights, $authGroups);
-    }
-    /**
-     * Authenticate a user
-     *
-     * @param string $user_name
-     * @param string $user_pass
-     * @return boolean
-     */
-    public function auth_login($user_name, $user_pass)
-    {
-        $record = Table::init('users.users')
-            ->setRequest((object) array("user_name" => $user_name))
-            ->doSelect()
-            ->getRow();
-
-        if(!empty($record) && $record->user_pass['password'] == sha1($record->user_pass['salt'].$user_pass))
-        {
-            //set the session
-            $_SESSION['usr'] = array();
-            $_SESSION['usr']['user_name'] = $user_name;
-            $_SESSION['usr']['user_pass'] = $user_pass;
-            list($_SESSION['usr']['auth'], $_SESSION['usr']['privs']) =
-                $this->getPrivilageMapping($record->user_privileges);
-
-            return true;
-        }
-        return false;
-    }
-    /**
-     * Log a user out
-     */
-    public function auth_logout()
-    {
-        $_SESSION['usr'] = null;
-        session_destroy();
-
-        return true;
     }
     /**
      * (non-PHPdoc)

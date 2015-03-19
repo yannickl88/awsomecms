@@ -69,21 +69,15 @@ class CoreComponent extends Component
      */
     public function action_session($smarty, $smartyLoader, $request)
     {
+        $token_storage = $this->get('security.token_storage');
+
         $loggedIn = false;
         $url = (isset($_GET['url']))? $_GET['url'] : "";
         $smarty->assign("URL", $url);
         $smarty->assign("isADMIN", (preg_match('/^'.preg_quote(Config::get('location', 'admin/', 'admin'), '/').'(.*?)/si', $url)) === 1);
-        if(!isset($_SESSION['usr']))
-        {
-            $smarty->assign("USR", null);
-        }
-        else
-        {
-            $smarty->assign("USR", $_SESSION['usr']);
-            $loggedIn = true;
-        }
         $smarty->assign("LOGINPAGE", ($url == Config::get("login", "admin/login", "admin") || !$loggedIn));
         $smarty->assign("HASDOC", file_exists(Config::get("websiteroot", "/")."/doc.php"));
+        $smarty->assign("app", ['user' => $token_storage->getToken()]);
     }
     /**
      * Layout action, this is used for the layout mapping page.

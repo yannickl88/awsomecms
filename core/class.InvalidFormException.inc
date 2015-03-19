@@ -15,24 +15,24 @@
 
 /**
  * Exception to be triggered when a field is not validly filled in
- * 
+ *
  * @author Yannick <yannick.l.88@gmail.com>
  */
 class FormException extends Exception
 {
     private $field;
     private $section;
-    
+
     public function __construct($field, $message = null, $code = 0, $section="")
     {
         parent::__construct($message, $code);
-        
+
         $this->field = $field;
         $this->section = $section;
     }
     /**
      * Get the field that were not valid
-     * 
+     *
      * @return string
      */
     public function getField()
@@ -41,7 +41,7 @@ class FormException extends Exception
     }
     /**
      * Get the section of the field
-     * 
+     *
      * @return string
      */
     public function getSection()
@@ -52,21 +52,55 @@ class FormException extends Exception
 
 /**
 * Exception class when a form is not valid
-* 
+*
 * @author Yannick <yannick.l.88@gmail.com>
 */
 class InvalidFormException extends Exception
 {
-    private $fields;
+    private $form_error;
+
+    public function __construct($record, $redirect, $table, $message = null, $code = 0)
+    {
+        parent::__construct($message, $code);
+
+        $this->form_error = new FormError([], $record, $table, $redirect);
+    }
+    /**
+     * Add field that is was not valid
+     *
+     * @param string $field
+     * @param string $message
+     */
+    public function addInvalidField($field, $message)
+    {
+        $this->form_error->addInvalidField($field, $message);
+    }
+    /**
+     * Set the data that should be passed when redirecting
+     *
+     * @param array $redirectData
+     */
+    public function setRedirectData($redirectData)
+    {
+        $this->form_error->setRedirectData($redirectData);
+    }
+
+    public function toError()
+    {
+        return $this->form_error;
+    }
+}
+
+class FormError
+{
+private $fields;
     private $record;
     private $table;
     private $redirect;
     private $redirectData;
-    
-    public function __construct($record, $redirect, $table, $message = null, $code = 0)
+
+    public function __construct($record, $redirect, $table)
     {
-        parent::__construct($message, $code);
-        
         $this->fields = array();
         $this->record = $record;
         $this->table = $table;
@@ -75,7 +109,7 @@ class InvalidFormException extends Exception
     }
     /**
      * Add field that is was not valid
-     * 
+     *
      * @param string $field
      * @param string $message
      */
@@ -85,7 +119,7 @@ class InvalidFormException extends Exception
     }
     /**
      * Get the fields that were not valid
-     * 
+     *
      * @return array
      */
     public function getInvalidFields()
@@ -94,7 +128,7 @@ class InvalidFormException extends Exception
     }
     /**
      * Get the record that was not valid
-     * 
+     *
      * @return object
      */
     public function getRecord()
@@ -103,7 +137,7 @@ class InvalidFormException extends Exception
     }
     /**
      * Get the page that should be redirected to
-     * 
+     *
      * @return string
      */
     public function getRedirect()
@@ -119,7 +153,7 @@ class InvalidFormException extends Exception
     }
     /**
      * Get the data that should be passed when redirecting
-     * 
+     *
      * @return array
      */
     public function getRedirectData()
@@ -128,14 +162,19 @@ class InvalidFormException extends Exception
     }
     /**
      * Set the data that should be passed when redirecting
-     * 
+     *
      * @param array $redirectData
      */
     public function setRedirectData($redirectData)
     {
         $this->redirectData = $redirectData;
     }
-    
+
+    public function toError()
+    {
+        return new FormError($this->fields, $this->record, $this->table, $this->redirect);
+    }
+
     public function __toString()
     {
         $html = "";
@@ -153,7 +192,7 @@ class InvalidFormException extends Exception
         {
             $html .= "            addFieldError('{$field}', '".addslashes($error)."');\n";
         }
-        
+
         foreach($this->record as $field => $value)
         {
             if($field != "method")
@@ -163,7 +202,7 @@ class InvalidFormException extends Exception
         }
         $html .= "        });";
         $html .= "</script>\n";
-        
+
         return $html;
     }
 }

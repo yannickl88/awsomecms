@@ -1,4 +1,5 @@
 <?php
+use Symfony\Component\DependencyInjection\ContainerInterface;
 /**
  * This file is part of the A.W.S.O.M.E.cms distribution.
  * Detailed copyright and licensing information can be found
@@ -21,10 +22,14 @@
 class Config
 {
     private static $instance;
-    
+
+    /**
+     * @var ContainerInterface
+     */
+    private $container;
     private $data;
     private $componenets;
-    
+
     /**
      * singelton
      *
@@ -33,10 +38,19 @@ class Config
     public static function getInstance()
     {
         if (!self::$instance instanceof self) {
-            self::$instance = new self();
+            throw new RuntimeException("Config not initialized, did you forget to call Config::init()?");
         }
         return self::$instance;
     }
+
+    /**
+     * @param ContainerInterface $container
+     */
+    public static function init(ContainerInterface $container)
+    {
+        self::$instance = new self($container);
+    }
+
     /**
      * Get something from the config
      *
@@ -52,14 +66,16 @@ class Config
     /**
      * constructor
      */
-    private function __construct()
+    private function __construct(ContainerInterface $container)
     {
+        $this->container = $container;
+
         $this->fillData();
     }
     /**
-     * Inject data into the config. This can be used to add data to the 
+     * Inject data into the config. This can be used to add data to the
      * config while there is no config file to read yet.
-     * 
+     *
      * @param Array $data
      */
     public function inject($data)
@@ -73,9 +89,9 @@ class Config
     {
         global $websiteroot;
         $frameworkroot = getFrameworkRoot();
-        
+
         $this->data = array("debug" => array("debug" => 0), "admin" => array("location" => "/"));
-        
+
         if(file_exists($websiteroot.'/config.ini'))
         {
             $this->data = parse_ini_file($websiteroot.'/config.ini', true);
@@ -84,12 +100,12 @@ class Config
         {
             $this->data = array_merge_recursive($this->data, parse_ini_file($frameworkroot.'/core/core.ini', true));
         }
-        
+
         //parse extra ini's
         if(file_exists($websiteroot.'/configs/'))
         {
             $files = scandir($websiteroot.'/configs/');
-            
+
             foreach($files as $file)
             {
                 if($file != '.' && $file != ".." && substr($file, strrpos($file, '.')+1) == 'ini')
@@ -103,16 +119,15 @@ class Config
         {
             $this->data["checksum"] = md5(serialize($this->data));
         }
-        
-        
+
         $this->data['layoutmap'] = array();
         $this->data['layoutmap'][] = array(preg_quote($this->data['admin']['location'], "/")."(.*)", "admin_layout.tpl");
-        
+
         //parse the layout map
         if(file_exists($frameworkroot.'/core/layoutmap.conf'))
         {
             $data = file($frameworkroot.'/core/layoutmap.conf');
-            
+
             foreach($data as $line)
             {
                 $this->data['layoutmap'][] = explode(" ", trim($line));
@@ -123,13 +138,13 @@ class Config
         {
             $data = file($frameworkroot.'/core/robots.conf');
             $this->data['robots'] = array();
-            
+
             foreach($data as $line)
             {
                 $this->data['robots'][] = preg_quote(trim($line), "/");
             }
         }
-        
+
         $this->data['websiteroot'] = $websiteroot;
         if(isset($_SERVER['HTTP_HOST']))
             $this->data['baseurl'] = "http://".$_SERVER['HTTP_HOST'];
@@ -148,7 +163,7 @@ class Config
         {
             if($this->hasKey($key))
             {
-                return $this->data[$key];
+                return $this->passthrough($this->data[$key]);
             }
             else
             {
@@ -161,7 +176,7 @@ class Config
         {
             if($this->hasKey($key, $section))
             {
-                return $this->data[$section][$key];
+                return $this->passthrough($this->data[$section][$key]);
             }
             else
             {
@@ -206,7 +221,7 @@ class Config
     }
     /**
      * Check if a value contains another value. This is done using bitwise comparison
-     * 
+     *
      * @param int $int
      * @param int $flag
      * @return boolean
@@ -214,5 +229,20 @@ class Config
     public static function hasFlag($int, $flag)
     {
         return (($int & $flag) == $flag);
+    }
+
+    /**
+     * If the value starts and ends with a %, assume it is a parameter in the parameters.yml and fetch that
+     *
+     * @param mixed $value
+     * @return mixed
+     */
+    private function passthrough($value)
+    {
+        if (is_string($value) && preg_match('/^%.*%$/', $value)) {
+            return $this->container->getParameter(substr($value, 1, -1));
+        }
+
+        return $value;
     }
 }

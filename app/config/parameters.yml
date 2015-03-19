@@ -1,0 +1,18 @@
+# This file is auto-generated during the composer install
+parameters:
+    database.driver: pdo_mysql
+    database.host: localhost
+    database.port: null
+    database.name: minimovers
+    database.user: root
+    database.password: null
+    
+    mailer.transport: smtp
+    mailer.host: 127.0.0.1
+    mailer.user: null
+    mailer.password: null
+    
+    locale: en
+    secret: bf58a65379942d318a15988de2b41eebb4e41923
+    
+    awsomecms.website_root : "%kernel.root_dir%/../htdocs"

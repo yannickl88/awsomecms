@@ -1,0 +1,8 @@
+services:
+    app.controller.default:
+        class: Bundle\AppBundle\Controller\DefaultController
+        
+    app.controller.admin.login:
+        class: Bundle\AppBundle\Controller\Admin\LoginController
+        arguments:
+            - "@security.authentication_utils"

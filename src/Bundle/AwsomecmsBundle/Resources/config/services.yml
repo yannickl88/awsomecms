@@ -1,0 +1,6 @@
+services:
+    awsomecms.controller.fallback:
+        class: Bundle\AwsomecmsBundle\Controller\FallbackController
+        arguments:
+            - "@service_container"
+            - "%awsomecms.website_root%"
