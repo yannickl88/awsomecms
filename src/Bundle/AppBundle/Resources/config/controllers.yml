@@ -1,8 +1,23 @@
 services:
     app.controller.default:
         class: Bundle\AppBundle\Controller\DefaultController
-        
+
     app.controller.admin.login:
         class: Bundle\AppBundle\Controller\Admin\LoginController
         arguments:
             - "@security.authentication_utils"
+            - "@security.token_storage"
+            - "@router"
+
+    app.controller.admin.news:
+        class: Bundle\AppBundle\Controller\Admin\NewsController
+        arguments:
+            - "@entity.news"
+
+    app.controller.admin.user:
+        class: Bundle\AppBundle\Controller\Admin\UserController
+        arguments:
+            - "@form_handler.provider.simple"
+            - "@entity.user"
+            - "@router"
+            - "@doctrine.orm.entity_manager"

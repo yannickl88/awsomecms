@@ -1,18 +1,145 @@
 <!DOCTYPE html>
-<html lang="nl-NL" dir="ltr">
+<html
+    lang="nl-NL"
+    dir="ltr"
+>
 <head>
-    <meta charset="utf-8">
-    <head>
-        <title>Admin</title>
-        <meta http-equiv="Content-type" content="text/html;charset=UTF-8" />
-        <script type="text/javascript" src="/js/jquery.min.js"></script>
-        <script type="text/javascript" src="/js/jquery-ui.min.js"></script>
-        <script type="text/javascript" src="/js/site.js"></script>
-        <script type="text/javascript" src="/js/base64.js"></script>
-        <script type="text/javascript" src="/js/admin.js"></script>
-        <script type="text/javascript" src="/js/tinyeditor.js"></script>
-    </head>
-    <body>
-        {% block body %}{% endblock %}
-    </body>
+<meta charset="utf-8">
+
+
+<head>
+<title>Admin</title>
+<link
+    type="text/css"
+    rel="stylesheet"
+    href="/css/admin.css"
+    media="screen"
+/>
+<link
+    type="text/css"
+    rel="stylesheet"
+    href="/css/datePicker.css"
+    media="screen"
+/>
+<link
+    type="text/css"
+    rel="stylesheet"
+    href="/css/style.css"
+    media="screen"
+/>
+<script
+    type="text/javascript"
+    src="/js/jquery.min.js"
+></script>
+<script
+    type="text/javascript"
+    src="/js/jquery-ui.min.js"
+></script>
+<script
+    type="text/javascript"
+    src="/js/site.js"
+></script>
+<script
+    type="text/javascript"
+    src="/js/base64.js"
+></script>
+<script
+    type="text/javascript"
+    src="/js/admin.js"
+></script>
+<script
+    type="text/javascript"
+    src="/js/tinyeditor.js"
+></script>
+</head>
+<body
+     {% block body_attr %}
+    {% endblock %}
+>
+    {% block body %}
+    <div id="formWrapperBackground">
+        <div id="formWrapperBorder">
+            <div id="formInnerWrapper">
+                <span id="formHeaderWrapper"> <a
+                    href="#"
+                    onclick="return closeFormPopup()"
+                >Cancel <img src="/img/icons/cross.png" /></a>
+                </span>
+                <div id="formWrapper"></div>
+            </div>
+        </div>
+    </div>
+    <div id="sidebarWrapper">
+        <div id="sidebarHeader">
+            <a href="{{ path('admin-home') }}" id="headerLink"> <img src="/img/admin/logo.png" />
+            </a>
+            <div id="headerLinks">
+                <a href="/doc.php" id="doc" target="_blank">Doc</a> |
+                <a href="{{ path('home') }}">View site</a> |
+                <a href="{{ path('admin-logout') }}">Log out</a>
+            </div>
+        </div>
+        <div id="adminMenuWrapper">
+            <ul>
+                <li class='adminmenuitem'><a href="{{ path('admin-collection') }}">Collection</a>
+                    <ul>
+                        <li class='adminmenuitem'><a href="{{ path('admin-collection') }}">Models</a></li>
+                        <li class='adminmenuitem'><a href="{{ path('admin-collection-categories') }}">Overview</a></li>
+                    </ul></li>
+                <li class='adminmenuitem'><a href="{{ path('admin-glossary') }}">Glossary</a>
+                    <ul>
+                        <li class='adminmenuitem'><a href="{{ path('admin-glossary-add') }}">Add Item</a></li>
+                        <li class='adminmenuitem'><a href="{{ path('admin-glossary') }}">Glossary</a></li>
+                    </ul></li>
+                <li class='adminmenuitem'><a href="{{ path('admin-imagegrid') }}">Image Blocks</a>
+                    <ul>
+                        <li class='adminmenuitem'><a href="{{ path('admin-imagegrid-block') }}">Blocks</a></li>
+                        <li class='adminmenuitem'><a href="{{ path('admin-imagegrid') }}">Grids</a></li>
+                    </ul></li>
+                <li class='adminmenuitem'><a href="{{ path('admin-linker') }}">Links</a>
+                    <ul>
+                        <li class='adminmenuitem'><a href="{{ path('admin-linker-add') }}">Add Link</a></li>
+                        <li class='adminmenuitem'><a href="{{ path('admin-linker-categories') }}">Categories</a></li>
+                        <li class='adminmenuitem'><a href="{{ path('admin-linker') }}">Links</a></li>
+                    </ul>
+                </li>
+                <li class='adminmenuitem'><a href="{{ path('admin-news') }}">News</a>
+                    <ul>
+                        <li class='adminmenuitem'><a href="{{ path('admin-news-add') }}">Add News</a></li>
+                        <li class='adminmenuitem'><a href="{{ path('admin-news') }}">News</a></li>
+                    </ul>
+                </li>
+                <li class='adminmenuitem'><a>Page</a>
+                    <ul>
+                        <li class='adminmenuitem'><a href="{{ path('admin-page-add') }}">Add Page</a></li>
+                    </ul>
+                </li>
+                <li class='adminmenuitem'><a>System</a>
+                    <ul>
+                        <li class='adminmenuitem'><a href="{{ path('admin-core-components') }}">Components</a></li>
+                        <li class='adminmenuitem'><a href="{{ path('admin-core-layout') }}">Layout Mapping</a></li>
+                    </ul>
+                </li>
+                <li class='adminmenuitem'><a href="{{ path('admin-users') }}">Users</a>
+                    <ul>
+                        <li class='adminmenuitem'><a href="{{ path('admin-users') }}">Users</a></li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+        <div id="adminTreeWrapper"></div>
+    </div>
+    <div id="mainWrapper">
+        <div id="mainHeader">
+            <h1>Welcome Admin</h1>
+        </div>
+        <div id="contentWrapper">{% block content %}{% endblock %}</div>
+        <div class="clear"></div>
+        <div id="copyright">
+            <hr />
+            <br /> <a href="http://code.google.com/p/awsomecms/">A.W.S.O.M.E. cms</a> &copy; 2009 - 2010
+        </div>
+    </div>
+    {% endblock %}
+</body>
 </html>

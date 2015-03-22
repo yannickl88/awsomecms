@@ -2,8 +2,11 @@ app:
     resource: "@AppBundle/Controller/"
     type:     annotation
 
-awsomecms:
+awsomecms_fallback:
     path: /{path}
     defaults: { _controller: "awsomecms.controller.fallback:fallback" }
     requirements:
       path: .*
+
+awesomecms_routes:
+    resource: "@AwsomecmsBundle/Resources/config/routing.yml" 

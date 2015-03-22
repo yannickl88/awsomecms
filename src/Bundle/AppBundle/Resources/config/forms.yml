@@ -1,0 +1,14 @@
+services:
+    form.user:
+        class: Component\Form\UserType
+        tags:
+            - { name: form.type, alias: user }
+
+    form.user.handler:
+        class: Component\Form\Handler\UserFormHandler
+        arguments:
+            - "@router"
+            - "@doctrine.orm.entity_manager"
+            - "@app.security.encoder"
+        tags:
+            - { name: form.handler }

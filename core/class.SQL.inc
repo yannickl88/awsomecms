@@ -437,7 +437,7 @@ class SQLQuery
      *
      * @return String
      */
-    public function getSQL()
+    public function getSQL(&$param)
     {
         switch($this->action)
         {
@@ -454,7 +454,7 @@ class SQLQuery
                 return $this->getDeleteSQL();
                 break;
             case 'update' :
-                return $this->getUpdateSQL();
+                return $this->getUpdateSQL($param);
                 break;
         }
     }
@@ -677,7 +677,7 @@ class SQLQuery
      *
      * @return String
      */
-    private function getUpdateSQL()
+    private function getUpdateSQL(&$param)
     {
         $query = '';
 
@@ -693,15 +693,8 @@ class SQLQuery
             }
 
             $totalValues .= $field.' = ';
-
-            if(is_numeric($this->values[$field]))
-            {
-                $totalValues .= addSlashesConfig($this->values[$field]);
-            }
-            else
-            {
-                $totalValues .= "'".addSlashesConfig($this->values[$field])."'";
-            }
+            $totalValues .= ":param_" . count($param);
+            $param["param_" . count($param)] = $this->values[$field];
         }
 
         $query .= ' SET '.$totalValues;
@@ -965,9 +958,10 @@ class SQL
         $request = null;
         $insert = false;
 
+        $param     = [];
         if(is_a($query, "SQLQuery"))
         {
-            $query_str = $query->getSQL();
+            $query_str = $query->getSQL($param);
             $query_obj = $query->getTables();
             $request = (object) $query->getRequest();
             $insert = ($query->getAction() == "insert" || $query->getAction() == "update" || $query->getAction() == "delete");
@@ -981,7 +975,8 @@ class SQL
         {
             $this->query = $query_str;
 
-            $result = $this->PDOconnection->query($query_str);
+            $result = $this->PDOconnection->prepare($query_str);
+            $result->execute($param);
 
             if($this->PDOconnection->errorCode() != '00000')
             {
@@ -1000,7 +995,7 @@ class SQL
             $result = new SQLRecord(null, $query_obj);
         }
 
-        Debugger::getInstance()->log("Query: '{$query_str}' [{$result->count()} rows returned]");
+        Debugger::getInstance()->log("Query: '{$query_str}' with params: " . json_encode($param) . " [{$result->count()} rows returned]");
 
         return $result;
     }

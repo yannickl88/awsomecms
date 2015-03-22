@@ -224,10 +224,12 @@ class FileComponent extends Component
 
         foreach($result as $row)
         {
-
-            if (is_array($row->file_data)) {
-                $row->file_location = $mapping[$this->getType($row->file_data->type)].substr($row->file_location, 1);
+            if (is_object($row->file_data)) {
+                $type = $this->getType($row->file_data->type);
+            } else {
+                $type = $this->getType(null);
             }
+            $row->file_location = $mapping[$type].substr($row->file_location, 1);
 
             $item = new FileItem($row);
             $tree->addChild($item);

@@ -1,5 +1,6 @@
 <?php
 
+use Doctrine\DBAL\Types\Type;
 use Symfony\Component\HttpKernel\Kernel;
 use Symfony\Component\Config\Loader\LoaderInterface;
 
@@ -17,6 +18,7 @@ class AppKernel extends Kernel
             new Sensio\Bundle\FrameworkExtraBundle\SensioFrameworkExtraBundle(),
             new Bundle\AppBundle\AppBundle(),
             new Bundle\AwsomecmsBundle\AwsomecmsBundle(),
+            new Hostnet\Bundle\FormHandlerBundle\FormHandlerBundle(),
         );
 
         if (in_array($this->getEnvironment(), array('dev', 'test'))) {
@@ -30,5 +32,15 @@ class AppKernel extends Kernel
     public function registerContainerConfiguration(LoaderInterface $loader)
     {
         $loader->load($this->getRootDir().'/config/config_'.$this->getEnvironment().'.yml');
+    }
+
+    public function boot()
+    {
+        parent::boot();
+
+        Type::addType('mltext', 'Component\\MLTextType');
+
+        $em = $this->getContainer()->get('doctrine.orm.entity_manager');
+        $em->getConnection()->getDatabasePlatform()->registerDoctrineTypeMapping('mltext','mltext');
     }
 }

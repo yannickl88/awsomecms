@@ -1,0 +1,35 @@
+{%- block form_row -%}
+<div class="admin_form_row">
+    <div class="admin_form_label">{{- form_label(form) -}}</div>
+    <div class="admin_form_field">{{- form_widget(form) -}}</div>
+    {{- form_errors(form) -}}
+</div>
+{%- endblock form_row -%}
+
+{%- block button_row -%}
+    <div class="admin_form_row admin_form_submit">
+        {{- form_widget(form) -}}
+    </div>
+{%- endblock button_row -%}
+
+{%- block form_label -%}
+    {% if label is not sameas(false) -%}
+        {% if not compound -%}
+            {% set label_attr = label_attr|merge({'for': id}) %}
+        {%- endif %}
+        {% if required -%}
+            {% set label_attr = label_attr|merge({'class': (label_attr.class|default('') ~ ' required')|trim}) %}
+        {%- endif %}
+        {% if label is empty -%}
+            {%- if label_format is not empty -%}
+                {% set label = label_format|replace({
+                    '%name%': name,
+                    '%id%': id,
+                }) %}
+            {%- else -%}
+                {% set label = name|humanize %}
+            {%- endif -%}
+        {%- endif -%}
+        <label{% for attrname, attrvalue in label_attr %} {{ attrname }}="{{ attrvalue }}"{% endfor %}>{{ label|trans({}, translation_domain) }}:</label>
+    {%- endif -%}
+{%- endblock form_label -%}

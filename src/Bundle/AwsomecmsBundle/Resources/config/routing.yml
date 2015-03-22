@@ -1,0 +1,41 @@
+home:
+    path: /
+
+admin-home:
+    path: /admin/
+
+admin-collection:
+    path: /admin/collection/admin/
+admin-collection-categories:
+    path: /admin/collection/mcadmin
+
+admin-glossary:
+    path: /admin/glossary/admin
+admin-glossary-add:
+    path: /admin/glossary/add
+
+admin-imagegrid:
+    path: /admin/imagegrid/admin
+admin-imagegrid-block:
+    path: /admin/imagegrid/adminblock
+
+admin-linker:
+    path: /admin/linker/admin
+admin-linker-categories:
+    path: /admin/linker/lcadmin
+admin-linker-add:
+    path: /admin/linker/add
+
+admin-news-add:
+    path: /admin/news/add
+
+admin-page:
+    path: /admin/page
+admin-page-add:
+    path: /admin/page/add
+
+admin-core-components:
+    path: /admin/core/components
+admin-core-layout:
+    path: /admin/core/layout
+

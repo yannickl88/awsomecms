@@ -22,22 +22,21 @@ framework:
 # Security Configuration
 security:
     providers:
-        in_memory:
-            memory:
-                users:
-                    admin:
-                        password: admin
-                        roles: 'ROLE_ADMIN'
+        administrators:
+            entity: { class: "AppBundle:User", property: username }
+    
     encoders:
-        Symfony\Component\Security\Core\User\User: plaintext
+        Bundle\AppBundle\Entity\User:
+            id: app.security.encoder
 
     firewalls:
         default:
             anonymous: ~
             http_basic: ~
             form_login:
-                login_path: admin-login
-                check_path: admin-login-check
+                login_path          : admin-login
+                check_path          : admin-login-check
+                default_target_path : admin-home
             logout:
                 path:   admin-logout
                 target: admin-login

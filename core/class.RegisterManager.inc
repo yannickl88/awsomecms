@@ -84,7 +84,7 @@ class RegisterManager
      */
     private function load()
     {
-        if($this->needsRevalidation())
+        if($this->needsRevalidation() || true)
         {
             Debugger::getInstance()->log("Rebuilding Cache for RegisterManager");
             $this->max = -1;

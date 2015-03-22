@@ -1,0 +1,12 @@
+services:
+    entity.news:
+        class: Bundle\AppBundle\Entity\Repository\NewsRepository
+        factory: ["@doctrine.orm.entity_manager", getRepository]
+        arguments:
+            - AppBundle:News
+
+    entity.user:
+        class: Bundle\AppBundle\Entity\Repository\UserRepository
+        factory: ["@doctrine.orm.entity_manager", getRepository]
+        arguments:
+            - AppBundle:User

@@ -4,7 +4,7 @@
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "c2f6aecc2d80b21025758b65222447a6",
+    "hash": "4c3552275ea97d43aa55ce0c4d4b687d",
     "packages": [
         {
             "name": "doctrine/annotations",
@@ -707,6 +707,97 @@
                 "orm"
             ],
             "time": "2014-12-16 13:45:01"
+        },
+        {
+            "name": "hostnet/form-handler-bundle",
+            "version": "1.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/hostnet/form-handler-bundle.git",
+                "reference": "7098e21bfe8df6bbe7e3cd1f0806f165be233e4e"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/hostnet/form-handler-bundle/zipball/7098e21bfe8df6bbe7e3cd1f0806f165be233e4e",
+                "reference": "7098e21bfe8df6bbe7e3cd1f0806f165be233e4e",
+                "shasum": ""
+            },
+            "require": {
+                "hostnet/form-handler-component": "1.*",
+                "php": ">=5.4",
+                "sensio/framework-extra-bundle": "3.*",
+                "symfony/http-foundation": "2.*, >=2.3"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "4.*"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Hostnet\\Bundle\\FormHandlerBundle\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "EPL-1.0"
+            ],
+            "authors": [
+                {
+                    "name": "Iltar van der Berg",
+                    "email": "ivanderberg@hostnet.nl"
+                },
+                {
+                    "name": "Yannick de Lange",
+                    "email": "ydelange@hostnet.nl"
+                }
+            ],
+            "description": "Hostnet form handler to provide an easier way of handling forms in actions",
+            "time": "2014-07-15 12:17:57"
+        },
+        {
+            "name": "hostnet/form-handler-component",
+            "version": "1.1.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/hostnet/form-handler-component.git",
+                "reference": "5907bf6d127ec2bf6b43e64ddebeed972d9e0952"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/hostnet/form-handler-component/zipball/5907bf6d127ec2bf6b43e64ddebeed972d9e0952",
+                "reference": "5907bf6d127ec2bf6b43e64ddebeed972d9e0952",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.4",
+                "symfony/form": "2.*, >=2.3",
+                "symfony/http-foundation": "2.*, >=2.3"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "4.*"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Hostnet\\Component\\Form\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Iltar van der Berg",
+                    "email": "ivanderberg@hostnet.nl"
+                },
+                {
+                    "name": "Yannick de Lange",
+                    "email": "ydelange@hostnet.nl"
+                }
+            ],
+            "description": "Hostnet form handler to provide an easier way of handling forms",
+            "time": "2015-01-26 11:54:58"
         },
         {
             "name": "jdorn/sql-formatter",

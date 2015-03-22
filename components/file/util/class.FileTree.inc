@@ -24,7 +24,7 @@ class FileItem extends TreeNode
         $this->name = $record->file_name;
         $this->id = $record->file_id;
         $this->location = $record->file_location;
-        if (is_array($record->file_data)) {
+        if (is_object($record->file_data)) {
             $this->viewURL = $record->file_data->url;
             $this->fileType = $record->file_data->type;
         }

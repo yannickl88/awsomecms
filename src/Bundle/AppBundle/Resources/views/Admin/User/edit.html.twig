@@ -1,0 +1,15 @@
+{% extends 'AppBundle:Admin:layout.html.twig' %}
+
+{% block content %}
+{% form_theme form 'AppBundle:Admin:fields.html.twig' %}
+<h2>Add to Users</h2>
+
+{{ form_start(form, {'attr': {'novalidate': 'novalidate'}}) }}
+{{ form_errors(form) }}
+
+{{ form_row(form.username) }}
+{{ form_row(form.password) }}
+{{ form_row(form.password2) }}
+{{ form_end(form) }}
+
+{% endblock %}

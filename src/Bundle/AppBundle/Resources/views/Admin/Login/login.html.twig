@@ -1,15 +1,40 @@
 {% extends 'AppBundle:Admin:layout.html.twig' %}
+
+{% block body_attr %}class="login"{% endblock %}
+
 {% block body %}
-{% if error %}
-    <div>{{ error.messageKey|trans(error.messageData) }}</div>
-{% endif %}
+<div id="loginWrapper">
+    <span class="header">Admin login</span>
+    {% if error %}
+    <div class="form_error">
+        The form was not filled in correctly.
+        <ul id="errorlist">
+            <li><label for="username">{{ error.messageKey|trans(error.messageData) }}</label></li>
+        </ul>
+    </div>
+    {% endif %}
 
-<form action="{{ path('admin-login-check') }}" method="post">
-    <label for="username">Username:</label>
-    <input type="text" id="username" name="_username" value="{{ last_username }}" />
-
-    <label for="password">Password:</label>
-    <input type="password" id="password" name="_password" />
-    <button type="submit">login</button>
+    <form action="{{ path('admin-login-check') }}" method="post">
+        <div class="admin_form_row">
+            <div class="admin_form_label">
+                <label for="username">Name:</label>
+            </div>
+            <div class="admin_form_field">
+                <input type="text" id="username" name="_username" value="{{ last_username }}" />
+            </div>
+        </div>
+        <div class="admin_form_row">
+            <div class="admin_form_label">
+                <label for="password">Password:</label>
+            </div>
+            <div class="admin_form_field">
+                <input type="password" id="password" name="_password" />
+            </div>
+        </div>
+        <div class="admin_form_row admin_form_submit">
+            <input type="submit" value="login" id="user_submit" class="admin_form_submit">
+        </div>
+    </form>
 </form>
+</div>
 {% endblock %}

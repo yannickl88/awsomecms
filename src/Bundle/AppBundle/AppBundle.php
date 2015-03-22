@@ -15,7 +15,7 @@ class AppBundle extends Bundle
     {
         // load default services.yml
         $loader = new YamlFileLoader($container, new FileLocator(__DIR__ . '/Resources/config'));
-        $files  = ['services.yml', 'controllers.yml'];
+        $files  = ['services.yml', 'entities.yml', 'forms.yml', 'controllers.yml'];
 
         foreach ($files as $file) {
             $loader->load($file);
